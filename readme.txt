@@ -2,16 +2,18 @@
 Contributors: mutube, Scott Switzer
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=martin%2efitzpatrick%40gmail%2ecom&item_name=Donation%20to%20mutube%2ecom&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
 Tags: adsense, ad, link, referral, manage, widget, google, adbrite, cj, adpinion, shoppingads, ypn, widgetbucks, openx, adroll, affiliate, crispads, adgridwork
+Tested up to: 2.7
 Requires at least: 2.5.0
 Stable tag: 3.2.13
 
-Advertising Manager simplifies managing Google Adsense and other Ads Networks on your blog. It automatically recognises many ad networks, and allows positioning with widgets, code or inline tags.
+Advertising Manager simplifies managing Google Adsense and other Ads Networks on your blog.
+
 
 == Description ==
 
-Advertising Manager is a Wordpress plugin for managing the ads on your blog. It automatically recognises many ad networks, and allows positioning with widgets, code or inline tags.
+Advertising Manager is a Wordpress plugin for managing Google Adsense and many other ad networks ads on your blog. It automatically recognises many ad networks, and allows positioning with widgets, code or inline tags.
 
-Version 3.1.x now supports
+Version 3.3.x now supports
 [Google Adsense](http://www.google.com/adsense), [AdBrite](http://www.adbrite.com/mb/landing_both.php?spid=51549&afb=120x60-1-blue), [AdGridWork](http://www.adgridwork.com/?r=18501), [Adpinion](http://www.adpinion.com/), [Adroll](http://re.adroll.com/a/D44UNLTJPNH5ZDXTTXII7V/7L73RCFU5VCG7FRNNIGH7O/d6ca1e265e654df2010a2153d5c42ed4.re), [Commission Junction](http://www.cj.com/), [CrispAds](http://www.crispads.com/), [OpenX](http://www.openx.org/), [ShoppingAds](http://www.shoppingads.com/refer_1ebff04bf5805f6da1b4), [Yahoo!PN](http://ypn.yahoo.com/), and [WidgetBucks](http://www.widgetbucks.com/home.page?referrer=468034).
 
 Automatic Ad Code Importer for all supported networks.
@@ -22,6 +24,14 @@ Automatic limiting of Ads to meet network T&Cs (Google 3 units/page)
 
 This plugin is under active development: if you experience problems, please first make sure you have the latest version installed. Feature requests, bug reports and comments can be submitted [here](http://forum.openx.org/index.php?showforum=74).
 
+
+== Screenshots ==
+
+[WP Advertising Manager List Screen in WP 2.7](http://blog.openx.org/wp-content/uploads/advertising-manager-list-wp-27.png "WP Advertising Manager List Screen in WP 2.7")
+[WP Advertising Manager Edit Screen in WP 2.7](http://blog.openx.org/wp-content/uploads/advertising-manager-edit-wp-27.png "WP Advertising Manager Edit Screen in WP 2.7")
+[WP Advertising Manager List Screen in WP 2.6](http://blog.openx.org/wp-content/uploads/picture-10.png "WP Advertising Manager List Screen in WP 2.6")
+
+
 == Installation ==
 
 1. Unzip the downloaded package and upload the Adsense Manager folder into your Wordpress plugins folder
@@ -29,7 +39,8 @@ This plugin is under active development: if you experience problems, please firs
 1. Go to Plugins and “Activate” the plugin
 1. Previous installations will be updated and a notice displayed. If you have not used Advertising Manager before but have used Adsense Manager or Adsense Deluxe, you will be offered the change to import those ads.
 1. “Advertising Manager” will now be displayed in your Options section and “Ads” appears under Manage.
-1. Import, create and modifty your Ad blocks under Manage &raquo; Ad Units
+1. Import, create and modifty your Ad blocks under Manage » Ad Units
+
 
 == Frequently Asked Questions ==
 
@@ -66,11 +77,14 @@ Load the page and Advertising Manager will revert to that version of the databas
 
 == To Do ==
 
-* Revenue sharing, integrate with Author Advertising plugin
-* Check bug(?) with ad counting (3 max ads Google)
-* Check compatibility with ALinks
-* Convert to Ad Zones with drag drop and auto dimensions/etc.
-* Auto-insertion of ads into posts, pages, between comments, etc.
+* New list screen look and feel
+* Finish renaming to 'Advertising Manager'
+* Re-introduce 'limit ads per page' (per Adsense T&C)
+* Link into OpenX Sync and OpenX Market for optimisation
+* Test Widget / Sidebar functionality through the K2 Theme
+* Test with WP 2.7
+* More testing the upgrade functionality from Adsense Deluxe, Adsense Manager, OpenX WP Plug-in
+* Make it able to translate in different languages
 
 == Change Log ==
 
@@ -78,6 +92,7 @@ By popular demand, below are the changes for versions listed. Use this to determ
 
 As a general rule the version X.Y.Z increments Z with bugfixes, Y with additional features, and X with major overhaul.
 
+* **3.3.4** Beta version with ad rotating and optimisation functionality
 * **3.2.13** Fix for WordPress 2.3.3 compatibility.
 * **3.2.11** Database/bugfixing code, only neccessary if you're experiencing errors.
 * **3.2.10** Database/bugfixing code, only neccessary if you're experiencing errors.
@@ -87,4 +102,3 @@ As a general rule the version X.Y.Z increments Z with bugfixes, Y with additiona
 * **3.2.6** Default ad checking fix. Ads will continue to work even if default-ad not set. Fixed Javascript errors.
 * **3.2.5** Fix to widgets to match updated WordPress code. May require replacement of widgets again. Fix to default ad selection, prevents errors in Widgets & ensures ads appear on site.
 * **3.2.4** Bugfixes to upgrade path from 2.5, prevents requirement to open/save each ad unit. Account ID is now copied across correctly during upgrades.
-
