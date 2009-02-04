@@ -1,0 +1,272 @@
+<?php
+if(!ADSENSEM_VERSION) {die();}
+
+class OX_Adnet
+{
+	var $name; //Name of this ad
+	var $id; // ID of the ad
+	var $title; //Used in widget displays only
+	var $p; //$p holds Ad properties (e.g. dimensions etc.) - acessible through $this->p[''] and $this->p(''); see $this->pd('') for default merged
+	var $active; //whether this ad can display
+
+	/**
+	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
+	 */
+	var $shortName = 'Ad';
+	
+	/**
+	 * The URL for the home page of the ad network site
+	 */
+	var $url = '';
+	
+	/**
+	 * The name of the network.  Used when displaying ads by network.
+	 */
+	var $network = '';
+	
+	/**
+	 * The name of the network.  Used when displaying ads by network.
+	 */
+	var $networkName = '';
+	
+	//Global start up functions for all network classes	
+	function OX_Adnet()
+	{
+		global $_adsensem;
+		
+		$this->network = get_class($this);
+		
+		if (!is_array($_adsensem['defaults'][$this->network])) {
+			$this->reset_defaults();
+			update_option('plugin_adsensem', $_adsensem);
+		}
+		
+		$this->p = array();
+		$this->name = '';
+		$this->title = '';
+		$this->active = true;
+	}
+	
+	/* Returns current setting, without defaults */
+	function p($key)
+	{
+		return $this->p[$key];
+	}
+	
+	/* Returns current default for this network */
+	function d($key){
+		global $_adsensem;
+		return $_adsensem['defaults'][$this->network][$key];
+	}
+	
+	/* Returns current setting, merged with defaults */
+	function pd($key)
+	{
+		global $_adsensem;
+
+		$value = $this->p($key);
+		if (empty($value)) {
+			$value = $this->d($key);
+		}
+		return $value;
+	}
+			
+	function account_id()
+	{
+		global $_adsensem;
+		return $_adsensem['account-ids'][$this->network];
+	}
+	
+	function set_account_id($aid)
+	{
+		global $_adsensem;
+		$_adsensem['account-ids'][$this->network]=$aid;
+	}
+	
+	function is_available()
+	{
+		//Extend this to include all ad-specific checks, so it can used to filter adzone groups in future.
+		return (
+			($this->active) &&
+			(
+				( ($this->p['show-home'] == 'yes') && is_home() ) ||
+				( ($this->p['show-post'] == 'yes') && is_single() ) ||
+				( ($this->p['show-page'] == 'yes') && is_page() ) ||
+				( ($this->p['show-archive'] == 'yes') && is_archive() ) ||
+				( ($this->p['show-search'] == 'yes') && is_search() )
+			)
+		);
+	}
+	
+	function get_ad()
+	{
+		global $_adsensem;
+		
+		$search = array();
+		$replace = array();
+		
+		$code = $this->pd('html-before');
+		$code.=$this->render_ad($search, $replace);
+		$code .= $this->pd('html-after');
+		
+		return $code;
+	}
+
+	function render_ad($search, $replace)
+	{
+		$search[] = '{{account-id}}';
+		$replace[] = $this->account_id();
+		$search[] = '{{random}}';
+		$replace[] = mt_rand();
+		
+		$properties = $this->get_default_properties();
+		foreach ($properties as $property => $default) {
+			$search[] = '{{' . $property . '}}';
+			$replace[] = $this->pd($property);
+		}
+		
+		return str_replace($search, $replace, $this->p['code']);
+	}
+		
+	function customiseSection($mode, $section)
+	{
+		return false;
+	}
+	
+	function displaySection($mode, $section)
+	{
+		return;
+	}
+	
+	function displayBeforeSection($mode, $section)
+	{
+		return;
+	}
+	
+	function displayAfterSection($mode, $section)
+	{
+		return;
+	}
+	
+	function reset_defaults()
+	{
+		global $_adsensem;
+		$_adsensem['defaults'][$this->network] = $this->get_default_properties();
+	}	
+	
+	function get_default_properties()
+	{
+		return array (
+			'adformat' => '728x90',
+			'code' => '',
+			'height' => '90',
+			'html-after' => '',
+			'html-before' => '',
+			'notes' => '',
+			'openx-market' => 'yes',
+			'openx-market-cpm' => '0.20',
+			'show-archive' => 'yes',
+			'show-home' => 'yes',
+			'show-page' => 'yes',
+			'show-post' => 'yes',
+			'show-search' => 'yes',
+			'weight' => '1',
+			'width' => '728',
+		);
+	}
+	
+	function save_defaults()
+	{
+		global $_adsensem;
+		
+		$properties = $this->get_default_properties();
+		if (!empty($properties)) {
+			foreach ($properties as $property => $default) {
+				if (isset($_POST['adsensem-' . $property])) {
+					$_adsensem['defaults'][$this->network][$property] = stripslashes($_POST['adsensem-' . $property]);
+				}
+			}
+		}
+		
+		// add an item to the audit trail
+		$_adsensem['defaults'][$this->network]['revisions'] = $this->add_revision($_adsensem['defaults'][$this->network]['revisions']);
+	}
+	
+	function save_settings()
+	{
+		global $_adsensem;	
+		
+		//Store account id to network default location
+		if($_POST['adsensem-account-id']!='') {
+			$this->set_account_id($_POST['adsensem-account-id']);
+		}
+		
+		if (isset($_POST['adsensem-name'])) {
+			$this->name = $_POST['adsensem-name'];
+		}
+		
+		if (isset($_POST['adsensem-active'])) {
+			$this->active = ($_POST['adsensem-active'] == 'yes');
+		}
+		
+		// Save some standard properties
+		$properties = $this->get_default_properties();
+		if (!empty($properties)) {
+			foreach ($properties as $property => $default) {
+				if (isset($_POST['adsensem-' . $property])) {
+					$this->p[$property]=stripslashes($_POST['adsensem-' . $property]);
+				}
+			}
+		}
+		
+		// Set width and height for non-custom formats
+		if ($this->p['adformat'] !== 'custom') {
+			list($this->p['width'],$this->p['height'],$null) = split('[x]',$this->p('adformat'));
+		}
+		
+		// add an item to the audit trail
+		$this->p['revisions'] = $this->add_revision($this->p['revisions']);
+	}
+	
+	function add_revision($revisions)
+	{
+		// Deal with revisions
+		$r = array();
+		$now = mktime();
+		$r[$now] = get_current_user();
+		
+		if (!empty($revisions)) {
+			foreach ($revisions as $ts => $user) {
+				$days = (strtotime($now) - strtotime($ts)) / 86400 + 1;
+				if ($days <= 30) {
+					$r[$ts] = $user;
+				}
+			}
+		}
+		krsort($r);
+		return $r;
+	}
+	
+	//Convert defined ads into a simple list for outputting as alternates. Maybe limit types by network (once multiple networks supported)
+	function get_alternate_ads()
+	{
+		global $_adsensem;
+		$compat=array();
+		foreach($_adsensem['ads'] as $oname => $oad){
+			if( ($this->network !== $oad->network ) && ($this->pd('width')==$oad->pd('width')) && ($this->pd('height')==$oad->pd('height')) ){ $compat[$oname]=$oname; }
+		}
+		return $compat;
+	}
+	
+	function import_detect_network($code)
+	{
+		return false;
+	}
+	
+	function import_settings($code)
+	{
+		$this->p['code'] = $code;
+	}
+}
+
+?>
