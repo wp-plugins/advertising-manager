@@ -82,8 +82,8 @@ class Template_EditAd
 					<div id="major-publishing-actions">
 						<div id="publishing-action">
 							<a class="submitdelete deletion" href="javascript:submit();" onclick="document.getElementById('adsensem-action').value='cancel'; document.getElementById('adsensem-form').submit();"><?php _e('Cancel', 'advmgr') ?></a>&nbsp;&nbsp;&nbsp;
-							<input name="save" type="submit" class="button-primary" id="publish" tabindex="5" accesskey="p" value="Apply" />
-							<input name="save" type="submit" class="button-primary" id="publish" tabindex="5" accesskey="p" value="Save" />
+							<input type="submit" class="button-primary" id="advman_apply" tabindex="5" accesskey="p" value="<?php _e('Apply', 'advman'); ?>" onclick="document.getElementById('adsensem-action').value='apply';" />
+							<input type="submit" class="button-primary" id="advman_save" tabindex="5" accesskey="p" value="<?php _e('Save', 'advman'); ?>" onclick="document.getElementById('adsensem-action').value='save';" />
 						</div>
 						<div class="clear"></div>
 					</div>
@@ -150,7 +150,7 @@ class Template_EditAd
 	<td>
 		<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 			<optgroup id="adsensem-optgroup-default" label="Default">
-				<option value=""> Use Default</option>
+				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 			</optgroup>
 			<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
 				<option<?php echo ($ad->p['adformat'] == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>
@@ -195,7 +195,7 @@ class Template_EditAd
 ?><div style="text-align:right; width:250px; font-size:small;">
 	<label for="adsensem-show-home">On Homepage:</label>
 	<select name="adsensem-show-home" id="adsensem-show-home">
-		<option value=""> Use Default</option>
+		<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 		<option<?php echo ($ad->p['show-home'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
 		<option<?php echo ($ad->p['show-home'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
 	</select>
@@ -204,7 +204,7 @@ class Template_EditAd
 	
 	<label for="adsensem-show-post">On Posts:</label></td><td>
 	<select name="adsensem-show-post" id="adsensem-show-post">
-		<option value=""> Use Default</option>
+		<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 		<option<?php echo ($ad->p['show-post'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
 		<option<?php echo ($ad->p['show-post'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
 	</select>
@@ -213,7 +213,7 @@ class Template_EditAd
 	
 	<label for="adsensem-show-page">On Pages:</label>
 	<select name="adsensem-show-page" id="adsensem-show-page">
-		<option value=""> Use Default</option>
+		<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 		<option<?php echo ($ad->p['show-page'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
 		<option<?php echo ($ad->p['show-page'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
 	</select>
@@ -222,7 +222,7 @@ class Template_EditAd
 		
 	<label for="adsensem-show-archive">On Archives:</label>
 	<select name="adsensem-show-archive" id="adsensem-show-archive">
-		<option value=""> Use Default</option>
+		<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 		<option<?php echo ($ad->p['show-archive'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
 		<option<?php echo ($ad->p['show-archive'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
 	</select>
@@ -231,7 +231,7 @@ class Template_EditAd
 	
 	<label class="adsensem_label" for="adsensem-show-search">On Search:</label>
 	<select name="adsensem-show-search" id="adsensem-show-search">
-		<option value=""> Use Default</option>
+		<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 		<option<?php echo ($ad->p['show-search'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
 		<option<?php echo ($ad->p['show-search'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
 	</select>

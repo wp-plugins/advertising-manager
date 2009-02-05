@@ -8,20 +8,20 @@ class Template_EditAd_Adbrite extends Template_EditAd
 		// Call parent first!
 		parent::Template_EditAd();
 		// Colors
-		add_meta_box('adsensem_colors', __('Colors', 'adsensem'), array(get_class($this), 'displaySectionColors'), 'adsensem', 'normal');
+		add_meta_box('adsensem_colors', __('Colors', 'advman'), array(get_class($this), 'displaySectionColors'), 'adsensem', 'normal');
 		// Account
-		add_meta_box('adsensem_account', __('Account Details', 'adsensem'), array(get_class($this), 'displaySectionAccount'), 'adsensem', 'advanced', 'high');
+		add_meta_box('adsensem_account', __('Account Details', 'advman'), array(get_class($this), 'displaySectionAccount'), 'adsensem', 'advanced', 'high');
 	}
 	
 	function displaySectionFormat($ad)
 	{
 ?><table id="adsensem-settings-ad_format">
 	<tr id="adsensem-form-adformat">
-		<td class="adsensem_label"><label for="adsensem-adformat">Format:</label></td>
+		<td class="adsensem_label"><label for="adsensem-adformat"><?php _e('Format:', 'advman'); ?></label></td>
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 				<optgroup id="adsensem-optgroup-default" label="Default">
-					<option value=""> Use Default</option>
+					<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
 					<option<?php echo ($ad->p['adformat'] == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>

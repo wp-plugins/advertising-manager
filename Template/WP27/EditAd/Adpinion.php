@@ -20,7 +20,7 @@ class Template_EditAd_Adpinion extends Template_EditAd
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 <?php if ($mode != 'edit_network'): ?>
 				<optgroup id="adsensem-optgroup-default" label="Default">
-					<option value=""> Use Default</option>
+					<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
 <?php endif; ?>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
