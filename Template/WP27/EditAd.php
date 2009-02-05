@@ -81,7 +81,7 @@ class Template_EditAd
 					</div>
 					<div id="major-publishing-actions">
 						<div id="publishing-action">
-							<a class="submitdelete deletion" href="#">Cancel</a>&nbsp;&nbsp;&nbsp;
+							<a class="submitdelete deletion" href="javascript:submit();" onclick="document.getElementById('adsensem-action').value='cancel'; document.getElementById('adsensem-form').submit();"><?php _e('Cancel', 'advmgr') ?></a>&nbsp;&nbsp;&nbsp;
 							<input name="save" type="submit" class="button-primary" id="publish" tabindex="5" accesskey="p" value="Apply" />
 							<input name="save" type="submit" class="button-primary" id="publish" tabindex="5" accesskey="p" value="Save" />
 						</div>

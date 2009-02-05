@@ -406,7 +406,7 @@ class adsensem_admin
 			
 			case 'copy' :
 				if (!empty($target)) {
-					adsensem_admin::_copy_ad($target);
+					$target = adsensem_admin::_copy_ad($target);
 				} elseif (!empty($targets)) {
 					foreach ($targets as $target) {
 						adsensem_admin::_copy_ad($target);
