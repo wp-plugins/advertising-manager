@@ -135,8 +135,8 @@ function ADS_setAction(action, id, name, network)
 			<div class="row-actions">
 				<span class='edit'><a href="javascript:ADS_setAction('edit','<?php echo $ad->id; ?>');" title="Edit the ad &quot;<?php echo $ad->name; ?>&quot;">Edit</a> | </span>
 				<span class='edit'><a class='submitdelete' title='Copy this ad' href="javascript:ADS_setAction('copy','<?php echo $ad->id; ?>');">Copy</a> | </span>
-				<span class='edit'><a class='submitdelete' title='Delete this ad' href="javascript:ADS_setAction('delete','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>', '<?php echo $ad->networkName; ?>');" onclick="">Delete</a> | </span>
-				<span class='edit'><a href="#" title="Preview this ad">Preview</a></span>
+				<span class='edit'><a class='submitdelete' title='Delete this ad' href="javascript:ADS_setAction('delete','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>', '<?php echo $ad->networkName; ?>');" onclick=""><?php _e('Delete', 'advman'); ?></a> | </span>
+				<span class='edit'><a href="<?php echo get_bloginfo('wpurl'); ?>/wp-admin/edit.php?page=advertising-manager-manage-ads&adsensem-show-ad-id=<?php echo $id ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview', 'advman'); ?></a></span>
 			</div>
 		</td>
 		<td class="author column-author"><a href="javascript:ADS_setAction('edit','<?php echo $ad->network; ?>');" title="Edit the ad network &quot;<?php echo $ad->networkName; ?>&quot;"><?php echo $ad->networkName; ?></a></td>
