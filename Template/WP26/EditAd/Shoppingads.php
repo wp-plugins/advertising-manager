@@ -138,7 +138,7 @@ class Template_EditAd_Shoppingads extends Template_EditAd
 		<td>
 			<div id="ad-color-bg" style="margin-top:1em;width:200px;background: #<?php echo htmlspecialchars($ad->pd('color-bg'), ENT_QUOTES); ?>;">
 			<div id="ad-color-border" style="font: 10px arial, sans-serif; border: 1px solid #<?php echo htmlspecialchars($ad->pd('color-border'), ENT_QUOTES); ?>" class="linkunit-wrapper">
-			<img src="<?php echo get_bloginfo('wpurl') . '/wp-content/plugins/adsense-manager/shoppingads.png'?>" style="width:60%">
+			<img src="<?php echo get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager/shoppingads.png'?>" style="width:60%">
 			<div id="ad-color-description" style="color: #<?php echo htmlspecialchars($ad->pd('color-desciption'), ENT_QUOTES); ?>; font: 11px verdana, arial, sans-serif; padding: 2px;">
 				<b><u>Description of Product</u></b><br /></div>
 			<div id="ad-color-price" style="color: #<?php echo htmlspecialchars($ad->pd('color-price'), ENT_QUOTES); ?>; padding: 2px;" class="text">

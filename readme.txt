@@ -20,7 +20,7 @@ Automatic Ad Code Importer for all supported networks.
 Widgets & Sidebar Modules compatible (as used in the popular K2 theme).
 Automatic limiting of Ads to meet network T&Cs (Google 3 units/page)
 
-[Extended instructions are available here...](http://www.mutube.com/mu/getting-started-with-adsense-manager-3x).
+[Extended instructions are available here...](http://www.mutube.com/mu/getting-started-with-advertising-manager-3x).
 
 This plugin is under active development: if you experience problems, please first make sure you have the latest version installed. Feature requests, bug reports and comments can be submitted [here](http://forum.openx.org/index.php?showforum=74).
 
@@ -73,7 +73,7 @@ Load the page and Advertising Manager will revert to that version of the databas
 
 = Where can I get more information? =
 
-[Complete usage instructions are available here.](http://www.mutube.com/mu/getting-started-with-adsense-manager-3x)
+[Complete usage instructions are available here.](http://www.mutube.com/mu/getting-started-with-advertising-manager-3x)
 
 == To Do ==
 

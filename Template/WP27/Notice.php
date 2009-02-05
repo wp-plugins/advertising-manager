@@ -8,7 +8,7 @@ class Template_Notice
 		if (is_array($notices)) {
 			foreach ($notices as $action => $notice) {
 ?>				<div id='update-nag'>
-				<form action="edit.php?page=adsense-manager-manage-ads" method="post" id="adsensem-config-manage" enctype="multipart/form-data">
+				<form action="edit.php?page=advertising-manager-manage-ads" method="post" id="adsensem-config-manage" enctype="multipart/form-data">
 				<input type="hidden" name="adsensem-mode" value="notice">		
 				<input type="hidden" name="adsensem-action" value="<?php echo $action; ?>">												
 <?php

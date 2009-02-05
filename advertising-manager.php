@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Advertising Manager
-PLugin URI: http://wordpress.org/extend/plugins/adsense-manager/
+PLugin URI: http://wordpress.org/extend/plugins/advertising-manager/
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer, Martin Fitzpatrick
 Version: 3.3.4
@@ -24,7 +24,8 @@ $template = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP26' : 'WP27';
 // Traverse the Ad Network directory and include all files
 if ($handle = opendir(ADS_PATH . '/OX/Adnet/')) {
     while (false !== ($file = readdir($handle))) {
-		if ($file != "." && $file != "..") {
+		// Make sure that the first character does not start with a '.' (omit hidden files like '.', '..', '.svn', etc.)
+		if ($file[0] != '.') {
 			require_once(ADS_PATH . '/OX/Adnet/' . $file);
 		}
     }
@@ -292,8 +293,8 @@ if (is_admin()) {
 			}
 			adsensem_admin::remove_notice('optimise');
 			break;
-		case 'notice:activate adsense-manager':
-			adsensem_admin::remove_notice('activate adsense-manager');
+		case 'notice:activate advertising-manager':
+			adsensem_admin::remove_notice('activate advertising-manager');
 			break;
 	}
 /* END PRE-OUTPUT PROCESSING */
