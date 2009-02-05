@@ -78,7 +78,6 @@ Load the page and Advertising Manager will revert to that version of the databas
 == To Do ==
 
 * New list screen look and feel
-* Finish renaming to 'Advertising Manager'
 * Re-introduce 'limit ads per page' (per Adsense T&C)
 * Link into OpenX Sync and OpenX Market for optimisation
 * Test Widget / Sidebar functionality through the K2 Theme
