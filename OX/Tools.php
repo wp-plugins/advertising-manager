@@ -11,5 +11,10 @@ class OX_Tools
 	{
 		return strcmp(get_class($a), get_class($b));
 	}
+	
+	function sanitize_number($number)
+	{
+		return preg_replace('/[^0-9\.\-]/i', '', $number);
+	}
 }
 ?>

@@ -255,6 +255,14 @@ class adsensem_admin
 			update_option('plugin_adsensem', $_adsensem);
 		}
 	}
+	
+	function _save_settings()
+	{
+		global $_adsensem;
+		
+		$_adsensem['settings']['openx-market'] = !empty($_POST['adsensem-openx-market']);
+		$_adsensem['settings']['openx-market-cpm'] = !empty($_POST['adsensem-openx-market-cpm']) ? OX_Tools::sanitize_number($_POST['adsensem-openx-market-cpm']) : '0.20';
+	}
 	function _copy_ad($target)
 	{
 		global $_adsensem;
@@ -522,8 +530,8 @@ class adsensem_admin
 		// Get our options and see if we're handling a form submission.
 		global $_adsensem;
 
-		if ( $_POST['adsensem-submit'] ) {
-			//$_adsensem['adsense-account']=preg_replace('/\D/','',$_POST['adsensem-adsense-account']);
+		if ($_POST['adsensem-action'] == 'save') {
+			adsensem_admin::_save_settings();
 			update_option('plugin_adsensem', $_adsensem);
 		}
 		include_once(ADS_PATH . '/Template/' . TEMPLATE . '/Settings.php');
