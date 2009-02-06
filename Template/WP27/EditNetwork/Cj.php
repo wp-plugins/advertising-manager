@@ -25,8 +25,8 @@ class Template_EditNetwork_Cj extends Template_EditNetwork
 	<td class="adsensem-label"><label for="adsensem-new-window">New Window:</label></td>
 	<td>
 		<select name="adsensem-new-window" id="adsensem-new-window">
-			<option<?php echo ($ad->d('new-window') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> Yes</option>
-			<option<?php echo ($ad->d('new-window') == 'no' ? ' selected="selected"' : ''); ?> value="no"> No</option>
+			<option<?php echo ($ad->d('new-window') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+			<option<?php echo ($ad->d('new-window') == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 		</select>
 	</td>
 </tr>

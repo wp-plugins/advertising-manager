@@ -74,6 +74,10 @@ class adsensem_upgrade {
 					if (!isset($new[$adnets[$n]]['weight'])) {
 						$new[$adnets[$n]]['weight'] = '1';
 					}
+					// Show only to an Author
+					if (!isset($new[$adnets[$n]]['show-author'])) {
+						$new[$adnets[$n]]['show-author'] = 'all';
+					}
 				}
 			}
 			$_adsensem['defaults'] = $new;

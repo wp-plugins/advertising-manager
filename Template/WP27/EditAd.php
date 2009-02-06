@@ -209,8 +209,8 @@ class Template_EditAd
 			<label for="adsensem-show-home"><?php _e('On Homepage:', 'advman'); ?></label>
 			<select name="adsensem-show-home" id="adsensem-show-home">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->p['show-home'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-				<option<?php echo ($ad->p['show-home'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+				<option<?php echo ($ad->p['show-home'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->p['show-home'] == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 			<img class="default_note" title="[Default] <?php echo $ad->d('show-home'); ?>">
 		</td>
@@ -232,8 +232,8 @@ class Template_EditAd
 			<label for="adsensem-show-page"><?php _e('On Posts:', 'advman'); ?></label>
 			<select name="adsensem-show-post" id="adsensem-show-post">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->p['show-post'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-				<option<?php echo ($ad->p['show-post'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+				<option<?php echo ($ad->p['show-post'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->p['show-post'] == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 			<img class="default_note" title="[Default] <?php echo $ad->d('show-post'); ?>">
 		</td>
@@ -245,8 +245,8 @@ class Template_EditAd
 			<label for="adsensem-show-page"><?php _e('On Pages:', 'advman'); ?></label>
 			<select name="adsensem-show-page" id="adsensem-show-page">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->p['show-page'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-				<option<?php echo ($ad->p['show-page'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+				<option<?php echo ($ad->p['show-page'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->p['show-page'] == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 			<img class="default_note" title="[Default] <?php echo $ad->d('show-page'); ?>">
 		</td>
@@ -258,8 +258,8 @@ class Template_EditAd
 			<label for="adsensem-show-archive"><?php _e('On Archives:', 'advman'); ?></label>
 			<select name="adsensem-show-archive" id="adsensem-show-archive">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->p['show-archive'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-				<option<?php echo ($ad->p['show-archive'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+				<option<?php echo ($ad->p['show-archive'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->p['show-archive'] == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 			<img class="default_note" title="[Default] <?php echo $ad->d('show-archive'); ?>">
 		</td>
@@ -271,8 +271,8 @@ class Template_EditAd
 			<label class="adsensem_label" for="adsensem-show-search"><?php _e('On Search:', 'advman'); ?></label>
 			<select name="adsensem-show-search" id="adsensem-show-search">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->p['show-search'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-				<option<?php echo ($ad->p['show-search'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+				<option<?php echo ($ad->p['show-search'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->p['show-search'] == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 			<img class="default_note" title="[Default] <?php echo $ad->d('show-search'); ?>">
 		</td>

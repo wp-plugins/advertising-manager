@@ -58,8 +58,8 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 	<td class="adsensem-label"><label for="adsensem-attitude">Attitude:</label></td>
 	<td>
 		<select name="adsensem-attitude" id="adsensem-attitude">
-			<option<?php echo ($ad->d('attitude') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> Yes</option>
-			<option<?php echo ($ad->d('attitude') == 'no' ? ' selected="selected"' : ''); ?> value="no"> No</option>
+			<option<?php echo ($ad->d('attitude') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+			<option<?php echo ($ad->d('attitude') == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 		</select>
 	</td>
 </tr>
@@ -67,8 +67,8 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 	<td class="adsensem-label"><label for="adsensem-new-window">New Window:</label></td>
 	<td>
 		<select name="adsensem-new-window" id="adsensem-new-window">
-			<option<?php echo ($ad->d('new-window') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> Yes</option>
-			<option<?php echo ($ad->d('new-window') == 'no' ? ' selected="selected"' : ''); ?> value="no"> No</option>
+			<option<?php echo ($ad->d('new-window') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+			<option<?php echo ($ad->d('new-window') == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 		</select>
 	</td>
 </tr>

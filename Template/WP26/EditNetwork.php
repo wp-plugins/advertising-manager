@@ -153,8 +153,8 @@ class Template_EditNetwork
 		<td style="white-space:nowrap">
 			<label for="adsensem-show-home"><?php _e('On Homepage:', 'advman'); ?></label>
 			<select name="adsensem-show-home" id="adsensem-show-home">
-				<option<?php echo ($ad->d('show-home') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-				<option<?php echo ($ad->d('show-home') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+				<option<?php echo ($ad->d('show-home') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->d('show-home') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
@@ -172,8 +172,8 @@ class Template_EditNetwork
 		<td style="white-space:nowrap">
 			<label for="adsensem-show-page"><?php _e('On Posts:', 'advman'); ?></label>
 			<select name="adsensem-show-post" id="adsensem-show-post">
-				<option<?php echo ($ad->d('show-post') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-				<option<?php echo ($ad->d('show-post') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+				<option<?php echo ($ad->d('show-post') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->d('show-post') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
@@ -183,8 +183,8 @@ class Template_EditNetwork
 		<td style="white-space:nowrap">
 			<label for="adsensem-show-page"><?php _e('On Pages:', 'advman'); ?></label>
 			<select name="adsensem-show-page" id="adsensem-show-page">
-				<option<?php echo ($ad->d('show-page') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-				<option<?php echo ($ad->d('show-page') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+				<option<?php echo ($ad->d('show-page') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->d('show-page') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
@@ -194,8 +194,8 @@ class Template_EditNetwork
 		<td style="white-space:nowrap">
 			<label for="adsensem-show-archive"><?php _e('On Archives:', 'advman'); ?></label>
 			<select name="adsensem-show-archive" id="adsensem-show-archive">
-				<option<?php echo ($ad->d('show-archive') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-				<option<?php echo ($ad->d('show-archive') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+				<option<?php echo ($ad->d('show-archive') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->d('show-archive') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
@@ -205,8 +205,8 @@ class Template_EditNetwork
 		<td style="white-space:nowrap">
 			<label class="adsensem_label" for="adsensem-show-search"><?php _e('On Search:', 'advman'); ?></label>
 			<select name="adsensem-show-search" id="adsensem-show-search">
-				<option<?php echo ($ad->d('show-search') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-				<option<?php echo ($ad->d('show-search') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+				<option<?php echo ($ad->d('show-search') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->d('show-search') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>

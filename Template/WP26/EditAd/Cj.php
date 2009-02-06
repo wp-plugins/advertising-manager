@@ -45,8 +45,8 @@ class Template_EditAd_Cj extends Template_EditAd
 	<td>
 		<select name="adsensem-new-window" id="adsensem-new-window">
 			<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-			<option<?php echo ($ad->p['new-window'] == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> Yes</option>
-			<option<?php echo ($ad->p['new-window'] == 'no' ? ' selected="selected"' : ''); ?> value="no"> No</option>
+			<option<?php echo ($ad->p['new-window'] == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+			<option<?php echo ($ad->p['new-window'] == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 		</select>
 			<img class="default_note" title="[Default] <?php echo $ad->d('new-window'); ?>">
 	</td>
