@@ -177,50 +177,94 @@ class Template_EditAd
 	
 	function displaySectionDisplayOptions($ad)
 	{
-?><div style="text-align:right; width:250px; font-size:small;">
-	<label for="adsensem-show-home"><?php _e('On Homepage:', 'advman'); ?></label>
-	<select name="adsensem-show-home" id="adsensem-show-home">
-		<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-		<option<?php echo ($ad->p['show-home'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-		<option<?php echo ($ad->p['show-home'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
-	</select>
-	<img class="default_note" title="[Default] <?php echo $ad->d('show-home'); ?>">
-	<br />
-	
-	<label for="adsensem-show-post"><?php _e('On Posts:', 'advman'); ?></label></td><td>
-	<select name="adsensem-show-post" id="adsensem-show-post">
-		<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-		<option<?php echo ($ad->p['show-post'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-		<option<?php echo ($ad->p['show-post'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
-	</select>
-	<img class="default_note" title="[Default] <?php echo $ad->d('show-post'); ?>">
-	<br />
-	
-	<label for="adsensem-show-page"><?php _e('On Pages:', 'advman'); ?></label>
-	<select name="adsensem-show-page" id="adsensem-show-page">
-		<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-		<option<?php echo ($ad->p['show-page'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-		<option<?php echo ($ad->p['show-page'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
-	</select>
-	<img class="default_note" title="[Default] <?php echo $ad->d('show-page'); ?>">
-	<br />
+		// Query the users
+		$users = get_users_of_blog();
+		$defaultAuthor = $ad->d('show-author');
+		if (is_numeric($defaultAuthor)) {
+			$u = get_users_of_blog($defaultAuthor);
+			$defaultAuthor = $u[0]->display_name;
+		} else {
+			$defaultAuthor = __('All Authors', 'advman');
+		}
 		
-	<label for="adsensem-show-archive"><?php _e('On Archives:', 'advman'); ?></label>
-	<select name="adsensem-show-archive" id="adsensem-show-archive">
-		<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-		<option<?php echo ($ad->p['show-archive'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-		<option<?php echo ($ad->p['show-archive'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
-	</select>
-	<img class="default_note" title="[Default] <?php echo $ad->d('show-archive'); ?>">
-	<br />
-	
-	<label class="adsensem_label" for="adsensem-show-search"><?php _e('On Search:', 'advman'); ?></label>
-	<select name="adsensem-show-search" id="adsensem-show-search">
-		<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-		<option<?php echo ($ad->p['show-search'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-		<option<?php echo ($ad->p['show-search'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
-	</select>
-	<img class="default_note" title="[Default] <?php echo $ad->d('show-search'); ?>">
+?><div style="text-align:right; width:250px; font-size:small;">
+	<table>
+	<tr>
+		<td style="white-space:nowrap">
+			<label for="adsensem-show-home"><?php _e('On Homepage:', 'advman'); ?></label>
+			<select name="adsensem-show-home" id="adsensem-show-home">
+				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
+				<option<?php echo ($ad->p['show-home'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
+				<option<?php echo ($ad->p['show-home'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+			</select>
+			<img class="default_note" title="[Default] <?php echo $ad->d('show-home'); ?>">
+		</td>
+		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
+		<td style="white-space:nowrap">
+			<label for="adsensem-show-author"><?php _e('By Author:', 'advman'); ?></label>
+			<select name="adsensem-show-author" id="adsensem-show-author">
+				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
+				<option<?php echo ($ad->p['show-author'] == 'all' ? " selected='selected'" : ''); ?> value="all"> <?php _e('All Authors', 'advman'); ?></option>
+<?php foreach ($users as $user) : ?>
+				<option<?php echo ($ad->p['show-author'] == $user->user_id ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
+<?php endforeach; ?>
+			</select>
+			<img class="default_note" title="[Default] <?php echo $defaultAuthor; ?>">
+		</td>
+	</tr>
+	<tr>
+		<td style="white-space:nowrap">
+			<label for="adsensem-show-page"><?php _e('On Posts:', 'advman'); ?></label>
+			<select name="adsensem-show-post" id="adsensem-show-post">
+				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
+				<option<?php echo ($ad->p['show-post'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
+				<option<?php echo ($ad->p['show-post'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+			</select>
+			<img class="default_note" title="[Default] <?php echo $ad->d('show-post'); ?>">
+		</td>
+		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td style="white-space:nowrap">
+			<label for="adsensem-show-page"><?php _e('On Pages:', 'advman'); ?></label>
+			<select name="adsensem-show-page" id="adsensem-show-page">
+				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
+				<option<?php echo ($ad->p['show-page'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
+				<option<?php echo ($ad->p['show-page'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+			</select>
+			<img class="default_note" title="[Default] <?php echo $ad->d('show-page'); ?>">
+		</td>
+		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td style="white-space:nowrap">
+			<label for="adsensem-show-archive"><?php _e('On Archives:', 'advman'); ?></label>
+			<select name="adsensem-show-archive" id="adsensem-show-archive">
+				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
+				<option<?php echo ($ad->p['show-archive'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
+				<option<?php echo ($ad->p['show-archive'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+			</select>
+			<img class="default_note" title="[Default] <?php echo $ad->d('show-archive'); ?>">
+		</td>
+		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td style="white-space:nowrap">
+			<label class="adsensem_label" for="adsensem-show-search"><?php _e('On Search:', 'advman'); ?></label>
+			<select name="adsensem-show-search" id="adsensem-show-search">
+				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
+				<option<?php echo ($ad->p['show-search'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
+				<option<?php echo ($ad->p['show-search'] == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+			</select>
+			<img class="default_note" title="[Default] <?php echo $ad->d('show-search'); ?>">
+		</td>
+		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
+		<td></td>
+	</tr>
+	</table>
 </div>
 <br />
 <span style="font-size:x-small;color:gray;">Display options determine where on your website your ads will appear.</span>

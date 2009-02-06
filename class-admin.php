@@ -240,7 +240,6 @@ class adsensem_admin
 		
 		$id = adsensem_admin::validate_id($target);
 		$_adsensem['ads'][$id]->id = $id; // Update internal ID reference
-		$name = 
 		$_adsensem['ads'][$id]->save_settings();
 		update_option('plugin_adsensem', $_adsensem);
 	}

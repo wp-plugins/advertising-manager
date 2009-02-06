@@ -17,7 +17,7 @@ class Template_CreateAd
 		
 ?><div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
-	<h2>Edit Settings for <?php echo $network_name; ?> Ad: <span class="<?php echo strtolower($ad->network); ?>"><?php echo "[$id] " . $ad->name; ?></span></h2>
+	<h2><?php _e('Create Ad:', 'advman'); ?></h2>
 	<form action="" method="post" id="adsensem-form" enctype="multipart/form-data">
 	<input type="hidden" name="adsensem-mode" id="adsensem-mode" value="edit_ad">
 	<input type="hidden" name="adsensem-action" id="adsensem-action">

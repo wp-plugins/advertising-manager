@@ -171,40 +171,75 @@ class Template_EditNetwork
 	
 	function displaySectionDisplayOptions($ad)
 	{
-?><div style="text-align:right; width:250px; font-size:small;">
-	<label for="adsensem-show-home"><?php _e('On Homepage:', 'advman'); ?></label>
-	<select name="adsensem-show-home" id="adsensem-show-home">
-		<option<?php echo ($ad->d('show-home') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-		<option<?php echo ($ad->d('show-home') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
-	</select>
-	<br />
-	
-	<label for="adsensem-show-post"><?php _e('On Posts:', 'advman'); ?></label></td><td>
-	<select name="adsensem-show-post" id="adsensem-show-post">
-		<option<?php echo ($ad->d('show-post') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-		<option<?php echo ($ad->d('show-post') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
-	</select>
-	<br />
-	
-	<label for="adsensem-show-page"><?php _e('On Pages:', 'advman'); ?></label>
-	<select name="adsensem-show-page" id="adsensem-show-page">
-		<option<?php echo ($ad->d('show-page') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-		<option<?php echo ($ad->d('show-page') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
-	</select>
-	<br />
+		// Query the users
+		$users = get_users_of_blog();
 		
-	<label for="adsensem-show-archive"><?php _e('On Archives:', 'advman'); ?></label>
-	<select name="adsensem-show-archive" id="adsensem-show-archive">
-		<option<?php echo ($ad->d('show-archive') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-		<option<?php echo ($ad->d('show-archive') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
-	</select>
-	<br />
-	
-	<label class="adsensem_label" for="adsensem-show-search"><?php _e('On Search:', 'advman'); ?></label>
-	<select name="adsensem-show-search" id="adsensem-show-search">
-		<option<?php echo ($ad->d('show-search') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
-		<option<?php echo ($ad->d('show-search') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
-	</select>
+?><div style="text-align:right; width:250px; font-size:small;">
+	<table>
+	<tr>
+		<td style="white-space:nowrap">
+			<label for="adsensem-show-home"><?php _e('On Homepage:', 'advman'); ?></label>
+			<select name="adsensem-show-home" id="adsensem-show-home">
+				<option<?php echo ($ad->d('show-home') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
+				<option<?php echo ($ad->d('show-home') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+			</select>
+		</td>
+		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
+		<td style="white-space:nowrap">
+			<label for="adsensem-show-author"><?php _e('By Author:', 'advman'); ?></label>
+			<select name="adsensem-show-author" id="adsensem-show-author">
+				<option<?php echo ($ad->d('show-author') == 'all' ? " selected='selected'" : ''); ?> value="all"> <?php _e('All Authors', 'advman'); ?></option>
+<?php foreach ($users as $user) : ?>
+				<option<?php echo ($ad->d('show-author') == $user->user_id ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
+<?php endforeach; ?>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td style="white-space:nowrap">
+			<label for="adsensem-show-page"><?php _e('On Posts:', 'advman'); ?></label>
+			<select name="adsensem-show-post" id="adsensem-show-post">
+				<option<?php echo ($ad->d('show-post') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
+				<option<?php echo ($ad->d('show-post') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+			</select>
+		</td>
+		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td style="white-space:nowrap">
+			<label for="adsensem-show-page"><?php _e('On Pages:', 'advman'); ?></label>
+			<select name="adsensem-show-page" id="adsensem-show-page">
+				<option<?php echo ($ad->d('show-page') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
+				<option<?php echo ($ad->d('show-page') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+			</select>
+		</td>
+		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td style="white-space:nowrap">
+			<label for="adsensem-show-archive"><?php _e('On Archives:', 'advman'); ?></label>
+			<select name="adsensem-show-archive" id="adsensem-show-archive">
+				<option<?php echo ($ad->d('show-archive') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
+				<option<?php echo ($ad->d('show-archive') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+			</select>
+		</td>
+		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td style="white-space:nowrap">
+			<label class="adsensem_label" for="adsensem-show-search"><?php _e('On Search:', 'advman'); ?></label>
+			<select name="adsensem-show-search" id="adsensem-show-search">
+				<option<?php echo ($ad->d('show-search') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
+				<option<?php echo ($ad->d('show-search') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
+			</select>
+		</td>
+		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
+		<td></td>
+	</tr>
+	</table>
 </div>
 <br />
 <span style="font-size:x-small;color:gray;">Display options determine where on your website your ads will appear.</span>

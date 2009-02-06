@@ -85,16 +85,26 @@ class OX_Adnet
 	
 	function is_available()
 	{
+		// Filter by active
+		if (!$this->active) {
+			return false;
+		}
+		// Filter by author
+		$author = $this->pd('show-author');
+		if (!empty($author) && ($author != 'all')) {
+			global $post;
+			if ($post->post_author != $this->p['show-author']) {
+				return false;
+			}
+		}
+		
 		//Extend this to include all ad-specific checks, so it can used to filter adzone groups in future.
 		return (
-			($this->active) &&
-			(
-				( ($this->p['show-home'] == 'yes') && is_home() ) ||
-				( ($this->p['show-post'] == 'yes') && is_single() ) ||
-				( ($this->p['show-page'] == 'yes') && is_page() ) ||
-				( ($this->p['show-archive'] == 'yes') && is_archive() ) ||
-				( ($this->p['show-search'] == 'yes') && is_search() )
-			)
+			( ($this->pd('show-home') == 'yes') && is_home() ) ||
+			( ($this->pd('show-post') == 'yes') && is_single() ) ||
+			( ($this->pd('show-page') == 'yes') && is_page() ) ||
+			( ($this->pd('show-archive') == 'yes') && is_archive() ) ||
+			( ($this->pd('show-search') == 'yes') && is_search() )
 		);
 	}
 	
@@ -166,6 +176,7 @@ class OX_Adnet
 			'openx-market' => 'yes',
 			'openx-market-cpm' => '0.20',
 			'show-archive' => 'yes',
+			'show-author' => 'all',
 			'show-home' => 'yes',
 			'show-page' => 'yes',
 			'show-post' => 'yes',

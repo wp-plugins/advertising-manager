@@ -202,7 +202,7 @@ class adsensem
 		foreach ($_adsensem['ads'] as $id => $ad) {
 			if ( ($ad->name == $matches[1]) && ($ad->is_available()) ) {
 				$ads[] = $ad;
-				$totalWeight += $ad->p['weight'];
+				$totalWeight += $ad->pd('weight');
 			}
 		}
 		// Pick the ad
@@ -211,7 +211,7 @@ class adsensem
 		// Loop through ads until the selected one is chosen
 		$wt = 0;
 		foreach ($ads as $ad) {
-			$wt += $ad->p['weight'];
+			$wt += $ad->pd('weight');
 			if ( ($wt / $totalWeight) > $rnd) {
 				// Display the ad
 				return $ad->get_ad();
