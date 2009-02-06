@@ -1,5 +1,5 @@
 <?php
-if(!ADSENSEM_VERSION) {die();}
+if(!ADVMAN_VERSION) {die();}
 
 class Template_Notice
 {

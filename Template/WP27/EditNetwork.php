@@ -1,5 +1,5 @@
 <?php
-if(!ADSENSEM_VERSION) {die();}
+if(!ADVMAN_VERSION) {die();}
 
 class Template_EditNetwork
 {
@@ -172,35 +172,35 @@ class Template_EditNetwork
 	function displaySectionDisplayOptions($ad)
 	{
 ?><div style="text-align:right; width:250px; font-size:small;">
-	<label for="adsensem-show-home">On Homepage:</label>
+	<label for="adsensem-show-home"><?php _e('On Homepage:', 'advman'); ?></label>
 	<select name="adsensem-show-home" id="adsensem-show-home">
 		<option<?php echo ($ad->d('show-home') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
 		<option<?php echo ($ad->d('show-home') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
 	</select>
 	<br />
 	
-	<label for="adsensem-show-post">On Posts:</label></td><td>
+	<label for="adsensem-show-post"><?php _e('On Posts:', 'advman'); ?></label></td><td>
 	<select name="adsensem-show-post" id="adsensem-show-post">
 		<option<?php echo ($ad->d('show-post') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
 		<option<?php echo ($ad->d('show-post') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
 	</select>
 	<br />
 	
-	<label for="adsensem-show-page">On Pages:</label>
+	<label for="adsensem-show-page"><?php _e('On Pages:', 'advman'); ?></label>
 	<select name="adsensem-show-page" id="adsensem-show-page">
 		<option<?php echo ($ad->d('show-page') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
 		<option<?php echo ($ad->d('show-page') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
 	</select>
 	<br />
 		
-	<label for="adsensem-show-archive">On Archives:</label>
+	<label for="adsensem-show-archive"><?php _e('On Archives:', 'advman'); ?></label>
 	<select name="adsensem-show-archive" id="adsensem-show-archive">
 		<option<?php echo ($ad->d('show-archive') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
 		<option<?php echo ($ad->d('show-archive') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>
 	</select>
 	<br />
 	
-	<label class="adsensem_label" for="adsensem-show-search">On Search:</label>
+	<label class="adsensem_label" for="adsensem-show-search"><?php _e('On Search:', 'advman'); ?></label>
 	<select name="adsensem-show-search" id="adsensem-show-search">
 		<option<?php echo ($ad->d('show-search') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> Yes</option>
 		<option<?php echo ($ad->d('show-search') == 'no' ? " selected='selected'" : ''); ?> value="no"> No</option>

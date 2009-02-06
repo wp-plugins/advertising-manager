@@ -44,7 +44,7 @@ class Template_EditAd_Cj extends Template_EditAd
 	<td class="adsensem-label"><label for="adsensem-new-window">New Window:</label></td>
 	<td>
 		<select name="adsensem-new-window" id="adsensem-new-window">
-			<option value=""> Use Default</option>
+			<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 			<option<?php echo ($ad->p['new-window'] == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> Yes</option>
 			<option<?php echo ($ad->p['new-window'] == 'no' ? ' selected="selected"' : ''); ?> value="no"> No</option>
 		</select>
@@ -70,7 +70,7 @@ class Template_EditAd_Cj extends Template_EditAd
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 				<optgroup id="adsensem-optgroup-default" label="Default">
-					<option value=""> Use Default</option>
+					<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
 					<option<?php echo ($ad->p['adformat'] == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>

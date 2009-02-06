@@ -1,5 +1,5 @@
 <?php
-if(!ADSENSEM_VERSION){die();}
+if(!ADVMAN_VERSION){die();}
 require_once(ADS_PATH . '/OX/Adnet.php');	
 
 $_adsensem_networks['OX_Adnet_Cj'] = array(

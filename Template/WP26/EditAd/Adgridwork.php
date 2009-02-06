@@ -21,7 +21,7 @@ class Template_EditAd_Adgridwork extends Template_EditAd
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 				<optgroup id="adsensem-optgroup-default" label="Default">
-					<option value=""> Use Default</option>
+					<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
 					<option<?php echo ($ad->p['adformat'] == '800x90' ? ' selected="selected"' : ''); ?> value="800x90"> 800 x 90 Large Leaderboard</option>

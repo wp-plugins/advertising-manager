@@ -70,7 +70,7 @@ class Template_EditAd_Adsense extends Template_EditAd
 		<td>
 			<select name="adsensem-adtype" id="adsensem-adtype" onchange="adsensem_form_update(this);">
 <?php if ($mode != 'edit_network'): ?>
-				<option value=""> Use Default</option>
+				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 <?php endif; ?>
 				<option<?php echo ($ad->p['adtype'] == 'ad' ? ' selected="selected"' : ''); ?> value="ad"> Ad Unit</option>
 				<option<?php echo ($ad->p['adtype'] == 'link' ? ' selected="selected"' : ''); ?> value="link"> Link Unit</option>
@@ -91,7 +91,7 @@ class Template_EditAd_Adsense extends Template_EditAd
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 <?php if ($mode != 'edit_network'): ?>
 				<optgroup id="adsensem-optgroup-Default" label="Default">
-					<option selected value=""> Use Default</option>
+					<option selected value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
 <?php endif; ?>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
@@ -126,7 +126,7 @@ class Template_EditAd_Adsense extends Template_EditAd
 			<select name="adsensem-linkformat" id="adsensem-linkformat" onchange="adsensem_form_update(this);">
 <?php if ($mode != 'edit_network'): ?>
 				<optgroup id="adsensem-optgroup-Default" label="Default">
-					<option selected value=""> Use Default</option>
+					<option selected value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
 <?php endif; ?>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
@@ -148,7 +148,7 @@ class Template_EditAd_Adsense extends Template_EditAd
 			<select name="adsensem-referralformat" id="adsensem-referralformat" onchange="adsensem_form_update(this);">
 <?php if ($mode != 'edit_network'): ?>
 				<optgroup id="adsensem-optgroup-Default" label="Default">
-					<option value=""> Use Default</option>
+					<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
 <?php endif; ?>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">

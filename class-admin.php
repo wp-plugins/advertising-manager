@@ -1,5 +1,5 @@
 <?php
-if (!ADSENSEM_VERSION) {die();}
+if (!ADVMAN_VERSION) {die();}
 
 require_once(ADS_PATH . '/OX/Tools.php');
 
@@ -50,7 +50,7 @@ class adsensem_admin
 			
 			$update_adsensem = true; 
 			
-		} elseif (adsensem_admin::version_upgrade($_adsensem['version'],ADSENSEM_VERSION)) {
+		} elseif (adsensem_admin::version_upgrade($_adsensem['version'],ADVMAN_VERSION)) {
 				include_once('class-upgrade.php');
 				
 				//Backup cycle

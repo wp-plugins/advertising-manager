@@ -26,7 +26,7 @@ class adsensem_upgrade {
 			adsensem_admin::add_notice('optimise','Advertising Manager has been upgraded!<br />Would you like Advertising Manager to enable <a href="www.switzer.org">auto optimisation</a>? (RECOMMENDED)','yn');
 		}
 		
-		$_adsensem['version']=ADSENSEM_VERSION;
+		$_adsensem['version']=ADVMAN_VERSION;
 	}
 
 	

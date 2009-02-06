@@ -14,10 +14,6 @@ $template = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP26' : 'WP27';
 
 // Definitions
 @define("ADSENSEM_VERSION", "3.3.4");
-@define("AM_BRAND_NAME", "Advertising Manager");
-@define("AM_BRAND_DEFAULT_NETWORK", "Adsense");
-@define("AM_BRAND_ACTIVATE",'Earn even more with <a href="http://www.text-link-ads.com/?ref=55499" target="_blank">Text Link Ads</a> and <a href="http://www.inlinks.com/?ref=211569" target="_blank">InLinks!</a>');
-//@define('ADS_PATH','/wp-content/plugins' . strrchr(dirname(__FILE__),'/') . "/");
 @define('ADS_PATH', dirname(__FILE__));
 
 // Ad Network Includes
