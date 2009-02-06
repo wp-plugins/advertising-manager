@@ -489,7 +489,8 @@ class adsensem_admin
 			
 			case 'create_ad' :
 				include_once(ADS_PATH . '/Template/' . TEMPLATE . '/CreateAd.php');
-				Template_CreateAd::display($target);
+				$templateClass = new Template_CreateAd();
+				$templateClass->display($target);
 				break;
 			
 			case 'edit_ad' :
