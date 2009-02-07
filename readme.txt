@@ -1,5 +1,5 @@
 === Advertising Manager ===
-Contributors: mutube, Scott Switzer
+Contributors: switzer, mutube
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=martin%2efitzpatrick%40gmail%2ecom&item_name=Donation%20to%20mutube%2ecom&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
 Tags: adsense, ad, link, referral, manage, widget, google, adbrite, cj, adpinion, shoppingads, ypn, widgetbucks, openx, adroll, affiliate, crispads, adgridwork
 Tested up to: 2.7
@@ -64,12 +64,14 @@ If the latest version to work was 2.1, enter: ?adsensem-revert-db=2
 
 Load the page and Advertising Manager will revert to that version of the database and re-attempt the upgrade.
 
-= What else do you have planned? =
-
-1. Ad Zones to allow grouping of ads at a particular location, and switching depending on the visitors language, country, etc.
-1. Auto-inserting of ads into posts based on configurable rules (i.e. All Posts, 2nd Paragraph)
-1. Localisation: multi-language support
-1. Support for Amazon Affiliates and any other networks I hear about.
+= How can I share revenue with my authors? =
+1.  Load YOUR ad into Advertising manager.
+1.  Set the weight of this ad to be 100.
+1.  Configure the other parameters of the ad as you see fit.
+1.  Copy this ad.  Make sure to keep the name the same (so the ad will rotate).
+1.  In 'Display Options', select the author who you want to share revenue with.
+1.  In 'Account Details' section, replace the ID with your partner's ID.
+1.  Depending on what % you want to show, set the weight appropriately.  For example, if you want to show 2 ads from your author for every 1 ad for you, then set the author ad weight to 200 (e.g. 200 / (200 + 100) = 66.7% rev share)
 
 = Where can I get more information? =
 
@@ -84,6 +86,10 @@ Load the page and Advertising Manager will revert to that version of the databas
 * Test with WP 2.7
 * More testing the upgrade functionality from Adsense Deluxe, Adsense Manager, OpenX WP Plug-in
 * Make it able to translate in different languages
+* Ad Zones to allow grouping of ads at a particular location, and switching depending on the visitors language, country, etc.
+* Auto-inserting of ads into posts based on configurable rules (i.e. All Posts, 2nd Paragraph)
+* Localisation: multi-language support
+* Support for Amazon Affiliates and any other networks I hear about.
 
 == Change Log ==
 
