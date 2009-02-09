@@ -22,7 +22,7 @@ class Template_EditAd_Shoppingads extends Template_EditAd
 ?><div style="font-size:small;">
 <p>
 	<label for="adsensem-account-id">Account ID:</label>
-	<input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->p['account-id']; ?>" />
+	<input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->get('account-id'); ?>" />
 </p>
 </div>
 <br />
@@ -32,6 +32,8 @@ class Template_EditAd_Shoppingads extends Template_EditAd
 	
 	function displaySectionFormat($ad)
 	{
+		$format = $ad->get('adformat');
+		
 ?>	<table id="adsensem-settings-ad_format">
 	<tr id="adsensem-form-adformat">
 		<td class="adsensem_label"><label for="adsensem-adformat">Format:</label></td>
@@ -41,26 +43,26 @@ class Template_EditAd_Shoppingads extends Template_EditAd
 					<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
-					<option<?php echo ($ad->p['adformat'] == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>
-					<option<?php echo ($ad->p['adformat'] == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> 468 x 60 Banner</option>
-					<option<?php echo ($ad->p['adformat'] == '234x60' ? ' selected="selected"' : ''); ?> value="234x60"> 234 x 60 Half Banner</option>
+					<option<?php echo ($format == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>
+					<option<?php echo ($format == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> 468 x 60 Banner</option>
+					<option<?php echo ($format == '234x60' ? ' selected="selected"' : ''); ?> value="234x60"> 234 x 60 Half Banner</option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-vertical" label="Vertical">
-					<option<?php echo ($ad->p['adformat'] == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> 120 x 600 Skyscraper</option>
-					<option<?php echo ($ad->p['adformat'] == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> 160 x 600 Wide Skyscraper</option>
-					<option<?php echo ($ad->p['adformat'] == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> 120 x 240 Vertical Banner</option>
+					<option<?php echo ($format == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> 120 x 600 Skyscraper</option>
+					<option<?php echo ($format == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> 160 x 600 Wide Skyscraper</option>
+					<option<?php echo ($format == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> 120 x 240 Vertical Banner</option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-square" label="Square">
-					<option<?php echo ($ad->p['adformat'] == '336x280' ? ' selected="selected"' : ''); ?> value="336x280"> 336 x 280 Large Rectangle</option>
-					<option<?php echo ($ad->p['adformat'] == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> 300 x 250 Medium Rectangle</option>
-					<option<?php echo ($ad->p['adformat'] == '250x250' ? ' selected="selected"' : ''); ?> value="250x250"> 250 x 250 Square</option>
-					<option<?php echo ($ad->p['adformat'] == '180x150' ? ' selected="selected"' : ''); ?> value="180x150"> 180 x 150 Small Rectangle</option>
-					<option<?php echo ($ad->p['adformat'] == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> 125 x 125 Button</option>
+					<option<?php echo ($format == '336x280' ? ' selected="selected"' : ''); ?> value="336x280"> 336 x 280 Large Rectangle</option>
+					<option<?php echo ($format == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> 300 x 250 Medium Rectangle</option>
+					<option<?php echo ($format == '250x250' ? ' selected="selected"' : ''); ?> value="250x250"> 250 x 250 Square</option>
+					<option<?php echo ($format == '180x150' ? ' selected="selected"' : ''); ?> value="180x150"> 180 x 150 Small Rectangle</option>
+					<option<?php echo ($format == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> 125 x 125 Button</option>
 				</optgroup>
 			</select>
 		</td>
 		<td>
-			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('adformat'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('adformat'); ?>">
 		</td>
 	</tr>
 	</table>
@@ -81,7 +83,7 @@ class Template_EditAd_Shoppingads extends Template_EditAd
 			<option<?php echo ($ad->p['attitude'] == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 			<option<?php echo ($ad->p['attitude'] == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 		</select>
-			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('attitude'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('attitude'); ?>">
 	</td>
 </tr>
 <tr>
@@ -92,7 +94,7 @@ class Template_EditAd_Shoppingads extends Template_EditAd
 			<option<?php echo ($ad->p['new-window'] == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 			<option<?php echo ($ad->p['new-window'] == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 		</select>
-			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('new-window'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('new-window'); ?>">
 	</td>
 </tr>
 </table>
@@ -110,40 +112,40 @@ class Template_EditAd_Shoppingads extends Template_EditAd
 			<table>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-border">Border:</label></td>
-				<td>#<input name="adsensem-color-border" onChange="adsensem_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->p['color-border']; ?>" /></td>
-				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-border'); ?>"></td>
+				<td>#<input name="adsensem-color-border" onChange="adsensem_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get('color-border'); ?>" /></td>
+				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-border'); ?>"></td>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-description">Description:</label></td>
-				<td>#<input name="adsensem-color-description" onChange="adsensem_update_color(this,'ad-color-description','description');" size="6" value="<?php echo $ad->p['color-description']; ?>" /></td>
-				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-description'); ?>"></td>
+				<td>#<input name="adsensem-color-description" onChange="adsensem_update_color(this,'ad-color-description','description');" size="6" value="<?php echo $ad->get('color-description'); ?>" /></td>
+				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-description'); ?>"></td>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-bg">Background:</label></td>
-				<td>#<input name="adsensem-color-bg" onChange="adsensem_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->p['color-bg']; ?>" /></td>
-				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-bg'); ?>"></td>
+				<td>#<input name="adsensem-color-bg" onChange="adsensem_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get('color-bg'); ?>" /></td>
+				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-bg'); ?>"></td>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-price">Price:</label></td>
-				<td>#<input name="adsensem-color-price" onChange="adsensem_update_color(this,'ad-color-price','price');" size="6" value="<?php echo $ad->p['color-price']; ?>" /></td>
-				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-price'); ?>"></td>
+				<td>#<input name="adsensem-color-price" onChange="adsensem_update_color(this,'ad-color-price','price');" size="6" value="<?php echo $ad->get('color-price'); ?>" /></td>
+				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-price'); ?>"></td>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-footer">Footer:</label></td>
-				<td>#<input name="adsensem-color-footer" onChange="adsensem_update_color(this,'ad-color-footer','footer');" size="6" value="<?php echo $ad->p['color-footer']; ?>" /></td>
-				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-footer'); ?>"></td>
+				<td>#<input name="adsensem-color-footer" onChange="adsensem_update_color(this,'ad-color-footer','footer');" size="6" value="<?php echo $ad->get('color-footer'); ?>" /></td>
+				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-footer'); ?>"></td>
 			</tr>
 			</table>
 		</td>
 		<td>
-			<div id="ad-color-bg" style="margin-top:1em;width:200px;background: #<?php echo htmlspecialchars($ad->pd('color-bg'), ENT_QUOTES); ?>;">
-			<div id="ad-color-border" style="font: 10px arial, sans-serif; border: 1px solid #<?php echo htmlspecialchars($ad->pd('color-border'), ENT_QUOTES); ?>" class="linkunit-wrapper">
+			<div id="ad-color-bg" style="margin-top:1em;width:200px;background: #<?php echo htmlspecialchars($ad->get('color-bg', true), ENT_QUOTES); ?>;">
+			<div id="ad-color-border" style="font: 10px arial, sans-serif; border: 1px solid #<?php echo htmlspecialchars($ad->get('color-border', true), ENT_QUOTES); ?>" class="linkunit-wrapper">
 			<img src="<?php echo get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager/shoppingads.png'?>" style="width:60%">
-			<div id="ad-color-description" style="color: #<?php echo htmlspecialchars($ad->pd('color-desciption'), ENT_QUOTES); ?>; font: 11px verdana, arial, sans-serif; padding: 2px;">
+			<div id="ad-color-description" style="color: #<?php echo htmlspecialchars($ad->get('color-desciption', true), ENT_QUOTES); ?>; font: 11px verdana, arial, sans-serif; padding: 2px;">
 				<b><u>Description of Product</u></b><br /></div>
-			<div id="ad-color-price" style="color: #<?php echo htmlspecialchars($ad->pd('color-price'), ENT_QUOTES); ?>; padding: 2px;" class="text">
+			<div id="ad-color-price" style="color: #<?php echo htmlspecialchars($ad->get('color-price', true), ENT_QUOTES); ?>; padding: 2px;" class="text">
 				Current Bid: $5.00<br /></div>
-			<div id="ad-color-footer" style="color: #<?php echo htmlspecialchars($ad->pd('color-footer'), ENT_QUOTES); ?>; font: 10px verdana, arial, sans-serif; padding: 2px;">
+			<div id="ad-color-footer" style="color: #<?php echo htmlspecialchars($ad->get('color-footer', true), ENT_QUOTES); ?>; font: 10px verdana, arial, sans-serif; padding: 2px;">
 				&nbsp;<span style="text-decoration:underline">Ads by <?php echo $ad->networkName; ?></span></div>
 			</div>
 		</td>
@@ -160,11 +162,11 @@ class Template_EditAd_Shoppingads extends Template_EditAd
 <table>
 <tr>
 	<td class="adsensem-label"><label for="adsensem-campaign">Camapign:</label></td>
-	<td><input type="text" name="adsensem-campaign" style="width:200px" id="adsensem-campaign" value="<?php echo $ad->p['campaign']; ?>" /></td>
+	<td><input type="text" name="adsensem-campaign" style="width:200px" id="adsensem-campaign" value="<?php echo $ad->get('campaign'); ?>" /></td>
 </tr>
 <tr>
 	<td class="adsensem-label"><label for="adsensem-keywords">Keywords:</label></td>
-	<td><input type="text" name="adsensem-keywords" style="width:200px" id="adsensem-keywords" value="<?php echo $ad->p['keywords']; ?>" /></td>
+	<td><input type="text" name="adsensem-keywords" style="width:200px" id="adsensem-keywords" value="<?php echo $ad->get('keywords'); ?>" /></td>
 </tr>
 </table>
 </div>

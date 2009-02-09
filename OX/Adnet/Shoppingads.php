@@ -59,12 +59,12 @@ class OX_Adnet_Shoppingads extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match("/shoppingads_ad_client(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->p['account-id'] = $matches[4];
+			$this->set('account-id', $matches[4]);
 			$code = str_replace("shoppingads_ad_client{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_ad_client{$matches[1]}={$matches[2]}{$matches[3]}{{account-id}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_ad_campaign(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->p['campaign'] = $matches[4];
+			$this->set('campaign', $matches[4]);
 			$code = str_replace("shoppingads_ad_campaign{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_ad_campaign{$matches[1]}={$matches[2]}{$matches[3]}{{campaign}}{$matches[5]}", $code);
 		}
 		
@@ -77,55 +77,55 @@ class OX_Adnet_Shoppingads extends OX_Adnet
 			$q2 = $matches[5];
 			if (preg_match("/shoppingads_ad_width(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
 				$width = $matches[4];
-				$this->p['width'] = $width;
-				$this->p['height'] = $height;
-				$this->p['adformat'] = $width . 'x' . $height;
+				$this->set('width', $width);
+				$this->set('height', $height);
+				$this->set('adformat', $width . 'x' . $height);
 				$code = str_replace("shoppingads_ad_height{$s1}={$s2}{$q1}{$height}{$q2}", "shoppingads_ad_height{$s1}={$s2}{$q1}{{height}}{$q2}", $code);
 				$code = str_replace("shoppingads_ad_width{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_ad_width{$matches[1]}={$matches[2]}{$matches[3]}{{width}}{$matches[5]}", $code);
 			}
 		}
 		
 		if (preg_match("/shoppingads_ad_kw(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->p['keywords'] = $matches[4];
+			$this->set('keywords', $matches[4]);
 			$code = str_replace("shoppingads_ad_kw{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_ad_kw{$matches[1]}={$matches[2]}{$matches[3]}{{keywords}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_color_border(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->p['color-border'] = $matches[4];
+			$this->set('color-border', $matches[4]);
 			$code = str_replace("shoppingads_color_border{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_color_border{$matches[1]}={$matches[2]}{$matches[3]}{{color-border}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_color_bg(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->p['color-bg'] = $matches[4];
+			$this->set('color-bg', $matches[4]);
 			$code = str_replace("shoppingads_color_bg{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_color_bg{$matches[1]}={$matches[2]}{$matches[3]}{{color-bg}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_color_heading(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->p['color-bg'] = $matches[4];
+			$this->set('color-bg', $matches[4]);
 			$code = str_replace("shoppingads_color_heading{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_color_heading{$matches[1]}={$matches[2]}{$matches[3]}{{color-title}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_color_text(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->p['color-text'] = $matches[4];
+			$this->set('color-text', $matches[4]);
 			$code = str_replace("shoppingads_color_text{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_color_text{$matches[1]}={$matches[2]}{$matches[3]}{{color-text}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_color_link(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->p['color-link'] = $matches[4];
+			$this->set('color-link', $matches[4]);
 			$code = str_replace("shoppingads_color_link{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_color_link{$matches[1]}={$matches[2]}{$matches[3]}{{color-link}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_attitude(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->p['attitude'] = $matches[4];
+			$this->set('attitude', $matches[4]);
 			$code = str_replace("shoppingads_attitude{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_attitude{$matches[1]}={$matches[2]}{$matches[3]}{{attitude}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_options(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->p['new-window'] = ($matches[4]=='n') ? 'yes' : 'no';
+			$this->set('new-window', ($matches[4]=='n') ? 'yes' : 'no');
 			$code = str_replace("shoppingads_options{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_options{$matches[1]}={$matches[2]}{$matches[3]}{{new-window}}{$matches[5]}", $code);
 		}
 		
-		$this->p['code'] = $code;
+		$this->set('code', $code);
 	}
 }
 /*

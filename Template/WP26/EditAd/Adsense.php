@@ -19,19 +19,19 @@ class Template_EditAd_Adsense extends Template_EditAd
 <table>
 <tr>
 	<td><label for="adsensem-slot">Account ID:</label></td>
-	<td><input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->p['account-id']; ?>" /></td>
+	<td><input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->get('account-id'); ?>" /></td>
 </tr>
 <tr>
 	<td><label for="adsensem-slot">Partner ID:</label></td>
-	<td><input type="text" name="adsensem-partner" style="width:200px" id="adsensem-partner" value="<?php echo $ad->p['partner']; ?>" /></td>
+	<td><input type="text" name="adsensem-partner" style="width:200px" id="adsensem-partner" value="<?php echo $ad->get('partner'); ?>" /></td>
 </tr>
 <tr>
 	<td><label for="adsensem-slot">Slot ID:</label></td>
-	<td><input type="text" name="adsensem-slot" style="width:200px" id="adsensem-slot" value="<?php echo $ad->p['slot']; ?>" /></td>
+	<td><input type="text" name="adsensem-slot" style="width:200px" id="adsensem-slot" value="<?php echo $ad->get('slot'); ?>" /></td>
 </tr>
 <tr>
 	<td><label for="adsensem-slot">Channel:</label></td>
-	<td><input type="text" name="adsensem-channel" style="width:200px" id="adsensem-channel" value="<?php echo $ad->p['channel']; ?>" /></td>
+	<td><input type="text" name="adsensem-channel" style="width:200px" id="adsensem-channel" value="<?php echo $ad->get('channel'); ?>" /></td>
 </tr>
 </table>
 </div>
@@ -42,8 +42,11 @@ class Template_EditAd_Adsense extends Template_EditAd
 	
 	function displaySectionFormat($ad)
 	{
+		$type = $ad->get('adtype');
+		$format = $ad->get('adformat');
+		
 ?>	<table id="adsensem-settings-ad_format">
-<?php if ($ad->p['adtype'] == 'slot') : ?>
+<?php if ($type == 'slot') : ?>
 		<input type="hidden" name="adsensem-adtype" value="slot">
 <?php else : ?>
 	<tr id="adsensem-form-adtype">
@@ -51,18 +54,18 @@ class Template_EditAd_Adsense extends Template_EditAd
 		<td>
 			<select name="adsensem-adtype" id="adsensem-adtype" onchange="adsensem_form_update(this);">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->p['adtype'] == 'ad' ? ' selected="selected"' : ''); ?> value="ad"> Ad Unit</option>
-				<option<?php echo ($ad->p['adtype'] == 'link' ? ' selected="selected"' : ''); ?> value="link"> Link Unit</option>
-				<option<?php echo ($ad->p['adtype'] == 'ref_text' ? ' selected="selected"' : ''); ?> value="ref_text"> Text Referral</option>
-				<option<?php echo ($ad->p['adtype'] == 'ref_image' ? ' selected="selected"' : ''); ?> value="ref_image"> Image Referral</option>
+				<option<?php echo ($type == 'ad' ? ' selected="selected"' : ''); ?> value="ad"> Ad Unit</option>
+				<option<?php echo ($type == 'link' ? ' selected="selected"' : ''); ?> value="link"> Link Unit</option>
+				<option<?php echo ($type == 'ref_text' ? ' selected="selected"' : ''); ?> value="ref_text"> Text Referral</option>
+				<option<?php echo ($type == 'ref_image' ? ' selected="selected"' : ''); ?> value="ref_image"> Image Referral</option>
 			</select>
 		</td>
 		<td>
-			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('adtype'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('adtype'); ?>">
 		</td>
 	</tr>
 <?php endif; ?>
-	<tr id="adsensem-form-ad-format"<?php echo (($ad->p['adtype'] == 'ad' || $ad->p['adtype'] == 'slot') ? '' : ' style="display:none"'); ?>>
+	<tr id="adsensem-form-ad-format"<?php echo (($type == 'ad' || $type == 'slot') ? '' : ' style="display:none"'); ?>>
 		<td class="adsensem_label"><label for="adsensem-adformat"><a href="https://www.google.com/adsense/adformats" target="_new">Format</a>:</label></td>
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
@@ -70,30 +73,30 @@ class Template_EditAd_Adsense extends Template_EditAd
 					<option selected value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
-					<option<?php echo ($ad->p['adformat'] == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>
-					<option<?php echo ($ad->p['adformat'] == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> 468 x 60 Banner</option>
-					<option<?php echo ($ad->p['adformat'] == '234x60' ? ' selected="selected"' : ''); ?> value="234x60"> 234 x 60 Half Banner</option>
+					<option<?php echo ($format == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>
+					<option<?php echo ($format == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> 468 x 60 Banner</option>
+					<option<?php echo ($format == '234x60' ? ' selected="selected"' : ''); ?> value="234x60"> 234 x 60 Half Banner</option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-vertical" label="Vertical">
-					<option<?php echo ($ad->p['adformat'] == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> 120 x 600 Skyscraper</option>
-					<option<?php echo ($ad->p['adformat'] == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> 160 x 600 Wide Skyscraper</option>
-					<option<?php echo ($ad->p['adformat'] == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> 120 x 240 Vertical Banner</option>
+					<option<?php echo ($format == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> 120 x 600 Skyscraper</option>
+					<option<?php echo ($format == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> 160 x 600 Wide Skyscraper</option>
+					<option<?php echo ($format == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> 120 x 240 Vertical Banner</option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-square" label="Square">
-					<option<?php echo ($ad->p['adformat'] == '336x280' ? ' selected="selected"' : ''); ?> value="336x280"> 336 x 280 Large Rectangle</option>
-					<option<?php echo ($ad->p['adformat'] == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> 300 x 250 Medium Rectangle</option>
-					<option<?php echo ($ad->p['adformat'] == '250x250' ? ' selected="selected"' : ''); ?> value="250x250"> 250 x 250 Square</option>
-					<option<?php echo ($ad->p['adformat'] == '200x200' ? ' selected="selected"' : ''); ?> value="200x200"> 200 x 200 Small Square</option>
-					<option<?php echo ($ad->p['adformat'] == '180x150' ? ' selected="selected"' : ''); ?> value="180x150"> 180 x 150 Small Rectangle</option>
-					<option<?php echo ($ad->p['adformat'] == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> 125 x 125 Button</option>
+					<option<?php echo ($format == '336x280' ? ' selected="selected"' : ''); ?> value="336x280"> 336 x 280 Large Rectangle</option>
+					<option<?php echo ($format == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> 300 x 250 Medium Rectangle</option>
+					<option<?php echo ($format == '250x250' ? ' selected="selected"' : ''); ?> value="250x250"> 250 x 250 Square</option>
+					<option<?php echo ($format == '200x200' ? ' selected="selected"' : ''); ?> value="200x200"> 200 x 200 Small Square</option>
+					<option<?php echo ($format == '180x150' ? ' selected="selected"' : ''); ?> value="180x150"> 180 x 150 Small Rectangle</option>
+					<option<?php echo ($format == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> 125 x 125 Button</option>
 				</optgroup>
 			</select>
 		</td>
 		<td>
-			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('adformat'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('adformat'); ?>">
 		</td>
 	</tr>
-	<tr id="adsensem-form-link-format"<?php echo (($ad->p['adtype'] == 'link') ? '' : ' style="display:none"'); ?>>
+	<tr id="adsensem-form-link-format"<?php echo (($type == 'link') ? '' : ' style="display:none"'); ?>>
 		<td class="adsensem_label"><label for="adsensem-linkformat"><a href="https://www.google.com/adsense/adformats" target="_new">Format</a>:</label></td>
 		<td>
 			<select name="adsensem-linkformat" id="adsensem-linkformat" onchange="adsensem_form_update(this);">
@@ -101,19 +104,19 @@ class Template_EditAd_Adsense extends Template_EditAd
 					<option selected value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
-					<option<?php echo ($ad->p['adformat'] == '728x15' ? ' selected="selected"' : ''); ?> value="728x15"> 728 x 15</option>
-					<option<?php echo ($ad->p['adformat'] == '468x15' ? ' selected="selected"' : ''); ?> value="468x15"> 468 x 15</option>
+					<option<?php echo ($format == '728x15' ? ' selected="selected"' : ''); ?> value="728x15"> 728 x 15</option>
+					<option<?php echo ($format == '468x15' ? ' selected="selected"' : ''); ?> value="468x15"> 468 x 15</option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-square" label="Square">
-					<option<?php echo ($ad->p['adformat'] == '200x90' ? ' selected="selected"' : ''); ?> value="200x90"> 200 x 90</option>
-					<option<?php echo ($ad->p['adformat'] == '180x90' ? ' selected="selected"' : ''); ?> value="180x90"> 180 x 90</option>
-					<option<?php echo ($ad->p['adformat'] == '160x90' ? ' selected="selected"' : ''); ?> value="160x90"> 160 x 90</option>
-					<option<?php echo ($ad->p['adformat'] == '120x90' ? ' selected="selected"' : ''); ?> value="120x90"> 120 x 90</option>
+					<option<?php echo ($format == '200x90' ? ' selected="selected"' : ''); ?> value="200x90"> 200 x 90</option>
+					<option<?php echo ($format == '180x90' ? ' selected="selected"' : ''); ?> value="180x90"> 180 x 90</option>
+					<option<?php echo ($format == '160x90' ? ' selected="selected"' : ''); ?> value="160x90"> 160 x 90</option>
+					<option<?php echo ($format == '120x90' ? ' selected="selected"' : ''); ?> value="120x90"> 120 x 90</option>
 				</optgroup>
 			</select>
 		</td>
 	</tr>
-	<tr id="adsensem-form-ref_image-format"<?php echo (($ad->p['adtype'] == 'ref_image') ? '' : ' style="display:none"'); ?>>
+	<tr id="adsensem-form-ref_image-format"<?php echo (($type == 'ref_image') ? '' : ' style="display:none"'); ?>>
 		<td class="adsensem_label"><label for="adsensem-referralformat"><a href="https://www.google.com/adsense/adformats" target="_new">Format</a>:</label></td>
 		<td>
 			<select name="adsensem-referralformat" id="adsensem-referralformat" onchange="adsensem_form_update(this);">
@@ -121,16 +124,16 @@ class Template_EditAd_Adsense extends Template_EditAd
 					<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
-					<option<?php echo ($ad->p['adformat'] == '110x32' ? ' selected="selected"' : ''); ?> value="110x32"> 110 x 32</option>
-					<option<?php echo ($ad->p['adformat'] == '120x60' ? ' selected="selected"' : ''); ?> value="120x60"> 120 x 60</option>
-					<option<?php echo ($ad->p['adformat'] == '180x60' ? ' selected="selected"' : ''); ?> value="180x60"> 180 x 60</option>
-					<option<?php echo ($ad->p['adformat'] == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> 468 x 60</option>
+					<option<?php echo ($format == '110x32' ? ' selected="selected"' : ''); ?> value="110x32"> 110 x 32</option>
+					<option<?php echo ($format == '120x60' ? ' selected="selected"' : ''); ?> value="120x60"> 120 x 60</option>
+					<option<?php echo ($format == '180x60' ? ' selected="selected"' : ''); ?> value="180x60"> 180 x 60</option>
+					<option<?php echo ($format == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> 468 x 60</option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-square" label="Square">
-					<option<?php echo ($ad->p['adformat'] == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> 125 x 125</option>
+					<option<?php echo ($format == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> 125 x 125</option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-vertical" label="Vertical">
-					<option<?php echo ($ad->p['adformat'] == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> 120 x 240</option>
+					<option<?php echo ($format == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> 120 x 240</option>
 				</optgroup>
 			</select>
 		</td>
@@ -154,28 +157,28 @@ class Template_EditAd_Adsense extends Template_EditAd
 			<table>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-border">Border:</label></td>
-				<td>#<input name="adsensem-color-border" onChange="adsensem_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->p['color-border']; ?>" /></td>
-				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-border'); ?>"></td>
+				<td>#<input name="adsensem-color-border" onChange="adsensem_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get('color-border'); ?>" /></td>
+				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-border'); ?>"></td>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-title">Title:</label></td>
-				<td>#<input name="adsensem-color-title" onChange="adsensem_update_color(this,'ad-color-title','title');" size="6" value="<?php echo $ad->p['color-title']; ?>" /></td>
-				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-title'); ?>"></td>
+				<td>#<input name="adsensem-color-title" onChange="adsensem_update_color(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get('color-title'); ?>" /></td>
+				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-title'); ?>"></td>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-bg">Background:</label></td>
-				<td>#<input name="adsensem-color-bg" onChange="adsensem_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->p['color-bg']; ?>" /></td>
-				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-bg'); ?>"></td>
+				<td>#<input name="adsensem-color-bg" onChange="adsensem_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get('color-bg'); ?>" /></td>
+				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-bg'); ?>"></td>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-text">Text:</label></td>
-				<td>#<input name="adsensem-color-text" onChange="adsensem_update_color(this,'ad-color-text','text');" size="6" value="<?php echo $ad->p['color-text']; ?>" /></td>
-				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-text'); ?>"></td>
+				<td>#<input name="adsensem-color-text" onChange="adsensem_update_color(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get('color-text'); ?>" /></td>
+				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-text'); ?>"></td>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-link">URL:</label></td>
-				<td>#<input name="adsensem-color-link" onChange="adsensem_update_color(this,'ad-color-link','link');" size="6" value="<?php echo $ad->p['color-link']; ?>" /></td>
-				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-link'); ?>"></td>
+				<td>#<input name="adsensem-color-link" onChange="adsensem_update_color(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get('color-link'); ?>" /></td>
+				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-link'); ?>"></td>
 			</tr>
 			</table>
 		</td>

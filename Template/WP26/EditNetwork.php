@@ -28,7 +28,7 @@ class Template_EditNetwork
 		global $_adsensem_networks;
 		
 		$ad = new $target;
-		$revisions = $ad->d('revisions');
+		$revisions = $ad->get_default('revisions');
 		if (!empty($revisions)) {
 			foreach($revisions as $t => $u) {
 				$last_user = $u;
@@ -72,7 +72,7 @@ class Template_EditNetwork
 
 	<h5>Notes</h5>
 	<label for="ad_code">Display any notes about this ad here:</label><br /><br />
-	<textarea rows="8" cols="22" name="adsensem-notes" id="adsensem-notes"><?php echo $ad->d('notes'); ?></textarea><br />
+	<textarea rows="8" cols="22" name="adsensem-notes" id="adsensem-notes"><?php echo $ad->get_default('notes'); ?></textarea><br />
 </div><!-- side-info -->
 </div><!-- submitpost -->
 
@@ -106,25 +106,25 @@ class Template_EditNetwork
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
-					<option<?php echo ($ad->d('adformat') == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>
-					<option<?php echo ($ad->d('adformat') == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> 468 x 60 Banner</option>
-					<option<?php echo ($ad->d('adformat') == '234x60' ? ' selected="selected"' : ''); ?> value="234x60"> 234 x 60 Half Banner</option>
+					<option<?php echo ($ad->get_default('adformat') == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>
+					<option<?php echo ($ad->get_default('adformat') == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> 468 x 60 Banner</option>
+					<option<?php echo ($ad->get_default('adformat') == '234x60' ? ' selected="selected"' : ''); ?> value="234x60"> 234 x 60 Half Banner</option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-vertical" label="Vertical">
-					<option<?php echo ($ad->d('adformat') == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> 120 x 600 Skyscraper</option>
-					<option<?php echo ($ad->d('adformat') == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> 160 x 600 Wide Skyscraper</option>
-					<option<?php echo ($ad->d('adformat') == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> 120 x 240 Vertical Banner</option>
+					<option<?php echo ($ad->get_default('adformat') == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> 120 x 600 Skyscraper</option>
+					<option<?php echo ($ad->get_default('adformat') == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> 160 x 600 Wide Skyscraper</option>
+					<option<?php echo ($ad->get_default('adformat') == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> 120 x 240 Vertical Banner</option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-square" label="Square">
-					<option<?php echo ($ad->d('adformat') == '336x280' ? ' selected="selected"' : ''); ?> value="336x280"> 336 x 280 Large Rectangle</option>
-					<option<?php echo ($ad->d('adformat') == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> 300 x 250 Medium Rectangle</option>
-					<option<?php echo ($ad->d('adformat') == '250x250' ? ' selected="selected"' : ''); ?> value="250x250"> 250 x 250 Square</option>
-					<option<?php echo ($ad->d('adformat') == '200x200' ? ' selected="selected"' : ''); ?> value="200x200"> 200 x 200 Small Square</option>
-					<option<?php echo ($ad->d('adformat') == '180x150' ? ' selected="selected"' : ''); ?> value="180x150"> 180 x 150 Small Rectangle</option>
-					<option<?php echo ($ad->d('adformat') == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> 125 x 125 Button</option>
+					<option<?php echo ($ad->get_default('adformat') == '336x280' ? ' selected="selected"' : ''); ?> value="336x280"> 336 x 280 Large Rectangle</option>
+					<option<?php echo ($ad->get_default('adformat') == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> 300 x 250 Medium Rectangle</option>
+					<option<?php echo ($ad->get_default('adformat') == '250x250' ? ' selected="selected"' : ''); ?> value="250x250"> 250 x 250 Square</option>
+					<option<?php echo ($ad->get_default('adformat') == '200x200' ? ' selected="selected"' : ''); ?> value="200x200"> 200 x 200 Small Square</option>
+					<option<?php echo ($ad->get_default('adformat') == '180x150' ? ' selected="selected"' : ''); ?> value="180x150"> 180 x 150 Small Rectangle</option>
+					<option<?php echo ($ad->get_default('adformat') == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> 125 x 125 Button</option>
 				</optgroup>
 				<optgroup id="adsensem-optgroup-custom" label="Custom">
-					<option<?php echo ($ad->d('adformat') == 'custom' ? ' selected="selected"' : ''); ?> value="custom"> Custom width and height</option>
+					<option<?php echo ($ad->get_default('adformat') == 'custom' ? ' selected="selected"' : ''); ?> value="custom"> Custom width and height</option>
 				</optgroup>
 			</select>
 		</td>
@@ -132,8 +132,8 @@ class Template_EditNetwork
 	<tr id="adsensem-settings-custom">
 		<td class="adsensem_label"><label for="adsensem-width">Dimensions:</label></td>
 		<td>
-			<input name="adsensem-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo $ad->d('width'); ?>" /> x
-			<input name="adsensem-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo $ad->d('height'); ?>" /> px
+			<input name="adsensem-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo $ad->get_default('width'); ?>" /> x
+			<input name="adsensem-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo $ad->get_default('height'); ?>" /> px
 		</td>
 	</tr>
 	</table>
@@ -153,17 +153,17 @@ class Template_EditNetwork
 		<td style="white-space:nowrap">
 			<label for="adsensem-show-home"><?php _e('On Homepage:', 'advman'); ?></label>
 			<select name="adsensem-show-home" id="adsensem-show-home">
-				<option<?php echo ($ad->d('show-home') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->d('show-home') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+				<option<?php echo ($ad->get_default('show-home') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->get_default('show-home') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
 		<td style="white-space:nowrap">
 			<label for="adsensem-show-author"><?php _e('By Author:', 'advman'); ?></label>
 			<select name="adsensem-show-author" id="adsensem-show-author">
-				<option<?php echo ($ad->d('show-author') == 'all' ? " selected='selected'" : ''); ?> value="all"> <?php _e('All Authors', 'advman'); ?></option>
+				<option<?php echo ($ad->get_default('show-author') == 'all' ? " selected='selected'" : ''); ?> value="all"> <?php _e('All Authors', 'advman'); ?></option>
 <?php foreach ($users as $user) : ?>
-				<option<?php echo ($ad->d('show-author') == $user->user_id ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
+				<option<?php echo ($ad->get_default('show-author') == $user->user_id ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
 <?php endforeach; ?>
 			</select>
 		</td>
@@ -172,8 +172,8 @@ class Template_EditNetwork
 		<td style="white-space:nowrap">
 			<label for="adsensem-show-page"><?php _e('On Posts:', 'advman'); ?></label>
 			<select name="adsensem-show-post" id="adsensem-show-post">
-				<option<?php echo ($ad->d('show-post') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->d('show-post') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+				<option<?php echo ($ad->get_default('show-post') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->get_default('show-post') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
@@ -183,8 +183,8 @@ class Template_EditNetwork
 		<td style="white-space:nowrap">
 			<label for="adsensem-show-page"><?php _e('On Pages:', 'advman'); ?></label>
 			<select name="adsensem-show-page" id="adsensem-show-page">
-				<option<?php echo ($ad->d('show-page') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->d('show-page') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+				<option<?php echo ($ad->get_default('show-page') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->get_default('show-page') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
@@ -194,8 +194,8 @@ class Template_EditNetwork
 		<td style="white-space:nowrap">
 			<label for="adsensem-show-archive"><?php _e('On Archives:', 'advman'); ?></label>
 			<select name="adsensem-show-archive" id="adsensem-show-archive">
-				<option<?php echo ($ad->d('show-archive') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->d('show-archive') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+				<option<?php echo ($ad->get_default('show-archive') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->get_default('show-archive') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
@@ -205,8 +205,8 @@ class Template_EditNetwork
 		<td style="white-space:nowrap">
 			<label class="adsensem_label" for="adsensem-show-search"><?php _e('On Search:', 'advman'); ?></label>
 			<select name="adsensem-show-search" id="adsensem-show-search">
-				<option<?php echo ($ad->d('show-search') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->d('show-search') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+				<option<?php echo ($ad->get_default('show-search') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->get_default('show-search') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
@@ -230,18 +230,18 @@ class Template_EditNetwork
 ?><div style="font-size:small;">
 <p>
 	<label for="adsensem-weight">Weight:</label>
-	<input type="text" name="adsensem-weight" style="width:50px" id="adsensem-weight" value="<?php echo $ad->d('weight'); ?>" />
+	<input type="text" name="adsensem-weight" style="width:50px" id="adsensem-weight" value="<?php echo $ad->get_default('weight'); ?>" />
 </p>
 <br />
 <p>
 	<label for="adsensem-openx-market" class="selectit">
-		<input name="adsensem-openx-market" type="checkbox" id="adsensem-openx-market" value="yes"<?php echo ($ad->d('openx-market') == 'yes' ? ' checked="checked"' : ''); ?> onChange="document.getElementById('adsensem-openx-market-cpm').disabled = (!this.checked); document.getElementById('adsensem-openx-market-cpm').style.color = (this.checked ? 'black' : 'gray'); document.getElementById('adsensem-openx-market-cpm-label').style.color = (this.checked ? 'black' : 'lightgray');" />
+		<input name="adsensem-openx-market" type="checkbox" id="adsensem-openx-market" value="yes"<?php echo ($ad->get_default('openx-market') == 'yes' ? ' checked="checked"' : ''); ?> onChange="document.getElementById('adsensem-openx-market-cpm').disabled = (!this.checked); document.getElementById('adsensem-openx-market-cpm').style.color = (this.checked ? 'black' : 'gray'); document.getElementById('adsensem-openx-market-cpm-label').style.color = (this.checked ? 'black' : 'lightgray');" />
 		OpenX Market Enabled
 	</label>
 </p>
 <p>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="adsensem-openx-market-cpm-label" for="adsensem-openx-market-cpm">Average eCPM:</label>
-	<input type="text" name="adsensem-openx-market-cpm" style="width:50px" id="adsensem-openx-market-cpm" value="<?php echo $ad->d('openx-market-cpm'); ?>"<?php echo ($ad->d('openx-market') != 'yes' ? ' disabled="disabled"' : ''); ?> />
+	<input type="text" name="adsensem-openx-market-cpm" style="width:50px" id="adsensem-openx-market-cpm" value="<?php echo $ad->get_default('openx-market-cpm'); ?>"<?php echo ($ad->get_default('openx-market') != 'yes' ? ' disabled="disabled"' : ''); ?> />
 </p>
 </div>
 <br />
@@ -253,9 +253,9 @@ class Template_EditNetwork
 	{
 ?><div style="font-size:small;">
 	<label for="html_before">HTML Code Before</label><br />
-	<textarea rows="1" cols="60" name="adsensem-html-before" id="adsensem-html-before" onfocus="this.select();"><?php echo $ad->d('html-before'); ?></textarea><br />
+	<textarea rows="1" cols="60" name="adsensem-html-before" id="adsensem-html-before" onfocus="this.select();"><?php echo $ad->get_default('html-before'); ?></textarea><br />
 	<label for="html_after">HTML Code After</label><br />
-	<textarea rows="1" cols="60" name="adsensem-html-after" id="adsensem-html-after" onfocus="this.select();"><?php echo $ad->d('html-after'); ?></textarea><br />
+	<textarea rows="1" cols="60" name="adsensem-html-after" id="adsensem-html-after" onfocus="this.select();"><?php echo $ad->get_default('html-after'); ?></textarea><br />
 </div>
 <br />
 <span style="font-size:x-small;color:gray;">Place any HTML code you want to display before or after your tag in the appropriate section.  If you want to change your ad network tag, you need to import the new tag again.</span>
@@ -264,7 +264,7 @@ class Template_EditNetwork
 	
 	function displaySectionHistory($ad)
 	{
-		$revisions = $ad->d('revisions');
+		$revisions = $ad->get_default('revisions');
 		
 ?><ul class='post-revisions'>
 <?php

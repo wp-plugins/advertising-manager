@@ -101,16 +101,17 @@ class Template_ListAds
 	function _display_ad_format($ad)
 	{
 		$atypes = array('ref_text' => 'Text');
-		$text = $ad->p['adformat'];
+		$text = $ad->get('adformat');
 		if (empty($text)) {
-			if (!empty($ad->p['adtype'])) {
-				$text = $atypes[$ad->p['adtype']];
+			$type = $ad->get('adtype');
+			if (!empty($type)) {
+				$text = $atypes[$type];
 			} else {
 				$text = '(default)';
 			}
 		} else {
 			if ($text == 'custom') {
-				$text = $ad->p['width'] . 'x' . $ad->p['height'];
+				$text = $ad->get('width') . 'x' . $ad->get('height');
 			}
 		}
 		

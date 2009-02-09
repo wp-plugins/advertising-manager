@@ -6,7 +6,7 @@ class OX_Adnet
 	var $name; //Name of this ad
 	var $id; // ID of the ad
 	var $title; //Used in widget displays only
-	var $p; //$p holds Ad properties (e.g. dimensions etc.) - acessible through $this->p[''] and $this->p(''); see $this->pd('') for default merged
+	var $p; //$p holds Ad properties (e.g. dimensions etc.) - acessible through $this->get(''); see $this->get_default('') for default merged
 	var $active; //whether this ad can display
 
 	/**
@@ -36,41 +36,75 @@ class OX_Adnet
 		
 		$this->network = get_class($this);
 		
+		// Set defaults if they are not already set
 		if (!is_array($_adsensem['defaults'][$this->network])) {
 			$this->reset_defaults();
 			update_option('plugin_adsensem', $_adsensem);
 		}
 		
-		$this->p = array();
 		$this->name = '';
 		$this->title = '';
 		$this->active = true;
 	}
 	
-	/* Returns current setting, without defaults */
-	function p($key)
+	/**
+	 * Returns a property setting
+	 * @param $key the property name
+	 * @param $default whether to return the default setting if the property is not set
+	 */
+	function get($key, $default = false)
 	{
+		// Return just the property
+		if (!$default) {
+			return isset($this->p[$key]) ? $this->p[$key] : '';
+		}
+		
+		// Return the default
+		if (!isset($this->p[$key]) || $this->p[$key] == '') {
+			return $this->get_default($key);
+		}
+		
+		// Return the property
 		return $this->p[$key];
 	}
 	
-	/* Returns current default for this network */
-	function d($key){
-		global $_adsensem;
-		return $_adsensem['defaults'][$this->network][$key];
-	}
-	
-	/* Returns current setting, merged with defaults */
-	function pd($key)
+	/**
+	 * Returns the default for the given property
+	 * @param $key the property in which to retrieve the default
+	 */
+	function get_default($key)
 	{
 		global $_adsensem;
-
-		$value = $this->p($key);
-		if (empty($value)) {
-			$value = $this->d($key);
+		
+		if (isset($_adsensem['defaults'][$this->network][$key])) {
+			return $_adsensem['defaults'][$this->network][$key];
+		} else {
+			return '';
 		}
-		return $value;
 	}
-			
+	
+	/**
+	 * Sets a given property to a value
+	 * @param $key the property in which to set the value
+	 * @param $value the value in which to set the property.
+	 */
+	function set($key, $value)
+	{
+		if (!empty($key)) {
+			if (!is_null($value)) {
+				$this->p[$key] = $value;
+			} else {
+				unset($this->p[$key]);
+			}
+		}
+	}
+	
+	/* Returns current setting, without defaults */
+	function p($key)
+	{
+		return isset($this->p[$key]) ? $this->p[$key] : '';
+	}
+	
 	function is_available()
 	{
 		global $post;
@@ -79,15 +113,15 @@ class OX_Adnet
 			return false;
 		}
 		// Filter by author
-		$author = $this->pd('show-author');
+		$author = $this->get('show-author', true);
 		if (!empty($author) && ($author != 'all')) {
-			if ($post->post_author != $this->p['show-author']) {
+			if ($post->post_author != $this->get('show-author')) {
 				return false;
 			}
 		}
 /*		
 		// Filter by category
-		$cat = $this->pd('show-category');
+		$cat = $this->get('show-category', true);
 		$cat = '1';
 		if (!empty($cat) && ($cat != 'all')) {
 			$categories = get_the_category();
@@ -105,11 +139,11 @@ class OX_Adnet
 */		
 		//Extend this to include all ad-specific checks, so it can used to filter adzone groups in future.
 		return (
-			( ($this->pd('show-home') == 'yes') && is_home() ) ||
-			( ($this->pd('show-post') == 'yes') && is_single() ) ||
-			( ($this->pd('show-page') == 'yes') && is_page() ) ||
-			( ($this->pd('show-archive') == 'yes') && is_archive() ) ||
-			( ($this->pd('show-search') == 'yes') && is_search() )
+			( ($this->get('show-home', true) == 'yes') && is_home() ) ||
+			( ($this->get('show-post', true) == 'yes') && is_single() ) ||
+			( ($this->get('show-page', true) == 'yes') && is_page() ) ||
+			( ($this->get('show-archive', true) == 'yes') && is_archive() ) ||
+			( ($this->get('show-search', true) == 'yes') && is_search() )
 		);
 	}
 	
@@ -120,9 +154,9 @@ class OX_Adnet
 		$search = array();
 		$replace = array();
 		
-		$code = $this->pd('html-before');
+		$code = $this->get('html-before', true);
 		$code.=$this->render_ad($search, $replace);
-		$code .= $this->pd('html-after');
+		$code .= $this->get('html-after', true);
 		
 		return $code;
 	}
@@ -135,10 +169,10 @@ class OX_Adnet
 		$properties = $this->get_default_properties();
 		foreach ($properties as $property => $default) {
 			$search[] = '{{' . $property . '}}';
-			$replace[] = $this->pd($property);
+			$replace[] = $this->get($property, true);
 		}
 		
-		return str_replace($search, $replace, $this->p['code']);
+		return str_replace($search, $replace, $this->get('code'));
 	}
 		
 	function customiseSection($mode, $section)
@@ -224,14 +258,17 @@ class OX_Adnet
 		if (!empty($properties)) {
 			foreach ($properties as $property => $default) {
 				if (isset($_POST['adsensem-' . $property])) {
-					$this->p[$property]=stripslashes($_POST['adsensem-' . $property]);
+					$this->set($property, stripslashes($_POST['adsensem-' . $property]));
 				}
 			}
 		}
 		
 		// Set width and height for non-custom formats
-		if ($this->p['adformat'] !== 'custom') {
-			list($this->p['width'],$this->p['height'],$null) = split('[x]',$this->p('adformat'));
+		$format = $this->get('adformat');
+		if ($format !== 'custom') {
+			list($width, $height, $null) = split('[x]', $format);
+			$this->set('width', $width);
+			$this->set('height', $height);
 		}
 		
 		// add an item to the audit trail
@@ -242,8 +279,12 @@ class OX_Adnet
 	{
 		// If there is no revisions, use my own revisions
 		if (empty($revisions)) {
-			$revisions = !empty($this->p['revisions']) ? $this->p['revisions'] : array();
+			$revisions = $this->get('revisions');
+			if (empty($revisions)) {
+				$revisions = array();
+			}
 		}
+		
 		// Deal with revisions
 		$r = array();
 		$now = mktime();
@@ -267,7 +308,7 @@ class OX_Adnet
 		global $_adsensem;
 		$compat=array();
 		foreach($_adsensem['ads'] as $oname => $oad){
-			if( ($this->network !== $oad->network ) && ($this->pd('width')==$oad->pd('width')) && ($this->pd('height')==$oad->pd('height')) ){ $compat[$oname]=$oname; }
+			if( ($this->network !== $oad->network ) && ($this->get('width', true)==$oad->get('width', true)) && ($this->get('height', true)==$oad->get('height', true)) ){ $compat[$oname]=$oname; }
 		}
 		return $compat;
 	}
@@ -279,7 +320,7 @@ class OX_Adnet
 	
 	function import_settings($code)
 	{
-		$this->p['code'] = $code;
+		$this->set('code', $code);
 	}
 }
 

@@ -44,7 +44,7 @@ class OX_Adnet_Html extends OX_Adnet
 		}
 		
 		if (!empty($width) && !empty($height)) {
-			$this->p['adformat'] = $width . "x" . $height;
+			$this->set('adformat', $width . 'x' . $height);
 		}
 	}
 }

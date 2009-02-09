@@ -230,7 +230,7 @@ class adsensem_admin
 		$newid = adsensem_admin::generate_id();
 		$_adsensem['ads'][$newid] = adsensem_clone($_adsensem['ads'][$id]); //clone() php4 hack
 		$_adsensem['ads'][$newid]->id = $newid; //update internal id reference
-		unset($_adsensem['ads'][$newid]->p['revisions']);
+		$_adsensem['ads'][$newid]->set('revisions', null); // remove any previous revisions
 
 		$_adsensem['ads'] = OX_Tools::sort($_adsensem['ads']);
 		$_adsensem['ads'][$newid]->add_revision();
@@ -323,11 +323,12 @@ class adsensem_admin
 	{
 		global $_adsensem;
 		
+		$market = ($active) ? 'yes' : 'no';
 		foreach ($_adsensem['ads'] as $id => $ad) {
-			$_adsensem['ads'][$id]->p['openx-market'] = ($active) ? 'yes' : 'no';
+			$_adsensem['ads'][$id]->set('openx-market', $market);
 		}
 		foreach ($_adsensem['defaults'] as $network => $settings) {
-			$_adsensem['defaults']['openx-market'] = ($active) ? 'yes' : 'no';
+			$_adsensem['defaults']['openx-market'] = $market;
 		}
 		update_option('plugin_adsensem', $_adsensem);
 	}

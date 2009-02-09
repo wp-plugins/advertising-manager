@@ -49,11 +49,11 @@ class OX_Adnet_Crispads extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match("/zoneid=(\w*)/", $code, $matches) !=0) {
-			$this->p['slot'] = $matches[1];
+			$this->set('slot', $matches[1]);
 			$code = str_replace("zoneid={$matches[1]}", "zoneid={{slot}}", $code);
 		}
 		if (preg_match("/n=(\w*)/", $code, $matches)!=0) {
-			$this->p['identifier'] = $matches[1];
+			$this->set('identifier', $matches[1]);
 			$code = str_replace("n={$matches[1]}", "n={{identifier}}", $code);
 		}
 		
@@ -62,9 +62,9 @@ class OX_Adnet_Crispads extends OX_Adnet
 			$width = $matches[1]; 
 			if (preg_match('/height="(\w*)"/', $code, $matches) != 0) {
 				$height = $matches[1];
-				$this->p['width'] = $width;
-				$this->p['height'] = $height;
-				$this->p['adformat'] = $width . 'x' . $height; //Only set if both width and height present
+				$this->set('width', $width);
+				$this->set('height', $height);
+				$this->set('adformat', $width . 'x' . $height); //Only set if both width and height present
 				$code = str_replace("width=\"{$width}\"", "width=\"{{width}}\"", $code);
 				$code = str_replace("height=\"{$height}\"", "height=\"{{height}}\"", $code);
 			}
@@ -72,7 +72,7 @@ class OX_Adnet_Crispads extends OX_Adnet
 		
 		$code = str_replace('INSERT_RANDOM_NUMBER_HERE', '{{random}}', $code);
 		
-		$this->p['code'] = $code;
+		$this->set('code', $code);
 	}
 }
 /*

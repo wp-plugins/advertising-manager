@@ -155,15 +155,22 @@ class adsensem_upgrade {
 					$ad->name = $n;
 				}
 				// Make sure width and height is set correctly
-				if (empty($ad->p['width']) || empty($ad->p['height'])) {
-					if ( !empty($ad->p['adformat']) && ($ad->p['adformat'] != 'custom')) {
-						list($this->p['width'],$this->p['height'],$null) = split('[x]',$this->p('adformat'));
+				$width = $ad->get('width', true);
+				$height = $ad->get('height', true);
+				if (empty($width) || empty($height)) {
+					$format = $ad->get('adformat');
+					if ( !empty($format) && ($format != 'custom')) {
+						list($width, $height, $null) = split('[x]', $format);
+						$this->set('width', $width);
+						$this->set('height', $height);
 					}
 				}
 				// Make sure that any settings under 'color-url' are now under 'color-link'
-				if (!empty($ad->p['color-url']) && empty($ad->p['color-link'])) {
-					$ad->p['color-link'] = $ad->p['color-url'];
-					unset($ad->p['color-url']);
+				$colorUrl = $ad->get('color-url');
+				$colorLink = $ad->get('color-link');
+				if (!empty($colorUrl) && empty($colorLink)) {
+					$ad->set('color-link', $colorUrl);
+					$ad->set('color-url', null);
 				}
 				// Re-import code because it was not saved in previous versions
 				if ($ad->network != 'OX_Adnet_Html') {
@@ -173,25 +180,22 @@ class adsensem_upgrade {
 				// Set the new active field
 				$ad->active = true;  // Need to set this ad as active in order for this ad to display
 				// Set market optimisation
-				$ad->p['openx-market'] = false;
-				$ad->p['openx-market-cpm'] = "0.20";
-				$ad->p['weight'] = "1";
+				$ad->set('openx-market', false);
+				$ad->set('openx-market-cpm', '0.20');
+				$ad->set('weight', '1');
 				
 				// Changed the 'hide link url' field to 'status' (for cj ads)
-				if (!empty($ad->p['hide-link-url'])) {
-					$ad->p['status'] = $ad->p['hide-link-url'];
-					unset($ad->p['hide-link-url']);
+				$hideLinkUrl = $ad->get('hide-link-url');
+				if (!empty($hideLinkUrl)) {
+					$ad->set('status', $hideLinkUrl);
+					$ad->set('hide-link-url', null);
 				}
 				
 				// Got rid of the 'Code Method' field in Crisp Ads
-				if (!empty($ad->p['codemethod'])) {
-					unset($ad->p['codemethod']);
-				}
+				$ad->set('codemethod', null);
 				
 				// Get rid of the 'default_ad' field (should be 'default-ad')
-				if (!empty($ad->p['default_ad'])) {
-					unset($ad->p['default_ad']);
-				}
+				$ad->set('default_ad', null);
 				
 				$new[$ad->id] = $ad;
 				$id++;
@@ -344,15 +348,17 @@ class adsensem_upgrade {
 				$ad=adsensem_admin::import_ad($vals['code']);
 				$name=adsensem_admin::generate_name($vals['name']);
 				
-				$_adsensem['ads'][$name]=$ad;
-				$_adsensem['ads'][$name]->name=$name;
+				$ad->name = $name;
 				
-				$_adsensem['ads'][$name]->p['show-home']=($deluxe['enabled_for']['home']==1)?'yes':'no';
-				$_adsensem['ads'][$name]->p['show-post']=($deluxe['enabled_for']['posts']==1)?'yes':'no';
-				$_adsensem['ads'][$name]->p['show-archive']=($deluxe['enabled_for']['archives']==1)?'yes':'no';
-				$_adsensem['ads'][$name]->p['show-page']=($deluxe['enabled_for']['page']==1)?'yes':'no';
+				$ad->set('show-home', ($deluxe['enabled_for']['home'] == 1) ? 'yes' : 'no');
+				$ad->set('show-post', ($deluxe['enabled_for']['posts'] == 1) ? 'yes' : 'no');
+				$ad->set('show-archive', ($deluxe['enabled_for']['archives'] == 1) ? 'yes' : 'no');
+				$ad->set('show-page', ($deluxe['enabled_for']['page'] == 1) ? 'yes' : 'no');
+				$_adsensem['ads'][$name] = $ad;
 				
-				if($vals['make_default']==1){$_adsensem['default-ad']=$name;}
+				if ($vals['make_default'] == 1) {
+					$_adsensem['default-ad'] = $name;
+				}
 			}
 		
 		OX_Tools::sort($_adsensem['ads']);
@@ -362,19 +368,19 @@ class adsensem_upgrade {
 	{
 		$code .= '<script type="text/javascript"><!--' . "\n";
 		$code.= 'google_ad_client = "pub-' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
-		$code.= 'google_ad_slot = "' . str_pad($ad->pd('slot'),10,'0',STR_PAD_LEFT) . '"' . ";\n"; //String padding to max 10 char slot ID
+		$code.= 'google_ad_slot = "' . str_pad($ad->get('slot', true),10,'0',STR_PAD_LEFT) . '"' . ";\n"; //String padding to max 10 char slot ID
 		
-		if($ad->pd('adtype')=='ref_text'){
+		if($ad->get('adtype', true)=='ref_text'){
 			$code.= 'google_ad_output = "textlink"' . ";\n";
 			$code.= 'google_ad_format = "ref_text"' . ";\n";
 			$code.= 'google_cpa_choice = ""' . ";\n";
-		} else if($ad->pd('adtype')=='ref_image'){
-			$code.= 'google_ad_width = ' . $ad->pd('width') . ";\n";
-			$code.= 'google_ad_height = ' . $ad->pd('height') . ";\n";
+		} else if($ad->get('adtype', true)=='ref_image'){
+			$code.= 'google_ad_width = ' . $ad->get('width', true) . ";\n";
+			$code.= 'google_ad_height = ' . $ad->get('height', true) . ";\n";
 			$code.= 'google_cpa_choice = ""' . ";\n";
 		} else {
-			$code.= 'google_ad_width = ' . $ad->pd('width') . ";\n";
-			$code.= 'google_ad_height = ' . $ad->pd('height') . ";\n";
+			$code.= 'google_ad_width = ' . $ad->get('width', true) . ";\n";
+			$code.= 'google_ad_height = ' . $ad->get('height', true) . ";\n";
 		}
 		
 		$code.= '//--></script>' . "\n";
@@ -388,13 +394,13 @@ class adsensem_upgrade {
 	{
 		$code ='<!-- Begin: AdBrite -->';
 		$code .= '<script type="text/javascript">' . "\n";
-		$code .= "var AdBrite_Title_Color = '" . $ad->pd('color-title') . "'\n";
-		$code .= "var AdBrite_Text_Color = '" . $ad->pd('color-text') . "'\n";
-		$code .= "var AdBrite_Background_Color = '" . $ad->pd('color-bg') . "'\n";
-		$code .= "var AdBrite_Border_Color = '" . $ad->pd('color-border') . "'\n";
+		$code .= "var AdBrite_Title_Color = '" . $ad->get('color-title', true) . "'\n";
+		$code .= "var AdBrite_Text_Color = '" . $ad->get('color-text', true) . "'\n";
+		$code .= "var AdBrite_Background_Color = '" . $ad->get('color-bg', true) . "'\n";
+		$code .= "var AdBrite_Border_Color = '" . $ad->get('color-border', true) . "'\n";
 		$code .= '</script>' . "\n";
-	   	$code .= '<script src="http://ads.adbrite.com/mb/text_group.php?sid=' . $ad->pd('slot') . '&zs=' . $_adsensem['account-ids'][$ad->network] . '" type="text/javascript"></script>';
-		$code .= '<div><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=' . $ad->pd('slot') . '&afsid=1" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>';
+	   	$code .= '<script src="http://ads.adbrite.com/mb/text_group.php?sid=' . $ad->get('slot', true) . '&zs=' . $_adsensem['account-ids'][$ad->network] . '" type="text/javascript"></script>';
+		$code .= '<div><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=' . $ad->get('slot', true) . '&afsid=1" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>';
 		$code .= '<!-- End: AdBrite -->';
 		
 		return $code;
@@ -402,14 +408,14 @@ class adsensem_upgrade {
 	
 	function _render_ad_adgridwork($ad)
 	{
-		$code ='<a href="http://www.adgridwork.com/?r=' . $_adsensem['account-ids'][$ad->network] . '" style="color: #' . $ad->pd('color-link') .  '; font-size: 14px" target="_blank">Free Advertising</a>';
+		$code ='<a href="http://www.adgridwork.com/?r=' . $_adsensem['account-ids'][$ad->network] . '" style="color: #' . $ad->get('color-link', true) .  '; font-size: 14px" target="_blank">Free Advertising</a>';
 		$code.='<script type="text/javascript">' . "\n";
-		$code.="var sid = '"  . $ad->pd('slot') . "';\n";
-		$code.="var title_color = '" . $ad->pd('color-title') . "';\n";
-		$code.="var description_color = '" . $ad->pd('color-text') . "';\n";
-		$code.="var link_color = '" . $ad->pd('color-link') . "';\n";
-		$code.="var background_color = '" . $ad->pd('color-bg') . "';\n";
-		$code.="var border_color = '" . $ad->pd('color-border') . "';\n";
+		$code.="var sid = '"  . $ad->get('slot', true) . "';\n";
+		$code.="var title_color = '" . $ad->get('color-title', true) . "';\n";
+		$code.="var description_color = '" . $ad->get('color-text', true) . "';\n";
+		$code.="var link_color = '" . $ad->get('color-link', true) . "';\n";
+		$code.="var background_color = '" . $ad->get('color-bg', true) . "';\n";
+		$code.="var border_color = '" . $ad->get('color-border', true) . "';\n";
 		$code.='</script><script type="text/javascript" src="http://www.mediagridwork.com/mx.js"></script>';
 		
 		return $code;
@@ -417,10 +423,10 @@ class adsensem_upgrade {
 	
 	function _render_ad_adpinion($ad)
 	{
-		if($ad->pd('width')>$ad->pd('height')){$xwidth=18;$xheight=17;} else {$xwidth=0;$xheight=35;}
+		if($ad->get('width', true)>$ad->get('height', true)){$xwidth=18;$xheight=17;} else {$xwidth=0;$xheight=35;}
 		$code ='';
-	 	$code .= '<iframe src="http://www.adpinion.com/app/adpinion_frame?website=' . $_adsensem['account-ids'][$ad->network] . '&amp;width=' . $ad->pd('width') . '&amp;height=' . $ad->pd('height') . '" ';
-		$code .= 'id="adframe" style="width:' . ($ad->pd('width')+$xwidth) . 'px;height:' . ($ad->pd('height')+$xheight) . 'px;" scrolling="no" frameborder="0">.</iframe>';
+	 	$code .= '<iframe src="http://www.adpinion.com/app/adpinion_frame?website=' . $_adsensem['account-ids'][$ad->network] . '&amp;width=' . $ad->get('width', true) . '&amp;height=' . $ad->get('height', true) . '" ';
+		$code .= 'id="adframe" style="width:' . ($ad->get('width', true)+$xwidth) . 'px;height:' . ($ad->get('height', true)+$xheight) . 'px;" scrolling="no" frameborder="0">.</iframe>';
 	
 		return $code;
 	}
@@ -429,10 +435,10 @@ class adsensem_upgrade {
 	{
 		$code ='';
 		$code .= '<!-- Start: Adroll Ads -->';
-	 	$code .= '<script type="text/javascript" src="http://c.adroll.com/r/' . $_adsensem['account-ids'][$ad->network] . '/' . $ad->pd('slot') . '/">';
+	 	$code .= '<script type="text/javascript" src="http://c.adroll.com/r/' . $_adsensem['account-ids'][$ad->network] . '/' . $ad->get('slot', true) . '/">';
 		$code .= '</script>';
 		$code .= '<!-- Start: Adroll Profile Link -->';
-	 	$code .= '<script type="text/javascript" src="http://c.adroll.com/r/' . $_adsensem['account-ids'][$ad->network] . '/' . $ad->pd('slot') . '/link">';
+	 	$code .= '<script type="text/javascript" src="http://c.adroll.com/r/' . $_adsensem['account-ids'][$ad->network] . '/' . $ad->get('slot', true) . '/link">';
 		$code .= '</script>';
 	
 		return $code;
@@ -445,30 +451,31 @@ class adsensem_upgrade {
 		$code .= '<script type="text/javascript"><!--' . "\n";
 		$code.= 'google_ad_client = "pub-' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
 				
-		if($ad->pd('channel')!==''){ $code.= 'google_ad_channel = "' . $ad->pd('channel') . '";' . "\n"; }
-		if($ad->pd('uistyle')!==''){ $code.= 'google_ui_features = "rc:' . $ad->pd('uistyle') . '";' . "\n"; }
+		if($ad->get('channel', true)!==''){ $code.= 'google_ad_channel = "' . $ad->get('channel', true) . '";' . "\n"; }
+		if($ad->get('uistyle', true)!==''){ $code.= 'google_ui_features = "rc:' . $ad->get('uistyle', true) . '";' . "\n"; }
 				
-		$code.= 'google_ad_width = ' . $ad->pd('width') . ";\n";
-		$code.= 'google_ad_height = ' . $ad->pd('height') . ";\n";
+		$code.= 'google_ad_width = ' . $ad->get('width', true) . ";\n";
+		$code.= 'google_ad_height = ' . $ad->get('height', true) . ";\n";
 				
-		$code.= 'google_ad_format = "' . $ad->pd('adformat') . '_as"' . ";\n";
-		$code.= 'google_ad_type = "' . $ad->pd('adtype') . '"' . ";\n";
+		$code.= 'google_ad_format = "' . $ad->get('adformat', true) . '_as"' . ";\n";
+		$code.= 'google_ad_type = "' . $ad->get('adtype', true) . '"' . ";\n";
 
-		switch ($ad->pd('alternate-ad')) {
-			case 'url'		: $code.= 'google_alternate_ad_url = "' . $ad->pd('alternate-url') . '";' . "\n"; break;
-			case 'color'	: $code.= 'google_alternate_ad_color = "' . $ad->pd('alternate-color') . '";' . "\n"; break;
+		switch ($ad->get('alternate-ad', true)) {
+			case 'url'		: $code.= 'google_alternate_ad_url = "' . $ad->get('alternate-url', true) . '";' . "\n"; break;
+			case 'color'	: $code.= 'google_alternate_ad_color = "' . $ad->get('alternate-color', true) . '";' . "\n"; break;
 			case ''				: break;
 			default				:
-				if (!empty($ad->p['alternate-ad'])) {
-					$code.= 'google_alternate_ad_url = "' . get_bloginfo('wpurl') . '/?adsensem-show-ad=' . $ad->p('alternate-ad') . '";'  . "\n";
+				$alternateAd = $ad->get('alternate-ad');
+				if (!empty($alternateAd)) {
+					$code.= 'google_alternate_ad_url = "' . get_bloginfo('wpurl') . '/?adsensem-show-ad=' . $alternateAd . '";'  . "\n";
 				}
 		}
 		
-		$code.= 'google_color_border = "' . $ad->pd('color-border') . '"' . ";\n";
-		$code.= 'google_color_bg = "' . $ad->pd('color-bg') . '"' . ";\n";
-		$code.= 'google_color_link = "' . $ad->pd('color-title') . '"' . ";\n";
-		$code.= 'google_color_text = "' . $ad->pd('color-text') . '"' . ";\n";
-		$code.= 'google_color_url = "' . $ad->pd('color-link') . '"' . ";\n";
+		$code.= 'google_color_border = "' . $ad->get('color-border', true) . '"' . ";\n";
+		$code.= 'google_color_bg = "' . $ad->get('color-bg', true) . '"' . ";\n";
+		$code.= 'google_color_link = "' . $ad->get('color-title', true) . '"' . ";\n";
+		$code.= 'google_color_text = "' . $ad->get('color-text', true) . '"' . ";\n";
+		$code.= 'google_color_url = "' . $ad->get('color-link', true) . '"' . ";\n";
 		
 		$code.= "\n" . '//--></script>' . "\n";
 
@@ -484,20 +491,20 @@ class adsensem_upgrade {
 		$code .= '<script type="text/javascript"><!--' . "\n";
 		$code.= 'google_ad_client = "pub-' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
 					
-		if($ad->pd('channel')!==''){ $code.= 'google_ad_channel = "' . $ad->pd('channel') . '";' . "\n"; }
-		if($ad->pd('uistyle')!==''){ $code.= 'google_ui_features = "rc:' . $ad->pd('uistyle') . '";' . "\n"; }
+		if($ad->get('channel', true)!==''){ $code.= 'google_ad_channel = "' . $ad->get('channel', true) . '";' . "\n"; }
+		if($ad->get('uistyle', true)!==''){ $code.= 'google_ui_features = "rc:' . $ad->get('uistyle', true) . '";' . "\n"; }
 					
-		$code.= 'google_ad_width = ' . $ad->pd('width') . ";\n";
-		$code.= 'google_ad_height = ' . $ad->pd('height') . ";\n";
+		$code.= 'google_ad_width = ' . $ad->get('width', true) . ";\n";
+		$code.= 'google_ad_height = ' . $ad->get('height', true) . ";\n";
 					
-		$code.= 'google_ad_format = "' . $ad->pd('adformat') . $ad->pd('adtype') . '"' . ";\n"; 
+		$code.= 'google_ad_format = "' . $ad->get('adformat', true) . $ad->get('adtype', true) . '"' . ";\n"; 
 
 		//$code.=$ad->_render_alternate_ad_code();
-		$code.= 'google_color_border = "' . $ad->pd('color-border') . '"' . ";\n";
-		$code.= 'google_color_bg = "' . $ad->pd('color-bg') . '"' . ";\n";
-		$code.= 'google_color_link = "' . $ad->pd('color-title') . '"' . ";\n";
-		$code.= 'google_color_text = "' . $ad->pd('color-text') . '"' . ";\n";
-		$code.= 'google_color_url = "' . $ad->pd('color-link') . '"' . ";\n";
+		$code.= 'google_color_border = "' . $ad->get('color-border', true) . '"' . ";\n";
+		$code.= 'google_color_bg = "' . $ad->get('color-bg', true) . '"' . ";\n";
+		$code.= 'google_color_link = "' . $ad->get('color-title', true) . '"' . ";\n";
+		$code.= 'google_color_text = "' . $ad->get('color-text', true) . '"' . ";\n";
+		$code.= 'google_color_url = "' . $ad->get('color-link', true) . '"' . ";\n";
 			
 		$code.= "\n" . '//--></script>' . "\n";
 
@@ -510,9 +517,9 @@ class adsensem_upgrade {
 	{
 		//if($ad===false){$ad=$_adsensem['ads'][$_adsensem['default_ad']];}
 		//$ad=adsensem::merge_defaults($ad); //Apply defaults
-		if($ad->pd('product')=='referral-image') {
-			$format = $ad->pd('adformat') . '_as_rimg';
-		} else if($ad->pd('product')=='referral-text') {
+		if($ad->get('product', true)=='referral-image') {
+			$format = $ad->get('adformat', true) . '_as_rimg';
+		} else if($ad->get('product', true)=='referral-text') {
 			$format = 'ref_text';
 		}				
 		$code='';
@@ -521,15 +528,15 @@ class adsensem_upgrade {
 		$code .= '<script type="text/javascript"><!--' . "\n";
 		$code.= 'google_ad_client = "pub-' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
 		
-		if($ad->pd('channel')!==''){ $code.= 'google_ad_channel = "' . $ad->pd('channel') . '";' . "\n"; }
+		if($ad->get('channel', true)!==''){ $code.= 'google_ad_channel = "' . $ad->get('channel', true) . '";' . "\n"; }
 		
-		if($ad->pd('product')=='referral-image'){
-			$code.= 'google_ad_width = ' . $ad->pd('width') . ";\n";
-			$code.= 'google_ad_height = ' . $ad->pd('height') . ";\n";
+		if($ad->get('product', true)=='referral-image'){
+			$code.= 'google_ad_width = ' . $ad->get('width', true) . ";\n";
+			$code.= 'google_ad_height = ' . $ad->get('height', true) . ";\n";
 		}
 		
-		if($ad->pd('product')=='referral-text'){$code.='google_ad_output = "textlink"' . ";\n";}
-		$code.='google_cpa_choice = "' . $ad->pd('referral') . '"' . ";\n";
+		if($ad->get('product', true)=='referral-text'){$code.='google_ad_output = "textlink"' . ";\n";}
+		$code.='google_cpa_choice = "' . $ad->get('referral', true) . '"' . ";\n";
 		
 		$code.= "\n" . '//--></script>' . "\n";
 
@@ -549,21 +556,21 @@ class adsensem_upgrade {
 		
 		$code = '';
 		$code .= '<!-- Start: CJ Ads -->';
-	 	$code .= '<a href="http://' . $cjservers[array_rand($cjservers)] . '/click-' . $_adsensem['account-ids'][$ad->network] . '-' . $ad->pd('slot') . '"';
-		if($ad->pd('new-window')=='yes'){$code.=' target="_blank" ';}
+	 	$code .= '<a href="http://' . $cjservers[array_rand($cjservers)] . '/click-' . $_adsensem['account-ids'][$ad->network] . '-' . $ad->get('slot', true) . '"';
+		if($ad->get('new-window', true)=='yes'){$code.=' target="_blank" ';}
 		
-		if($ad->pd('hide-link')=='yes'){
+		if($ad->get('hide-link', true)=='yes'){
 			$code.='onmouseover="window.status=\'';
-			$code.=$ad->pd('hide-link-url');
+			$code.=$ad->get('hide-link-url', true);
 			$code.='\';return true;" onmouseout="window.status=\' \';return true;"';
 		}
 		
 		$code .= '>';
 		
-		$code .= '<img src="http://' . $cjservers[array_rand($cjservers)] . '/image-' . $_adsensem['account-ids'][$ad->network] . '-' . $ad->pd('slot') . '"';
-		$code .= ' width="' . $ad->pd('width') . '" ';
-		$code .= ' height="' . $ad->pd('height') . '" ';
-		$code .= ' alt="' . $ad->pd('alt-text') . '" ';
+		$code .= '<img src="http://' . $cjservers[array_rand($cjservers)] . '/image-' . $_adsensem['account-ids'][$ad->network] . '-' . $ad->get('slot', true) . '"';
+		$code .= ' width="' . $ad->get('width', true) . '" ';
+		$code .= ' height="' . $ad->get('height', true) . '" ';
+		$code .= ' alt="' . $ad->get('alt-text', true) . '" ';
 		$code .= '>';
 		$code .= '</a>';
 	
@@ -572,13 +579,13 @@ class adsensem_upgrade {
 	
 	function _render_ad_crispads($ad)
 	{
-		if ($ad->pd('codemethod')=='javascript'){
+		if ($ad->get('codemethod', true)=='javascript'){
 			$code='<script type="text/javascript"><!--//<![CDATA[' . "\n";
 			$code.="var m3_u = (location.protocol=='https:'?'https://www.crispads.com/spinner/www/delivery/ajs.php':'http://www.crispads.com/spinner/www/delivery/ajs.php');\n";
 			$code.="var m3_r = Math.floor(Math.random()*99999999999);\n";
 			$code.="if (!document.MAX_used) document.MAX_used = ',';\n";
 			$code.="document.write (\"<scr\"+\"ipt type='text/javascript' src='\"+m3_u);\n";
-			$code.='document.write ("?zoneid=' . $ad->pd('slot') . '");' . "\n";
+			$code.='document.write ("?zoneid=' . $ad->get('slot', true) . '");' . "\n";
 			$code.="document.write ('&amp;cb=' + m3_r);\n";
 			$code.="if (document.MAX_used != ',') document.write (\"&amp;exclude=\" + document.MAX_used);\n";
 	   		$code.='document.write ("&amp;loc=" + escape(window.location));' . "\n";
@@ -586,9 +593,9 @@ class adsensem_upgrade {
 			$code.='if (document.context) document.write ("&context=" + escape(document.context));' . "\n";
 			$code.='if (document.mmm_fo) document.write ("&amp;mmm_fo=1");' . "\n";
 			$code.='document.write ("\'><\/scr"+"ipt>");' . "\n";
-			$code.='//]]>--></script><noscript><a href="http://www.crispads.com/spinner/www/delivery/ck.php?n=' . $ad->pd('identifier') . '&amp;cb=INSERT_RANDOM_NUMBER_HERE" target="_blank"><img src="http://www.crispads.com/spinner/www/delivery/avw.php?zoneid=' . $ad->pd('slot') . '&amp;n=' . $ad->pd('identifier') . '" border="0" alt="" /></a></noscript>';
+			$code.='//]]>--></script><noscript><a href="http://www.crispads.com/spinner/www/delivery/ck.php?n=' . $ad->get('identifier', true) . '&amp;cb=INSERT_RANDOM_NUMBER_HERE" target="_blank"><img src="http://www.crispads.com/spinner/www/delivery/avw.php?zoneid=' . $ad->get('slot', true) . '&amp;n=' . $ad->get('identifier', true) . '" border="0" alt="" /></a></noscript>';
 		} else { //Iframe
-			$code='<iframe id="' . $ad->pd('identifier') . '" name="' . $ad->pd('identifier') . '" src="http://www.crispads.com/spinner/www/delivery/afr.php?n=' . $ad->pd('identifier') . '&amp;zoneid=' . $ad->pd('slot') . '" framespacing="0" frameborder="no" scrolling="no" width="' . $ad->pd('width') . '" height="' . $ad->pd('height') . '"><a href="http://www.crispads.com/spinner/www/delivery/ck.php?n=' . $ad->pd('identifier') . '&amp;cb=INSERT_RANDOM_NUMBER_HERE" target="_blank"><img src="http://www.crispads.com/spinner/www/delivery/avw.php?zoneid=' . $ad->pd('slot') . '&amp;n=' . $ad->pd('identifier') . '" border="0" alt="" /></a></iframe>';
+			$code='<iframe id="' . $ad->get('identifier', true) . '" name="' . $ad->get('identifier', true) . '" src="http://www.crispads.com/spinner/www/delivery/afr.php?n=' . $ad->get('identifier', true) . '&amp;zoneid=' . $ad->get('slot', true) . '" framespacing="0" frameborder="no" scrolling="no" width="' . $ad->get('width', true) . '" height="' . $ad->get('height', true) . '"><a href="http://www.crispads.com/spinner/www/delivery/ck.php?n=' . $ad->get('identifier', true) . '&amp;cb=INSERT_RANDOM_NUMBER_HERE" target="_blank"><img src="http://www.crispads.com/spinner/www/delivery/avw.php?zoneid=' . $ad->get('slot', true) . '&amp;n=' . $ad->get('identifier', true) . '" border="0" alt="" /></a></iframe>';
 			$code.='<script type="text/javascript" src="http://www.crispads.com/spinner/www/delivery/ag.php"></script>';
 		}
 		
@@ -598,22 +605,22 @@ class adsensem_upgrade {
 	{
 		$code = '<script type="text/javascript"><!--' . "\n";
 		$code.= 'shoppingads_ad_client = "' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
-		$code.= 'shoppingads_ad_campaign = "' . $ad->pd('campaign') . '";' . "\n";
+		$code.= 'shoppingads_ad_campaign = "' . $ad->get('campaign', true) . '";' . "\n";
 
-		list($width,$height,$null)=split('[x]',$ad->pd('adformat'));
+		list($width,$height,$null)=split('[x]',$ad->get('adformat', true));
 		$code.= 'shoppingads_ad_width = "' . $width . '";' . "\n";
 		$code.= 'shoppingads_ad_height = "' . $height . '";' . "\n";
 
-		$code.= 'shoppingads_ad_kw = "' . $ad->pd('keywords') . '";' . "\n";
+		$code.= 'shoppingads_ad_kw = "' . $ad->get('keywords', true) . '";' . "\n";
 
-		$code.= 'shoppingads_color_border = "' . $ad->pd('color-border') . '";' . "\n";
-		$code.= 'shoppingads_color_bg = "' . $ad->pd('color-bg') . '";' . "\n";
-		$code.= 'shoppingads_color_heading = "' . $ad->pd('color-title') . '";' . "\n";
-		$code.= 'shoppingads_color_text = "' . $ad->pd('color-text') . '";' . "\n";
-		$code.= 'shoppingads_color_link = "' . $ad->pd('color-title') . '";' . "\n";
+		$code.= 'shoppingads_color_border = "' . $ad->get('color-border', true) . '";' . "\n";
+		$code.= 'shoppingads_color_bg = "' . $ad->get('color-bg', true) . '";' . "\n";
+		$code.= 'shoppingads_color_heading = "' . $ad->get('color-title', true) . '";' . "\n";
+		$code.= 'shoppingads_color_text = "' . $ad->get('color-text', true) . '";' . "\n";
+		$code.= 'shoppingads_color_link = "' . $ad->get('color-title', true) . '";' . "\n";
 
-		$code.= 'shoppingads_attitude = "' . $ad->pd('attitude') . '";' . "\n";
-		if($ad->pd('new-window')=='yes'){$code.= 'shoppingads_options = "n";' . "\n";}
+		$code.= 'shoppingads_attitude = "' . $ad->get('attitude', true) . '";' . "\n";
+		if($ad->get('new-window', true)=='yes'){$code.= 'shoppingads_options = "n";' . "\n";}
 
 		$code.= '--></script>
 		<script type="text/javascript" src="http://ads.shoppingads.com/pagead/show_sa_ads.js">
@@ -626,7 +633,7 @@ class adsensem_upgrade {
 	{
 		$code ='';
 		$code .= '<!-- START CUSTOM WIDGETBUCKS CODE --><div>';
-		$code .= '<script src="http://api.widgetbucks.com/script/ads.js?uid=' . $ad->pd('slot') . '"></script>'; 
+		$code .= '<script src="http://api.widgetbucks.com/script/ads.js?uid=' . $ad->get('slot', true) . '"></script>'; 
 		$code .= '</div><!-- END CUSTOM WIDGETBUCKS CODE -->';
 		return $code;
 	}
@@ -636,16 +643,16 @@ class adsensem_upgrade {
 		$code = '<script language="JavaScript">';
 		$code .= '<!--';
 		$code .= 'ctxt_ad_partner = "' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
-		$code .= 'ctxt_ad_section = "' . $ad->pd('channel') . '";' . "\n";
+		$code .= 'ctxt_ad_section = "' . $ad->get('channel', true) . '";' . "\n";
 		$code .= 'ctxt_ad_bg = "";' . "\n";
-		$code .= 'ctxt_ad_width = "' . $ad->pd('width') . '";' . "\n";
-		$code .= 'ctxt_ad_height = "' . $ad->pd('height') . '";' . "\n";
+		$code .= 'ctxt_ad_width = "' . $ad->get('width', true) . '";' . "\n";
+		$code .= 'ctxt_ad_height = "' . $ad->get('height', true) . '";' . "\n";
 		
-		$code .= 'ctxt_ad_bc = "' . $ad->pd('color-bg') . '";' . "\n";
-		$code .= 'ctxt_ad_cc = "' . $ad->pd('color-border') . '";' . "\n";
-		$code .= 'ctxt_ad_lc = "' . $ad->pd('color-title') . '";' . "\n";
-		$code .= 'ctxt_ad_tc = "' . $ad->pd('color-text') . '";' . "\n";
-		$code .= 'ctxt_ad_uc = "' . $ad->pd('color-link') . '";' . "\n";
+		$code .= 'ctxt_ad_bc = "' . $ad->get('color-bg', true) . '";' . "\n";
+		$code .= 'ctxt_ad_cc = "' . $ad->get('color-border', true) . '";' . "\n";
+		$code .= 'ctxt_ad_lc = "' . $ad->get('color-title', true) . '";' . "\n";
+		$code .= 'ctxt_ad_tc = "' . $ad->get('color-text', true) . '";' . "\n";
+		$code .= 'ctxt_ad_uc = "' . $ad->get('color-link', true) . '";' . "\n";
 		
 		$code .= '// -->';
 		$code .= '</script>';

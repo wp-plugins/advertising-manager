@@ -18,7 +18,7 @@ class Template_EditAd_Widgetbucks extends Template_EditAd
 ?><div style="font-size:small;">
 <p>
 	<label for="adsensem-account-id">Account ID:</label>
-	<input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->p['account-id']; ?>" />
+	<input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->get('account-id'); ?>" />
 </p>
 </div>
 <br />

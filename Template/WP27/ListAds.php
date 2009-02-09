@@ -140,7 +140,7 @@ function ADS_setAction(action, id, name, network)
 			</div>
 		</td>
 		<td class="author column-author"><a href="javascript:ADS_setAction('edit','<?php echo $ad->network; ?>');" title="Edit the ad network &quot;<?php echo $ad->networkName; ?>&quot;"><?php echo $ad->networkName; ?></a></td>
-		<td class="categories column-categories"> <?php echo $ad->p['adformat']; ?></td>
+		<td class="categories column-categories"> <?php echo $ad->get('adformat'); ?></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('<?php echo ($ad->active) ? 'deactivate' : 'activate'; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? 'Yes' : 'No'; ?></a></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $_adsensem['default-ad']) ? 'Yes' : 'No'; ?></a></td>
 <?php

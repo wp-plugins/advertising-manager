@@ -57,49 +57,49 @@ class OX_Adnet_Ypn extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match('/ctxt_ad_partner( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->p['account-id'] = $matches[3];
+			$this->set('account-id', $matches[3]);
 			$code = str_replace("ctxt_ad_partner{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_partner{$matches[1]}={$matches[2]}\"{{account-id}}\"", $code);
 		}
 		
 		if (preg_match('/ctxt_ad_section( *)=( *)"(.*)"/', $code, $matches)){
-			$this->p['channel'] = $matches[3];
+			$this->set('channel', $matches[3]);
 			$code = str_replace("ctxt_ad_section{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_section{$matches[1]}={$matches[2]}\"{{channel}}\"", $code);
 		}
 
 		if (preg_match('/ctxt_ad_bc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->p['color-border'] = $matches[3];
+			$this->set('color-border', $matches[3]);
 			$code = str_replace("ctxt_ad_bc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_bc{$matches[1]}={$matches[2]}\"{{color-border}}\"", $code);
 		}
 		if (preg_match('/ctxt_ad_cc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->p['color-bg'] = $matches[3];
+			$this->set('color-bg', $matches[3]);
 			$code = str_replace("ctxt_ad_cc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_cc{$matches[1]}={$matches[2]}\"{{color-bg}}\"", $code);
 		}
 		if (preg_match('/ctxt_ad_lc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->p['color-title'] = $matches[3];
+			$this->set('color-title', $matches[3]);
 			$code = str_replace("ctxt_ad_lc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_lc{$matches[1]}={$matches[2]}\"{{color-title}}\"", $code);
 		}
 		if (preg_match('/ctxt_ad_tc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->p['color-text'] = $matches[3];
+			$this->set('color-text', $matches[3]);
 			$code = str_replace("ctxt_ad_tc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_tc{$matches[1]}={$matches[2]}\"{{color-text}}\"", $code);
 		}
 		if (preg_match('/ctxt_ad_uc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->p['color-link'] = $matches[3];
+			$this->set('color-link', $matches[3]);
 			$code = str_replace("ctxt_ad_uc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_uc{$matches[1]}={$matches[2]}\"{{color-link}}\"", $code);
 		}
 		
 		if (preg_match('/ctxt_ad_width( *)=( *)(\d*)/', $code, $matches)) {
 			$width = $matches[3];
-			$this->p['width'] = $width;
+			$this->set('width', $width);
 			$code = str_replace("ctxt_ad_width{$matches[1]}={$matches[2]}{$matches[3]}", "ctxt_ad_width{$matches[1]}={$matches[2]}{{width}}", $code);
 			if (preg_match('/ctxt_ad_height( *)=( *)(\d*)/', $code, $matches)) {
 				$height = $matches[3];
-				$this->p['height'] = $height;
+				$this->set('height', $height);
 				$code = str_replace("ctxt_ad_height{$matches[1]}={$matches[2]}{$matches[3]}", "ctxt_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
-				$this->p['adformat'] = $width . "x" . $height;
+				$this->set('adformat', $width . 'x' . $height);
 			}
 		}
 		
-		$this->p['code'] = $code;
+		$this->set('code', $code);
 	}
 }
 /*

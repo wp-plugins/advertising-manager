@@ -48,11 +48,11 @@ class OX_Adnet_Widgetbucks extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match('/(\w*)\.widgetbucks.com\/script\/(\w*).js\?uid=(\w*)/', $code, $matches)!=0) { 
-			$this->p['account-id'] = $matches[3];
+			$this->set('account-id', $matches[3]);
 			$code = str_replace("{$matches[1]}.widgetbucks.com/script/{$matches[2]}.js?uid={$matches[3]}", "{$matches[1]}.widgetbucks.com/script/{$matches[2]}.js?uid={{account-id}}", $code);
 		}
 		
-		$this->p['code'] = $code;
+		$this->set('code', $code);
 	}
 
 	function _form_settings_help()

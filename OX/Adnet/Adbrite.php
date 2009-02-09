@@ -61,33 +61,33 @@ class OX_Adnet_Adbrite extends OX_Adnet
 		parent::import_settings($code);
 
 		if (preg_match("/var AdBrite_Title_Color = '(\w*)'/", $code, $matches)) {
-			$this->p['color-title'] = $matches[1];
+			$this->set('color-title', $matches[1]);
 			$code = str_replace("var AdBrite_Title_Color = '{$matches[1]}'", "var AdBrite_Title_Color = '{{color-title}}'", $code);
 		}
 		if (preg_match("/var AdBrite_Text_Color = '(\w*)'/", $code, $matches)) {
-			$this->p['color-text'] = $matches[1];
+			$this->set('color-text', $matches[1]);
 			$code = str_replace("var AdBrite_Text_Color = '{$matches[1]}'", "var AdBrite_Text_Color = '{{color-text}}'", $code);
 		}
 		if (preg_match("/var AdBrite_Background_Color = '(\w*)'/", $code, $matches)) {
-			$this->p['color-bg'] = $matches[1];
+			$this->set('color-bg', $matches[1]);
 			$code = str_replace("var AdBrite_Background_Color = '{$matches[1]}'", "var AdBrite_Background_Color = '{{color-bg}}'", $code);
 		}
 		if (preg_match("/var AdBrite_Border_Color = '(\w*)'/", $code, $matches)) {
-			$this->p['color-border'] = $matches[1];
+			$this->set('color-border', $matches[1]);
 			$code = str_replace("var AdBrite_Border_Color = '{$matches[1]}'", "var AdBrite_Border_Color = '{{color-border}}'", $code);
 		}
 		
 		if (preg_match("/zs=(\w*)/", $code, $matches) != 0) {
-			$this->p['account-id'] = $matches[1];
+			$this->set('account-id', $matches[1]);
 			$code = str_replace("zs={$matches[1]}", "zs={{account-id}}", $code);
 		}
 		if (preg_match("/sid=(\w*)/", $code, $matches) != 0) {
-			$this->p['slot'] = $matches[1];
+			$this->set('slot', $matches[1]);
 			$code = str_replace("sid={$matches[1]}", "sid={{slot}}", $code);
 			$code = str_replace("opid={$matches[1]}", "sid={{slot}}", $code);
 		}
 		
-		$this->p['code'] = $code;
+		$this->set('code', $code);
 	}
 }
 /*

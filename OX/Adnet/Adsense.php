@@ -63,57 +63,57 @@ class OX_Adnet_Adsense extends OX_Adnet
 		
 		// Account ID
 		if (preg_match('/google_ad_client( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->p['account-id'] = $matches[3];
+			$this->set('account-id', $matches[3]);
 			$code = str_replace("google_ad_client{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_client{$matches[1]}={$matches[2]}\"{{account-id}}\"", $code);
 		}
 		
 		// Channel
 		if (preg_match('/google_ad_channel( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->p['partner'] = $matches[3];
+			$this->set('partner', $matches[3]);
 			$code = str_replace("google_ad_channel{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_channel{$matches[1]}={$matches[2]}\"{{channel}}\"", $code);
 		}
 		
 		// Partner ID
 		if (preg_match('/google_ad_host( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->p['partner'] = $matches[3];
+			$this->set('partner', $matches[3]);
 			$code = str_replace("google_ad_host{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_host{$matches[1]}={$matches[2]}\"{{partner}}\"", $code);
 		}
 		
 		// Slot ID
 		$adtype = 'ad';
 		if (preg_match('/google_ad_slot( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->p['slot'] = $matches[3];
+			$this->set('slot', $matches[3]);
 			$adtype = 'slot'; // 'Slot tag types'
 			$code = str_replace("google_ad_slot{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_slot{$matches[1]}={$matches[2]}\"{{slot}}\"", $code);
 		}
 		
 		// Color Border
 		if (preg_match('/google_color_border( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->p['color-border'] = $matches[3];
+			$this->set('color-border', $matches[3]);
 			$code = str_replace("google_color_border{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_color_border{$matches[1]}={$matches[2]}\"{{color-border}}\"", $code);
 		}
 		
 		// Color Background
 		if (preg_match('/google_color_bg( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->p['color-bg'] = $matches[3];
+			$this->set('color-bg', $matches[3]);
 			$code = str_replace("google_color_bg{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_color_bg{$matches[1]}={$matches[2]}\"{{color-bg}}\"", $code);
 		}
 		
 		// Color Title
 		if (preg_match('/google_color_link( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->p['color-title'] = $matches[3];
+			$this->set('color-title', $matches[3]);
 			$code = str_replace("google_color_link{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_color_link{$matches[1]}={$matches[2]}\"{{color-title}}\"", $code);
 		}
 		
 		// Color Text
 		if (preg_match('/google_color_text( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->p['color-text'] = $matches[3];
+			$this->set('color-text', $matches[3]);
 			$code = str_replace("google_color_text{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_color_text{$matches[1]}={$matches[2]}\"{{color-text}}\"", $code);
 		}
 
 		// Color URL
 		if (preg_match('/google_color_url( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->p['color-link'] = $matches[3];
+			$this->set('color-link', $matches[3]);
 			$code = str_replace("google_color_url{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_color_url{$matches[1]}={$matches[2]}\"{{color-link}}\"", $code);
 		}
 
@@ -122,34 +122,35 @@ class OX_Adnet_Adsense extends OX_Adnet
 			$width = $matches[3]; 
 			if (preg_match('/google_ad_height( *)=( *)(\d*);/', $code, $matches) != 0) {
 				$height = $matches[3];
-				$this->p['width'] = $width;
-				$this->p['height'] = $height;
-				$this->p['adformat'] = $width . 'x' . $height;
+				$this->set('width', $width);
+				$this->set('height', $height);
+				$this->set('adformat', $width . 'x' . $height);
 				$code = str_replace("google_ad_width{$matches[1]}={$matches[2]}{$width}", "google_ad_width{$matches[1]}={$matches[2]}{{width}}", $code);
 				$code = str_replace("google_ad_height{$matches[1]}={$matches[2]}{$height}", "google_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
 			}
 		}
 		
+		$format = $this->get('adformat'); //passthru
 		if (preg_match('/google_cpa_choice = ""/', $code, $matches) != 0) {
 			//Referral unit
 			if (preg_match('/google_ad_output = "textlink";/', $code, $matches) != 0) {
-				$this->p['adtype'] = 'ref_text';
+				$this->set('adtype', 'ref_text');
 			} else {
-				$this->p['adtype']='ref_image';
-				$this->p['referralformat'] = $this->p['adformat']; //passthru
+				$this->set('adtype', 'ref_image');
+				$this->set('referralformat', $format);
 			}
 		} else {
 			$linkformats = array('728x15', '468x15', '200x90', '180x90', '160x90', '120x90');
 			
-			if (array_search($this->p['adformat'], $linkformats) === false) {
-				$this->p['adtype'] = $adtype;
+			if (array_search($format, $linkformats) === false) {
+				$this->set('adtype', $adtype);
 			} else {
-				$this->p['adtype'] = 'link';
-				$this->p['linkformat'] = $_POST['adformat']; //passthru
+				$this->set('adtype', 'link');
+				$this->set('linkformat', OX_Tools::sanitize_format($_POST['adsensem-adformat'])); //passthru
 			}
 		}
 		
-		$this->p['code'] = $code;
+		$this->set('code', $code);
 	}
 	
 	function save_settings()
@@ -158,22 +159,24 @@ class OX_Adnet_Adsense extends OX_Adnet
 		parent::save_settings();
 		
 		//Override adformat saving already
-		switch($this->p['adtype']){
+		switch($this->get('adtype')){
 			case 'slot' :
 			case 'ad' :
-				$this->p['adformat'] = $_POST['adsensem-adformat'];
+				$this->set('adformat', OX_Tools::sanitize_format($_POST['adsensem-adformat']));
 				break;
 			case 'link' :
-				$this->p['adformat'] = $_POST['adsensem-linkformat'];
+				$this->set('adformat', OX_Tools::sanitize_format($_POST['adsensem-linkformat']));
 				break;
 			case 'ref_image' :
-				$this->p['adformat'] = $_POST['adsensem-referralformat'];
+				$this->set('adformat', OX_Tools::sanitize_format($_POST['adsensem-referralformat']));
 				break;
 			default :
-				$this->p['adformat'] = '';
+				$this->set('adformat', '');
 		 }
 
-		 list($this->p['width'],$this->p['height'],$null)=split('[x]',$this->p('adformat')); 
+		 list($width, $height, $null) = split('[x]', $this->get('adformat'));
+		 $this->set('width', $width);
+		 $this->set('height', $height);
 	}
 
 	function _form_settings_stats()

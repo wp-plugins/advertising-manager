@@ -122,7 +122,7 @@ class adsensem
 		if (!empty($_adsensem['ads'])) {
 			foreach ($_adsensem['ads'] as $id => $ad) {
 				$name = $ad->name;
-				$args = array('name' => $name, 'height' => $ad->p['height'], 'width' => $ad->p['width']);
+				$args = array('name' => $name, 'height' => $ad->get('height'), 'width' => $ad->get('width'));
 				if (function_exists('wp_register_sidebar_widget')) {
 					//$id, $name, $output_callback, $options = array()
 					wp_register_sidebar_widget("adsensem-$name", "Ad#$name", array('adsensem','widget'), $args, $name);
@@ -204,7 +204,7 @@ class adsensem
 		foreach ($_adsensem['ads'] as $id => $ad) {
 			if ( ($ad->name == $matches[1]) && ($ad->is_available()) ) {
 				$ads[] = $ad;
-				$totalWeight += $ad->pd('weight');
+				$totalWeight += $ad->get('weight', true);
 			}
 		}
 		// Pick the ad
@@ -213,7 +213,7 @@ class adsensem
 		// Loop through ads until the selected one is chosen
 		$wt = 0;
 		foreach ($ads as $ad) {
-			$wt += $ad->pd('weight');
+			$wt += $ad->get('weight', true);
 			if ( ($wt / $totalWeight) > $rnd) {
 				// Display the ad
 				return $ad->get_ad();

@@ -49,13 +49,13 @@ class OX_Adnet_Openx extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match("/zoneid=(\w*)/", $code, $matches) !=0) {
-			$this->p['slot'] = $matches[1];
+			$this->set('slot', $matches[1]);
 			$code = str_replace('zoneid=' . $matches[1], 'zoneid={{slot}}', $code);
 		}
 		
 		$code = str_replace('INSERT_RANDOM_NUMBER_HERE', '{{random}}', $code);
 		
-		$this->p['code'] = $code;
+		$this->set('code', $code);
 	}
 
 	function customiseSection($mode, $section)

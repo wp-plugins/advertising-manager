@@ -38,7 +38,7 @@ class OX_Adnet_Adpinion extends OX_Adnet
 	
 	function render_ad($search, $replace)
 	{
-		if($this->pd('width') > $this->pd('height')) {
+		if($this->get('width', true) > $this->get('height', true)) {
 			$xwidth=18;
 			$xheight=17;
 		} else {
@@ -48,8 +48,8 @@ class OX_Adnet_Adpinion extends OX_Adnet
 	
 		$search[] = '{{xwidth}}';
 		$search[] = '{{xheight}}';
-		$replace[] = $this->pd('width') + $xwidth;
-		$replace[] = $this->pd('height') + $xheight;
+		$replace[] = $this->get('width', true) + $xwidth;
+		$replace[] = $this->get('height', true) + $xheight;
 		
 		return parent::render_ad($search, $replace);
 	}
@@ -76,7 +76,7 @@ class OX_Adnet_Adpinion extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match("/website=(\w*)/", $code, $matches) != 0) {
-			$this->p['account-id'] = $matches[1];
+			$this->set('account-id', $matches[1]);
 			$code = str_replace("website={$matches[1]}", "website={{account-id}}'", $code);
 		}
 		if (preg_match("/width=(\w*)/", $code, $matches) != 0) {
@@ -91,11 +91,11 @@ class OX_Adnet_Adpinion extends OX_Adnet
 			$code = str_replace("style=\"width:{$matches[1]}px;height:{$matches[2]}px", "style=\"width:{{xwidth}}px;height:{{xheight}}px", $code);
 		}
 		
-		$this->p['width'] = $width;
-		$this->p['height'] = $height;
-		$this->p['adformat'] = $width . 'x' . $height;
+		$this->set('width', $width);
+		$this->set('height', $height);
+		$this->set('adformat', $width . 'x' . $height);
 		
-		$this->p['code'] = $code;
+		$this->set('code', $code);
 	}
 }
 /*

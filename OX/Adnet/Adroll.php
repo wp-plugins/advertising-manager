@@ -52,12 +52,12 @@ class OX_Adnet_Adroll extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match("/http:\/\/(\w*).adroll.com\/(\w*)\/(\w*)\/(\w*)/", $code, $matches)!=0) { 
-			$this->p['account-id'] = $matches[3];
-			$this->p['slot'] = $matches[4];
+			$this->set('account-id', $matches[3]);
+			$this->set('slot', $matches[4]);
 			$code = str_replace("http://{$matches[1]}.adroll.com/{$matches[2]}/{$matches[3]}/{$matches[4]}", "http://{$matches[1]}.adroll.com/{$matches[2]}/{{account-id}}/{{slot}}", $code);
 		}
 		
-		$this->p['code'] = $code;
+		$this->set('code', $code);
 	}
 
 	function _form_settings_help()

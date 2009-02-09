@@ -84,8 +84,8 @@ class OX_Adnet_Cj extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match('/http:\/\/([.\w]*)\/click-(\d*)-(\d*)/', $code, $matches) != 0) { 
-			$this->p['account-id'] = $matches[2];
-			$this->p['slot'] = $matches[3]; 
+			$this->set('account-id', $matches[2]);
+			$this->set('slot', $matches[3]); 
 			$code = str_replace("http://{$matches[1]}/click-{$matches[2]}-{$matches[3]}", "http://{{xdomain}}/click-{{account-id}}-{{slot}}", $code);
 		}
 
@@ -96,17 +96,17 @@ class OX_Adnet_Cj extends OX_Adnet
 		}
 		
 		if (preg_match("/onmouseover=\"window.status='([^']*)';return true;\"/", $code, $matches)) {
-			$this->p['status'] = $matches[1];
+			$this->set('status', $matches[1]);
 			$code = str_replace("onmouseover=\"window.status='{$matches[1]}';return true;\"", "onmouseover=\"window.status='{{status}}';return true;\"", $code);
 		}
 
 		if (preg_match("/ alt=\"([^\"]*)\"/", $code, $matches)) {
-			$this->p['alt-text'] = $matches[1];
+			$this->set('alt-text', $matches[1]);
 			$code = str_replace(" alt=\"{$matches[1]}\"", " alt=\"{{alt-text}}\"", $code);
 		}
 		
 		if ($v = strpos($code, " target=\"_blank\"")) {
-			$this->p['new-window'] = 'yes';
+			$this->set('new-window', 'yes');
 			$code = str_replace(" target=\"_blank\"", "{{new-window}}", $code);
 		}
 		
@@ -114,15 +114,15 @@ class OX_Adnet_Cj extends OX_Adnet
 			$width = $matches[1];
 			if (preg_match('/height="(\w*)"/', $code, $matches) != 0) {
 				$height = $matches[1];
-				$this->p['width'] = $width;
-				$this->p['height'] = $height;
-				$this->p['adformat'] = $width . 'x' . $height; //Only set if both width and height present
+				$this->set('width', $width);
+				$this->set('height', $height);
+				$this->set('adformat', $width . 'x' . $height); //Only set if both width and height present
 				$code = str_replace("width=\"{$width}\"", "width=\"{{width}}\"", $code);
 				$code = str_replace("height=\"{$height}\"", "height=\"{{height}}\"", $code);
 			}
 		}
 		
-		$this->p['code'] = $code;
+		$this->set('code', $code);
 	}
 		
 	function _form_settings_help()
@@ -133,7 +133,7 @@ class OX_Adnet_Cj extends OX_Adnet
 			Find more ads from existing relationships.</li>
 	<li><a href="https://members.cj.com/member/publisher/accounts/listmyadvertisers.do?sortKey=active_start_date&sortOrder=DESC" target="_blank">Find Advertisers (No Relationship)</a><br />
 			Find ads from new advertisers.</li>
-	<li><a href="https://members.cj.com/member/publisher/other/getlinkdetail.do?adId=<?php echo $this->p('slot');?>" target="_blank">View Ad Setup</a><br />
+	<li><a href="https://members.cj.com/member/publisher/other/getlinkdetail.do?adId=<?php echo $this->get('slot');?>" target="_blank">View Ad Setup</a><br />
 			View the online ad setup page for this ad.</li>
 	</ul>	</td></tr>
 	<tr><td><p>You can also view your <a href="https://www.google.com/adsense/report/overview" target="_blank">statistics and earnings</a> online.</p></td></tr>

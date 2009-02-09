@@ -66,54 +66,54 @@ class OX_Adnet_Adgridwork extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match("/www\.adgridwork\.com\/\?r=(\d*)/", $code, $matches)) {
-			$this->p['account-id'] = $matches[1];
+			$this->set('account-id', $matches[1]);
 			$code = str_replace("www.adgridwork.com/?r={$matches[1]}", "www.adgridwork.com/?r={{account-id}}", $code);
 		}
 		
 		if (preg_match('/var sid = \'(\w*)\'/', $code, $matches)) {
-			$this->p['slot'] = $matches[1];
+			$this->set('slot', $matches[1]);
 			$code = str_replace("var sid = '{$matches[1]}'", "var sid = '{{slot}}'", $code);
 		}
 		
 		if (preg_match('/style=\"color: #(\w*);/', $code, $matches)) {
-			$this->p['color-link'] = $matches[1];
+			$this->set('color-link', $matches[1]);
 			$code = str_replace("style=\"color: #{$matches[1]};", "style=\"color: #{{color-link}};", $code);
 		}
 		
 		if (preg_match("/var title_color = '(\w*)'/", $code, $matches)) {
-			$this->p['color-title'] = $matches[1];
+			$this->set('color-title', $matches[1]);
 			$code = str_replace("var title_color = '{$matches[1]}'", "var title_color = '{{color-title}}'", $code);
 		}
 		
 		if (preg_match("/var description_color = '(\w*)'/", $code, $matches)) {
-			$this->p['color-text'] = $matches[1];
+			$this->set('color-text', $matches[1]);
 			$code = str_replace("var description_color = '{$matches[1]}'", "var description_color = '{{color-text}}'", $code);
 		}
 		
 		if (preg_match("/var link_color = '(\w*)'/", $code, $matches)) {
-			$this->p['color-url'] = $matches[1];
+			$this->set('color-url', $matches[1]);
 			$code = str_replace("var link_color = '{$matches[1]}'", "var link_color = '{{color-link}}'", $code);
 		}
 		
 		if (preg_match("/var background_color = '(\w*)'/", $code, $matches)) {
-			$this->p['color-bg'] = $matches[1];
+			$this->set('color-bg', $matches[1]);
 			$code = str_replace("var background_color = '{$matches[1]}'", "var background_color = '{{color-bg}}'", $code);
 		}
 		
 		if (preg_match("/var border_color = '(\w*)'/", $code, $matches)) {
-			$this->p['color-border'] = $matches[1];
+			$this->set('color-border', $matches[1]);
 			$code = str_replace("var border_color = '{$matches[1]}'", "var border_color = '{{color-border}}'", $code);
 		}
 		
-		$this->p['code'] = $code;
+		$this->set('code', $code);
 	}
 
 	function _form_settings_help(){
 	?><tr><td><p>Further configuration and control over channel and slot setup can be achieved through <a href="http://www.adgridwork.com/u.php" target="_blank">AdGridWorks's online system</a>:</p>
 	<ul>
-	<li><a href="http://www.adgridwork.com/u.php?page=metrics&sid=<?php echo $this->p['slot']; ?>" target="_blank">Campaign Metrics</a><br />
+	<li><a href="http://www.adgridwork.com/u.php?page=metrics&sid=<?php echo $this->get('slot'); ?>" target="_blank">Campaign Metrics</a><br />
 			View hits, clicks, and other stats information.</li>
-	<li><a href="http://www.adgridwork.com/u.php?page=submitsite&sid=<?php echo $this->p['slot']; ?>" target="_blank">Edit Campaign</a><br />
+	<li><a href="http://www.adgridwork.com/u.php?page=submitsite&sid=<?php echo $this->get('slot'); ?>" target="_blank">Edit Campaign</a><br />
 			Change keywords, ad format and layout.</li>
 	</ul></td></tr>
 	<?php	

@@ -16,6 +16,14 @@ class OX_Tools
 	{
 		return preg_replace('/[^0-9\.\-]/i', '', $number);
 	}
+	function sanitize_format($number)
+	{
+		if (strtolower($number) == 'custom') {
+			return $number;
+		}
+		
+		return preg_replace('/[^0-9\x]/i', '', $number);
+	}
 	function sanitize_key($string)
 	{
 		if (is_array($string)) {
@@ -33,14 +41,12 @@ class OX_Tools
 		$last_user = 'Unknown';
 		$last_timestamp = 0;
 		
-		if (!empty($ad->p['revisions'])) {
-			$revisions = $ad->p['revisions'];
-			if (!empty($revisions)) {
-				foreach($revisions as $t => $u) {
-					$last_user = $u;
-					$last_timestamp = $t;
-					break; // just get first one - the array is sorted by reverse date
-				}
+		$revisions = $ad->get('revisions');
+		if (!empty($revisions)) {
+			foreach($revisions as $t => $u) {
+				$last_user = $u;
+				$last_timestamp = $t;
+				break; // just get first one - the array is sorted by reverse date
 			}
 		}
 		
