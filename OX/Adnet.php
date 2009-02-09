@@ -85,7 +85,7 @@ class OX_Adnet
 				return false;
 			}
 		}
-		
+/*		
 		// Filter by category
 		$cat = $this->pd('show-category');
 		$cat = '1';
@@ -102,7 +102,7 @@ class OX_Adnet
 				return false;
 			}
 		}
-		
+*/		
 		//Extend this to include all ad-specific checks, so it can used to filter adzone groups in future.
 		return (
 			( ($this->pd('show-home') == 'yes') && is_home() ) ||
