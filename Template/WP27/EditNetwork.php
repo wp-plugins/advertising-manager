@@ -57,7 +57,7 @@ class Template_EditNetwork
 			<div id='side-sortables' class='meta-box-sortables'>
 				<div id="submitdiv" class="postbox " >
 				<div class="handlediv" title="<?php _e('Click to toggle', 'advman'); ?>"><br /></div>
-				<h3 class='hndle'><span>Save Settings</span></h3>
+				<h3 class='hndle'><span><?php _e('Save Settings', 'advman'); ?></span></h3>
 				<div class="inside">
 					<div class="submitbox" id="submitpost">
 						<div id="minor-publishing">
@@ -93,9 +93,9 @@ class Template_EditNetwork
 			</div>
 		</div>
 		<div id="tagsdiv" class="postbox " >
-			<h3 class='hndle'><span>Shortcuts</span></h3>
+			<h3 class='hndle'><span><?php _e('Shortcuts', 'advman'); ?></span></h3>
 			<div class="inside">
-				<p id="jaxtag"><label class="hidden" for="newtag">Shortcuts</label></p>
+				<p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
 				<p class="hide-if-no-js"><a href='<?php echo $ad->url ?>' target='wp-preview'><?php echo $ad->networkName ?> Home Page</a></p>
 				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('adsensem-action').value='reset'; document.getElementById('adsensem-form').submit();">Reset Default Settings</a></p>
 			</div>

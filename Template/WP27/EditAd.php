@@ -90,9 +90,9 @@ class Template_EditAd
 			</div>
 		</div>
 		<div id="tagsdiv" class="postbox " >
-			<h3 class='hndle'><span>Shortcuts</span></h3>
+			<h3 class='hndle'><span><?php _e('Shortcuts', 'advman'); ?></span></h3>
 			<div class="inside">
-				<p id="jaxtag"><label class="hidden" for="newtag">Shortcuts</label></p>
+				<p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
 				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('You are about to copy the <?php echo $ad->networkName; ?> ad:\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\nAre you sure?\n(Press \'Cancel\' to do nothing, \'OK\' to copy)')){document.getElementById('adsensem-action').value='copy'; document.getElementById('adsensem-form').submit(); } else {return false;}">Copy this ad</a></p>
 				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('You are about to permanently delete the <?php echo $ad->networkName; ?> ad:\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\nAre you sure?\n(Press \'Cancel\' to keep, \'OK\' to delete)')){document.getElementById('adsensem-action').value='delete'; document.getElementById('adsensem-form').submit(); } else {return false;}">Delete this ad</a></p>
 				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('adsensem-action').value='edit'; document.getElementById('adsensem-action-target').value='<?php echo $ad->network ?>'; document.getElementById('adsensem-form').submit();">Edit <?php echo $ad->networkName ?> Defaults</a></p>
@@ -100,9 +100,9 @@ class Template_EditAd
 		</div>
 		<div id="categorydiv" class="postbox " >
 			<div class="handlediv" title="<?php _e('Click to toggle', 'advman'); ?>"><br /></div>
-			<h3 class='hndle'><span>Notes</span></h3>
+			<h3 class='hndle'><span><?php _e('Notes', 'advman'); ?></span></h3>
 			<div class="inside">
-				<label for="ad_code">Display any notes about this ad here:</label><br /><br />
+				<label for="ad_code"><?php _e('Display any notes about this ad here:', 'advman'); ?></label><br /><br />
 				<textarea rows="8" cols="28" name="adsensem-notes" id="adsensem-notes"><?php echo $ad->get('notes'); ?></textarea><br />
 			</div>
 		</div>
@@ -131,12 +131,12 @@ class Template_EditAd
 	function displaySectionTitle($ad)
 	{
 ?><div id="titlediv">
-	<h3><label for="title">Name</label></h3>
+	<h3><label for="title"><?php _e('Name', 'advman'); ?></label></h3>
 <div id="titlewrap">
 	<input type="text" name="adsensem-name" size="30" value="<?php echo $ad->name ?>" id="title" autocomplete="off" />
 </div><!-- titlewrap -->
 <br />
-<span style="font-size:smaller;color:gray;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ads with the same name will rotate according to their relative weights.</span>
+<span style="font-size:smaller;color:gray;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php _e('Ads with the same name will rotate according to their relative weights.', 'advman'); ?></span>
 </div><!-- titlediv -->
 <?php
 	}
@@ -147,7 +147,7 @@ class Template_EditAd
 		
 ?><table id="adsensem-settings-ad_format">
 <tr id="adsensem-form-adformat">
-	<td class="adsensem_label"><label for="adsensem-adformat">Format:</label></td>
+	<td class="adsensem_label"><label for="adsensem-adformat"><?php _e('Format:', 'advman'); ?></label></td>
 	<td>
 		<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 			<optgroup id="adsensem-optgroup-default" label="Default">
