@@ -33,25 +33,6 @@ class Template_EditAd_Adsense extends Template_EditAd
 	<td><label for="adsensem-slot">Channel:</label></td>
 	<td><input type="text" name="adsensem-channel" style="width:200px" id="adsensem-channel" value="<?php echo $ad->p['channel']; ?>" /></td>
 </tr>
-<tr>
-	<td>
-		<p>Further configuration and control over channel and slot setup can be achieved through <a href="http://www.google.com/adsense/" target="_blank">Google's online system</a>:</p>
-		<ul>
-			<li>
-				<a href="https://www.google.com/adsense/adslots" target="_blank">Manage Ad</a><br />
-				Configure ad rotation and display settings.
-			</li>
-			<li>
-				<a href="https://www.google.com/adsense/channels" target="_blank">Edit Channels</a><br />
-				Get current ad code for this unit.
-			</li>
-			<li>
-				<a href="https://www.google.com/adsense/styles" target="_blank">Edit Styles</a><br />
-				Change dimensions, positioning and tags.
-			</li>
-		</ul>
-	</td>
-</tr>
 </table>
 </div>
 <br />
