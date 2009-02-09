@@ -21,7 +21,7 @@ class Template_CreateAd
 	<form action="" method="post" id="adsensem-form" enctype="multipart/form-data">
 	<input type="hidden" name="adsensem-mode" id="adsensem-mode" value="edit_ad">
 	<input type="hidden" name="adsensem-action" id="adsensem-action">
-	<input type="hidden" name="adsensem-action-target" id="adsensem-action-target" value="<?php echo $id; ?>">
+	<input type="hidden" name="adsensem-action-target" id="adsensem-action-target">
 
 	<ul class="subsubsub">
 		<li><a href="javascript:submit();" onclick="document.getElementById('adsensem-action').value='list'; document.getElementById('adsensem-form').submit();" >Show Ads (<?php echo sizeof($_adsensem['ads']); ?>)</a> |</li>

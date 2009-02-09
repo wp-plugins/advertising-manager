@@ -367,10 +367,10 @@ class adsensem_admin
 		
 		$update_adsensem = false;
 		
-		$mode = !empty($_POST['adsensem-mode']) ? OX_Tools::sanitize_string($_POST['adsensem-mode']) : null;
-		$action = !empty($_POST['adsensem-action']) ? OX_Tools::sanatize_string($_POST['adsensem-action']) : null;
-		$target = !empty($_POST['adsensem-action-target']) ? OX_Tools::sanatize_string($_POST['adsensem-action-target']) : null;
-		$targets = !empty($_POST['adsensem-action-targets']) ? OX_Tools::sanatize_string($_POST['adsensem-action-targets']) : null;
+		$mode = !empty($_POST['adsensem-mode']) ? OX_Tools::sanitize_key($_POST['adsensem-mode']) : null;
+		$action = !empty($_POST['adsensem-action']) ? OX_Tools::sanitize_key($_POST['adsensem-action']) : null;
+		$target = !empty($_POST['adsensem-action-target']) ? OX_Tools::sanitize_key($_POST['adsensem-action-target']) : null;
+		$targets = !empty($_POST['adsensem-action-targets']) ? OX_Tools::sanitize_key($_POST['adsensem-action-targets']) : null;
 		$filter = null;
 		
 		switch ($action) {

@@ -16,9 +16,16 @@ class OX_Tools
 	{
 		return preg_replace('/[^0-9\.\-]/i', '', $number);
 	}
-	function sanitize_string($string)
+	function sanitize_key($string)
 	{
-		return preg_replace('/[^0-9a-z]/i', '', $number);
+		if (is_array($string)) {
+			$a = array();
+			foreach ($string as $str) {
+				$a[] = sanitize_key($str);
+			}
+			return $a;
+		}
+		return preg_replace('/[^0-9a-z\_\-]/i', '', $string);
 	}
 }
 ?>
