@@ -54,23 +54,23 @@ class Template_EditAd
 			<div id='side-sortables' class='meta-box-sortables'>
 				<div id="submitdiv" class="postbox " >
 				<div class="handlediv" title="<?php _e('Click to toggle', 'advman'); ?>"><br /></div>
-				<h3 class='hndle'><span>Save Settings</span></h3>
+				<h3 class='hndle'><span><?php _e('Save Settings', 'advman'); ?></span></h3>
 				<div class="inside">
 					<div class="submitbox" id="submitpost">
 						<div id="minor-publishing">
-							<div style="display:none;"><input type="submit" name="save" value="Save" /></div>
+							<div style="display:none;"><input type="submit" name="save" value="<?php _e('Save', 'advman'); ?>" /></div>
 							<div id="minor-publishing-actions">
 								<div id="save-action"></div>
 								<div id="preview-action">
-									<a class="preview button" href="<?php echo get_bloginfo('wpurl'); ?>/wp-admin/edit.php?page=advertising-manager-manage-ads&adsensem-show-ad-id=<?php echo $id ?>" target="wp-preview" id="post-preview" tabindex="4">Preview Ad</a>
+									<a class="preview button" href="<?php echo get_bloginfo('wpurl'); ?>/wp-admin/edit.php?page=advertising-manager-manage-ads&adsensem-show-ad-id=<?php echo $id ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview Ad', 'advman'); ?></a>
 									<input type="hidden" name="wp-preview" id="wp-preview" value="" />
 								</div>
 								<div class="clear"></div>
 							</div>
 							<div id="misc-publishing-actions">
 							<div class="misc-pub-section">
-								<label for="post_status">Status:</label>
-								<b><a href="#" class="edit-post-status hide-if-no-js"><?php echo ($ad->active) ? 'Active' : 'Paused'; ?></a></b>
+								<label for="post_status"><?php _e('Status:', 'advman'); ?></label>
+								<b><a href="javascript:submit();" class="edit-post-status hide-if-no-js" onclick="document.getElementById('adsensem-action').value='<?php echo $ad->active ? 'deactivate' : 'activate'; ?>'; document.getElementById('adsensem-form').submit();"><?php echo ($ad->active) ? __('Active', 'advman') : __('Paused', 'advman'); ?></a></b>
 							</div>
 							<div class="misc-pub-section curtime misc-pub-section-last">
 								<span id="timestamp"><?php echo __('Last edited', 'advman') . ' <abbr title="' . $last_timestamp2 . '"><b>' . $last_timestamp . __(' ago', 'advman') . '</b></abbr> by ' . $last_user; ?></span>
@@ -311,7 +311,7 @@ class Template_EditAd
 </p>
 <p>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="adsensem-openx-market-cpm-label" for="adsensem-openx-market-cpm">Average eCPM:</label>
-	<input type="text" name="adsensem-openx-market-cpm" style="width:50px" id="adsensem-openx-market-cpm" value="<?php echo $ad->get('openx-market-cpm'); ?>"<?php echo ($ad->p['openx-market'] != 'yes' ? ' disabled="disabled"' : ''); ?> />
+	<input type="text" name="adsensem-openx-market-cpm" style="width:50px" id="adsensem-openx-market-cpm" value="<?php echo $ad->get('openx-market-cpm'); ?>"<?php echo ($ad->get('openx-market') != 'yes' ? ' disabled="disabled"' : ''); ?> />
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('openx-market-cpm'); ?>">
 </p>
 </div>
