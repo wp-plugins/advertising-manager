@@ -29,23 +29,13 @@ class Template_EditAd
 		
 		$id = $target;
 		$ad = $_adsensem['ads'][$id];
-		$network_name = $ad->networkName;
-		$revisions = $ad->p['revisions'];
-		if (!empty($revisions)) {
-			foreach($revisions as $t => $u) {
-				$last_user = $u;
-				$last_timestamp = date('l, F jS, Y @ h:ia', $t);
-				break; // just get first one - the array is sorted by reverse date
-			}
-		} else {
-			$last_user = 'Unknown';
-			$last_timestamp = 'More than 30 days ago';
-		}
+		list($last_user, $last_timestamp) = OX_Tools::get_last_edit($ad);
+		$last_timestamp = human_time_diff($last_timestamp);
 ?>
 
 <div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
-	<h2>Edit Settings for <?php echo $network_name; ?> Ad: <span class="<?php echo strtolower($ad->network); ?>"><?php echo "[$id] " . $ad->name; ?></span></h2>
+	<h2>Edit Settings for <?php echo $ad->networkName; ?> Ad: <span class="<?php echo strtolower($ad->network); ?>"><?php echo "[$id] " . $ad->name; ?></span></h2>
 	<form action="" method="post" id="adsensem-form" enctype="multipart/form-data">
 	<input type="hidden" name="adsensem-mode" id="adsensem-mode" value="edit_ad">
 	<input type="hidden" name="adsensem-action" id="adsensem-action">
@@ -74,7 +64,7 @@ class Template_EditAd
 								<b><a href="#" class="edit-post-status hide-if-no-js"><?php echo ($ad->active) ? 'Active' : 'Paused'; ?></a></b>
 							</div>
 							<div class="misc-pub-section curtime misc-pub-section-last">
-								<span id="timestamp">Last edited by <?php echo $last_user ?> on: <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $last_timestamp ?></b></span>
+								<span id="timestamp"><?php printf(__('Last edited <b>%1$s ago</b> by %2$s', 'advman'), $last_timestamp, $last_user); ?></span>
 							</div>
 						</div>
 						<div class="clear"></div>
@@ -96,7 +86,7 @@ class Template_EditAd
 				<p id="jaxtag"><label class="hidden" for="newtag">Shortcuts</label></p>
 				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('You are about to copy the <?php echo $ad->networkName; ?> ad:\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\nAre you sure?\n(Press \'Cancel\' to do nothing, \'OK\' to copy)')){document.getElementById('adsensem-action').value='copy'; document.getElementById('adsensem-form').submit(); } else {return false;}">Copy this ad</a></p>
 				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('You are about to permanently delete the <?php echo $ad->networkName; ?> ad:\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\nAre you sure?\n(Press \'Cancel\' to keep, \'OK\' to delete)')){document.getElementById('adsensem-action').value='delete'; document.getElementById('adsensem-form').submit(); } else {return false;}">Delete this ad</a></p>
-				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('adsensem-action').value='edit'; document.getElementById('adsensem-action-target').value='<?php echo $ad->network ?>'; document.getElementById('adsensem-form').submit();">Edit <?php echo $network_name ?> Defaults</a></p>
+				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('adsensem-action').value='edit'; document.getElementById('adsensem-action-target').value='<?php echo $ad->network ?>'; document.getElementById('adsensem-form').submit();">Edit <?php echo $ad->networkName ?> Defaults</a></p>
 			</div>
 		</div>
 		<div id="categorydiv" class="postbox " >

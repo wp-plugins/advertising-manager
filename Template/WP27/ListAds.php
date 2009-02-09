@@ -102,25 +102,25 @@ function ADS_setAction(action, id, name, network)
 <table class="widefat post fixed" cellspacing="0">
 	<thead>
 	<tr>
-	<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><input type="checkbox" /></th>
-	<th scope="col" id="title" class="manage-column column-title" style="">Name</th>
-	<th scope="col" id="author" class="manage-column column-author" style="">Type</th>
-	<th scope="col" id="categories" class="manage-column column-acategories" style="">Format</th>
-	<th scope="col" id="active" class="manage-column column-tags" style="">Active</th>
-	<th scope="col" id="tags" class="manage-column column-tags" style="">Default</th>
-	<th scope="col" id="date" class="manage-column column-date" style="">Date</th>
+	<th scope="col"  class="manage-column column-cb check-column" style=""><input type="checkbox" /></th>
+	<th scope="col"  class="manage-column column-title" style=""><?php _e('Name', 'advman'); ?></th>
+	<th scope="col"  class="manage-column column-author" style=""><?php _e('Type', 'advman'); ?></th>
+	<th scope="col"  class="manage-column column-categories" style=""><?php _e('Format', 'advman'); ?></th>
+	<th scope="col"  class="manage-column column-tags" style=""><?php _e('Active', 'advman'); ?></th>
+	<th scope="col"  class="manage-column column-tags" style=""><?php _e('Default', 'advman'); ?></th>
+	<th scope="col"  class="manage-column column-date" style=""><?php _e('Last Edit', 'advman'); ?></th>
 	</tr>
 	</thead>
 
 	<tfoot>
 	<tr>
 	<th scope="col"  class="manage-column column-cb check-column" style=""><input type="checkbox" /></th>
-	<th scope="col"  class="manage-column column-title" style="">Name</th>
-	<th scope="col"  class="manage-column column-author" style="">Type</th>
-	<th scope="col"  class="manage-column column-categories" style="">Format</th>
-	<th scope="col"  class="manage-column column-tags" style="">Active</th>
-	<th scope="col"  class="manage-column column-tags" style="">Default</th>
-	<th scope="col"  class="manage-column column-date" style="">Date</th>
+	<th scope="col"  class="manage-column column-title" style=""><?php _e('Name', 'advman'); ?></th>
+	<th scope="col"  class="manage-column column-author" style=""><?php _e('Type', 'advman'); ?></th>
+	<th scope="col"  class="manage-column column-categories" style=""><?php _e('Format', 'advman'); ?></th>
+	<th scope="col"  class="manage-column column-tags" style=""><?php _e('Active', 'advman'); ?></th>
+	<th scope="col"  class="manage-column column-tags" style=""><?php _e('Default', 'advman'); ?></th>
+	<th scope="col"  class="manage-column column-date" style=""><?php _e('Last Edit', 'advman'); ?></th>
 	</tr>
 	</tfoot>
 
@@ -143,7 +143,11 @@ function ADS_setAction(action, id, name, network)
 		<td class="categories column-categories"> <?php echo $ad->p['adformat']; ?></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('<?php echo ($ad->active) ? 'deactivate' : 'activate'; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? 'Yes' : 'No'; ?></a></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $_adsensem['default-ad']) ? 'Yes' : 'No'; ?></a></td>
-		<td class="date column-date"><abbr title="2009/01/30 6:57:16 PM">1 min ago</abbr><br />Published</td>
+<?php
+		list($last_user, $t) = OX_Tools::get_last_edit($ad);
+		$last_timestamp = (time() - $t) < (30 * 24 * 60 * 60) ? human_time_diff($t) : __('> 30 days', 'advman');
+		$last_timestamp2 = date('l, F jS, Y @ h:ia', $t);
+?>		<td class="date column-date"><abbr title="<?php echo $last_timestamp2 ?>"><?php echo $last_timestamp . __(' ago', 'advman'); ?></abbr><br /><?php echo __('by ', 'advman') . $last_user; ?></td>
 	</tr>
 <?php endif; ?>
 <?php endif; ?>

@@ -30,17 +30,8 @@ class Template_EditAd
 		$id = $target;
 		$ad = $_adsensem['ads'][$id];
 		$network_name = $ad->networkName;
-		$revisions = $ad->p['revisions'];
-		if (!empty($revisions)) {
-			foreach($revisions as $t => $u) {
-				$last_user = $u;
-				$last_timestamp = date('l, F jS, Y @ h:ia', $t);
-				break; // just get first one - the array is sorted by reverse date
-			}
-		} else {
-			$last_user = 'Unknown';
-			$last_timestamp = 'More than 30 days ago';
-		}
+		list($last_user, $last_timestamp) = OX_Tools::get_last_edit($ad);
+		$last_timestamp = human_time_diff($last_timestamp);
 ?>
 
 <form action="" method="post" id="adsensem-form" enctype="multipart/form-data">
@@ -66,7 +57,7 @@ class Template_EditAd
 			<option<?php echo ($ad->active ? "" : " selected='selected'"); ?> value='no'>Paused</option>
 		</select>
 	</p>
-	<p class="curtime">Last edited by <?php echo $last_user ?> on:<br /><?php echo $last_timestamp ?></p>
+	<p class="curtime"><?php printf(__('Last edited <b>%1$s ago</b> by %2$s', 'advman'), $last_timestamp, $last_user); ?></p>
 </div><!-- inside -->
 
 	<div style="white-space:nowrap">
