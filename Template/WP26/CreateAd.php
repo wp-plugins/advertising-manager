@@ -13,23 +13,23 @@ class Template_CreateAd
 			<input type="hidden" name="adsensem-mode" id="adsensem-mode" value="create_ad">	
 			<input type="hidden" name="adsensem-action" id="adsensem-action">
 			<input type="hidden" name="adsensem-action-target" id="adsensem-action-target">
-			<h2>Create Ads</h2>
+			<h2><?php _e('Create Ads', 'advman'); ?></h2>
 			<ul class="subsubsub">
 				<li><a href="javascript:submit();" onclick="document.getElementById('adsensem-action').value='list'; document.getElementById('adsensem-form').submit();" >Show Ads (<?php echo sizeof($_adsensem['ads']); ?>)</a> |</li>
-				<li><a href="" class="current">Create New Ad</a></li>
+				<li><a href="" class="current"><?php _e('Create New Ad', 'advman'); ?></a></li>
 			</ul>
 			
 			<table>
 			<tr>
 				<td style="width:50%;vertical-align:top;">
-					<h3>Step 1: Import Your Ad Code</h3>
-					<p>Simply <strong>paste your Ad Code below</strong> and Import!</p>
+					<h3><?php _e('Step 1: Import Your Ad Code', 'advman'); ?></h3>
+					<p><?php _e('Simply <strong>paste your Ad Code below</strong> and Import!', 'advman'); ?></p>
 					<div>
 						<textarea rows="5" cols="65" name="adsensem-code" id="adsensem-code"></textarea>
 						<p class="submit" style="text-align:right;vertical-align:bottom;">
-							<input type="button" value="Cancel" onclick="document.getElementById('adsensem-action').value='cancel'; this.form.submit();">		
-							<input type="button" value="Clear" onclick="document.getElementById('adsensem-code').value='';">		
-							<input style="font-weight:bold;" type="submit" value="Import to New Ad Unit&raquo;" onclick="document.getElementById('adsensem-action').value='import';">
+							<input type="button" value="<?php _e('Cancel', 'advman'); ?>" onclick="document.getElementById('adsensem-action').value='cancel'; this.form.submit();">		
+							<input type="button" value="<?php _e('Clear', 'advman'); ?>" onclick="document.getElementById('adsensem-code').value='';">		
+							<input style="font-weight:bold;" type="submit" value="<?php _e('Import to New Ad Unit&raquo;', 'advman'); ?>" onclick="document.getElementById('adsensem-action').value='import';">
 						</p>
 					</div>		
 				</td>

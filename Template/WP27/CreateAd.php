@@ -25,17 +25,17 @@ class Template_CreateAd
 
 	<ul class="subsubsub">
 		<li><a href="javascript:submit();" onclick="document.getElementById('adsensem-action').value='list'; document.getElementById('adsensem-form').submit();" >Show Ads (<?php echo sizeof($_adsensem['ads']); ?>)</a> |</li>
-		<li><a href="" class="current">Create New Ad</a></li>
+		<li><a href="" class="current"><?php _e('Create New Ad', 'advman'); ?></a></li>
 	</ul>
 	<br />
 	<p>&nbsp;</p>
-	<p><h3>Step 1: Import Your Ad Code</h3></p>
-	<p>Simply <strong>paste your Ad Code below</strong> and Import!</p>
+	<p><h3><?php _e('Step 1: Import Your Ad Code', 'advman'); ?></h3></p>
+	<p><?php _e('Simply <strong>paste your Ad Code below</strong> and Import!', 'advman'); ?></p>
 	
 <div id="post-body" class="has-sidebar">
 	<div id="post-body-content" class="has-sidebar-content" style="width:600px">
 
-<label class="hidden" for="excerpt">Code</label><textarea rows="40" cols="40" name="adsensem-code" tabindex="6" id="excerpt"></textarea>
+<label class="hidden" for="excerpt">Code</label><textarea rows="8" cols="70" name="adsensem-code" tabindex="6"></textarea>
 <p><span style="font-size:x-small;color:gray;"><?php _e('Advertising Manager will automatically detect many ad network tags', 'advman'); ?></span></p>
 
 			<div id="publishing-action">

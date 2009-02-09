@@ -253,9 +253,9 @@ class Template_EditNetwork
 	{
 ?><div style="font-size:small;">
 	<label for="html_before">HTML Code Before</label><br />
-	<textarea rows="1" cols="60" name="adsensem-html-before" id="adsensem-html-before" onfocus="this.select();"><?php echo $ad->get_default('html-before'); ?></textarea><br />
+	<textarea rows="1" cols="60" name="adsensem-html-before" id="adsensem-html-before" onfocus="this.select();"><?php echo $ad->get_default('html-before'); ?></textarea><br /><br />
 	<label for="html_after">HTML Code After</label><br />
-	<textarea rows="1" cols="60" name="adsensem-html-after" id="adsensem-html-after" onfocus="this.select();"><?php echo $ad->get_default('html-after'); ?></textarea><br />
+	<textarea rows="1" cols="60" name="adsensem-html-after" id="adsensem-html-after" onfocus="this.select();"><?php echo $ad->get_default('html-after'); ?></textarea><br /><br />
 </div>
 <br />
 <span style="font-size:x-small;color:gray;">Place any HTML code you want to display before or after your tag in the appropriate section.  If you want to change your ad network tag, you need to import the new tag again.</span>

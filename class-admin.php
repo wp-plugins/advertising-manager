@@ -365,7 +365,7 @@ class adsensem_admin
 				break;
 			
 			case 'cancel' :
-				$mode = 'list_ads';
+				$mode = !empty($_adsensem['ads']) ? 'list_ads' : 'create_ad';
 				break;
 			
 			case 'clear' :
