@@ -31,7 +31,7 @@ class OX_Tools
 	function get_last_edit($ad)
 	{
 		$last_user = 'Unknown';
-		$last_timestamp = 'More than 30 days ago';
+		$last_timestamp = 0;
 		
 		if (!empty($ad->p['revisions'])) {
 			$revisions = $ad->p['revisions'];

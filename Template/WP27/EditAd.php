@@ -29,8 +29,14 @@ class Template_EditAd
 		
 		$id = $target;
 		$ad = $_adsensem['ads'][$id];
-		list($last_user, $last_timestamp) = OX_Tools::get_last_edit($ad);
-		$last_timestamp = human_time_diff($last_timestamp);
+		list($last_user, $t) = OX_Tools::get_last_edit($ad);
+		if ((time() - $t) < (30 * 24 * 60 * 60)) { // less than 30 days ago
+			$last_timestamp =  human_time_diff($t);
+			$last_timestamp2 = date('l, F jS, Y @ h:ia', $t);
+		} else {
+			$last_timestamp =  __('> 30 days', 'advman');
+			$last_timestamp2 = '';
+		}
 ?>
 
 <div class="wrap">
@@ -64,7 +70,7 @@ class Template_EditAd
 								<b><a href="#" class="edit-post-status hide-if-no-js"><?php echo ($ad->active) ? 'Active' : 'Paused'; ?></a></b>
 							</div>
 							<div class="misc-pub-section curtime misc-pub-section-last">
-								<span id="timestamp"><?php printf(__('Last edited <b>%1$s ago</b> by %2$s', 'advman'), $last_timestamp, $last_user); ?></span>
+								<span id="timestamp"><?php echo __('Last edited', 'advman') . ' <abbr title="' . $last_timestamp2 . '"><b>' . $last_timestamp . __(' ago', 'advman') . '</b></abbr> by ' . $last_user; ?></span>
 							</div>
 						</div>
 						<div class="clear"></div>

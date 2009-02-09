@@ -127,7 +127,7 @@ class OX_Adnet
 		return $code;
 	}
 
-	function render_ad($search, $replace)
+	function render_ad($search = array(), $replace = array())
 	{
 		$search[] = '{{random}}';
 		$replace[] = mt_rand();
@@ -235,11 +235,15 @@ class OX_Adnet
 		}
 		
 		// add an item to the audit trail
-		$this->p['revisions'] = $this->add_revision($this->p['revisions']);
+		$this->add_revision();
 	}
 	
-	function add_revision($revisions)
+	function add_revision($revisions = null)
 	{
+		// If there is no revisions, use my own revisions
+		if (empty($revisions)) {
+			$revisions = !empty($this->p['revisions']) ? $this->p['revisions'] : array();
+		}
 		// Deal with revisions
 		$r = array();
 		$now = mktime();

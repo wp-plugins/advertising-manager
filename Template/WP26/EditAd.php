@@ -30,8 +30,14 @@ class Template_EditAd
 		$id = $target;
 		$ad = $_adsensem['ads'][$id];
 		$network_name = $ad->networkName;
-		list($last_user, $last_timestamp) = OX_Tools::get_last_edit($ad);
-		$last_timestamp = human_time_diff($last_timestamp);
+		list($last_user, $t) = OX_Tools::get_last_edit($ad);
+		if ((time() - $t) < (30 * 24 * 60 * 60)) { // less than 30 days ago
+			$last_timestamp =  human_time_diff($t);
+			$last_timestamp2 = date('l, F jS, Y @ h:ia', $t);
+		} else {
+			$last_timestamp =  __('> 30 days', 'advman');
+			$last_timestamp2 = '';
+		}
 ?>
 
 <form action="" method="post" id="adsensem-form" enctype="multipart/form-data">
@@ -57,7 +63,7 @@ class Template_EditAd
 			<option<?php echo ($ad->active ? "" : " selected='selected'"); ?> value='no'>Paused</option>
 		</select>
 	</p>
-	<p class="curtime"><?php printf(__('Last edited <b>%1$s ago</b> by %2$s', 'advman'), $last_timestamp, $last_user); ?></p>
+	<p class="curtime"><?php echo __('Last edited', 'advman') . ' <abbr title="' . $last_timestamp2 . '"><b>' . $last_timestamp . __(' ago', 'advman') . '</b></abbr> by ' . $last_user; ?></p>
 </div><!-- inside -->
 
 	<div style="white-space:nowrap">

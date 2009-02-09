@@ -276,27 +276,33 @@ if (is_admin()) {
 	
 	
 	/* PRE-OUTPUT PROCESSING - e.g. NOTICEs (upgrade-adsense-deluxe) */
-	switch ($_POST['adsensem-mode'] . ':' . $_POST['adsensem-action']) {
-		case 'notice:upgrade adsense-deluxe':
-			if ($_POST['adsensem-notice-confirm-yes']) {
-				require_once('class-upgrade.php');
-				adsensem_upgrade::adsense_deluxe_to_3_0();
-				adsensem_admin::remove_notice('upgrade adsense-deluxe');
-			} else {
-				adsensem_admin::remove_notice('upgrade adsense-deluxe');
+	if (!empty($_POST['adsensem-mode'])) {
+		$mode = OX_Tools::sanitize_key($_POST['adsensem-mode']);
+		if ($mode == 'notice') {
+			$action = OX_Tools::sanitize_key($_POST['adsensem-action']);
+			switch ($action) {
+				case 'upgrade adsense-deluxe':
+					if ($_POST['adsensem-notice-confirm-yes']) {
+						require_once('class-upgrade.php');
+						adsensem_upgrade::adsense_deluxe_to_3_0();
+						adsensem_admin::remove_notice('upgrade adsense-deluxe');
+					} else {
+						adsensem_admin::remove_notice('upgrade adsense-deluxe');
+					}
+					break;	
+				case 'optimise':
+					if ($_POST['adsensem-notice-confirm-yes']) {
+						adsensem_admin::_set_auto_optimise(true);
+					} else {
+						adsensem_admin::_set_auto_optimise(false);
+					}
+					adsensem_admin::remove_notice('optimise');
+					break;
+				case 'activate advertising-manager':
+					adsensem_admin::remove_notice('activate advertising-manager');
+					break;
 			}
-			break;	
-		case 'notice:optimise':
-			if ($_POST['adsensem-notice-confirm-yes']) {
-				adsensem_admin::_set_auto_optimise(true);
-			} else {
-				adsensem_admin::_set_auto_optimise(false);
-			}
-			adsensem_admin::remove_notice('optimise');
-			break;
-		case 'notice:activate advertising-manager':
-			adsensem_admin::remove_notice('activate advertising-manager');
-			break;
+		}
 	}
 /* END PRE-OUTPUT PROCESSING */
 }

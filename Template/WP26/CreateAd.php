@@ -35,7 +35,8 @@ class Template_CreateAd
 				</td>
 				<td style="width:10%";>&nbsp;</td>
 				<td style="width:40%";>
-					<p>Advertising Manager supports most Ad networks including <?php adsensem_admin::network_list(); ?>.</p>
+					<p><?php _e('Advertising Manager supports most Ad networks.', 'advman'); ?></p>
+					<p><?php _e('Any networks not supported directly will be managed as HTML Code units.', 'advman'); ?></p>
 				</td>
 			</tr>
 			</table>

@@ -140,32 +140,6 @@ class adsensem_admin
 		update_option('plugin_adsensem', $_adsensem);		
 	}
 
-	function network_list()
-	{
-		global $_adsensem_networks;
-
-		$count = sizeof($_adsensem_networks);
-		foreach ($_adsensem_networks as $name=>$network) {
-			$count--;
-			
-			if ($network['display']===false) {
-				continue;
-			}
-			if ($network['www-signup']!='') {
-?><a href="<?php echo $network['www-signup'] ?>" target="_blank"><?php
-			}
-			echo $network['name'];
-			if ($network['www-signup']!='') {
-?></a><?php
-			}
-			if ($count>1) {
-				echo ', ';
-			} elseif ($count == 1) {
-				echo ' and ';
-			}
-		}
-	}
-
 	function generate_name($base = null)
 	{
 		global $_adsensem;

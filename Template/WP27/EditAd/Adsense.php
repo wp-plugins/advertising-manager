@@ -50,9 +50,7 @@ class Template_EditAd_Adsense extends Template_EditAd
 		<td class="adsensem_label"><label for="adsensem-adtype">Ad Type:</label></td>
 		<td>
 			<select name="adsensem-adtype" id="adsensem-adtype" onchange="adsensem_form_update(this);">
-<?php if ($mode != 'edit_network'): ?>
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-<?php endif; ?>
 				<option<?php echo ($ad->p['adtype'] == 'ad' ? ' selected="selected"' : ''); ?> value="ad"> Ad Unit</option>
 				<option<?php echo ($ad->p['adtype'] == 'link' ? ' selected="selected"' : ''); ?> value="link"> Link Unit</option>
 				<option<?php echo ($ad->p['adtype'] == 'ref_text' ? ' selected="selected"' : ''); ?> value="ref_text"> Text Referral</option>
@@ -60,9 +58,7 @@ class Template_EditAd_Adsense extends Template_EditAd
 			</select>
 		</td>
 		<td>
-<?php if ($mode != 'edit_network'): ?>
 			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('adtype'); ?>">
-<?php endif; ?>
 		</td>
 	</tr>
 <?php endif; ?>
@@ -70,11 +66,9 @@ class Template_EditAd_Adsense extends Template_EditAd
 		<td class="adsensem_label"><label for="adsensem-adformat"><a href="https://www.google.com/adsense/adformats" target="_new">Format</a>:</label></td>
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
-<?php if ($mode != 'edit_network'): ?>
 				<optgroup id="adsensem-optgroup-Default" label="Default">
 					<option selected value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
-<?php endif; ?>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
 					<option<?php echo ($ad->p['adformat'] == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>
 					<option<?php echo ($ad->p['adformat'] == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> 468 x 60 Banner</option>
@@ -96,20 +90,16 @@ class Template_EditAd_Adsense extends Template_EditAd
 			</select>
 		</td>
 		<td>
-<?php if ($mode != 'edit_network'): ?>
 			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('adformat'); ?>">
-<?php endif; ?>
 		</td>
 	</tr>
 	<tr id="adsensem-form-link-format"<?php echo (($ad->p['adtype'] == 'link') ? '' : ' style="display:none"'); ?>>
 		<td class="adsensem_label"><label for="adsensem-linkformat"><a href="https://www.google.com/adsense/adformats" target="_new">Format</a>:</label></td>
 		<td>
 			<select name="adsensem-linkformat" id="adsensem-linkformat" onchange="adsensem_form_update(this);">
-<?php if ($mode != 'edit_network'): ?>
 				<optgroup id="adsensem-optgroup-Default" label="Default">
 					<option selected value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
-<?php endif; ?>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
 					<option<?php echo ($ad->p['adformat'] == '728x15' ? ' selected="selected"' : ''); ?> value="728x15"> 728 x 15</option>
 					<option<?php echo ($ad->p['adformat'] == '468x15' ? ' selected="selected"' : ''); ?> value="468x15"> 468 x 15</option>
@@ -127,11 +117,9 @@ class Template_EditAd_Adsense extends Template_EditAd
 		<td class="adsensem_label"><label for="adsensem-referralformat"><a href="https://www.google.com/adsense/adformats" target="_new">Format</a>:</label></td>
 		<td>
 			<select name="adsensem-referralformat" id="adsensem-referralformat" onchange="adsensem_form_update(this);">
-<?php if ($mode != 'edit_network'): ?>
 				<optgroup id="adsensem-optgroup-Default" label="Default">
 					<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
-<?php endif; ?>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
 					<option<?php echo ($ad->p['adformat'] == '110x32' ? ' selected="selected"' : ''); ?> value="110x32"> 110 x 32</option>
 					<option<?php echo ($ad->p['adformat'] == '120x60' ? ' selected="selected"' : ''); ?> value="120x60"> 120 x 60</option>
@@ -167,37 +155,27 @@ class Template_EditAd_Adsense extends Template_EditAd
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-border">Border:</label></td>
 				<td>#<input name="adsensem-color-border" onChange="adsensem_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->p['color-border']; ?>" /></td>
-<?php if ($mode != 'edit_network'): ?>
 				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-border'); ?>"></td>
-<?php endif; ?>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-title">Title:</label></td>
 				<td>#<input name="adsensem-color-title" onChange="adsensem_update_color(this,'ad-color-title','title');" size="6" value="<?php echo $ad->p['color-title']; ?>" /></td>
-<?php if ($mode != 'edit_network'): ?>
 				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-title'); ?>"></td>
-<?php endif; ?>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-bg">Background:</label></td>
 				<td>#<input name="adsensem-color-bg" onChange="adsensem_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->p['color-bg']; ?>" /></td>
-<?php if ($mode != 'edit_network') : ?>
 				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-bg'); ?>"></td>
-<?php endif; ?>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-text">Text:</label></td>
 				<td>#<input name="adsensem-color-text" onChange="adsensem_update_color(this,'ad-color-text','text');" size="6" value="<?php echo $ad->p['color-text']; ?>" /></td>
-<?php if ($mode != 'edit_network') : ?>
 				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-text'); ?>"></td>
-<?php endif; ?>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-link">URL:</label></td>
 				<td>#<input name="adsensem-color-link" onChange="adsensem_update_color(this,'ad-color-link','link');" size="6" value="<?php echo $ad->p['color-link']; ?>" /></td>
-<?php if ($mode != 'edit_network') : ?>
 				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-link'); ?>"></td>
-<?php endif; ?>
 			</tr>
 			</table>
 		</td>
