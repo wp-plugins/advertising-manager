@@ -84,7 +84,7 @@ class OX_Adnet_Cj extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match('/http:\/\/([.\w]*)\/click-(\d*)-(\d*)/', $code, $matches) != 0) { 
-			$this->set_account_id($matches[2]);
+			$this->p['account-id'] = $matches[2];
 			$this->p['slot'] = $matches[3]; 
 			$code = str_replace("http://{$matches[1]}/click-{$matches[2]}-{$matches[3]}", "http://{{xdomain}}/click-{{account-id}}-{{slot}}", $code);
 		}

@@ -54,7 +54,7 @@ class Template_EditAd
 		<div id="side-info-column" class="inner-sidebar">
 			<div id='side-sortables' class='meta-box-sortables'>
 				<div id="submitdiv" class="postbox " >
-				<div class="handlediv" title="Click to toggle"><br /></div>
+				<div class="handlediv" title="<?php _e('Click to toggle', 'advman'); ?>"><br /></div>
 				<h3 class='hndle'><span>Save Settings</span></h3>
 				<div class="inside">
 					<div class="submitbox" id="submitpost">
@@ -100,7 +100,7 @@ class Template_EditAd
 			</div>
 		</div>
 		<div id="categorydiv" class="postbox " >
-			<div class="handlediv" title="Click to toggle"><br /></div>
+			<div class="handlediv" title="<?php _e('Click to toggle', 'advman'); ?>"><br /></div>
 			<h3 class='hndle'><span>Notes</span></h3>
 			<div class="inside">
 				<label for="ad_code">Display any notes about this ad here:</label><br /><br />
@@ -175,13 +175,13 @@ class Template_EditAd
 			</optgroup>
 		</select>
 	</td>
-	<td><img class="default_note" title="[Default] <?php echo $ad->d('adformat'); ?>"></td>
+	<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('adformat'); ?>"></td>
 </tr>
 <tr id="adsensem-settings-custom">
 	<td class="adsensem_label"><label for="adsensem-width">Dimensions:</label></td>
 	<td>
-		<input name="adsensem-width" size="5" title="Custom width for this unit." value="<?php echo ($ad->p['width']); ?>" /> x
-		<input name="adsensem-height" size="5" title="Custom width for this unit." value="<?php echo ($ad->p['height']); ?>" /> px
+		<input name="adsensem-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->p['width']); ?>" /> x
+		<input name="adsensem-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->p['height']); ?>" /> px
 	</td>
 </tr>
 </table>
@@ -212,7 +212,7 @@ class Template_EditAd
 				<option<?php echo ($ad->p['show-home'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 				<option<?php echo ($ad->p['show-home'] == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
-			<img class="default_note" title="[Default] <?php echo $ad->d('show-home'); ?>">
+			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('show-home'); ?>">
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
 		<td style="white-space:nowrap">
@@ -224,7 +224,7 @@ class Template_EditAd
 				<option<?php echo ($ad->p['show-author'] == $user->user_id ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
 <?php endforeach; ?>
 			</select>
-			<img class="default_note" title="[Default] <?php echo $defaultAuthor; ?>">
+			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $defaultAuthor; ?>">
 		</td>
 	</tr>
 	<tr>
@@ -235,7 +235,7 @@ class Template_EditAd
 				<option<?php echo ($ad->p['show-post'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 				<option<?php echo ($ad->p['show-post'] == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
-			<img class="default_note" title="[Default] <?php echo $ad->d('show-post'); ?>">
+			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('show-post'); ?>">
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
 		<td></td>
@@ -248,7 +248,7 @@ class Template_EditAd
 				<option<?php echo ($ad->p['show-page'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 				<option<?php echo ($ad->p['show-page'] == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
-			<img class="default_note" title="[Default] <?php echo $ad->d('show-page'); ?>">
+			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('show-page'); ?>">
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
 		<td></td>
@@ -261,7 +261,7 @@ class Template_EditAd
 				<option<?php echo ($ad->p['show-archive'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 				<option<?php echo ($ad->p['show-archive'] == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
-			<img class="default_note" title="[Default] <?php echo $ad->d('show-archive'); ?>">
+			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('show-archive'); ?>">
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
 		<td></td>
@@ -274,7 +274,7 @@ class Template_EditAd
 				<option<?php echo ($ad->p['show-search'] == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 				<option<?php echo ($ad->p['show-search'] == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
-			<img class="default_note" title="[Default] <?php echo $ad->d('show-search'); ?>">
+			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('show-search'); ?>">
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
 		<td></td>
@@ -298,7 +298,7 @@ class Template_EditAd
 <p>
 	<label for="adsensem-weight">Weight:</label>
 	<input type="text" name="adsensem-weight" style="width:50px" id="adsensem-weight" value="<?php echo $ad->p['weight']; ?>" />
-	<img class="default_note" title="[Default] <?php echo $ad->d('weight'); ?>">
+	<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('weight'); ?>">
 </p>
 <br />
 <p>
@@ -306,12 +306,12 @@ class Template_EditAd
 		<input name="adsensem-openx-market" type="checkbox" id="adsensem-openx-market" value="yes"<?php echo ($ad->p['openx-market'] == 'yes' ? ' checked="checked"' : ''); ?> onChange="document.getElementById('adsensem-openx-market-cpm').disabled = (!this.checked); document.getElementById('adsensem-openx-market-cpm').style.color = (this.checked ? 'black' : 'gray'); document.getElementById('adsensem-openx-market-cpm-label').style.color = (this.checked ? 'black' : 'lightgray');" />
 		OpenX Market Enabled
 	</label>
-	<img class="default_note" title="[Default] <?php echo $ad->d('openx-market'); ?>">
+	<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('openx-market'); ?>">
 </p>
 <p>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="adsensem-openx-market-cpm-label" for="adsensem-openx-market-cpm">Average eCPM:</label>
 	<input type="text" name="adsensem-openx-market-cpm" style="width:50px" id="adsensem-openx-market-cpm" value="<?php echo $ad->p['openx-market-cpm']; ?>"<?php echo ($ad->p['openx-market'] != 'yes' ? ' disabled="disabled"' : ''); ?> />
-	<img class="default_note" title="[Default] <?php echo $ad->d('openx-market-cpm'); ?>">
+	<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('openx-market-cpm'); ?>">
 </p>
 </div>
 <br />
@@ -323,11 +323,11 @@ class Template_EditAd
 	{
 ?><div style="font-size:small;">
 	<label for="html_before">HTML Code Before</label><br />
-	<textarea rows="1" cols="60" name="adsensem-html-before" id="adsensem-html-before" onfocus="this.select();"><?php echo $ad->p['html-before']; ?></textarea><img class="default_note" title="[Default] <?php echo $ad->d('html-before'); ?>"><br />
+	<textarea rows="1" cols="60" name="adsensem-html-before" id="adsensem-html-before" onfocus="this.select();"><?php echo $ad->p['html-before']; ?></textarea><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('html-before'); ?>"><br />
 	<label for="ad_code">Ad Code</label><br />
 	<textarea rows="6" cols="60" id="adsensem-code" style="background:#cccccc" onfocus="this.select();" onclick="this.select();" readonly="readonly"><?php echo $ad->render_ad(); ?></textarea><br />
 	<label for="html_after">HTML Code After</label><br />
-	<textarea rows="1" cols="60" name="adsensem-html-after" id="adsensem-html-after" onfocus="this.select();"><?php echo $ad->p['html-after']; ?></textarea><img class="default_note" title="[Default] <?php echo $ad->d('html-after'); ?>"><br />
+	<textarea rows="1" cols="60" name="adsensem-html-after" id="adsensem-html-after" onfocus="this.select();"><?php echo $ad->p['html-after']; ?></textarea><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('html-after'); ?>"><br />
 </div>
 <br />
 <span style="font-size:x-small;color:gray;">Place any HTML code you want to display before or after your tag in the appropriate section.  If you want to change your ad network tag, you need to import the new tag again.</span>

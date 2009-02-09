@@ -76,7 +76,7 @@ class OX_Adnet_Adpinion extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match("/website=(\w*)/", $code, $matches) != 0) {
-			$this->set_account_id($matches[1]);
+			$this->p['account-id'] = $matches[1];
 			$code = str_replace("website={$matches[1]}", "website={{account-id}}'", $code);
 		}
 		if (preg_match("/width=(\w*)/", $code, $matches) != 0) {

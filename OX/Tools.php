@@ -3,7 +3,7 @@ class OX_Tools
 {
 	function sort($ads)
 	{
-		uasort($ads, 'sort_by_class');
+		uasort($ads, '_sort_by_class');
 		return $ads;
 	}
 	
@@ -15,6 +15,10 @@ class OX_Tools
 	function sanitize_number($number)
 	{
 		return preg_replace('/[^0-9\.\-]/i', '', $number);
+	}
+	function sanitize_string($string)
+	{
+		return preg_replace('/[^0-9a-z]/i', '', $number);
 	}
 }
 ?>

@@ -72,15 +72,15 @@ class Template_EditAd_Crispads extends Template_EditAd
 		</td>
 		<td>
 <?php if ($mode != 'edit_network'): ?>
-			<img class="default_note" title="[Default] <?php echo $ad->d('adformat'); ?>">
+			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('adformat'); ?>">
 <?php endif; ?>
 		</td>
 	</tr>
 	<tr id="adsensem-settings-custom">
 		<td class="adsensem_label"><label for="adsensem-width">Dimensions:</label></td>
 		<td>
-			<input name="adsensem-width" size="5" title="Custom width for this unit." value="<?php echo ($ad->p['width']); ?>" /> x
-			<input name="adsensem-height" size="5" title="Custom width for this unit." value="<?php echo ($ad->p['height']); ?>" /> px
+			<input name="adsensem-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->p['width']); ?>" /> x
+			<input name="adsensem-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->p['height']); ?>" /> px
 		</td>
 	</tr>
 	</table>

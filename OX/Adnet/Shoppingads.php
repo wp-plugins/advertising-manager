@@ -59,7 +59,7 @@ class OX_Adnet_Shoppingads extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match("/shoppingads_ad_client(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->set_account_id($matches[4]);
+			$this->p['account-id'] = $matches[4];
 			$code = str_replace("shoppingads_ad_client{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_ad_client{$matches[1]}={$matches[2]}{$matches[3]}{{account-id}}{$matches[5]}", $code);
 		}
 		

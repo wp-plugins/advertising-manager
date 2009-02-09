@@ -19,7 +19,7 @@ class Template_EditAd_Cj extends Template_EditAd
 <table>
 <tr>
 	<td><label for="adsensem-slot">Account ID:</label></td>
-	<td><input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->account_id(); ?>" /></td>
+	<td><input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->p['account-id']; ?>" /></td>
 </tr>
 <tr>
 	<td><label for="adsensem-slot">Slot ID:</label></td>
@@ -48,7 +48,7 @@ class Template_EditAd_Cj extends Template_EditAd
 			<option<?php echo ($ad->p['new-window'] == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 			<option<?php echo ($ad->p['new-window'] == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 		</select>
-			<img class="default_note" title="[Default] <?php echo $ad->d('new-window'); ?>">
+			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('new-window'); ?>">
 	</td>
 </tr>
 <tr>
@@ -101,14 +101,14 @@ class Template_EditAd_Cj extends Template_EditAd
 			</select>
 		</td>
 		<td>
-			<img class="default_note" title="[Default] <?php echo $ad->d('adformat'); ?>">
+			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('adformat'); ?>">
 		</td>
 	</tr>
 	<tr id="adsensem-settings-custom">
 		<td class="adsensem_label"><label for="adsensem-width">Dimensions:</label></td>
 		<td>
-			<input name="adsensem-width" size="5" title="Custom width for this unit." value="<?php echo ($ad->p['width']); ?>" /> x
-			<input name="adsensem-height" size="5" title="Custom width for this unit." value="<?php echo ($ad->p['height']); ?>" /> px
+			<input name="adsensem-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->p['width']); ?>" /> x
+			<input name="adsensem-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->p['height']); ?>" /> px
 		</td>
 	</tr>
 	</table>

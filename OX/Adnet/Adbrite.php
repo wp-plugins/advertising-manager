@@ -78,7 +78,7 @@ class OX_Adnet_Adbrite extends OX_Adnet
 		}
 		
 		if (preg_match("/zs=(\w*)/", $code, $matches) != 0) {
-			$this->set_account_id($matches[1]);
+			$this->p['account-id'] = $matches[1];
 			$code = str_replace("zs={$matches[1]}", "zs={{account-id}}", $code);
 		}
 		if (preg_match("/sid=(\w*)/", $code, $matches) != 0) {

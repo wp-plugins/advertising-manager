@@ -48,7 +48,7 @@ class Template_EditAd_Adgridwork extends Template_EditAd
 			</select>
 		</td>
 		<td>
-			<img class="default_note" title="[Default] <?php echo $ad->d('adformat'); ?>">
+			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('adformat'); ?>">
 		</td>
 	</tr>
 	</table>
@@ -66,27 +66,27 @@ class Template_EditAd_Adgridwork extends Template_EditAd
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-border">Border:</label></td>
 				<td>#<input name="adsensem-color-border" onChange="adsensem_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->p['color-border']; ?>" /></td>
-				<td><img class="default_note" title="[Default] <?php echo $ad->d('color-border'); ?>"></td>
+				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-border'); ?>"></td>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-title">Title:</label></td>
 				<td>#<input name="adsensem-color-title" onChange="adsensem_update_color(this,'ad-color-title','title');" size="6" value="<?php echo $ad->p['color-title']; ?>" /></td>
-				<td><img class="default_note" title="[Default] <?php echo $ad->d('color-title'); ?>"></td>
+				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-title'); ?>"></td>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-bg">Background:</label></td>
 				<td>#<input name="adsensem-color-bg" onChange="adsensem_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->p['color-bg']; ?>" /></td>
-				<td><img class="default_note" title="[Default] <?php echo $ad->d('color-bg'); ?>"></td>
+				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-bg'); ?>"></td>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-text">Text:</label></td>
 				<td>#<input name="adsensem-color-text" onChange="adsensem_update_color(this,'ad-color-text','text');" size="6" value="<?php echo $ad->p['color-text']; ?>" /></td>
-				<td><img class="default_note" title="[Default] <?php echo $ad->d('color-text'); ?>"></td>
+				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-text'); ?>"></td>
 			</tr>
 			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-link">URL:</label></td>
 				<td>#<input name="adsensem-color-link" onChange="adsensem_update_color(this,'ad-color-link','link');" size="6" value="<?php echo $ad->p['color-link']; ?>" /></td>
-				<td><img class="default_note" title="[Default] <?php echo $ad->d('color-link'); ?>"></td>
+				<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-link'); ?>"></td>
 			</tr>
 			</table>
 		</td>

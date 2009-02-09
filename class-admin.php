@@ -36,6 +36,8 @@ class adsensem_admin
 		$user = get_current_user();
 		$siteurl = get_option('siteurl');
 		
+		$update_adsensem = false;
+		
 		//No startup data found, fill it out now.
 		if (adsensem::setup_is_valid() == false) {
 			
@@ -50,17 +52,17 @@ class adsensem_admin
 			
 			$update_adsensem = true; 
 			
-		} elseif (adsensem_admin::version_upgrade($_adsensem['version'],ADVMAN_VERSION)) {
-				include_once('class-upgrade.php');
-				
-				//Backup cycle
-				$backup = get_option('plugin_adsensem_backup');
-				$backup[adsensem_admin::major_version($_adsensem['version'])] = $_adsensem;
-				update_option('plugin_adsensem_backup',$backup);
-				unset($backup);
-				
-				adsensem_upgrade::go();
-				$update_adsensem = true;
+		} elseif (version_compare($_adsensem['version'], ADVMAN_VERSION, '<')) {
+			include_once('class-upgrade.php');
+			
+			//Backup cycle
+			$backup = get_option('plugin_adsensem_backup');
+			$backup[adsensem_admin::major_version($_adsensem['version'])] = $_adsensem;
+			update_option('plugin_adsensem_backup',$backup);
+			unset($backup);
+			
+			adsensem_upgrade::go();
+			$update_adsensem = true;
 		}
 		
 		if ($update_adsensem) {
@@ -72,25 +74,6 @@ class adsensem_admin
 	{
 		$mv=explode('.', $v);
 		return $mv[0]; //Return major version
-	}
-		
-	function version_upgrade($old,$new)
-	{
-		$ov=explode('.', $old);
-		$nv=explode('.', $new);
-		
-		if ($nv[0]>$ov[0]) {
-			return true;
-		} elseif ($nv[0]==$ov[0]) {
-			if ($nv[1]>$ov[1]) {
-				return true;
-			} elseif ($nv[1]==$ov[1]) {
-				if ($nv[2]>$ov[2]) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 		
 	/**
@@ -133,7 +116,7 @@ class adsensem_admin
 	{
 		global $_adsensem;
 		
-		if (is_array($_adsensem['notices'])) {
+		if (!empty($_adsensem['notices'])) {
 			include_once(ADS_PATH . '/Template/' . TEMPLATE . '/Notice.php');
 			Template_Notice::display($_adsensem['notices']);
 		}
@@ -151,7 +134,9 @@ class adsensem_admin
 	function remove_notice($action)
 	{
 		global $_adsensem;
-		unset($_adsensem['notices'][$action]); //=false;
+		if (!empty($_adsensem['notices'][$action])) {
+			unset($_adsensem['notices'][$action]); //=false;
+		}
 		update_option('plugin_adsensem', $_adsensem);		
 	}
 
@@ -382,10 +367,10 @@ class adsensem_admin
 		
 		$update_adsensem = false;
 		
-		$mode = $_POST['adsensem-mode'];
-		$action = $_POST['adsensem-action'];
-		$target = $_POST['adsensem-action-target'];
-		$targets = $_POST['adsensem-action-targets'];
+		$mode = !empty($_POST['adsensem-mode']) ? OX_Tools::sanitize_string($_POST['adsensem-mode']) : null;
+		$action = !empty($_POST['adsensem-action']) ? OX_Tools::sanatize_string($_POST['adsensem-action']) : null;
+		$target = !empty($_POST['adsensem-action-target']) ? OX_Tools::sanatize_string($_POST['adsensem-action-target']) : null;
+		$targets = !empty($_POST['adsensem-action-targets']) ? OX_Tools::sanatize_string($_POST['adsensem-action-targets']) : null;
 		$filter = null;
 		
 		switch ($action) {

@@ -7,18 +7,24 @@ class adsensem_upgrade {
 		global $_adsensem;
 	
 		$upgraded = false;
-		$openx = false;
+		
+		// Bug where version was = a string for a while...
+		if ($_adsensem['version'] == 'ADVMAN_VERSION') {
+			$_adsensem['version'] = '3.3.4';
+			$upgraded = true;
+		}
+		
 		/* List of possible upgrade paths here: Ensure that versions automagically stack on top of one another
 				e.g. v1.x to v3.x should be possilbe v1.x > v2.x > v3.x */
 		
-		if (adsensem_admin::version_upgrade($_adsensem['version'],"3.0")) {
+		if (version_compare($_adsensem['version'], '3.0', '<')) {
 			adsensem_upgrade::v2_x_to_3_0();
 			$upgraded = true;
 		}
-		if (adsensem_admin::version_upgrade($_adsensem['version'],"3.3.4")) {
+		
+		if (version_compare($_adsensem['version'], '3.3.4', '<')) {
 			adsensem_upgrade::v3_0_to_3_3_3();
 			$upgraded = true;
-			$openx = true;
 		}
 	
 		//Write notice, ONLY IF UPGRADE HAS OCCURRED
@@ -26,7 +32,7 @@ class adsensem_upgrade {
 			adsensem_admin::add_notice('optimise','Advertising Manager has been upgraded!<br />Would you like Advertising Manager to enable <a href="www.switzer.org">auto optimisation</a>? (RECOMMENDED)','yn');
 		}
 		
-		$_adsensem['version']=ADVMAN_VERSION;
+		$_adsensem['version'] = ADVMAN_VERSION;
 	}
 
 	
@@ -78,12 +84,17 @@ class adsensem_upgrade {
 					if (!isset($new[$adnets[$n]]['show-author'])) {
 						$new[$adnets[$n]]['show-author'] = 'all';
 					}
+					// Show only for a Category
+					if (!isset($new[$adnets[$n]]['show-category'])) {
+						$new[$adnets[$n]]['show-category'] = 'all';
+					}
 				}
 			}
 			$_adsensem['defaults'] = $new;
 		}
 		
 		// Change account IDs to new class structure
+		// We are going to change it to something later, but we need it this way for ad conversions...
 		if (!empty($_adsensem['account-ids'])) {
 			$new = array();
 			$accounts = $_adsensem['account-ids'];
@@ -133,7 +144,6 @@ class adsensem_upgrade {
 									break;
 							}
 						}
-						$ad = $a;
 					}
 				}
 				if (empty($ad->id)) {
@@ -189,6 +199,17 @@ class adsensem_upgrade {
 			
 			$_adsensem['ads'] = $new;
 			$_adsensem['next_ad_id'] = $id;
+		}
+		
+		// Move account IDs inside the ad array
+		if (!empty($_adsensem['account-ids'])) {
+			foreach ($_adsensem['account-ids'] as $class => $accountId) {
+				foreach ($_adsensem['ads'] as $id => $ad) {
+					if ($class == get_class($ad)) {
+						$_adsensem['ads'][$id]['account-id'] = $accountId;
+					}
+				}
+			}
 		}
 		
 		// Be nice does not exist anymore
@@ -340,7 +361,7 @@ class adsensem_upgrade {
 	function _render_ad_adsense($ad)
 	{
 		$code .= '<script type="text/javascript"><!--' . "\n";
-		$code.= 'google_ad_client = "pub-' . $ad->account_id() . '";' . "\n";
+		$code.= 'google_ad_client = "pub-' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
 		$code.= 'google_ad_slot = "' . str_pad($ad->pd('slot'),10,'0',STR_PAD_LEFT) . '"' . ";\n"; //String padding to max 10 char slot ID
 		
 		if($ad->pd('adtype')=='ref_text'){
@@ -372,7 +393,7 @@ class adsensem_upgrade {
 		$code .= "var AdBrite_Background_Color = '" . $ad->pd('color-bg') . "'\n";
 		$code .= "var AdBrite_Border_Color = '" . $ad->pd('color-border') . "'\n";
 		$code .= '</script>' . "\n";
-	   	$code .= '<script src="http://ads.adbrite.com/mb/text_group.php?sid=' . $ad->pd('slot') . '&zs=' . $ad->account_id() . '" type="text/javascript"></script>';
+	   	$code .= '<script src="http://ads.adbrite.com/mb/text_group.php?sid=' . $ad->pd('slot') . '&zs=' . $_adsensem['account-ids'][$ad->network] . '" type="text/javascript"></script>';
 		$code .= '<div><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=' . $ad->pd('slot') . '&afsid=1" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>';
 		$code .= '<!-- End: AdBrite -->';
 		
@@ -381,7 +402,7 @@ class adsensem_upgrade {
 	
 	function _render_ad_adgridwork($ad)
 	{
-		$code ='<a href="http://www.adgridwork.com/?r=' . $ad->account_id() . '" style="color: #' . $ad->pd('color-link') .  '; font-size: 14px" target="_blank">Free Advertising</a>';
+		$code ='<a href="http://www.adgridwork.com/?r=' . $_adsensem['account-ids'][$ad->network] . '" style="color: #' . $ad->pd('color-link') .  '; font-size: 14px" target="_blank">Free Advertising</a>';
 		$code.='<script type="text/javascript">' . "\n";
 		$code.="var sid = '"  . $ad->pd('slot') . "';\n";
 		$code.="var title_color = '" . $ad->pd('color-title') . "';\n";
@@ -398,7 +419,7 @@ class adsensem_upgrade {
 	{
 		if($ad->pd('width')>$ad->pd('height')){$xwidth=18;$xheight=17;} else {$xwidth=0;$xheight=35;}
 		$code ='';
-	 	$code .= '<iframe src="http://www.adpinion.com/app/adpinion_frame?website=' . $ad->account_id() . '&amp;width=' . $ad->pd('width') . '&amp;height=' . $ad->pd('height') . '" ';
+	 	$code .= '<iframe src="http://www.adpinion.com/app/adpinion_frame?website=' . $_adsensem['account-ids'][$ad->network] . '&amp;width=' . $ad->pd('width') . '&amp;height=' . $ad->pd('height') . '" ';
 		$code .= 'id="adframe" style="width:' . ($ad->pd('width')+$xwidth) . 'px;height:' . ($ad->pd('height')+$xheight) . 'px;" scrolling="no" frameborder="0">.</iframe>';
 	
 		return $code;
@@ -408,10 +429,10 @@ class adsensem_upgrade {
 	{
 		$code ='';
 		$code .= '<!-- Start: Adroll Ads -->';
-	 	$code .= '<script type="text/javascript" src="http://c.adroll.com/r/' . $ad->account_id() . '/' . $ad->pd('slot') . '/">';
+	 	$code .= '<script type="text/javascript" src="http://c.adroll.com/r/' . $_adsensem['account-ids'][$ad->network] . '/' . $ad->pd('slot') . '/">';
 		$code .= '</script>';
 		$code .= '<!-- Start: Adroll Profile Link -->';
-	 	$code .= '<script type="text/javascript" src="http://c.adroll.com/r/' . $ad->account_id() . '/' . $ad->pd('slot') . '/link">';
+	 	$code .= '<script type="text/javascript" src="http://c.adroll.com/r/' . $_adsensem['account-ids'][$ad->network] . '/' . $ad->pd('slot') . '/link">';
 		$code .= '</script>';
 	
 		return $code;
@@ -422,7 +443,7 @@ class adsensem_upgrade {
 		$code='';
 		
 		$code .= '<script type="text/javascript"><!--' . "\n";
-		$code.= 'google_ad_client = "pub-' . $ad->account_id() . '";' . "\n";
+		$code.= 'google_ad_client = "pub-' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
 				
 		if($ad->pd('channel')!==''){ $code.= 'google_ad_channel = "' . $ad->pd('channel') . '";' . "\n"; }
 		if($ad->pd('uistyle')!==''){ $code.= 'google_ui_features = "rc:' . $ad->pd('uistyle') . '";' . "\n"; }
@@ -461,7 +482,7 @@ class adsensem_upgrade {
 		$code='';
 
 		$code .= '<script type="text/javascript"><!--' . "\n";
-		$code.= 'google_ad_client = "pub-' . $ad->account_id() . '";' . "\n";
+		$code.= 'google_ad_client = "pub-' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
 					
 		if($ad->pd('channel')!==''){ $code.= 'google_ad_channel = "' . $ad->pd('channel') . '";' . "\n"; }
 		if($ad->pd('uistyle')!==''){ $code.= 'google_ui_features = "rc:' . $ad->pd('uistyle') . '";' . "\n"; }
@@ -498,7 +519,7 @@ class adsensem_upgrade {
 
 	
 		$code .= '<script type="text/javascript"><!--' . "\n";
-		$code.= 'google_ad_client = "pub-' . $ad->account_id() . '";' . "\n";
+		$code.= 'google_ad_client = "pub-' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
 		
 		if($ad->pd('channel')!==''){ $code.= 'google_ad_channel = "' . $ad->pd('channel') . '";' . "\n"; }
 		
@@ -528,7 +549,7 @@ class adsensem_upgrade {
 		
 		$code = '';
 		$code .= '<!-- Start: CJ Ads -->';
-	 	$code .= '<a href="http://' . $cjservers[array_rand($cjservers)] . '/click-' . $ad->account_id() . '-' . $ad->pd('slot') . '"';
+	 	$code .= '<a href="http://' . $cjservers[array_rand($cjservers)] . '/click-' . $_adsensem['account-ids'][$ad->network] . '-' . $ad->pd('slot') . '"';
 		if($ad->pd('new-window')=='yes'){$code.=' target="_blank" ';}
 		
 		if($ad->pd('hide-link')=='yes'){
@@ -539,7 +560,7 @@ class adsensem_upgrade {
 		
 		$code .= '>';
 		
-		$code .= '<img src="http://' . $cjservers[array_rand($cjservers)] . '/image-' . $ad->account_id() . '-' . $ad->pd('slot') . '"';
+		$code .= '<img src="http://' . $cjservers[array_rand($cjservers)] . '/image-' . $_adsensem['account-ids'][$ad->network] . '-' . $ad->pd('slot') . '"';
 		$code .= ' width="' . $ad->pd('width') . '" ';
 		$code .= ' height="' . $ad->pd('height') . '" ';
 		$code .= ' alt="' . $ad->pd('alt-text') . '" ';
@@ -576,7 +597,7 @@ class adsensem_upgrade {
 	function _render_ad_shoppingads($ad)
 	{
 		$code = '<script type="text/javascript"><!--' . "\n";
-		$code.= 'shoppingads_ad_client = "' . $ad->account_id() . '";' . "\n";
+		$code.= 'shoppingads_ad_client = "' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
 		$code.= 'shoppingads_ad_campaign = "' . $ad->pd('campaign') . '";' . "\n";
 
 		list($width,$height,$null)=split('[x]',$ad->pd('adformat'));
@@ -614,7 +635,7 @@ class adsensem_upgrade {
 	{
 		$code = '<script language="JavaScript">';
 		$code .= '<!--';
-		$code .= 'ctxt_ad_partner = "' . $ad->account_id() . '";' . "\n";
+		$code .= 'ctxt_ad_partner = "' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
 		$code .= 'ctxt_ad_section = "' . $ad->pd('channel') . '";' . "\n";
 		$code .= 'ctxt_ad_bg = "";' . "\n";
 		$code .= 'ctxt_ad_width = "' . $ad->pd('width') . '";' . "\n";

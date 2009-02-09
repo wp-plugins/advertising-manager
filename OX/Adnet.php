@@ -71,20 +71,9 @@ class OX_Adnet
 		return $value;
 	}
 			
-	function account_id()
-	{
-		global $_adsensem;
-		return $_adsensem['account-ids'][$this->network];
-	}
-	
-	function set_account_id($aid)
-	{
-		global $_adsensem;
-		$_adsensem['account-ids'][$this->network]=$aid;
-	}
-	
 	function is_available()
 	{
+		global $post;
 		// Filter by active
 		if (!$this->active) {
 			return false;
@@ -92,8 +81,24 @@ class OX_Adnet
 		// Filter by author
 		$author = $this->pd('show-author');
 		if (!empty($author) && ($author != 'all')) {
-			global $post;
 			if ($post->post_author != $this->p['show-author']) {
+				return false;
+			}
+		}
+		
+		// Filter by category
+		$cat = $this->pd('show-category');
+		$cat = '1';
+		if (!empty($cat) && ($cat != 'all')) {
+			$categories = get_the_category();
+			$found = false;
+			foreach ($categories as $category) {
+				if ($category->cat_ID == $cat) {
+					$found = true;
+					break;
+				}
+			}
+			if (!$found) {
 				return false;
 			}
 		}
@@ -124,8 +129,6 @@ class OX_Adnet
 
 	function render_ad($search, $replace)
 	{
-		$search[] = '{{account-id}}';
-		$replace[] = $this->account_id();
 		$search[] = '{{random}}';
 		$replace[] = mt_rand();
 		
@@ -167,6 +170,7 @@ class OX_Adnet
 	function get_default_properties()
 	{
 		return array (
+			'account-id' => '',
 			'adformat' => '728x90',
 			'code' => '',
 			'height' => '90',
@@ -206,11 +210,6 @@ class OX_Adnet
 	function save_settings()
 	{
 		global $_adsensem;	
-		
-		//Store account id to network default location
-		if($_POST['adsensem-account-id']!='') {
-			$this->set_account_id($_POST['adsensem-account-id']);
-		}
 		
 		if (isset($_POST['adsensem-name'])) {
 			$this->name = $_POST['adsensem-name'];

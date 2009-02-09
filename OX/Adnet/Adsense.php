@@ -63,7 +63,7 @@ class OX_Adnet_Adsense extends OX_Adnet
 		
 		// Account ID
 		if (preg_match('/google_ad_client( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->set_account_id($matches[3]);
+			$this->p['account-id'] = $matches[3];
 			$code = str_replace("google_ad_client{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_client{$matches[1]}={$matches[2]}\"{{account-id}}\"", $code);
 		}
 		

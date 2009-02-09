@@ -89,7 +89,7 @@ function ADS_setAction(action, id, name, network)
 
 
 <div class="view-switch">
-	<a href="/wordpress.27/wp-admin/edit.php?mode=list"><img class="current" id="view-switch-list" src="../wp-includes/images/blank.gif" width="20" height="20" title="List View" alt="List View" /></a>
+	<a href="/wordpress.27/wp-admin/edit.php?mode=list"><img class="current" id="view-switch-list" src="../wp-includes/images/blank.gif" width="20" height="20" title="<?php _e('List View', 'advman'); ?>" alt="List View" /></a>
 
 	<a href="/wordpress.27/wp-admin/edit.php?mode=excerpt"><img  id="view-switch-excerpt" src="../wp-includes/images/blank.gif" width="20" height="20" title="Excerpt View" alt="Excerpt View" /></a>
 </div>
@@ -134,8 +134,8 @@ function ADS_setAction(action, id, name, network)
 			<strong><a class="row-title" href="javascript:ADS_setAction('edit','<?php echo $ad->id; ?>');" title="Edit the ad &quot;<?php echo $ad->name; ?>&quot;">[<?php echo $ad->id; ?>] <?php echo $ad->name; ?></a></strong>
 			<div class="row-actions">
 				<span class='edit'><a href="javascript:ADS_setAction('edit','<?php echo $ad->id; ?>');" title="Edit the ad &quot;<?php echo $ad->name; ?>&quot;">Edit</a> | </span>
-				<span class='edit'><a class='submitdelete' title='Copy this ad' href="javascript:ADS_setAction('copy','<?php echo $ad->id; ?>');">Copy</a> | </span>
-				<span class='edit'><a class='submitdelete' title='Delete this ad' href="javascript:ADS_setAction('delete','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>', '<?php echo $ad->networkName; ?>');" onclick=""><?php _e('Delete', 'advman'); ?></a> | </span>
+				<span class='edit'><a class='submitdelete' title="<?php _e('Copy this ad', 'advman'); ?>" href="javascript:ADS_setAction('copy','<?php echo $ad->id; ?>');">Copy</a> | </span>
+				<span class='edit'><a class='submitdelete' title="<?php _e('Delete this ad', 'advman'); ?>" href="javascript:ADS_setAction('delete','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>', '<?php echo $ad->networkName; ?>');" onclick=""><?php _e('Delete', 'advman'); ?></a> | </span>
 				<span class='edit'><a href="<?php echo get_bloginfo('wpurl'); ?>/wp-admin/edit.php?page=advertising-manager-manage-ads&adsensem-show-ad-id=<?php echo $id ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview', 'advman'); ?></a></span>
 			</div>
 		</td>

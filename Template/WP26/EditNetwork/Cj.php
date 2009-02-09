@@ -82,8 +82,8 @@ class Template_EditNetwork_Cj extends Template_EditNetwork
 	<tr id="adsensem-settings-custom">
 		<td class="adsensem_label"><label for="adsensem-width">Dimensions:</label></td>
 		<td>
-			<input name="adsensem-width" size="5" title="Custom width for this unit." value="<?php echo ($ad->d('width')); ?>" /> x
-			<input name="adsensem-height" size="5" title="Custom width for this unit." value="<?php echo ($ad->d('height')); ?>" /> px
+			<input name="adsensem-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->d('width')); ?>" /> x
+			<input name="adsensem-height" size="5" title="<?php _e('Custom height for this unit.', 'advman');?>" value="<?php echo ($ad->d('height')); ?>" /> px
 		</td>
 	</tr>
 	</table>

@@ -38,7 +38,7 @@ class Template_EditAd_Adpinion extends Template_EditAd
 		</td>
 		<td>
 <?php if ($mode != 'edit_network'): ?>
-			<img class="default_note" title="[Default] <?php echo $ad->d('adformat'); ?>">
+			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('adformat'); ?>">
 <?php endif; ?>
 		</td>
 	</tr>
@@ -54,7 +54,7 @@ class Template_EditAd_Adpinion extends Template_EditAd
 <table>
 <tr>
 	<td><label for="adsensem-slot">Account ID:</label></td>
-	<td><input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->account_id(); ?>" /></td>
+	<td><input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->p['account-id']; ?>" /></td>
 </tr>
 </table>
 </div>

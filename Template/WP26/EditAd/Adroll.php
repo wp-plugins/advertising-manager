@@ -42,7 +42,7 @@ class Template_EditAd_Adroll extends Template_EditAd
 			</select>
 		</td>
 		<td>
-			<img class="default_note" title="[Default] <?php echo $ad->d('adformat'); ?>">
+			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('adformat'); ?>">
 		</td>
 	</tr>
 	</table>
@@ -57,7 +57,7 @@ class Template_EditAd_Adroll extends Template_EditAd
 <table>
 <tr>
 	<td><label for="adsensem-account-id">Account ID:</label></td>
-	<td><input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->account_id(); ?>" /></td>
+	<td><input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->p['account-id']; ?>" /></td>
 </tr>
 <tr>
 	<td><label for="adsensem-slot">Slot ID:</label></td>

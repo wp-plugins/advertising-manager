@@ -37,7 +37,7 @@ class Template_EditAd_Adbrite extends Template_EditAd
 			</select>
 		</td>
 		<td>
-			<img class="default_note" title="[Default] <?php echo $ad->d('adformat'); ?>">
+			<img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('adformat'); ?>">
 		</td>
 	</tr>
 	</table>
@@ -55,22 +55,22 @@ class Template_EditAd_Adbrite extends Template_EditAd
 		<tr>
 			<td class="adsensem_label"><label for="adsensem-color-border">Border:</label></td>
 			<td>#<input name="adsensem-color-border" onChange="adsensem_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->p['color-border']; ?>" /></td>
-			<td><img class="default_note" title="[Default] <?php echo $ad->d('color-border'); ?>"></td>
+			<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-border'); ?>"></td>
 		</tr>
 		<tr>
 			<td class="adsensem_label"><label for="adsensem-color-title">Title:</label></td>
 			<td>#<input name="adsensem-color-title" onChange="adsensem_update_color(this,'ad-color-title','title');" size="6" value="<?php echo $ad->p['color-title']; ?>" /></td>
-			<td><img class="default_note" title="[Default] <?php echo $ad->d('color-title'); ?>"></td>
+			<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-title'); ?>"></td>
 		</tr>
 		<tr>
 			<td class="adsensem_label"><label for="adsensem-color-bg">Background:</label></td>
 			<td>#<input name="adsensem-color-bg" onChange="adsensem_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->p['color-bg']; ?>" /></td>
-			<td><img class="default_note" title="[Default] <?php echo $ad->d('color-bg'); ?>"></td>
+			<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-bg'); ?>"></td>
 		</tr>
 		<tr>
 			<td class="adsensem_label"><label for="adsensem-color-text">Text:</label></td>
 			<td>#<input name="adsensem-color-text" onChange="adsensem_update_color(this,'ad-color-text','text');" size="6" value="<?php echo $ad->p['color-text']; ?>" /></td>
-			<td><img class="default_note" title="[Default] <?php echo $ad->d('color-text'); ?>"></td>
+			<td><img class="default_note" title="<?php _e('[Default]', 'advman') . ' ' . $ad->d('color-text'); ?>"></td>
 		</tr>
 		</table>
 	</td>
@@ -97,7 +97,7 @@ class Template_EditAd_Adbrite extends Template_EditAd
 ?><table>
 <tr>
 	<td><label for="adsensem-slot">Account ID:</label></td>
-	<td><input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->account_id(); ?>" /></td>
+	<td><input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->p['account-id']; ?>" /></td>
 </tr>
 <tr>
 	<td><label for="adsensem-slot">Slot ID:</label></td>

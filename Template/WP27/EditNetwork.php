@@ -53,7 +53,7 @@ class Template_EditNetwork
 		<div id="side-info-column" class="inner-sidebar">
 			<div id='side-sortables' class='meta-box-sortables'>
 				<div id="submitdiv" class="postbox " >
-				<div class="handlediv" title="Click to toggle"><br /></div>
+				<div class="handlediv" title="<?php _e('Click to toggle', 'advman'); ?>"><br /></div>
 				<h3 class='hndle'><span>Save Settings</span></h3>
 				<div class="inside">
 					<div class="submitbox" id="submitpost">
@@ -98,7 +98,7 @@ class Template_EditNetwork
 			</div>
 		</div>
 		<div id="categorydiv" class="postbox " >
-			<div class="handlediv" title="Click to toggle"><br /></div>
+			<div class="handlediv" title="<?php _e('Click to toggle', 'advman'); ?>"><br /></div>
 			<h3 class='hndle'><span>Notes</span></h3>
 			<div class="inside">
 				<label for="ad_code">Display any notes about this ad here:</label><br /><br />
@@ -159,8 +159,8 @@ class Template_EditNetwork
 <tr id="adsensem-settings-custom">
 	<td class="adsensem_label"><label for="adsensem-width">Dimensions:</label></td>
 	<td>
-		<input name="adsensem-width" size="5" title="Custom width for this unit." value="<?php echo ($ad->d('width')); ?>" /> x
-		<input name="adsensem-height" size="5" title="Custom width for this unit." value="<?php echo ($ad->d('height')); ?>" /> px
+		<input name="adsensem-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->d('width')); ?>" /> x
+		<input name="adsensem-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->d('height')); ?>" /> px
 	</td>
 </tr>
 </table>

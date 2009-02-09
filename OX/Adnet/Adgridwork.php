@@ -66,7 +66,7 @@ class OX_Adnet_Adgridwork extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match("/www\.adgridwork\.com\/\?r=(\d*)/", $code, $matches)) {
-			$this->set_account_id($matches[1]);
+			$this->p['account-id'] = $matches[1];
 			$code = str_replace("www.adgridwork.com/?r={$matches[1]}", "www.adgridwork.com/?r={{account-id}}", $code);
 		}
 		

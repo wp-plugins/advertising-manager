@@ -57,7 +57,7 @@ class OX_Adnet_Ypn extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match('/ctxt_ad_partner( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->set_account_id($matches[3]);
+			$this->p['account-id'] = $matches[3];
 			$code = str_replace("ctxt_ad_partner{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_partner{$matches[1]}={$matches[2]}\"{{account-id}}\"", $code);
 		}
 		

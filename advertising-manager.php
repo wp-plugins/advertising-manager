@@ -8,12 +8,14 @@ Version: 3.3.4
 Author URI: http://www.mutube.com/
 */
 
+error_reporting(E_ALL);
+
 global $wp_version;
 $template = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP26' : 'WP27';
 @define('TEMPLATE', $template);
 
 // Definitions
-@define("ADSENSEM_VERSION", "3.3.4");
+@define("ADVMAN_VERSION", "3.3.4");
 @define('ADS_PATH', dirname(__FILE__));
 
 // Ad Network Includes
@@ -106,7 +108,7 @@ class adsensem
 		$_adsensem['ads'] = array();
 		$_adsensem['next_ad_id'] = 1;
 		$_adsensem['default-ad'] = '';
-		$_adsensem['version'] = ADSENSEM_VERSION;
+		$_adsensem['version'] = ADVMAN_VERSION;
 		
 		return $_adsensem;
 	}
@@ -183,7 +185,7 @@ class adsensem
 	 */
 	function footer()
 	{
-?>		<!-- Advertising Manager v<?php echo ADSENSEM_VERSION;?> (<?php timer_stop(1); ?> seconds.) -->
+?>		<!-- Advertising Manager v<?php echo ADVMAN_VERSION;?> (<?php timer_stop(1); ?> seconds.) -->
 <?php
 	}
 
@@ -237,18 +239,18 @@ class adsensem
 }
 
 /* SHOW ALTERNATE AD UNITS */
-if ($_REQUEST['adsensem-show-ad']) {
-?>	<html><body>
-<?php
-	adsensem_ad($_REQUEST['adsensem-show-ad']);
-?>	</body></html>
-<?php
+if (!empty($_REQUEST['adsensem-show-ad'])) {
+	$name = OX_Tools::sanitize_name($_REQUEST['adsensem-show-ad']);
+	echo '<html><body>';
+	adsensem_ad($name);
+	echo '</body></html>';
 	die(0);
 }
 /* END SHOW ALTERNATE AD UNITS */
 // SHOW AN AD BY ID
-if ($_REQUEST['adsensem-show-ad-id']) {
-	if (!empty($_adsensem['ads'][$_REQUEST['adsensem-show-ad-id']])) {
+if (!empty($_REQUEST['adsensem-show-ad-id'])) {
+	$id = OX_Tools::sanitize_number($_REQUEST['adsensem-show-ad-id']);
+	if (!empty($_adsensem['ads'][$id])) {
 		echo '<html><body>' . $_adsensem['ads'][$_REQUEST['adsensem-show-ad-id']]->get_ad() . '</body></html>';
 	}
 	die(0);
@@ -259,12 +261,15 @@ if (is_admin()) {
 	require_once('class-admin.php');
 
 	/* REVERT TO PREVIOUS BACKUP OF AD DATABASE */
-	if ($_REQUEST['adsensem-revert-db']){
-		$backup=get_option('plugin_adsensem_backup');
-		$_adsensem=$backup[$_REQUEST['adsensem-revert-db']];
-		update_option('plugin_adsensem',$_adsensem);
-		if ($_REQUEST['adsensem-block-upgrade']) {
-			die();
+	if (!empty($_REQUEST['adsensem-revert-db'])) {
+		$version = OX_Tools::sanitize_number($_REQUEST['adsensem-revert-db']);
+		$backup = get_option('plugin_adsensem_backup');
+		if (!empty($backup[$version])) {
+			$_adsensem = $backup[$version];
+			update_option('plugin_adsensem',$_adsensem);
+			if (!empty($_REQUEST['adsensem-block-upgrade'])) {
+				die();
+			}
 		}
 	}
 	/* END REVERT TO PREVIOUS BACKUP OF AD DATABASE */
