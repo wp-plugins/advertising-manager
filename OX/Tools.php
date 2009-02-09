@@ -52,5 +52,32 @@ class OX_Tools
 		
 		return array($last_user, $last_timestamp);
 	}
+	
+	function add_revision($revisions = null)
+	{
+		// If there is no revisions, use my own revisions
+		if (!is_array($revisions)) {
+			$revisions = array();
+		}
+		
+		// Deal with revisions
+		$r = array();
+		$now = mktime();
+		$r[$now] = get_current_user();
+		
+		// Get rid of revisions more than 30 days old
+		if (!empty($revisions)) {
+			foreach ($revisions as $ts => $user) {
+				$days = (strtotime($now) - strtotime($ts)) / 86400 + 1;
+				if ($days <= 30) {
+					$r[$ts] = $user;
+				}
+			}
+		}
+		
+		krsort($r);
+		return $r;
+	}
+
 }
 ?>

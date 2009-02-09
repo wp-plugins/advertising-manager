@@ -238,7 +238,8 @@ class OX_Adnet
 		}
 		
 		// add an item to the audit trail
-		$_adsensem['defaults'][$this->network]['revisions'] = $this->add_revision($_adsensem['defaults'][$this->network]['revisions']);
+		$revisions = OX_Tools::add_revision($_adsensem['defaults'][$this->network]['revisions']);
+		$_adsensem['defaults'][$this->network]['revisions'] = $revisions;
 	}
 	
 	function save_settings()
@@ -275,31 +276,10 @@ class OX_Adnet
 		$this->add_revision();
 	}
 	
-	function add_revision($revisions = null)
+	function add_revision()
 	{
-		// If there is no revisions, use my own revisions
-		if (empty($revisions)) {
-			$revisions = $this->get('revisions');
-			if (empty($revisions)) {
-				$revisions = array();
-			}
-		}
-		
-		// Deal with revisions
-		$r = array();
-		$now = mktime();
-		$r[$now] = get_current_user();
-		
-		if (!empty($revisions)) {
-			foreach ($revisions as $ts => $user) {
-				$days = (strtotime($now) - strtotime($ts)) / 86400 + 1;
-				if ($days <= 30) {
-					$r[$ts] = $user;
-				}
-			}
-		}
-		krsort($r);
-		return $r;
+		$revisions = $this->get('revisions');
+		$this->set('revisions', OX_Tools::add_revision($revisions));
 	}
 	
 	//Convert defined ads into a simple list for outputting as alternates. Maybe limit types by network (once multiple networks supported)

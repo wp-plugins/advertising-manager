@@ -46,7 +46,10 @@ class Template_EditAd
 	<input type="hidden" name="adsensem-mode" id="adsensem-mode" value="edit_ad">
 	<input type="hidden" name="adsensem-action" id="adsensem-action">
 	<input type="hidden" name="adsensem-action-target" id="adsensem-action-target" value="<?php echo $id; ?>">
-	<div id="poststuff" class="metabox-holder">
+<?php  
+	wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );  
+	wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );  
+?>	<div id="poststuff" class="metabox-holder">
 		<div id="side-info-column" class="inner-sidebar">
 			<div id='side-sortables' class='meta-box-sortables'>
 				<div id="submitdiv" class="postbox " >

@@ -45,7 +45,10 @@ class Template_EditNetwork
 <input type="hidden" name="adsensem-mode" id="adsensem-mode" value="edit_network">
 <input type="hidden" name="adsensem-action" id="adsensem-action">
 <input type="hidden" name="adsensem-action-target" id="adsensem-action-target" value="<?php echo $target; ?>">
-<div class="wrap">
+<?php  
+	wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );  
+	wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );  
+?><div class="wrap">
 	<h2>Edit <span class="<?php echo strtolower($ad->network); ?>"><?php echo $ad->networkName; ?></span> Defaults</h2>
 <div id="poststuff">
 <div class="submitbox" id="submitpost">
