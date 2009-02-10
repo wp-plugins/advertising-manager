@@ -61,7 +61,7 @@ class Template_EditAd_Adpinion extends Template_EditAd
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;">The Account ID is your ID for your Adpinion account.</span>
+<span style="font-size:x-small; color:gray;"><?php _e('The Account ID is your ID for your Adpinion account.', 'advman'); ?></span>
 <?php
 	}
 }

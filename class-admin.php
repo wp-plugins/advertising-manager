@@ -35,39 +35,6 @@ class adsensem_admin
 		$email = get_option('admin_email');
 		$user = get_current_user();
 		$siteurl = get_option('siteurl');
-		
-		$update_adsensem = false;
-		
-		//No startup data found, fill it out now.
-		if (adsensem::setup_is_valid() == false) {
-			
-			// Get basic array
-			$_adsensem = adsensem::get_initial_array();
-			
-			// Check to see if Adsense Deluxe should be upgraded
-			$deluxe = get_option('acmetech_adsensedeluxe');
-			if (is_array($deluxe)) {
-				adsensem_admin::add_notice('upgrade adsense-deluxe','Advertising Manager has detected a previous installation of <strong>Adsense Deluxe</strong>. Import settings?','yn');
-			}
-			
-			$update_adsensem = true; 
-			
-		} elseif (version_compare($_adsensem['version'], ADVMAN_VERSION, '<')) {
-			include_once('class-upgrade.php');
-			
-			//Backup cycle
-			$backup = get_option('plugin_adsensem_backup');
-			$backup[adsensem_admin::major_version($_adsensem['version'])] = $_adsensem;
-			update_option('plugin_adsensem_backup',$backup);
-			unset($backup);
-			
-			adsensem_upgrade::go();
-			$update_adsensem = true;
-		}
-		
-		if ($update_adsensem) {
-			update_option('plugin_adsensem', $_adsensem);
-		}
 	}
 			
 	function major_version($v)
@@ -123,23 +90,6 @@ class adsensem_admin
 		
 	}
 	
-	function add_notice($action,$text,$confirm=false)
-	{
-		global $_adsensem;
-		$_adsensem['notices'][$action]['text'] = $text;
-		$_adsensem['notices'][$action]['confirm'] = $confirm;
-		update_option('plugin_adsensem', $_adsensem);
-	}
-	
-	function remove_notice($action)
-	{
-		global $_adsensem;
-		if (!empty($_adsensem['notices'][$action])) {
-			unset($_adsensem['notices'][$action]); //=false;
-		}
-		update_option('plugin_adsensem', $_adsensem);		
-	}
-
 	function generate_name($base = null)
 	{
 		global $_adsensem;
@@ -328,7 +278,7 @@ class adsensem_admin
 			$_adsensem['ads'][$id]->set('openx-market', $market);
 		}
 		foreach ($_adsensem['defaults'] as $network => $settings) {
-			$_adsensem['defaults']['openx-market'] = $market;
+			$_adsensem['defaults'][$network]['openx-market'] = $market;
 		}
 		update_option('plugin_adsensem', $_adsensem);
 	}
@@ -443,7 +393,8 @@ class adsensem_admin
 		switch ($mode) {
 			case 'list_ads' :
 				include_once(ADS_PATH . '/Template/' . TEMPLATE . '/ListAds.php');
-				Template_ListAds::display($target, $filter);
+				$templateListAds = new Template_ListAds();
+				$templateListAds->display($target, $filter);
 				break;
 			
 			case 'create_ad' :

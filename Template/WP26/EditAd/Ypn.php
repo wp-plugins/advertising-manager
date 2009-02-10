@@ -81,7 +81,7 @@ class Template_EditAd_Ypn extends Template_EditAd
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;">Enter the Slot ID which corresponds to this ad.  The identifier uniquely identifies the slot.  This information should automatically be filled in when you import your tag.  If copying ads, you will need to enter this manually.</span>
+<span style="font-size:x-small; color:gray;"><?php _e('Enter the Slot ID which corresponds to this ad.  The identifier uniquely identifies the slot.  This information should automatically be filled in when you import your tag.  If copying ads, you will need to enter this manually.', 'advman'); ?></span>
 <?php
 	}
 	

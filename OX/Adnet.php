@@ -238,7 +238,8 @@ class OX_Adnet
 		}
 		
 		// add an item to the audit trail
-		$revisions = OX_Tools::add_revision($_adsensem['defaults'][$this->network]['revisions']);
+		$revisions = !empty($_adsensem['defaults'][$this->network]['revisions']) ? $_adsensem['defaults'][$this->network]['revisions'] : array();
+		$revisions = OX_Tools::add_revision($revisions);
 		$_adsensem['defaults'][$this->network]['revisions'] = $revisions;
 	}
 	

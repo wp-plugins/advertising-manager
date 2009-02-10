@@ -30,6 +30,9 @@ if ($handle = opendir(ADS_PATH . '/OX/Adnet/')) {
     closedir($handle);
 }
 
+// Other Includes
+require_once(ADS_PATH . '/OX/Tools.php');
+
 $_adsensem = get_option('plugin_adsensem');
 $_adsensem_notices = array();
 
@@ -69,6 +72,33 @@ class adsensem
 			add_filter('the_content', array('adsensem','filter_ads'));
 			// Add an action when the wordpress footer displays
 			add_action('wp_footer', array('adsensem','footer'));
+			add_action('admin_menu', array('adsensem','init_admin'));
+			add_action('widgets_init',  array('adsensem','init_widgets'), 1);
+
+			if (version_compare($_adsensem['version'], ADVMAN_VERSION, '<')) {
+				include_once('class-upgrade.php');
+				
+				//Backup cycle
+				$backup = get_option('plugin_adsensem_backup');
+				$backup[adsensem_admin::major_version($_adsensem['version'])] = $_adsensem;
+				update_option('plugin_adsensem_backup',$backup);
+				unset($backup);
+				
+				adsensem_upgrade::go();
+				update_option('plugin_adsensem', $_adsensem);
+			}
+			
+		} else {
+			// Get basic array
+			$_adsensem = adsensem::get_initial_array();
+			
+			// Check to see if Adsense Deluxe should be upgraded
+			$deluxe = get_option('acmetech_adsensedeluxe');
+			if (is_array($deluxe)) {
+				adsensem::add_notice('upgrade adsense-deluxe','Advertising Manager has detected a previous installation of <strong>Adsense Deluxe</strong>. Import settings?','yn');
+			}
+			
+			update_option('plugin_adsensem', $_adsensem);
 		}
 		
 		// Sync with OpenX
@@ -122,7 +152,7 @@ class adsensem
 		if (!empty($_adsensem['ads'])) {
 			foreach ($_adsensem['ads'] as $id => $ad) {
 				$name = $ad->name;
-				$args = array('name' => $name, 'height' => $ad->get('height'), 'width' => $ad->get('width'));
+				$args = array('name' => $name, 'height' => $ad->get('height', true), 'width' => $ad->get('width', true));
 				if (function_exists('wp_register_sidebar_widget')) {
 					//$id, $name, $output_callback, $options = array()
 					wp_register_sidebar_widget("adsensem-$name", "Ad#$name", array('adsensem','widget'), $args, $name);
@@ -145,6 +175,22 @@ class adsensem
 			// CALL OPENX SYNC!
 		}
 	}
+	
+	function add_notice($action,$text,$confirm=false)
+	{
+		global $_adsensem;
+		$_adsensem['notices'][$action]['text'] = $text;
+		$_adsensem['notices'][$action]['confirm'] = $confirm;
+	}
+	
+	function remove_notice($action)
+	{
+		global $_adsensem;
+		if (!empty($_adsensem['notices'][$action])) {
+			unset($_adsensem['notices'][$action]); //=false;
+		}
+	}
+
 	
 	// This is the function that outputs adsensem widget.
 	function widget($args,$n='')
@@ -285,9 +331,9 @@ if (is_admin()) {
 					if ($_POST['adsensem-notice-confirm-yes']) {
 						require_once('class-upgrade.php');
 						adsensem_upgrade::adsense_deluxe_to_3_0();
-						adsensem_admin::remove_notice('upgrade adsense-deluxe');
+						adsensem::remove_notice('upgrade adsense-deluxe');
 					} else {
-						adsensem_admin::remove_notice('upgrade adsense-deluxe');
+						adsensem::remove_notice('upgrade adsense-deluxe');
 					}
 					break;	
 				case 'optimise':
@@ -296,10 +342,10 @@ if (is_admin()) {
 					} else {
 						adsensem_admin::_set_auto_optimise(false);
 					}
-					adsensem_admin::remove_notice('optimise');
+					adsensem::remove_notice('optimise');
 					break;
 				case 'activate advertising-manager':
-					adsensem_admin::remove_notice('activate advertising-manager');
+					adsensem::remove_notice('activate advertising-manager');
 					break;
 			}
 		}
@@ -318,6 +364,4 @@ function adsensem_sbm_widget($args)
 /* SIDEBAR MODULES COMPATIBILITY FUNCTION */
 
 add_action('plugins_loaded', array('adsensem','init'), 1);	
-add_action('admin_menu', array('adsensem','init_admin'));
-add_action('widgets_init',  array('adsensem','init_widgets'), 1);
 ?>

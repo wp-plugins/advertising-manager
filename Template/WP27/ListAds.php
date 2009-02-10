@@ -140,7 +140,7 @@ function ADS_setAction(action, id, name, network)
 			</div>
 		</td>
 		<td class="author column-author"><a href="javascript:ADS_setAction('edit','<?php echo $ad->network; ?>');" title="Edit the ad network &quot;<?php echo $ad->networkName; ?>&quot;"><?php echo $ad->networkName; ?></a></td>
-		<td class="categories column-categories"> <?php echo $ad->get('adformat'); ?></td>
+		<td class="categories column-categories"> <?php echo $this->displayFormat($ad); ?></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('<?php echo ($ad->active) ? 'deactivate' : 'activate'; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? 'Yes' : 'No'; ?></a></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $_adsensem['default-ad']) ? 'Yes' : 'No'; ?></a></td>
 <?php
@@ -175,6 +175,52 @@ function ADS_setAction(action, id, name, network)
 
 
 <?php
+	}
+	
+	/**
+	 * Display the format field according to the following rules:
+	 * 1.  If a format and type combination is set, fill it in
+	 * 2.  If not, display the default in grey
+	 */
+	function displayFormat($ad)
+	{
+		$format = $ad->get('adformat');
+		
+		// If format is custom, format it like:  Custom (468x60)
+		if ($format == 'custom') {
+			$format = __('Custom', 'advman') . ' (' . $ad->get('width') . 'x' . $ad->get('height') . ')';
+		} elseif ($format == 'x') {
+			$format = '';
+		}
+		
+		// Find a default if the format is not filled in
+		if (empty($format)) {
+			$format = $ad->get_default('adformat');
+			if ($format == 'custom') {
+				$format = __('Custom', 'advman') . ' (' . $ad->get('width') . 'x' . $ad->get('height') . ')';
+			} elseif ($format == 'x') {
+				$format = '';
+			}
+			if (!empty($format)) {
+				$format = "<span style='color:gray;'>" . $format . "</span>";
+			}
+		}
+		
+		$type = $ad->get('adtype');
+		
+		// If there is an ad type, prefix it on to the format
+		if (empty($type)) {
+			$type = $ad->get_default('adtype');
+			if (!empty($type)) {
+				$type = "<span style='color:gray;'>" . $type . "</span>";
+			}
+		}
+		
+		if (!empty($format) && (!empty($type))) {
+			return $type . '<br />' . $format;
+		}
+		
+		return $type . $format;
 	}
 }
 ?>

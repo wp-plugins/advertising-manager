@@ -64,17 +64,9 @@ class Template_EditNetwork
 							<div style="display:none;"><input type="submit" name="save" value="Save" /></div>
 							<div id="minor-publishing-actions">
 								<div id="save-action"></div>
-								<div id="preview-action">
-									<a class="preview button" href="<?php echo get_bloginfo('wpurl'); ?>/wp-admin/edit.php?page=advertising-manager-manage-ads&adsensem-show-ad-id=<?php echo $id ?>" target="wp-preview" id="post-preview" tabindex="4">Preview Ad</a>
-									<input type="hidden" name="wp-preview" id="wp-preview" value="" />
-								</div>
 								<div class="clear"></div>
 							</div>
 							<div id="misc-publishing-actions">
-							<div class="misc-pub-section">
-								<label for="post_status">Status:</label>
-								<b><a href="#" class="edit-post-status hide-if-no-js"><?php echo ($ad->active) ? 'Active' : 'Paused'; ?></a></b>
-							</div>
 							<div class="misc-pub-section curtime misc-pub-section-last">
 								<span id="timestamp">Last edited by <?php echo $last_user ?> on: <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $last_timestamp ?></b></span>
 							</div>
@@ -275,7 +267,7 @@ class Template_EditNetwork
 </p>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;">Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of '0' will stop this ad from displaying. OpenX Market optimised ads will display an alternative ad if it will make more money than this ad. Set the avarage amount you make from this network per 1000 ads (eCPM), and Advertising Manager will automatically optimise on the OpenX Market.</span>
+<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying. OpenX Market optimised ads will display an alternative ad if it will make more money than this ad. Set the avarage amount you make from this network per 1000 ads (eCPM), and Advertising Manager will automatically optimise on the OpenX Market.', 'advman'); ?></span>
 <?php
 	}
 	
@@ -313,7 +305,7 @@ class Template_EditNetwork
 		}
 ?>	</ul>
 <br />
-<span style="font-size:x-small; color:gray;">The last 30 days of revisions are stored for each ad.</span>
+<span style="font-size:x-small; color:gray;"><?php _e('The last 30 days of revisions are stored for each ad.', 'advman'); ?></span>
 <?php
 	}
 }

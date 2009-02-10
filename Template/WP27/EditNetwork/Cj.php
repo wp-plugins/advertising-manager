@@ -37,7 +37,7 @@ class Template_EditNetwork_Cj extends Template_EditNetwork
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;">The Alt Text displays in place of the ad in some cases.  The status sets the browser toolbar message when the cursor is hovering over the ad.  New Window will open a new browser window when the ad is clicked.</span>
+<span style="font-size:x-small; color:gray;"><?php _e('The Alt Text displays in place of the ad in some cases.  The status sets the browser toolbar message when the cursor is hovering over the ad.  New Window will open a new browser window when the ad is clicked.', 'advman'); ?></span>
 <?php
 	}
 	

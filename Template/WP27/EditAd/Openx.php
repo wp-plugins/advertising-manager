@@ -22,7 +22,7 @@ class Template_EditAd_Openx extends Template_EditAd
 </p>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;">Enter the Slot ID which corresponds to this ad.  This should automatically be filled in when you import your tag.  If copying ads, you will need to enter this manually.</span>
+<span style="font-size:x-small; color:gray;"><?php _e('Enter the Slot ID which corresponds to this ad.  This should automatically be filled in when you import your tag.  If copying ads, you will need to enter this manually.', 'advman'); ?></span>
 <?php
 	}
 }
