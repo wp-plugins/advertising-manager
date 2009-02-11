@@ -39,18 +39,17 @@ $_adsensem_notices = array();
 
 // This function is for backwards compatibility.  Do we still need it?
 if (!function_exists('adsensem_ad')) {
-	function adsensem_ad($id = false)
+	function adsensem_ad($name = false)
 	{
 		global $_adsensem;
-		if ($id === false) {
-			$ad = $_adsensem['ads'][$_adsensem['default-ad']];
-		} else {
-			$ad = $_adsensem['ads'][$id];
+		
+		if (empty($name)) { /* default ad */
+			$name = $_adsensem['default-ad'];
 		}
-		if (is_object($ad)) {
-			if ($ad->is_available()) {
-				echo $ad->get_ad();
-			} 
+		
+		$ad = adsensem::select_ad($name);
+		if (!empty($ad)) {
+			echo $ad->get_ad();
 		}
 	}
 }
@@ -80,7 +79,7 @@ class adsensem
 				
 				//Backup cycle
 				$backup = get_option('plugin_adsensem_backup');
-				$backup[adsensem_admin::major_version($_adsensem['version'])] = $_adsensem;
+				$backup[adsensem::major_version($_adsensem['version'])] = $_adsensem;
 				update_option('plugin_adsensem_backup',$backup);
 				unset($backup);
 				
@@ -129,6 +128,12 @@ class adsensem
 		return false;
 	}
 	
+	function major_version($v)
+	{
+		$mv=explode('.', $v);
+		return $mv[0]; //Return major version
+	}
+		
 	/**
 	 * Initialise the Adsensem array
 	 */
@@ -244,11 +249,22 @@ class adsensem
 			$matches[1] = $_adsensem['default-ad'];
 		}
 		
+		$ad = adsensem::select_ad($matches[1]);
+		if (!empty($ad)) {
+			return $ad->get_ad();
+		}
+		return '';
+	}
+	
+	function select_ad($name)
+	{
+		global $_adsensem;
+		
 		// Find the ads which match the name
 		$ads = array();
 		$totalWeight = 0;
 		foreach ($_adsensem['ads'] as $id => $ad) {
-			if ( ($ad->name == $matches[1]) && ($ad->is_available()) ) {
+			if ( ($ad->name == $name) && ($ad->is_available()) ) {
 				$ads[] = $ad;
 				$totalWeight += $ad->get('weight', true);
 			}
@@ -262,10 +278,9 @@ class adsensem
 			$wt += $ad->get('weight', true);
 			if ( ($wt / $totalWeight) > $rnd) {
 				// Display the ad
-				return $ad->get_ad();
+				return $ad;
 			}
 		}
-		return '';
 	}
 		
 

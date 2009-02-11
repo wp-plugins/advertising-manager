@@ -37,12 +37,6 @@ class adsensem_admin
 		$siteurl = get_option('siteurl');
 	}
 			
-	function major_version($v)
-	{
-		$mv=explode('.', $v);
-		return $mv[0]; //Return major version
-	}
-		
 	/**
 	 * Build an HMTL field of type TEXT
 	 */
