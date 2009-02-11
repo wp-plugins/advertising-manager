@@ -36,8 +36,7 @@ require_once(ADS_PATH . '/OX/Tools.php');
 $_adsensem = get_option('plugin_adsensem');
 $_adsensem_notices = array();
 
-
-// This function is for backwards compatibility.  Do we still need it?
+// backwards compatibility
 if (!function_exists('adsensem_ad')) {
 	function adsensem_ad($name = false)
 	{

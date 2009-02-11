@@ -20,11 +20,9 @@ class Template_EditAd_Adpinion extends Template_EditAd
 		<td class="adsensem_label"><label for="adsensem-adformat"><?php _e('Format:'); ?></label></td>
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
-<?php if ($mode != 'edit_network'): ?>
 				<optgroup id="adsensem-optgroup-default" label="Default">
 					<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
-<?php endif; ?>
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
 					<option<?php echo ($format == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>
 					<option<?php echo ($format == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> 468 x 60 Banner</option>
@@ -39,9 +37,7 @@ class Template_EditAd_Adpinion extends Template_EditAd
 			</select>
 		</td>
 		<td>
-<?php if ($mode != 'edit_network'): ?>
 			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('adformat'); ?>">
-<?php endif; ?>
 		</td>
 	</tr>
 	</table>
