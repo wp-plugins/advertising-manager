@@ -456,7 +456,8 @@ class adsensem_admin
 */
 	function add_header_script()
 	{
-		if ($_GET['page']=='advertising-manager-manage-ads') {
+		$page = !empty($_GET['page']) ? $_GET['page'] : '';
+		if ($page == 'advertising-manager-manage-ads') {
 ?><link type="text/css" rel="stylesheet" href="<?php echo get_bloginfo('wpurl') ?>/wp-content/plugins/advertising-manager/advertising-manager.css" />
 <script src="<?php echo get_bloginfo('wpurl') ?>/wp-content/plugins/advertising-manager/advertising-manager.js"></script>
 <?php
