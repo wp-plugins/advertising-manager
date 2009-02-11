@@ -1,0 +1,11 @@
+// HERE IS HOW TO BUILD A VERSION
+1.  Increase the ADVMAN_VERSION at the top of advertising-manager.php
+2.  Update the Readme.txt file with any changes.
+3.  Check in all code.
+4.  Follow the build process below:
+
+mkdir build
+cd build
+svn export http://svn.wp-plugins.org/advertising-manager/trunk
+mv trunk advertising-manager
+zip -r advertising-manager.zip advertising-manager/

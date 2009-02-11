@@ -15,7 +15,7 @@ $template = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP26' : 'WP27';
 @define('TEMPLATE', $template);
 
 // Definitions
-@define("ADVMAN_VERSION", "3.3.4");
+@define("ADVMAN_VERSION", "3.3.5");
 @define('ADS_PATH', dirname(__FILE__));
 
 // Ad Network Includes
