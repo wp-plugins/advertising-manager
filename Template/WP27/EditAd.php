@@ -283,7 +283,7 @@ class Template_EditAd
 	</table>
 </div>
 <br />
-<span style="font-size:x-small;color:gray;">Display options determine where on your website your ads will appear.</span>
+<span style="font-size:x-small;color:gray;"><?php _e('Display options determine where on your website your ads will appear.', 'advman'); ?></span>
 <?php
 	}
 	
@@ -316,7 +316,7 @@ class Template_EditAd
 </p>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of '0' will stop this ad from displaying. OpenX Market optimised ads will display an alternative ad if it will make more money than this ad. Set the avarage amount you make from this network per 1000 ads (eCPM), and Advertising Manager will automatically optimise on the OpenX Market.', 'advman'); ?></span>
+<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying. OpenX Market optimised ads will display an alternative ad if it will make more money than this ad. Set the avarage amount you make from this network per 1000 ads (eCPM), and Advertising Manager will automatically optimise on the OpenX Market.', 'advman'); ?></span>
 <?php
 	}
 	

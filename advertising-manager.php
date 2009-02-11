@@ -335,6 +335,7 @@ if (is_admin()) {
 					} else {
 						adsensem::remove_notice('upgrade adsense-deluxe');
 					}
+					update_option('plugin_adsensem', $_adsensem);
 					break;	
 				case 'optimise':
 					if ($_POST['adsensem-notice-confirm-yes']) {
@@ -343,9 +344,11 @@ if (is_admin()) {
 						adsensem_admin::_set_auto_optimise(false);
 					}
 					adsensem::remove_notice('optimise');
+					update_option('plugin_adsensem', $_adsensem);
 					break;
 				case 'activate advertising-manager':
 					adsensem::remove_notice('activate advertising-manager');
+					update_option('plugin_adsensem', $_adsensem);
 					break;
 			}
 		}

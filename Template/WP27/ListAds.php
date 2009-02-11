@@ -212,7 +212,13 @@ function ADS_setAction(action, id, name, network)
 		if (empty($type)) {
 			$type = $ad->get_default('adtype');
 			if (!empty($type)) {
-				$type = "<span style='color:gray;'>" . $type . "</span>";
+				$types = array(
+					'ad' => __('Ad Unit', 'advmgr'),
+					'link' => __('Link Unit', 'advmgr'),
+					'ref_text' => __('Text Referral', 'advmgr'),
+					'ref_image' => __('Image Referral', 'advmgr'),
+				);
+				$type = "<span style='color:gray;'>" . $types[$type] . "</span>";
 			}
 		}
 		

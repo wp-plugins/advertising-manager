@@ -375,9 +375,10 @@ class adsensem_upgrade {
 	function _render_ad_adsense($ad)
 	{
 		global $_adsensem;
+		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? ('pub-' . $_adsensem['account-ids'][$ad->network]) : '';
 
 		$code .= '<script type="text/javascript"><!--' . "\n";
-		$code.= 'google_ad_client = "pub-' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
+		$code.= 'google_ad_client = "' . $accountId . '";' . "\n";
 		$code.= 'google_ad_slot = "' . str_pad($ad->get('slot', true),10,'0',STR_PAD_LEFT) . '"' . ";\n"; //String padding to max 10 char slot ID
 		
 		if($ad->get('adtype', true)=='ref_text'){
@@ -465,11 +466,12 @@ class adsensem_upgrade {
 	function _render_ad_adsense_ad($ad)
 	{
 		global $_adsensem;
+		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? ('pub-' . $_adsensem['account-ids'][$ad->network]) : '';
 
 		$code='';
 		
 		$code .= '<script type="text/javascript"><!--' . "\n";
-		$code.= 'google_ad_client = "pub-' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
+		$code.= 'google_ad_client = "' . $accountId . '";' . "\n";
 				
 		if($ad->get('channel')!==''){ $code.= 'google_ad_channel = "' . $ad->get('channel') . '";' . "\n"; }
 		if($ad->get('uistyle')!==''){ $code.= 'google_ui_features = "rc:' . $ad->get('uistyle') . '";' . "\n"; }
@@ -507,11 +509,12 @@ class adsensem_upgrade {
 	function _render_ad_adsense_link($ad)
 	{
 		global $_adsensem;
+		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? ('pub-' . $_adsensem['account-ids'][$ad->network]) : '';
 
 		$code='';
 
 		$code .= '<script type="text/javascript"><!--' . "\n";
-		$code.= 'google_ad_client = "pub-' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
+		$code.= 'google_ad_client = "' . $accountId . '";' . "\n";
 					
 		if($ad->get('channel')!==''){ $code.= 'google_ad_channel = "' . $ad->get('channel') . '";' . "\n"; }
 		if($ad->get('uistyle')!==''){ $code.= 'google_ui_features = "rc:' . $ad->get('uistyle') . '";' . "\n"; }
@@ -538,6 +541,7 @@ class adsensem_upgrade {
 	function _render_ad_adsense_referral($ad)
 	{
 		global $_adsensem;
+		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? ('pub-' . $_adsensem['account-ids'][$ad->network]) : '';
 
 		//if($ad===false){$ad=$_adsensem['ads'][$_adsensem['default_ad']];}
 		//$ad=adsensem::merge_defaults($ad); //Apply defaults
@@ -550,7 +554,7 @@ class adsensem_upgrade {
 
 	
 		$code .= '<script type="text/javascript"><!--' . "\n";
-		$code.= 'google_ad_client = "pub-' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
+		$code.= 'google_ad_client = "' . $accountId . '";' . "\n";
 		
 		if($ad->get('channel')!==''){ $code.= 'google_ad_channel = "' . $ad->get('channel') . '";' . "\n"; }
 		
@@ -644,10 +648,10 @@ class adsensem_upgrade {
 		$code.= 'shoppingads_ad_kw = "' . $ad->get('keywords') . '";' . "\n";
 
 		$code.= 'shoppingads_color_border = "' . $ad->get('color-border') . '";' . "\n";
-		$code.= 'shoppingads_color_bg = "' . $ad->get('color-bg', true) . '";' . "\n";
+		$code.= 'shoppingads_color_bg = "' . $ad->get('color-bg') . '";' . "\n";
 		$code.= 'shoppingads_color_heading = "' . $ad->get('color-title') . '";' . "\n";
 		$code.= 'shoppingads_color_text = "' . $ad->get('color-text') . '";' . "\n";
-		$code.= 'shoppingads_color_link = "' . $ad->get('color-title') . '";' . "\n";
+		$code.= 'shoppingads_color_link = "' . $ad->get('color-link') . '";' . "\n";
 
 		$code.= 'shoppingads_attitude = "' . $ad->get('attitude') . '";' . "\n";
 		if($ad->get('new-window')=='yes'){$code.= 'shoppingads_options = "n";' . "\n";}

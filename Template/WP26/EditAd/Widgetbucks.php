@@ -17,12 +17,12 @@ class Template_EditAd_Widgetbucks extends Template_EditAd
 	{
 ?><div style="font-size:small;">
 <p>
-	<label for="adsensem-account-id">Account ID:</label>
-	<input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->get('account-id'); ?>" />
+	<label for="adsensem-slot">Slot ID:</label>
+	<input type="text" name="adsensem-slot" style="width:200px" id="adsensem-slot" value="<?php echo $ad->get('slot'); ?>" />
 </p>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php _e('Enter the Account ID which corresponds to this ad.  This should automatically be filled in when you import your tag.  If copying ads, you will need to enter this manually.', 'advman'); ?></span>
+<span style="font-size:x-small; color:gray;"><?php _e('Enter the Slot ID which corresponds to this ad.  This should automatically be filled in when you import your tag.  If copying ads, you will need to enter this manually.', 'advman'); ?></span>
 <?php
 	}
 }

@@ -38,8 +38,8 @@ class OX_Adnet_Shoppingads extends OX_Adnet
 			'color-bg' => 'FFFFFF',
 			'color-border' => 'FFFFFF',
 			'color-link' => '008000',
-			'color-price' => '000000',
-			'color-text' => '00A0E2',
+			'color-text' => '000000',
+			'color-title' => '00A0E2',
 			'height' => '250',
 			'keywords' => '',
 			'new-window' => 'no',
@@ -101,7 +101,7 @@ class OX_Adnet_Shoppingads extends OX_Adnet
 		}
 		
 		if (preg_match("/shoppingads_color_heading(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->set('color-bg', $matches[4]);
+			$this->set('color-title', $matches[4]);
 			$code = str_replace("shoppingads_color_heading{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_color_heading{$matches[1]}={$matches[2]}{$matches[3]}{{color-title}}{$matches[5]}", $code);
 		}
 		

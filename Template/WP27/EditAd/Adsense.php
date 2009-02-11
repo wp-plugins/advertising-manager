@@ -13,6 +13,22 @@ class Template_EditAd_Adsense extends Template_EditAd
 		add_meta_box('adsensem_account', __('Account Details', 'adsensem'), array(get_class($this), 'displaySectionAccount'), 'adsensem', 'advanced', 'high');
 	}
 	
+	function display($target = null)
+	{
+		// Get our options and see if we're handling a form submission.
+		global $_adsensem;
+		
+		$id = $target;
+		$ad = $_adsensem['ads'][$id];
+		$type = $ad->get('adtype');
+		if ($type == 'ref_image') {
+			// Remove Color Meta box
+			remove_meta_box('adsensem_colors', 'adsensem', 'normal');
+		}
+		
+		parent::display($target);
+	}
+	
 	function displaySectionAccount($ad)
 	{
 ?><div style="font-size:small;">

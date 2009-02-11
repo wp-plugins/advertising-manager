@@ -69,7 +69,7 @@ class OX_Adnet_Adsense extends OX_Adnet
 		
 		// Channel
 		if (preg_match('/google_ad_channel( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->set('partner', $matches[3]);
+			$this->set('channel', $matches[3]);
 			$code = str_replace("google_ad_channel{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_channel{$matches[1]}={$matches[2]}\"{{channel}}\"", $code);
 		}
 		

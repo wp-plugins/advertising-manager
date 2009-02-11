@@ -44,7 +44,7 @@ class Template_EditAd_Adbrite extends Template_EditAd
 	</tr>
 	</table>
 <br />
-<span style="font-size:x-small;color:gray;">Select one of the supported ad format sizes.</span>
+<span style="font-size:x-small;color:gray;"><?php _e('Select one of the supported ad format sizes.', 'advman'); ?></span>
 <?php
 	}
 	
@@ -90,7 +90,7 @@ class Template_EditAd_Adbrite extends Template_EditAd
 </tr>
 </table>
 <br />
-<span style="font-size:x-small;color:gray;">Select one of the ad format sizes supported by <?php echo $ad->networkName; ?>.</span>
+<span style="font-size:x-small;color:gray;"><?php _e('Choose how you want your ad to appear.  Enter the RGB value of the color in the appropriate box.  The sample ad to the right will show you what your color scheme looks like.', 'advman'); ?></span>
 <?php
 	}
 	

@@ -84,6 +84,21 @@ class OX_Adnet
 	}
 	
 	/**
+	 * Returns the default for the given property
+	 * @param $key the property in which to retrieve the default
+	 */
+	function set_default($key, $value)
+	{
+		global $_adsensem;
+		
+		if (is_null($value)) {
+			unset($_adsensem['defaults'][get_class()][$key]);
+		} else {
+			$_adsensem['defaults'][get_class()][$key] = $value;
+		}
+	}
+	
+	/**
 	 * Sets a given property to a value
 	 * @param $key the property in which to set the value
 	 * @param $value the value in which to set the property.

@@ -116,24 +116,24 @@ class Template_EditAd_Shoppingads extends Template_EditAd
 				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-border'); ?>"></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-description">Description:</label></td>
-				<td>#<input name="adsensem-color-description" onChange="adsensem_update_color(this,'ad-color-description','description');" size="6" value="<?php echo $ad->get('color-description'); ?>" /></td>
-				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-description'); ?>"></td>
-			</tr>
-			<tr>
 				<td class="adsensem_label"><label for="adsensem-color-bg">Background:</label></td>
 				<td>#<input name="adsensem-color-bg" onChange="adsensem_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get('color-bg'); ?>" /></td>
 				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-bg'); ?>"></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-price">Price:</label></td>
-				<td>#<input name="adsensem-color-price" onChange="adsensem_update_color(this,'ad-color-price','price');" size="6" value="<?php echo $ad->get('color-price'); ?>" /></td>
-				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-price'); ?>"></td>
+				<td class="adsensem_label"><label for="adsensem-color-title">Title:</label></td>
+				<td>#<input name="adsensem-color-title" onChange="adsensem_update_color(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get('color-title'); ?>" /></td>
+				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-title'); ?>"></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-footer">Footer:</label></td>
-				<td>#<input name="adsensem-color-footer" onChange="adsensem_update_color(this,'ad-color-footer','footer');" size="6" value="<?php echo $ad->get('color-footer'); ?>" /></td>
-				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-footer'); ?>"></td>
+				<td class="adsensem_label"><label for="adsensem-color-price">Text:</label></td>
+				<td>#<input name="adsensem-color-text" onChange="adsensem_update_color(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get('color-text'); ?>" /></td>
+				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-text'); ?>"></td>
+			</tr>
+			<tr>
+				<td class="adsensem_label"><label for="adsensem-color-footer">Link:</label></td>
+				<td>#<input name="adsensem-color-link" onChange="adsensem_update_color(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get('color-link'); ?>" /></td>
+				<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-link'); ?>"></td>
 			</tr>
 			</table>
 		</td>
@@ -141,11 +141,11 @@ class Template_EditAd_Shoppingads extends Template_EditAd
 			<div id="ad-color-bg" style="margin-top:1em;width:200px;background: #<?php echo htmlspecialchars($ad->get('color-bg', true), ENT_QUOTES); ?>;">
 			<div id="ad-color-border" style="font: 10px arial, sans-serif; border: 1px solid #<?php echo htmlspecialchars($ad->get('color-border', true), ENT_QUOTES); ?>" class="linkunit-wrapper">
 			<img src="<?php echo get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager/shoppingads.png'?>" style="width:60%">
-			<div id="ad-color-description" style="color: #<?php echo htmlspecialchars($ad->get('color-desciption', true), ENT_QUOTES); ?>; font: 11px verdana, arial, sans-serif; padding: 2px;">
+			<div id="ad-color-title" style="color: #<?php echo htmlspecialchars($ad->get('color-title', true), ENT_QUOTES); ?>; font: 11px verdana, arial, sans-serif; padding: 2px;">
 				<b><u>Description of Product</u></b><br /></div>
-			<div id="ad-color-price" style="color: #<?php echo htmlspecialchars($ad->get('color-price', true), ENT_QUOTES); ?>; padding: 2px;" class="text">
+			<div id="ad-color-text" style="color: #<?php echo htmlspecialchars($ad->get('color-text', true), ENT_QUOTES); ?>; padding: 2px;" class="text">
 				Current Bid: $5.00<br /></div>
-			<div id="ad-color-footer" style="color: #<?php echo htmlspecialchars($ad->get('color-footer', true), ENT_QUOTES); ?>; font: 10px verdana, arial, sans-serif; padding: 2px;">
+			<div id="ad-color-link" style="color: #<?php echo htmlspecialchars($ad->get('color-link', true), ENT_QUOTES); ?>; font: 10px verdana, arial, sans-serif; padding: 2px;">
 				&nbsp;<span style="text-decoration:underline">Ads by <?php echo $ad->networkName; ?></span></div>
 			</div>
 		</td>
