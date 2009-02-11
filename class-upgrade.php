@@ -377,7 +377,7 @@ class adsensem_upgrade {
 		global $_adsensem;
 		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? ('pub-' . $_adsensem['account-ids'][$ad->network]) : '';
 
-		$code .= '<script type="text/javascript"><!--' . "\n";
+		$code = '<script type="text/javascript"><!--' . "\n";
 		$code.= 'google_ad_client = "' . $accountId . '";' . "\n";
 		$code.= 'google_ad_slot = "' . str_pad($ad->get('slot', true),10,'0',STR_PAD_LEFT) . '"' . ";\n"; //String padding to max 10 char slot ID
 		
@@ -404,6 +404,7 @@ class adsensem_upgrade {
 	function _render_ad_adbrite($ad)
 	{
 		global $_adsensem;
+		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? $_adsensem['account-ids'][$ad->network] : '';
 
 		$code ='<!-- Begin: AdBrite -->';
 		$code .= '<script type="text/javascript">' . "\n";
@@ -412,7 +413,7 @@ class adsensem_upgrade {
 		$code .= "var AdBrite_Background_Color = '" . $ad->get('color-bg') . "'\n";
 		$code .= "var AdBrite_Border_Color = '" . $ad->get('color-border') . "'\n";
 		$code .= '</script>' . "\n";
-	   	$code .= '<script src="http://ads.adbrite.com/mb/text_group.php?sid=' . $ad->get('slot') . '&zs=' . $_adsensem['account-ids'][$ad->network] . '" type="text/javascript"></script>';
+	   	$code .= '<script src="http://ads.adbrite.com/mb/text_group.php?sid=' . $ad->get('slot') . '&zs=' . $accountId . '" type="text/javascript"></script>';
 		$code .= '<div><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=' . $ad->get('slot') . '&afsid=1" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>';
 		$code .= '<!-- End: AdBrite -->';
 		
@@ -422,8 +423,9 @@ class adsensem_upgrade {
 	function _render_ad_adgridwork($ad)
 	{
 		global $_adsensem;
+		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? $_adsensem['account-ids'][$ad->network] : '';
 
-		$code ='<a href="http://www.adgridwork.com/?r=' . $_adsensem['account-ids'][$ad->network] . '" style="color: #' . $ad->get('color-link') .  '; font-size: 14px" target="_blank">Free Advertising</a>';
+		$code ='<a href="http://www.adgridwork.com/?r=' . $accountId . '" style="color: #' . $ad->get('color-link') .  '; font-size: 14px" target="_blank">Free Advertising</a>';
 		$code.='<script type="text/javascript">' . "\n";
 		$code.="var sid = '"  . $ad->get('slot') . "';\n";
 		$code.="var title_color = '" . $ad->get('color-title') . "';\n";
@@ -439,10 +441,11 @@ class adsensem_upgrade {
 	function _render_ad_adpinion($ad)
 	{
 		global $_adsensem;
+		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? $_adsensem['account-ids'][$ad->network] : '';
 
 		if($ad->get('width')>$ad->get('height')){$xwidth=18;$xheight=17;} else {$xwidth=0;$xheight=35;}
 		$code ='';
-	 	$code .= '<iframe src="http://www.adpinion.com/app/adpinion_frame?website=' . $_adsensem['account-ids'][$ad->network] . '&amp;width=' . $ad->get('width') . '&amp;height=' . $ad->get('height') . '" ';
+	 	$code .= '<iframe src="http://www.adpinion.com/app/adpinion_frame?website=' . $accountId . '&amp;width=' . $ad->get('width') . '&amp;height=' . $ad->get('height') . '" ';
 		$code .= 'id="adframe" style="width:' . ($ad->get('width')+$xwidth) . 'px;height:' . ($ad->get('height')+$xheight) . 'px;" scrolling="no" frameborder="0">.</iframe>';
 	
 		return $code;
@@ -451,13 +454,14 @@ class adsensem_upgrade {
 	function _render_ad_adroll($ad)
 	{
 		global $_adsensem;
+		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? $_adsensem['account-ids'][$ad->network] : '';
 
 		$code ='';
 		$code .= '<!-- Start: Adroll Ads -->';
-	 	$code .= '<script type="text/javascript" src="http://c.adroll.com/r/' . $_adsensem['account-ids'][$ad->network] . '/' . $ad->get('slot') . '/">';
+	 	$code .= '<script type="text/javascript" src="http://c.adroll.com/r/' . $accountId . '/' . $ad->get('slot') . '/">';
 		$code .= '</script>';
 		$code .= '<!-- Start: Adroll Profile Link -->';
-	 	$code .= '<script type="text/javascript" src="http://c.adroll.com/r/' . $_adsensem['account-ids'][$ad->network] . '/' . $ad->get('slot') . '/link">';
+	 	$code .= '<script type="text/javascript" src="http://c.adroll.com/r/' . $accountId . '/' . $ad->get('slot') . '/link">';
 		$code .= '</script>';
 	
 		return $code;
@@ -576,6 +580,7 @@ class adsensem_upgrade {
 	function _render_ad_cj($ad)
 	{
 		global $_adsensem;
+		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? $_adsensem['account-ids'][$ad->network] : '';
 
 		$cjservers=array(
 			'www.kqzyfj.com',
@@ -586,7 +591,7 @@ class adsensem_upgrade {
 		
 		$code = '';
 		$code .= '<!-- Start: CJ Ads -->';
-	 	$code .= '<a href="http://' . $cjservers[array_rand($cjservers)] . '/click-' . $_adsensem['account-ids'][$ad->network] . '-' . $ad->get('slot') . '"';
+	 	$code .= '<a href="http://' . $cjservers[array_rand($cjservers)] . '/click-' . $accountId . '-' . $ad->get('slot') . '"';
 		if($ad->get('new-window')=='yes'){$code.=' target="_blank" ';}
 		
 		if($ad->get('hide-link')=='yes'){
@@ -597,7 +602,7 @@ class adsensem_upgrade {
 		
 		$code .= '>';
 		
-		$code .= '<img src="http://' . $cjservers[array_rand($cjservers)] . '/image-' . $_adsensem['account-ids'][$ad->network] . '-' . $ad->get('slot') . '"';
+		$code .= '<img src="http://' . $cjservers[array_rand($cjservers)] . '/image-' . $accountId . '-' . $ad->get('slot') . '"';
 		$code .= ' width="' . $ad->get('width') . '" ';
 		$code .= ' height="' . $ad->get('height') . '" ';
 		$code .= ' alt="' . $ad->get('alt-text') . '" ';
@@ -636,9 +641,10 @@ class adsensem_upgrade {
 	function _render_ad_shoppingads($ad)
 	{
 		global $_adsensem;
+		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? $_adsensem['account-ids'][$ad->network] : '';
 
 		$code = '<script type="text/javascript"><!--' . "\n";
-		$code.= 'shoppingads_ad_client = "' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
+		$code.= 'shoppingads_ad_client = "' . $accountId . '";' . "\n";
 		$code.= 'shoppingads_ad_campaign = "' . $ad->get('campaign') . '";' . "\n";
 
 		list($width,$height,$null)=split('[x]',$ad->get('adformat'));
@@ -677,10 +683,11 @@ class adsensem_upgrade {
 	function _render_ad_ypn($ad)
 	{
 		global $_adsensem;
+		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? $_adsensem['account-ids'][$ad->network] : '';
 
 		$code = '<script language="JavaScript">';
 		$code .= '<!--';
-		$code .= 'ctxt_ad_partner = "' . $_adsensem['account-ids'][$ad->network] . '";' . "\n";
+		$code .= 'ctxt_ad_partner = "' . $accountId . '";' . "\n";
 		$code .= 'ctxt_ad_section = "' . $ad->get('channel') . '";' . "\n";
 		$code .= 'ctxt_ad_bg = "";' . "\n";
 		$code .= 'ctxt_ad_width = "' . $ad->get('width') . '";' . "\n";

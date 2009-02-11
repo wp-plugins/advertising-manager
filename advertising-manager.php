@@ -338,7 +338,8 @@ if (is_admin()) {
 					update_option('plugin_adsensem', $_adsensem);
 					break;	
 				case 'optimise':
-					if ($_POST['adsensem-notice-confirm-yes']) {
+					$yes = isset($_POST['adsensem-notice-confirm-yes']);
+					if ($yes) {
 						adsensem_admin::_set_auto_optimise(true);
 					} else {
 						adsensem_admin::_set_auto_optimise(false);
