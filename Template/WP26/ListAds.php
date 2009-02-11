@@ -82,18 +82,14 @@ class Template_ListAds
 	function _display_network_row($ad)
 	{
 		global $_adsensem;
-		global $_adsensem_networks;
 		
-		$network = get_class($ad);
-		
-		$defaults = $_adsensem['defaults'][$network];
 ?>				<tr class="network_header" id="default-options">
-					<td style="width:180px;"><a class="<?php echo strtolower($network); ?>" href="javascript:document.getElementById('adsensem-form').submit();" onclick="javascript:document.getElementById('adsensem-action').value='edit'; document.getElementById('adsensem-action-target').value='<?php echo $network; ?>';"><?php echo $ad->networkName; ?></a></td>
+					<td style="width:180px;"><a class="<?php echo strtolower($ad->network); ?>" href="javascript:document.getElementById('adsensem-form').submit();" onclick="javascript:document.getElementById('adsensem-action').value='edit'; document.getElementById('adsensem-action-target').value='<?php echo $ad->network; ?>';"><?php echo $ad->networkName; ?></a></td>
 					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>
-					<td><?php echo $_adsensem['defaults'][$network]['notes']; ?></td>
+					<td><?php echo $ad->get_default('notes'); ?></td>
 				</tr>
 <?php
 	}

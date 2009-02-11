@@ -8,11 +8,13 @@ class Template_Settings
 		// Get our options and see if we're handling a form submission.
 		global $_adsensem;
 		global $_adsensem_networks;
+		
+		$action = isset($_POST['adsensem-action']) ? $_POST['adsensem-action'] : '';
 ?><div class="wrap">
 	<div id="icon-options-general" class="icon32"><br /></div>
 <h2><?php _e('Ad Settings', 'advman'); ?></h2>
 
-<?php if ($_POST['adsensem-action'] == 'save') : ?>
+<?php if ($action == 'save') : ?>
 <div id="message" class="updated fade"><p><strong><?php _e('Settings saved.') ?></strong></p></div>
 <?php endif; ?>
 

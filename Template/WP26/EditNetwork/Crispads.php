@@ -13,7 +13,7 @@ class Template_EditNetwork_Crispads extends Template_EditNetwork
 	{
 ?>	<table id="adsensem-settings-ad_format">
 	<tr id="adsensem-form-adformat">
-		<td class="adsensem_label"><label for="adsensem-adformat">Format:</label></td>
+		<td class="adsensem_label"><label for="adsensem-adformat"><?php _e('Format:'); ?></label></td>
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
@@ -48,7 +48,7 @@ class Template_EditNetwork_Crispads extends Template_EditNetwork
 		</td>
 	</tr>
 	<tr id="adsensem-settings-custom">
-		<td class="adsensem_label"><label for="adsensem-width">Dimensions:</label></td>
+		<td class="adsensem_label"><label for="adsensem-width"><?php _e('Dimensions:'); ?></label></td>
 		<td>
 			<input name="adsensem-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_default('width')); ?>" /> x
 			<input name="adsensem-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_default('height')); ?>" /> px

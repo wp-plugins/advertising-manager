@@ -13,7 +13,7 @@ class Template_EditNetwork_Adroll extends Template_EditNetwork
 	{
 ?>	<table id="adsensem-settings-ad_format">
 	<tr id="adsensem-form-adformat">
-		<td class="adsensem_label"><label for="adsensem-adformat">Format:</label></td>
+		<td class="adsensem_label"><label for="adsensem-adformat"><?php _e('Format:'); ?></label></td>
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">

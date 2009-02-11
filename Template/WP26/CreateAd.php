@@ -15,7 +15,7 @@ class Template_CreateAd
 			<input type="hidden" name="adsensem-action-target" id="adsensem-action-target">
 			<h2><?php _e('Create Ads', 'advman'); ?></h2>
 			<ul class="subsubsub">
-				<li><a href="javascript:submit();" onclick="document.getElementById('adsensem-action').value='list'; document.getElementById('adsensem-form').submit();" >Show Ads (<?php echo sizeof($_adsensem['ads']); ?>)</a> |</li>
+				<li><a href="javascript:submit();" onclick="document.getElementById('adsensem-action').value='list'; document.getElementById('adsensem-form').submit();" ><?php _e('Show Ads', 'advman'); ?> (<?php echo sizeof($_adsensem['ads']); ?>)</a> |</li>
 				<li><a href="" class="current"><?php _e('Create New Ad', 'advman'); ?></a></li>
 			</ul>
 			

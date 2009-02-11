@@ -35,7 +35,7 @@ class Template_CreateAd
 <div id="post-body" class="has-sidebar">
 	<div id="post-body-content" class="has-sidebar-content" style="width:600px">
 
-<label class="hidden" for="excerpt">Code</label><textarea rows="8" cols="70" name="adsensem-code" tabindex="6"></textarea>
+<label class="hidden" for="excerpt"><?php _e('Code'); ?></label><textarea rows="8" cols="70" name="adsensem-code" tabindex="6"></textarea>
 <p><span style="font-size:x-small;color:gray;"><?php _e('Advertising Manager will automatically detect many ad network tags', 'advman'); ?></span></p>
 
 			<div id="publishing-action">

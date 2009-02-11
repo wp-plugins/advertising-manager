@@ -647,7 +647,7 @@ class adsensem_upgrade {
 		$code.= 'shoppingads_ad_client = "' . $accountId . '";' . "\n";
 		$code.= 'shoppingads_ad_campaign = "' . $ad->get('campaign') . '";' . "\n";
 
-		list($width,$height,$null)=split('[x]',$ad->get('adformat'));
+		list($width,$height)=split('[x]',$ad->get('adformat'));
 		$code.= 'shoppingads_ad_width = "' . $width . '";' . "\n";
 		$code.= 'shoppingads_ad_height = "' . $height . '";' . "\n";
 

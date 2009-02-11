@@ -17,7 +17,7 @@ class Template_EditAd_Adpinion extends Template_EditAd
 		
 ?>	<table id="adsensem-settings-ad_format">
 	<tr id="adsensem-form-adformat">
-		<td class="adsensem_label"><label for="adsensem-adformat">Format:</label></td>
+		<td class="adsensem_label"><label for="adsensem-adformat"><?php _e('Format:'); ?></label></td>
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 <?php if ($mode != 'edit_network'): ?>
@@ -55,7 +55,7 @@ class Template_EditAd_Adpinion extends Template_EditAd
 ?><div style="font-size:small;">
 <table>
 <tr>
-	<td><label for="adsensem-slot">Account ID:</label></td>
+	<td><label for="adsensem-slot"><?php _e('Account ID:'); ?></label></td>
 	<td><input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->get('account-id'); ?>" /></td>
 </tr>
 </table>

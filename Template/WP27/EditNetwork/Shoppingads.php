@@ -19,7 +19,7 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 	{
 ?>	<table id="adsensem-settings-ad_format">
 	<tr id="adsensem-form-adformat">
-		<td class="adsensem_label"><label for="adsensem-adformat">Format:</label></td>
+		<td class="adsensem_label"><label for="adsensem-adformat"><?php _e('Format:'); ?></label></td>
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
@@ -55,7 +55,7 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 ?><div style="font-size:small;">
 <table>
 <tr>
-	<td class="adsensem-label"><label for="adsensem-attitude">Attitude:</label></td>
+	<td class="adsensem-label"><label for="adsensem-attitude"><?php _e('Attitude:'); ?></label></td>
 	<td>
 		<select name="adsensem-attitude" id="adsensem-attitude">
 			<option<?php echo ($ad->get_default('attitude') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
@@ -64,7 +64,7 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 	</td>
 </tr>
 <tr>
-	<td class="adsensem-label"><label for="adsensem-new-window">New Window:</label></td>
+	<td class="adsensem-label"><label for="adsensem-new-window"><?php _e('New Window:'); ?></label></td>
 	<td>
 		<select name="adsensem-new-window" id="adsensem-new-window">
 			<option<?php echo ($ad->get_default('new-window') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
@@ -86,23 +86,23 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 		<td>
 			<table>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-border">Border:</label></td>
+				<td class="adsensem_label"><label for="adsensem-color-border"><?php _e('Border:'); ?></label></td>
 				<td>#<input name="adsensem-color-border" onChange="adsensem_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get_default('color-border'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-bg">Background:</label></td>
+				<td class="adsensem_label"><label for="adsensem-color-bg"><?php _e('Background:'); ?></label></td>
 				<td>#<input name="adsensem-color-bg" onChange="adsensem_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get_default('color-bg'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-text">Title:</label></td>
+				<td class="adsensem_label"><label for="adsensem-color-text"><?php _e('Title:'); ?></label></td>
 				<td>#<input name="adsensem-color-title" onChange="adsensem_update_color(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get_default('color-title'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-price">Text:</label></td>
+				<td class="adsensem_label"><label for="adsensem-color-price"><?php _e('Text:'); ?></label></td>
 				<td>#<input name="adsensem-color-text" onChange="adsensem_update_color(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get_default('color-text'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-link">Link:</label></td>
+				<td class="adsensem_label"><label for="adsensem-color-link"><?php _e('Link:'); ?></label></td>
 				<td>#<input name="adsensem-color-link" onChange="adsensem_update_color(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get_default('color-link'); ?>" /></td>
 			</tr>
 			</table>
@@ -131,11 +131,11 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 ?><div style="font-size:small;">
 <table>
 <tr>
-	<td class="adsensem-label"><label for="adsensem-campaign">Camapign:</label></td>
+	<td class="adsensem-label"><label for="adsensem-campaign"><?php _e('Camapign:'); ?></label></td>
 	<td><input type="text" name="adsensem-campaign" style="width:200px" id="adsensem-campaign" value="<?php echo $ad->get_default('campaign'); ?>" /></td>
 </tr>
 <tr>
-	<td class="adsensem-label"><label for="adsensem-keywords">Keywords:</label></td>
+	<td class="adsensem-label"><label for="adsensem-keywords"><?php _e('Keywords:'); ?></label></td>
 	<td><input type="text" name="adsensem-keywords" style="width:200px" id="adsensem-keywords" value="<?php echo $ad->get_default('keywords'); ?>" /></td>
 </tr>
 </table>

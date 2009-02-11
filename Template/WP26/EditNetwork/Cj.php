@@ -18,11 +18,11 @@ class Template_EditNetwork_Cj extends Template_EditNetwork
 ?><div style="font-size:small;">
 <table>
 <tr>
-	<td class="adsensem-label"><label for="adsensem-slot">Alt Text:</label></td>
+	<td class="adsensem-label"><label for="adsensem-slot"><?php _e('Alt Text:'); ?></label></td>
 	<td><input type="text" name="adsensem-alt-text" style="width:300px" id="adsensem-alt-text" value="<?php echo $ad->get_default('alt-text'); ?>" /></td>
 </tr>
 <tr>
-	<td class="adsensem-label"><label for="adsensem-new-window">New Window:</label></td>
+	<td class="adsensem-label"><label for="adsensem-new-window"><?php _e('New Window:'); ?></label></td>
 	<td>
 		<select name="adsensem-new-window" id="adsensem-new-window">
 			<option<?php echo ($ad->get_default('new-window') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
@@ -31,7 +31,7 @@ class Template_EditNetwork_Cj extends Template_EditNetwork
 	</td>
 </tr>
 <tr>
-	<td class="adsensem-label"><label for="adsensem-status">Status Text:</label></td>
+	<td class="adsensem-label"><label for="adsensem-status"><?php _e('Status Text:'); ?></label></td>
 	<td><input type="text" name="adsensem-status" style="width:300px" id="adsensem-status" value="<?php echo $ad->get_default('status'); ?>" /></td>
 </tr>
 </table>
@@ -45,7 +45,7 @@ class Template_EditNetwork_Cj extends Template_EditNetwork
 	{
 ?>	<table id="adsensem-settings-ad_format">
 	<tr id="adsensem-form-adformat">
-		<td class="adsensem_label"><label for="adsensem-adformat">Format:</label></td>
+		<td class="adsensem_label"><label for="adsensem-adformat"><?php _e('Format:'); ?></label></td>
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
@@ -80,7 +80,7 @@ class Template_EditNetwork_Cj extends Template_EditNetwork
 		</td>
 	</tr>
 	<tr id="adsensem-settings-custom">
-		<td class="adsensem_label"><label for="adsensem-width">Dimensions:</label></td>
+		<td class="adsensem_label"><label for="adsensem-width"><?php _e('Dimensions:'); ?></label></td>
 		<td>
 			<input name="adsensem-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_default('width')); ?>" /> x
 			<input name="adsensem-height" size="5" title="<?php _e('Custom height for this unit.', 'advman');?>" value="<?php echo ($ad->get_default('height')); ?>" /> px

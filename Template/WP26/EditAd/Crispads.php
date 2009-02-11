@@ -16,11 +16,11 @@ class Template_EditAd_Crispads extends Template_EditAd
 ?><div style="font-size:small;">
 <table>
 <tr>
-	<td><label for="adsensem-slot">Slot ID:</label></td>
+	<td><label for="adsensem-slot"><?php _e('Slot ID:'); ?></label></td>
 	<td><input type="text" name="adsensem-slot" style="width:200px" id="adsensem-slot" value="<?php echo $ad->get('slot'); ?>" /></td>
 </tr>
 <tr>
-	<td><label for="adsensem-slot">Identifier:</label></td>
+	<td><label for="adsensem-slot"><?php _e('Identifier:'); ?></label></td>
 	<td><input type="text" name="adsensem-slot" style="width:200px" id="adsensem-identifier" value="<?php echo $ad->get('identifier'); ?>" /></td>
 </tr>
 </table>
@@ -36,7 +36,7 @@ class Template_EditAd_Crispads extends Template_EditAd
 		
 ?>	<table id="adsensem-settings-ad_format">
 	<tr id="adsensem-form-adformat">
-		<td class="adsensem_label"><label for="adsensem-adformat">Format:</label></td>
+		<td class="adsensem_label"><label for="adsensem-adformat"><?php _e('Format:'); ?></label></td>
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 <?php if ($mode != 'edit_network'): ?>
@@ -79,7 +79,7 @@ class Template_EditAd_Crispads extends Template_EditAd
 		</td>
 	</tr>
 	<tr id="adsensem-settings-custom">
-		<td class="adsensem_label"><label for="adsensem-width">Dimensions:</label></td>
+		<td class="adsensem_label"><label for="adsensem-width"><?php _e('Dimensions:'); ?></label></td>
 		<td>
 			<input name="adsensem-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('width')); ?>" /> x
 			<input name="adsensem-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('height')); ?>" /> px

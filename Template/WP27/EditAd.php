@@ -179,7 +179,7 @@ class Template_EditAd
 	<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('adformat'); ?>"></td>
 </tr>
 <tr id="adsensem-settings-custom">
-	<td class="adsensem_label"><label for="adsensem-width">Dimensions:</label></td>
+	<td class="adsensem_label"><label for="adsensem-width"><?php _e('Dimensions:'); ?></label></td>
 	<td>
 		<input name="adsensem-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('width')); ?>" /> x
 		<input name="adsensem-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('height')); ?>" /> px
@@ -297,7 +297,7 @@ class Template_EditAd
 	{
 ?><div style="font-size:small;">
 <p>
-	<label for="adsensem-weight">Weight:</label>
+	<label for="adsensem-weight"><?php _e('Weight:'); ?></label>
 	<input type="text" name="adsensem-weight" style="width:50px" id="adsensem-weight" value="<?php echo $ad->get('weight'); ?>" />
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('weight'); ?>">
 </p>
@@ -310,7 +310,7 @@ class Template_EditAd
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('openx-market'); ?>">
 </p>
 <p>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="adsensem-openx-market-cpm-label" for="adsensem-openx-market-cpm">Average eCPM:</label>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="adsensem-openx-market-cpm-label" for="adsensem-openx-market-cpm"><?php _e('Average eCPM:'); ?></label>
 	<input type="text" name="adsensem-openx-market-cpm" style="width:50px" id="adsensem-openx-market-cpm" value="<?php echo $ad->get('openx-market-cpm'); ?>"<?php echo ($ad->get('openx-market') != 'yes' ? ' disabled="disabled"' : ''); ?> />
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('openx-market-cpm'); ?>">
 </p>
@@ -323,11 +323,11 @@ class Template_EditAd
 	function displaySectionCode($ad)
 	{
 ?><div style="font-size:small;">
-	<label for="html_before">HTML Code Before</label><br />
+	<label for="html_before"><?php _e('HTML Code Before'); ?></label><br />
 	<textarea rows="1" cols="60" name="adsensem-html-before" id="adsensem-html-before" onfocus="this.select();"><?php echo $ad->get('html-before'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('html-before'); ?>"><br /><br />
-	<label for="ad_code">Ad Code</label><br />
+	<label for="ad_code"><?php _e('Ad Code'); ?></label><br />
 	<textarea rows="6" cols="60" id="adsensem-code" style="background:#cccccc" onfocus="this.select();" onclick="this.select();" readonly="readonly"><?php echo $ad->render_ad(); ?></textarea><br /><br />
-	<label for="html_after">HTML Code After</label><br />
+	<label for="html_after"><?php _e('HTML Code After'); ?></label><br />
 	<textarea rows="1" cols="60" name="adsensem-html-after" id="adsensem-html-after" onfocus="this.select();"><?php echo $ad->get('html-after'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('html-after'); ?>"><br /><br />
 </div>
 <br />

@@ -19,15 +19,15 @@ class Template_Settings
 <th scope="row">Optimisation</th>
 <td>
 	<fieldset>
-		<legend class="hidden">Optimisation</legend>
+		<legend class="hidden"><?php _e('Optimisation'); ?></legend>
 		<label for="adsensem-openx-market">
 			<input name="adsensem-openx-market" type="checkbox" id="adsensem-openx-market" value="1"  checked="checked" />
-			Optimise ads on OpenX Market by default
+			<?php _e('Optimise ads on OpenX Market by default'); ?>
 		</label>
 		<br />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<label for="adsensem-openx-market-cpm">
-			Default eCPM:
+			<?php _e('Default eCPM:'); ?>
 			<input name="adsensem-openx-market-cpm" type="text" id="adsensem-openx-market-cpm" value="0.20" size="5"  />
 		</label>
 		<br /><br />
@@ -50,12 +50,12 @@ class Template_Settings
 		<legend class="hidden">Optimisation</legend>
 		<label for="adsensem-openx-market">
 			<input name="adsensem-openx-market" type="checkbox" id="adsensem-openx-market" value="1"  checked="checked" />
-			Optimise ads on OpenX Market by default
+			<?php _e('Optimise ads on OpenX Market by default'); ?>
 		</label>
 		<br />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<label for="adsensem-openx-market-cpm">
-			Default eCPM:
+			<?php _e('Default eCPM:'); ?>
 			<input name="adsensem-openx-market-cpm" type="text" id="adsensem-openx-market-cpm" value="0.20" size="5"  />
 		</label>
 		<br /><br />

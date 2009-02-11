@@ -74,7 +74,7 @@ class Template_EditNetwork
 	</ul>
 
 	<h5>Notes</h5>
-	<label for="ad_code">Display any notes about this ad here:</label><br /><br />
+	<label for="ad_code"><?php _e('Display any notes about this ad here:'); ?></label><br /><br />
 	<textarea rows="8" cols="22" name="adsensem-notes" id="adsensem-notes"><?php echo $ad->get_default('notes'); ?></textarea><br />
 </div><!-- side-info -->
 </div><!-- submitpost -->
@@ -105,7 +105,7 @@ class Template_EditNetwork
 	{
 ?>	<table id="adsensem-settings-ad_format">
 	<tr id="adsensem-form-adformat">
-		<td class="adsensem_label"><label for="adsensem-adformat">Format:</label></td>
+		<td class="adsensem_label"><label for="adsensem-adformat"><?php _e('Format:'); ?></label></td>
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
@@ -133,7 +133,7 @@ class Template_EditNetwork
 		</td>
 	</tr>
 	<tr id="adsensem-settings-custom">
-		<td class="adsensem_label"><label for="adsensem-width">Dimensions:</label></td>
+		<td class="adsensem_label"><label for="adsensem-width"><?php _e('Dimensions:'); ?></label></td>
 		<td>
 			<input name="adsensem-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo $ad->get_default('width'); ?>" /> x
 			<input name="adsensem-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo $ad->get_default('height'); ?>" /> px
@@ -232,7 +232,7 @@ class Template_EditNetwork
 	{
 ?><div style="font-size:small;">
 <p>
-	<label for="adsensem-weight">Weight:</label>
+	<label for="adsensem-weight"><?php _e('Weight:'); ?></label>
 	<input type="text" name="adsensem-weight" style="width:50px" id="adsensem-weight" value="<?php echo $ad->get_default('weight'); ?>" />
 </p>
 <br />
@@ -243,21 +243,21 @@ class Template_EditNetwork
 	</label>
 </p>
 <p>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="adsensem-openx-market-cpm-label" for="adsensem-openx-market-cpm">Average eCPM:</label>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="adsensem-openx-market-cpm-label" for="adsensem-openx-market-cpm"><?php _e('Average eCPM:'); ?></label>
 	<input type="text" name="adsensem-openx-market-cpm" style="width:50px" id="adsensem-openx-market-cpm" value="<?php echo $ad->get_default('openx-market-cpm'); ?>"<?php echo ($ad->get_default('openx-market') != 'yes' ? ' disabled="disabled"' : ''); ?> />
 </p>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of '0' will stop this ad from displaying. OpenX Market optimised ads will display an alternative ad if it will make more money than this ad. Set the avarage amount you make from this network per 1000 ads (eCPM), and Advertising Manager will automatically optimise on the OpenX Market.', 'advman'); ?></span>
+<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying. OpenX Market optimised ads will display an alternative ad if it will make more money than this ad. Set the avarage amount you make from this network per 1000 ads (eCPM), and Advertising Manager will automatically optimise on the OpenX Market.', 'advman'); ?></span>
 <?php
 	}
 	
 	function displaySectionCode($ad)
 	{
 ?><div style="font-size:small;">
-	<label for="html_before">HTML Code Before</label><br />
+	<label for="html_before"><?php _e('HTML Code Before'); ?></label><br />
 	<textarea rows="1" cols="60" name="adsensem-html-before" id="adsensem-html-before" onfocus="this.select();"><?php echo $ad->get_default('html-before'); ?></textarea><br /><br />
-	<label for="html_after">HTML Code After</label><br />
+	<label for="html_after"><?php _e('HTML Code After'); ?></label><br />
 	<textarea rows="1" cols="60" name="adsensem-html-after" id="adsensem-html-after" onfocus="this.select();"><?php echo $ad->get_default('html-after'); ?></textarea><br /><br />
 </div>
 <br />

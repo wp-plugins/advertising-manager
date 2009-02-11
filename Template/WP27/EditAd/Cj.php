@@ -18,11 +18,11 @@ class Template_EditAd_Cj extends Template_EditAd
 ?><div style="font-size:small;">
 <table>
 <tr>
-	<td><label for="adsensem-slot">Account ID:</label></td>
+	<td><label for="adsensem-slot"><?php _e('Account ID:'); ?></label></td>
 	<td><input type="text" name="adsensem-account-id" style="width:200px" id="adsensem-account-id" value="<?php echo $ad->get('account-id'); ?>" /></td>
 </tr>
 <tr>
-	<td><label for="adsensem-slot">Slot ID:</label></td>
+	<td><label for="adsensem-slot"><?php _e('Slot ID:'); ?></label></td>
 	<td><input type="text" name="adsensem-slot" style="width:200px" id="adsensem-slot" value="<?php echo $ad->get('slot'); ?>" /></td>
 </tr>
 </table>
@@ -37,11 +37,11 @@ class Template_EditAd_Cj extends Template_EditAd
 ?><div style="font-size:small;">
 <table>
 <tr>
-	<td class="adsensem-label"><label for="adsensem-slot">Alt Text:</label></td>
+	<td class="adsensem-label"><label for="adsensem-slot"><?php _e('Alt Text:'); ?></label></td>
 	<td><input type="text" name="adsensem-alt-text" style="width:300px" id="adsensem-alt-text" value="<?php echo $ad->get('alt-text'); ?>" /></td>
 </tr>
 <tr>
-	<td class="adsensem-label"><label for="adsensem-new-window">New Window:</label></td>
+	<td class="adsensem-label"><label for="adsensem-new-window"><?php _e('New Window:'); ?></label></td>
 	<td>
 		<select name="adsensem-new-window" id="adsensem-new-window">
 			<option value=""> <?php _e('Use Default', 'advman'); ?></option>
@@ -52,7 +52,7 @@ class Template_EditAd_Cj extends Template_EditAd
 	</td>
 </tr>
 <tr>
-	<td class="adsensem-label"><label for="adsensem-status">Status Text:</label></td>
+	<td class="adsensem-label"><label for="adsensem-status"><?php _e('Status Text:'); ?></label></td>
 	<td><input type="text" name="adsensem-status" style="width:300px" id="adsensem-status" value="<?php echo $ad->get('status'); ?>" /></td>
 </tr>
 </table>
@@ -68,7 +68,7 @@ class Template_EditAd_Cj extends Template_EditAd
 		
 ?>	<table id="adsensem-settings-ad_format">
 	<tr id="adsensem-form-adformat">
-		<td class="adsensem_label"><label for="adsensem-adformat">Format:</label></td>
+		<td class="adsensem_label"><label for="adsensem-adformat"><?php _e('Format:'); ?></label></td>
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 				<optgroup id="adsensem-optgroup-default" label="Default">
@@ -107,7 +107,7 @@ class Template_EditAd_Cj extends Template_EditAd
 		</td>
 	</tr>
 	<tr id="adsensem-settings-custom">
-		<td class="adsensem_label"><label for="adsensem-width">Dimensions:</label></td>
+		<td class="adsensem_label"><label for="adsensem-width"><?php _e('Dimensions:'); ?></label></td>
 		<td>
 			<input name="adsensem-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('width')); ?>" /> x
 			<input name="adsensem-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('height')); ?>" /> px

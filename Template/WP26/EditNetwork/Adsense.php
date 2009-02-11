@@ -21,7 +21,7 @@ class Template_EditNetwork_Adsense extends Template_EditNetwork
 		} else {
 ?>
 	<tr id="adsensem-form-adtype">
-		<td class="adsensem_label"><label for="adsensem-adtype">Ad Type:</label></td>
+		<td class="adsensem_label"><label for="adsensem-adtype"><?php _e('Ad Type:'); ?></label></td>
 		<td>
 			<select name="adsensem-adtype" id="adsensem-adtype" onchange="adsensem_form_update(this);">
 				<option<?php echo ($ad->get_default('adtype') == 'ad' ? ' selected="selected"' : ''); ?> value="ad"> Ad Unit</option>
@@ -36,7 +36,7 @@ class Template_EditNetwork_Adsense extends Template_EditNetwork
 <?php
 		}
 ?>	<tr id="adsensem-form-ad-format"<?php echo (($ad->get_default('adtype') == 'ad' || $ad->get_default('adtype') == 'slot') ? '' : ' style="display:none"'); ?>>
-		<td class="adsensem_label"><label for="adsensem-adformat"><a href="https://www.google.com/adsense/adformats" target="_new">Format</a>:</label></td>
+		<td class="adsensem_label"><label for="adsensem-adformat"><a href="https://www.google.com/adsense/adformats" target="_new"><?php _e('Format'); ?></a>:</label></td>
 		<td>
 			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
@@ -63,7 +63,7 @@ class Template_EditNetwork_Adsense extends Template_EditNetwork
 		</td>
 	</tr>
 	<tr id="adsensem-form-link-format"<?php echo (($ad->get_default('adtype') == 'link') ? '' : ' style="display:none"'); ?>>
-		<td class="adsensem_label"><label for="adsensem-linkformat"><a href="https://www.google.com/adsense/adformats" target="_new">Format</a>:</label></td>
+		<td class="adsensem_label"><label for="adsensem-linkformat"><a href="https://www.google.com/adsense/adformats" target="_new"><?php _e('Format'); ?></a>:</label></td>
 		<td>
 			<select name="adsensem-linkformat" id="adsensem-linkformat" onchange="adsensem_form_update(this);">
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
@@ -80,7 +80,7 @@ class Template_EditNetwork_Adsense extends Template_EditNetwork
 		</td>
 	</tr>
 	<tr id="adsensem-form-ref_image-format"<?php echo (($ad->get_default('adtype') == 'ref_image') ? '' : ' style="display:none"'); ?>>
-		<td class="adsensem_label"><label for="adsensem-referralformat"><a href="https://www.google.com/adsense/adformats" target="_new">Format</a>:</label></td>
+		<td class="adsensem_label"><label for="adsensem-referralformat"><a href="https://www.google.com/adsense/adformats" target="_new"><?php _e('Format'); ?></a>:</label></td>
 		<td>
 			<select name="adsensem-referralformat" id="adsensem-referralformat" onchange="adsensem_form_update(this);">
 				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
@@ -116,23 +116,23 @@ class Template_EditNetwork_Adsense extends Template_EditNetwork
 		<td>
 			<table>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-border">Border:</label></td>
+				<td class="adsensem_label"><label for="adsensem-color-border"><?php _e('Border:'); ?></label></td>
 				<td>#<input name="adsensem-color-border" onChange="adsensem_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get_default('color-border'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-title">Title:</label></td>
+				<td class="adsensem_label"><label for="adsensem-color-title"><?php _e('Title:'); ?></label></td>
 				<td>#<input name="adsensem-color-title" onChange="adsensem_update_color(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get_default('color-title'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-bg">Background:</label></td>
+				<td class="adsensem_label"><label for="adsensem-color-bg"><?php _e('Background:'); ?></label></td>
 				<td>#<input name="adsensem-color-bg" onChange="adsensem_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get_default('color-bg'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-text">Text:</label></td>
+				<td class="adsensem_label"><label for="adsensem-color-text"><?php _e('Text:'); ?></label></td>
 				<td>#<input name="adsensem-color-text" onChange="adsensem_update_color(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get_default('color-text'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-link">URL:</label></td>
+				<td class="adsensem_label"><label for="adsensem-color-link"><?php _e('URL:'); ?></label></td>
 				<td>#<input name="adsensem-color-link" onChange="adsensem_update_color(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get_default('color-link'); ?>" /></td>
 			</tr>
 			</table>
