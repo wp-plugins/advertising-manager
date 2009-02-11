@@ -57,7 +57,7 @@ class Template_ListAds
 					<td style="text-align:center;">
 						<input class="button" onClick="document.getElementById('adsensem-action').value='default'; document.getElementById('adsensem-action-target').value='<?php echo $id; ?>'; this.form.submit();" type="checkbox"<?php echo ($ad->name == $_adsensem['default-ad']) ? " checked='checked'" : '' ?>>
 					</td>
-					<td><?php echo htmlspecialchars($ad->p['notes'], ENT_QUOTES); ?></td>
+					<td><?php echo htmlspecialchars($ad->get('notes'), ENT_QUOTES); ?></td>
 				</tr>
 <?php
 			}

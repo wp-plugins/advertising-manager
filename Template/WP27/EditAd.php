@@ -337,7 +337,7 @@ class Template_EditAd
 	
 	function displaySectionHistory($ad)
 	{
-		$revisions = $ad->p['revisions'];
+		$revisions = $ad->get('revisions');
 		
 ?><ul class='post-revisions'>
 <?php
