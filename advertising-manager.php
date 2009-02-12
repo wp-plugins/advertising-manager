@@ -8,6 +8,9 @@ Version: 3.3.5
 Author URI: http://www.mutube.com/
 */
 
+//Load Localisation Plug-in
+load_plugin_textdomain('advman', false, 'advertising-manager/languages');
+
 // DEFINITIONS
 @define("ADVMAN_VERSION", "3.3.5");
 @define('ADVMAN_PATH', dirname(__FILE__));
@@ -275,8 +278,8 @@ class advman
 }
 
 // SHOW ADS - OLDER VERSION
-if (!function_exists('advman_ad')) {
-	function advman_ad($name = false)
+if (!function_exists('adsensem_ad')) {
+	function adsensem_ad($name = false)
 	{
 		global $_advman;
 		

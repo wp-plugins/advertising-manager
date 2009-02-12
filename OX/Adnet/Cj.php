@@ -24,6 +24,21 @@ class OX_Adnet_Cj extends OX_Adnet
 	 */
 	var $networkName = 'Commission Junction';
 	
+	/**
+	 * The domains that CJ randomly chooses to serve ads.  Add to this list as they become available.
+	 */
+	var $xdomains = array(
+		'www.commission-junction.com',
+		'www.cj.com',
+		'www.qksrv.net',
+		'www.kqzyfj.com',
+		'www.tkqlhce.com',
+		'www.jdoqocy.com',
+		'www.dpbolvw.net',
+		'www.lduhtrp.net',
+		'www.anrdoezrs.net');
+
+	
 	function OX_Adnet_Cj()
 	{
 		$this->OX_Adnet();
@@ -31,17 +46,10 @@ class OX_Adnet_Cj extends OX_Adnet
 	
 	function render_ad()
 	{
-		$cjservers=array(
-			'www.kqzyfj.com',
-			'www.tkqlhce.com',
-			'www.jdoqocy.com',
-			'www.dpbolvw.net',
-			'www.lduhtrp.net');
-		
 		$search[] = '{{xdomain}}';
-		$replace[] = $cjservers[array_rand($cjservers)];
+		$replace[] = $this->xdomains[array_rand($this->xdomains)];
 		
-		return parent::render_ad();
+		return parent::render_ad($search, $replace);
 	}
 	
 	function get_default_properties()
@@ -60,22 +68,11 @@ class OX_Adnet_Cj extends OX_Adnet
 	
 	function import_detect_network($code)
 	{
-		# Domains: (add more)
-		$domains = array(
-		'www.commission-junction.com',
-		'www.cj.com',
-		'www.qksrv.net',
-		'www.kqzyfj.com',
-		'www.tkqlhce.com',
-		'www.jdoqocy.com',
-		'www.dpbolvw.net',
-		'www.lduhtrp.net',
-		'www.anrdoezrs.net');
-		
-		$match=false;
-		foreach($domains as $d){$match=$match || (strpos($code,'href="http://' . $d)!==false);}
+		$match = false;
+		foreach ($xdomains as $d) {
+			$match = $match || (strpos($code, ('href="http://' . $d)) !== false);
+		}
 		return $match;
-		
 	}
 		
 	function import_settings($code)
