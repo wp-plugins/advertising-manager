@@ -1,6 +1,6 @@
 <?php
 if(!ADVMAN_VERSION){die();}
-require_once(ADS_PATH . '/OX/Adnet.php');	
+require_once(ADVMAN_PATH . '/OX/Adnet.php');	
 
 $_adsensem_networks['OX_Adnet_Cj'] = array(
 		'www-create' => 'https://members.cj.com/member/publisher/accounts/listmyadvertisers.do?sortKey=active_start_date&sortOrder=DESC',

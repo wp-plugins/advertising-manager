@@ -1,5 +1,5 @@
 <?php
-require_once(ADS_PATH . '/Template/WP27/EditNetwork.php');
+require_once(ADVMAN_PATH . '/Template/WP27/EditNetwork.php');
 
 class Template_EditNetwork_Adsense extends Template_EditNetwork
 {

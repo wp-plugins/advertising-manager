@@ -1,5 +1,5 @@
 <?php
-require_once(ADS_PATH . '/Template/WP27/EditAd.php');
+require_once(ADVMAN_PATH . '/Template/WP27/EditAd.php');
 
 class Template_EditAd_Ypn extends Template_EditAd
 {

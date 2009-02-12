@@ -4,22 +4,18 @@ Plugin Name: Advertising Manager
 PLugin URI: http://code.openx.org/projects/show/advertising-manager
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer, Martin Fitzpatrick
-Version: 3.3.4
+Version: 3.3.5
 Author URI: http://www.mutube.com/
 */
 
-error_reporting(E_ALL);
-
+// DEFINITIONS
+@define("ADVMAN_VERSION", "3.3.5");
+@define('ADVMAN_PATH', dirname(__FILE__));
 global $wp_version;
 $template = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP26' : 'WP27';
-@define('TEMPLATE', $template);
+@define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . '/Template/' . $template);
 
-// Definitions
-@define("ADVMAN_VERSION", "3.3.5");
-@define('ADS_PATH', dirname(__FILE__));
-
-// Ad Network Includes
-// Traverse the Ad Network directory and include all files
+// INCLUDES
 if ($handle = opendir(ADS_PATH . '/OX/Adnet/')) {
     while (false !== ($file = readdir($handle))) {
 		// Make sure that the first character does not start with a '.' (omit hidden files like '.', '..', '.svn', etc.)
@@ -29,31 +25,11 @@ if ($handle = opendir(ADS_PATH . '/OX/Adnet/')) {
     }
     closedir($handle);
 }
-
-// Other Includes
 require_once(ADS_PATH . '/OX/Tools.php');
 
+// DATA
 $_adsensem = get_option('plugin_adsensem');
 $_adsensem_notices = array();
-
-// backwards compatibility
-if (!function_exists('adsensem_ad')) {
-	function adsensem_ad($name = false)
-	{
-		global $_adsensem;
-		
-		if (empty($name)) { /* default ad */
-			$name = $_adsensem['default-ad'];
-		}
-		
-		$ad = adsensem::select_ad($name);
-		if (!empty($ad)) {
-			echo $ad->get_ad();
-		}
-	}
-}
-
-
 
 class adsensem
 {
@@ -162,7 +138,7 @@ class adsensem
 					wp_register_sidebar_widget("adsensem-$name", "Ad#$name", array('adsensem','widget'), $args, $name);
 //					wp_register_widget_control("adsensem-$name", "Ad#$name", array('adsensem','widget_control'), $args, $name); 
 				} elseif (function_exists('register_sidebar_module') ) {
-					register_sidebar_module("Ad #$name", 'adsensem_sbm_widget', "adsensem-$name", $args );
+					register_sidebar_module("Ad #$name", 'advman_sbm_widget', "adsensem-$name", $args );
 //					register_sidebar_module_control("Ad #$name", array('adsensem','widget_control'), "adsensem-$name");
 				}			
 			}
@@ -298,6 +274,24 @@ class adsensem
 	}
 }
 
+// SHOW ADS - OLDER VERSION
+if (!function_exists('adsensem_ad')) {
+	function adsensem_ad($name = false)
+	{
+		global $_adsensem;
+		
+		if (empty($name)) { /* default ad */
+			$name = $_adsensem['default-ad'];
+		}
+		
+		$ad = adsensem::select_ad($name);
+		if (!empty($ad)) {
+			echo $ad->get_ad();
+		}
+	}
+}
+
+
 /* SHOW ALTERNATE AD UNITS */
 if (!empty($_REQUEST['adsensem-show-ad'])) {
 	$name = OX_Tools::sanitize_name($_REQUEST['adsensem-show-ad']);
@@ -374,7 +368,7 @@ if (is_admin()) {
 
 
 /* SIDEBAR MODULES COMPATIBILITY FUNCTION */
-function adsensem_sbm_widget($args)
+function advman_sbm_widget($args)
 {
 	global $k2sbm_current_module;
 	adsensem::widget($args,$k2sbm_current_module->options['name']);

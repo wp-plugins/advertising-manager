@@ -1,7 +1,7 @@
 <?php
 if (!ADVMAN_VERSION) {die();}
 
-require_once(ADS_PATH . '/OX/Tools.php');
+require_once(ADVMAN_PATH . '/OX/Tools.php');
 
 function adsensem_clone($object)
 {
@@ -78,7 +78,7 @@ class adsensem_admin
 		global $_adsensem;
 		
 		if (!empty($_adsensem['notices'])) {
-			include_once(ADS_PATH . '/Template/' . TEMPLATE . '/Notice.php');
+			include_once(ADVMAN_TEMPLATE_PATH . '/Notice.php');
 			Template_Notice::display($_adsensem['notices']);
 		}
 		
@@ -386,24 +386,24 @@ class adsensem_admin
 		
 		switch ($mode) {
 			case 'list_ads' :
-				include_once(ADS_PATH . '/Template/' . TEMPLATE . '/ListAds.php');
+				include_once(ADVMAN_TEMPLATE_PATH . '/ListAds.php');
 				$templateListAds = new Template_ListAds();
 				$templateListAds->display($target, $filter);
 				break;
 			
 			case 'create_ad' :
-				include_once(ADS_PATH . '/Template/' . TEMPLATE . '/CreateAd.php');
+				include_once(ADVMAN_TEMPLATE_PATH . '/CreateAd.php');
 				$templateClass = new Template_CreateAd();
 				$templateClass->display($target);
 				break;
 			
 			case 'edit_ad' :
 				$shortName = $_adsensem['ads'][$target]->shortName;
-				if (file_exists(ADS_PATH . '/Template/' . TEMPLATE . '/EditAd/' . $shortName . '.php')) {
-					include_once(ADS_PATH . '/Template/' . TEMPLATE . '/EditAd/' . $shortName . '.php');
+				if (file_exists(ADVMAN_TEMPLATE_PATH . '/EditAd/' . $shortName . '.php')) {
+					include_once(ADVMAN_TEMPLATE_PATH . '/EditAd/' . $shortName . '.php');
 					$templateClassName = 'Template_EditAd_' . $shortName;
 				} else {
-					include_once(ADS_PATH . '/Template/' . TEMPLATE . '/EditAd.php');
+					include_once(ADVMAN_TEMPLATE_PATH . '/EditAd.php');
 					$templateClassName = 'Template_EditAd';
 				}
 				$templateClass = new $templateClassName;
@@ -413,11 +413,11 @@ class adsensem_admin
 			case 'edit_network' :
 				$networkAd = new $target;
 				$shortName = $networkAd->shortName;
-				if (file_exists(ADS_PATH . '/Template/' . TEMPLATE . '/EditNetwork/' . $shortName . '.php')) {
-					include_once(ADS_PATH . '/Template/' . TEMPLATE . '/EditNetwork/' . $shortName . '.php');
+				if (file_exists(ADVMAN_TEMPLATE_PATH . '/EditNetwork/' . $shortName . '.php')) {
+					include_once(ADVMAN_TEMPLATE_PATH . '/EditNetwork/' . $shortName . '.php');
 					$templateClassName = 'Template_EditNetwork_' . $shortName;
 				} else {
-					include_once(ADS_PATH . '/Template/' . TEMPLATE . '/EditNetwork.php');
+					include_once(ADVMAN_TEMPLATE_PATH . '/EditNetwork.php');
 					$templateClassName = 'Template_EditNetwork';
 				}
 				$templateClass = new $templateClassName;
@@ -439,7 +439,7 @@ class adsensem_admin
 			adsensem_admin::_save_settings();
 			update_option('plugin_adsensem', $_adsensem);
 		}
-		include_once(ADS_PATH . '/Template/' . TEMPLATE . '/Settings.php');
+		include_once(ADVMAN_TEMPLATE_PATH . '/Settings.php');
 		Template_Settings::display();
 	}
 
