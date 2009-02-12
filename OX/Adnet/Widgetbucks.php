@@ -2,7 +2,7 @@
 if(!ADVMAN_VERSION){die();}
 require_once(ADVMAN_PATH . '/OX/Adnet.php');	
 
-$_adsensem_networks['OX_Adnet_Widgetbucks']	= array(
+$_advman_networks['OX_Adnet_Widgetbucks']	= array(
 		'www-create' => 'http://www.widgetbucks.com/widget.page?action=call&widgetID=',
 		'www-signup' => 'http://www.widgetbucks.com/home.page?referrer=468034'
 		);

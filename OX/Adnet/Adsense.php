@@ -2,7 +2,7 @@
 if(!ADVMAN_VERSION){die();}
 require_once(ADVMAN_PATH . '/OX/Adnet.php');	
 
-$_adsensem_networks['OX_Adnet_Adsense'] = array(
+$_advman_networks['OX_Adnet_Adsense'] = array(
 		'ico'		=>	'http://www.google.com/favicon.ico',
 		'www-create' => 'https://www.google.com/adsense/adsense-products',
 		'www-signup'		=>	'https://www.google.com/adsense/',
@@ -118,16 +118,24 @@ class OX_Adnet_Adsense extends OX_Adnet
 		}
 
 		// Width / Height
+		$width = '';
+		$height = '';
 		if (preg_match('/google_ad_width( *)=( *)(\d*);/', $code, $matches) != 0) {
 			$width = $matches[3]; 
-			if (preg_match('/google_ad_height( *)=( *)(\d*);/', $code, $matches) != 0) {
-				$height = $matches[3];
+			if ($width != '') {
 				$this->set('width', $width);
-				$this->set('height', $height);
-				$this->set('adformat', $width . 'x' . $height);
-				$code = str_replace("google_ad_width{$matches[1]}={$matches[2]}{$width}", "google_ad_width{$matches[1]}={$matches[2]}{{width}}", $code);
-				$code = str_replace("google_ad_height{$matches[1]}={$matches[2]}{$height}", "google_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
 			}
+			$code = str_replace("google_ad_width{$matches[1]}={$matches[2]}{$width}", "google_ad_width{$matches[1]}={$matches[2]}{{width}}", $code);
+		}
+		if (preg_match('/google_ad_height( *)=( *)(\d*);/', $code, $matches) != 0) {
+			$height = $matches[3];
+			if ($height != '') {
+				$this->set('height', $height);
+			}
+			$code = str_replace("google_ad_height{$matches[1]}={$matches[2]}{$height}", "google_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
+		}
+		if (($width != '') && ($height != '')) {
+			$this->set('adformat', $width . 'x' . $height);
 		}
 		
 		$format = $this->get('adformat'); //passthru
@@ -146,7 +154,7 @@ class OX_Adnet_Adsense extends OX_Adnet
 				$this->set('adtype', $adtype);
 			} else {
 				$this->set('adtype', 'link');
-				$this->set('linkformat', OX_Tools::sanitize_format($_POST['adsensem-adformat'])); //passthru
+				$this->set('linkformat', OX_Tools::sanitize_format($_POST['advman-adformat'])); //passthru
 			}
 		}
 		
@@ -162,13 +170,13 @@ class OX_Adnet_Adsense extends OX_Adnet
 		switch($this->get('adtype')){
 			case 'slot' :
 			case 'ad' :
-				$this->set('adformat', OX_Tools::sanitize_format($_POST['adsensem-adformat']));
+				$this->set('adformat', OX_Tools::sanitize_format($_POST['advman-adformat']));
 				break;
 			case 'link' :
-				$this->set('adformat', OX_Tools::sanitize_format($_POST['adsensem-linkformat']));
+				$this->set('adformat', OX_Tools::sanitize_format($_POST['advman-linkformat']));
 				break;
 			case 'ref_image' :
-				$this->set('adformat', OX_Tools::sanitize_format($_POST['adsensem-referralformat']));
+				$this->set('adformat', OX_Tools::sanitize_format($_POST['advman-referralformat']));
 				break;
 			default :
 				$this->set('adformat', '');

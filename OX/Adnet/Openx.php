@@ -2,7 +2,7 @@
 if(!ADVMAN_VERSION){die();}
 require_once(ADVMAN_PATH . '/OX/Adnet.php');	
 
-$_adsensem_networks['OX_Adnet_Openx'] = array(
+$_advman_networks['OX_Adnet_Openx'] = array(
 		'www-create' => 'http://www.openx.org/',
 		'www-signup' => 'http://www.openx.org/'
 		);

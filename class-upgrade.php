@@ -1,30 +1,30 @@
 <?php
 
-class adsensem_upgrade {
+class advman_upgrade {
 	
 	function go()
 	{
-		global $_adsensem;
+		global $_advman;
 	
 		$upgraded = false;
 		$optimiseMsg = false;
 		
 		// Bug where version was = a string for a while...
-		if ($_adsensem['version'] == 'ADVMAN_VERSION') {
-			$_adsensem['version'] = '3.3.4';
+		if ($_advman['version'] == 'ADVMAN_VERSION') {
+			$_advman['version'] = '3.3.4';
 			$upgraded = true;
 		}
 		
 		/* List of possible upgrade paths here: Ensure that versions automagically stack on top of one another
 				e.g. v1.x to v3.x should be possilbe v1.x > v2.x > v3.x */
 		
-		if (version_compare($_adsensem['version'], '3.0', '<')) {
-			adsensem_upgrade::v2_x_to_3_0();
+		if (version_compare($_advman['version'], '3.0', '<')) {
+			advman_upgrade::v2_x_to_3_0();
 			$upgraded = true;
 		}
 		
-		if (version_compare($_adsensem['version'], '3.3.4', '<')) {
-			adsensem_upgrade::v3_0_to_3_3_3();
+		if (version_compare($_advman['version'], '3.3.4', '<')) {
+			advman_upgrade::v3_0_to_3_3_3();
 			$optimiseMsg = true;
 			$upgraded = true;
 		}
@@ -32,18 +32,18 @@ class adsensem_upgrade {
 		if ($upgraded) {
 			//Write notice, ONLY IF UPGRADE HAS OCCURRED
 			if ($optimiseMsg) {
-				adsensem::add_notice('optimise','<strong>Advertising Manager</strong> has upgraded its settings from a previous version of <strong>Adsense Manager</strong><br />Would you like Advertising Manager to enable <a href="www.switzer.org">auto optimisation</a>? (RECOMMENDED)','yn');
+				advman::add_notice('optimise','<strong>Advertising Manager</strong> has upgraded its settings from a previous version of <strong>Adsense Manager</strong><br />Would you like Advertising Manager to enable <a href="www.switzer.org">auto optimisation</a>? (RECOMMENDED)','yn');
 			}
-			$_adsensem['version'] = ADVMAN_VERSION;
-			update_option('plugin_adsensem', $_adsensem);
+			$_advman['version'] = ADVMAN_VERSION;
+			update_option('plugin_adsensem', $_advman);
 		}
 	}
 
 	
 	function v3_0_to_3_3_3()
 	{
-		global $_adsensem;
-		$old = $_adsensem;
+		global $_advman;
+		$old = $_advman;
 		// New / Old class structure mapping
 		$adnets = array(
 			'ad_adbrite' => 'OX_Adnet_Adbrite',
@@ -65,13 +65,13 @@ class adsensem_upgrade {
 		);
 			
 		// Change defaults to new class structure
-		if (!empty($_adsensem['defaults'])) {
+		if (!empty($_advman['defaults'])) {
 			$new = array();
-			$defaults = $_adsensem['defaults'];
+			$defaults = $_advman['defaults'];
 			foreach ($defaults as $n => $default) {
 				if (!empty($adnets[$n])) {
 					// Set the new class structure
-					$new[$adnets[$n]] = $_adsensem['defaults'][$n];
+					$new[$adnets[$n]] = $_advman['defaults'][$n];
 					// Set OpenX Market participation
 					if (!isset($new[$adnets[$n]]['openx-market'])) {
 						$new[$adnets[$n]]['openx-market'] = 'no';
@@ -92,29 +92,39 @@ class adsensem_upgrade {
 					if (!isset($new[$adnets[$n]]['show-category'])) {
 						$new[$adnets[$n]]['show-category'] = 'all';
 					}
+					// Set height and width for an ad format
+					if (!empty($new[$adnets[$n]]['adformat']) && ($new[$adnets[$n]]['adformat'] != 'custom')) {
+						list($width, $height) = split('[x]', $new[$adnets[$n]]['adformat']);
+						if (is_numeric($width)) {
+							$new[$adnets[$n]]['width'] = $width;
+						}
+						if (is_numeric($height)) {
+							$new[$adnets[$n]]['height'] = $height;
+						}
+					}
 				}
 			}
-			$_adsensem['defaults'] = $new;
+			$_advman['defaults'] = $new;
 		}
 		
 		// Change account IDs to new class structure
 		// We are going to change it to something later, but we need it this way for ad conversions...
-		if (!empty($_adsensem['account-ids'])) {
+		if (!empty($_advman['account-ids'])) {
 			$new = array();
-			$accounts = $_adsensem['account-ids'];
+			$accounts = $_advman['account-ids'];
 			foreach ($accounts as $n => $account) {
 				if (!empty($adnets[$n])) {
 					// Set the new class structure
-					$new[$adnets[$n]] = $_adsensem['account-ids'][$n];
+					$new[$adnets[$n]] = $_advman['account-ids'][$n];
 				}
 			}
-			$_adsensem['account-ids'] = $new;
+			$_advman['account-ids'] = $new;
 		}
 		
-		if (!empty($_adsensem['ads'])) {
+		if (!empty($_advman['ads'])) {
 			$new = array();
 			$id = 1;
-			$ads = $_adsensem['ads'];
+			$ads = $_advman['ads'];
 			// Next, make sure that the classes and properties are ok.
 			foreach ($ads as $n => $ad) {
 				$oldClass = '';
@@ -179,7 +189,7 @@ class adsensem_upgrade {
 				}
 				// Re-import code because it was not saved in previous versions
 				if ($ad->network != 'OX_Adnet_Html') {
-					$code = call_user_func(array('adsensem_upgrade', '_render_' . $oldClass), $ad);
+					$code = call_user_func(array('advman_upgrade', '_render_' . $oldClass), $ad);
 					$ad->import_settings($code);
 				}
 				// Set the new active field
@@ -206,18 +216,18 @@ class adsensem_upgrade {
 				$id++;
 			}
 			
-			$_adsensem['ads'] = $new;
-			$_adsensem['next_ad_id'] = $id;
+			$_advman['ads'] = $new;
+			$_advman['next_ad_id'] = $id;
 		}
 		
 		// Move account IDs inside the ad array
-		if (!empty($_adsensem['account-ids'])) {
-			foreach ($_adsensem['account-ids'] as $class => $accountId) {
-				foreach ($_adsensem['ads'] as $id => $ad) {
+		if (!empty($_advman['account-ids'])) {
+			foreach ($_advman['account-ids'] as $class => $accountId) {
+				foreach ($_advman['ads'] as $id => $ad) {
 					if ($class == get_class($ad)) {
 						$exitingAccountId = $ad->get('account-id');
 						if (empty($exitingAccountId)) {
-							$_adsensem['ads'][$id]->set('account-id', $accountId);
+							$_advman['ads'][$id]->set('account-id', $accountId);
 						}
 					}
 				}
@@ -225,36 +235,36 @@ class adsensem_upgrade {
 		}
 		
 		// Be nice does not exist anymore
-		if (!empty($_adsensem['be-nice'])) {
-			unset($_adsensem['be-nice']);
+		if (!empty($_advman['be-nice'])) {
+			unset($_advman['be-nice']);
 		}
-		if (!empty($_adsensem['benice'])) {
-			unset($_adsensem['benice']);
+		if (!empty($_advman['benice'])) {
+			unset($_advman['benice']);
 		}
 		
 		// Remove the networks node
-		if (!empty($_adsensem['networks'])) {
-			unset($_adsensem['networks']);
+		if (!empty($_advman['networks'])) {
+			unset($_advman['networks']);
 		}
 	}
 	
 	function v2_x_to_3_0(){
-		global $_adsensem;
+		global $_advman;
 		
-		$old=$_adsensem;
+		$old=$_advman;
 		
 				/*  VERSION 3.x  */
-				$_adsensem['ads'] = array();
+				$_advman['ads'] = array();
 				
-				$_adsensem['be-nice'] = $old['benice'];
-				$_adsensem['default-ad'] = $old['defaults']['ad'];
+				$_advman['be-nice'] = $old['benice'];
+				$_advman['default-ad'] = $old['defaults']['ad'];
 				
-				$_adsensem['defaults']=array();
-				$_adsensem['defaults']['ad_adsense_classic']=adsensem_upgrade::_process_v2_x_to_3_0($old['defaults']);
-				$_adsensem['defaults']['ad_adsense']=$_adsensem['defaults']['ad_adsense_classic'];
+				$_advman['defaults']=array();
+				$_advman['defaults']['ad_adsense_classic']=advman_upgrade::_process_v2_x_to_3_0($old['defaults']);
+				$_advman['defaults']['ad_adsense']=$_advman['defaults']['ad_adsense_classic'];
 				
 				/* Copy AdSense account-id to both class/new settings */
-				$_adsensem['account-ids']['ad_adsense']=$old['adsense-account'];
+				$_advman['account-ids']['ad_adsense']=$old['adsense-account'];
 				
 				/* Now all that remains is to convert the ads. In 2.x ads were stored as simply arrays containing the options.
 					To upgrade create new objects using product/slot/etc. info, or for code units run an import cycle. */
@@ -265,52 +275,52 @@ class adsensem_upgrade {
 					if($oad['slot']!=''){$type='slot';}
 					else {$type=$oad['product'];}
 					
-					$name=adsensem_admin::generate_name($oname);
+					$name=advman_admin::generate_name($oname);
 					
 					switch($type){
 						
 						/* HTML Code Ads */
 						case 'code':
-							$ad=adsensem_admin::import_ad($oad['code']);
-							$_adsensem['ads'][$name]=$ad;
-							$_adsensem['ads'][$name]->name=$name;
+							$ad=advman_admin::import_ad($oad['code']);
+							$_advman['ads'][$name]=$ad;
+							$_advman['ads'][$name]->name=$name;
 						break;
 						
 						/* AdSense Slot Ads */
 						case 'slot':
 							$ad=new Ad_AdSense();
-							$_adsensem['ads'][$name]=$ad;
-							$_adsensem['ads'][$name]->name=$name;
-							$_adsensem['ads'][$name]->p=adsensem_upgrade::_process_v2_x_to_3_0($oad);
+							$_advman['ads'][$name]=$ad;
+							$_advman['ads'][$name]->name=$name;
+							$_advman['ads'][$name]->p=advman_upgrade::_process_v2_x_to_3_0($oad);
 						break;
 						/* AdSense Ad */
 						case 'ad':
 							$ad=new Ad_AdSense_Ad();
-							$_adsensem['ads'][$name]=$ad;
-							$_adsensem['ads'][$name]->name=$name;
-							$_adsensem['ads'][$name]->p=adsensem_upgrade::_process_v2_x_to_3_0($oad);
+							$_advman['ads'][$name]=$ad;
+							$_advman['ads'][$name]->name=$name;
+							$_advman['ads'][$name]->p=advman_upgrade::_process_v2_x_to_3_0($oad);
 						break;
 						case 'link':
 							$ad=new Ad_AdSense_Link();
-							$_adsensem['ads'][$name]=$ad;
-							$_adsensem['ads'][$name]->name=$name;
-							$_adsensem['ads'][$name]->p=adsensem_upgrade::_process_v2_x_to_3_0($oad);
+							$_advman['ads'][$name]=$ad;
+							$_advman['ads'][$name]->name=$name;
+							$_advman['ads'][$name]->p=advman_upgrade::_process_v2_x_to_3_0($oad);
 						break;
 							
 						case 'referral':
 						case 'referral-image':
 						case 'referral-text':
 							$ad=new Ad_AdSense_Referral();
-							$_adsensem['ads'][$name]=$ad;
-							$_adsensem['ads'][$name]->name=$name;
-							$_adsensem['ads'][$name]->p=adsensem_upgrade::_process_v2_x_to_3_0($oad);
+							$_advman['ads'][$name]=$ad;
+							$_advman['ads'][$name]->name=$name;
+							$_advman['ads'][$name]->p=advman_upgrade::_process_v2_x_to_3_0($oad);
 						break;	
 					}
 					
 				} 
 				}
 			
-		OX_Tools::sort($_adsensem['ads']);
+		OX_Tools::sort($_advman['ads']);
 		}
 		
 	
@@ -349,12 +359,12 @@ class adsensem_upgrade {
 	
 	function adsense_deluxe_to_3_0()
 	{
-		global $_adsensem;
+		global $_advman;
 		$deluxe=get_option('acmetech_adsensedeluxe');
 		
 			foreach($deluxe['ads'] as $key => $vals){
-				$ad=adsensem_admin::import_ad($vals['code']);
-				$name=adsensem_admin::generate_name($vals['name']);
+				$ad=advman_admin::import_ad($vals['code']);
+				$name=advman_admin::generate_name($vals['name']);
 				
 				$ad->name = $name;
 				
@@ -362,36 +372,36 @@ class adsensem_upgrade {
 				$ad->set('show-post', ($deluxe['enabled_for']['posts'] == 1) ? 'yes' : 'no');
 				$ad->set('show-archive', ($deluxe['enabled_for']['archives'] == 1) ? 'yes' : 'no');
 				$ad->set('show-page', ($deluxe['enabled_for']['page'] == 1) ? 'yes' : 'no');
-				$_adsensem['ads'][$name] = $ad;
+				$_advman['ads'][$name] = $ad;
 				
 				if ($vals['make_default'] == 1) {
-					$_adsensem['default-ad'] = $name;
+					$_advman['default-ad'] = $name;
 				}
 			}
 		
-		OX_Tools::sort($_adsensem['ads']);
+		OX_Tools::sort($_advman['ads']);
 	}
 	
 	function _render_ad_adsense($ad)
 	{
-		global $_adsensem;
-		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? ('pub-' . $_adsensem['account-ids'][$ad->network]) : '';
+		global $_advman;
+		$accountId = !empty($_advman['account-ids'][$ad->network]) ? ('pub-' . $_advman['account-ids'][$ad->network]) : '';
 
 		$code = '<script type="text/javascript"><!--' . "\n";
 		$code.= 'google_ad_client = "' . $accountId . '";' . "\n";
-		$code.= 'google_ad_slot = "' . str_pad($ad->get('slot', true),10,'0',STR_PAD_LEFT) . '"' . ";\n"; //String padding to max 10 char slot ID
+		$code.= 'google_ad_slot = "' . str_pad($ad->get('slot'),10,'0',STR_PAD_LEFT) . '"' . ";\n"; //String padding to max 10 char slot ID
 		
-		if($ad->get('adtype', true)=='ref_text'){
+		if($ad->get('adtype')=='ref_text'){
 			$code.= 'google_ad_output = "textlink"' . ";\n";
 			$code.= 'google_ad_format = "ref_text"' . ";\n";
 			$code.= 'google_cpa_choice = ""' . ";\n";
-		} else if($ad->get('adtype', true)=='ref_image'){
-			$code.= 'google_ad_width = ' . $ad->get('width', true) . ";\n";
-			$code.= 'google_ad_height = ' . $ad->get('height', true) . ";\n";
+		} else if($ad->get('adtype')=='ref_image'){
+			$code.= 'google_ad_width = ' . $ad->get('width') . ";\n";
+			$code.= 'google_ad_height = ' . $ad->get('height') . ";\n";
 			$code.= 'google_cpa_choice = ""' . ";\n";
 		} else {
-			$code.= 'google_ad_width = ' . $ad->get('width', true) . ";\n";
-			$code.= 'google_ad_height = ' . $ad->get('height', true) . ";\n";
+			$code.= 'google_ad_width = ' . $ad->get('width') . ";\n";
+			$code.= 'google_ad_height = ' . $ad->get('height') . ";\n";
 		}
 		
 		$code.= '//--></script>' . "\n";
@@ -403,8 +413,8 @@ class adsensem_upgrade {
 	
 	function _render_ad_adbrite($ad)
 	{
-		global $_adsensem;
-		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? $_adsensem['account-ids'][$ad->network] : '';
+		global $_advman;
+		$accountId = !empty($_advman['account-ids'][$ad->network]) ? $_advman['account-ids'][$ad->network] : '';
 
 		$code ='<!-- Begin: AdBrite -->';
 		$code .= '<script type="text/javascript">' . "\n";
@@ -422,8 +432,8 @@ class adsensem_upgrade {
 	
 	function _render_ad_adgridwork($ad)
 	{
-		global $_adsensem;
-		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? $_adsensem['account-ids'][$ad->network] : '';
+		global $_advman;
+		$accountId = !empty($_advman['account-ids'][$ad->network]) ? $_advman['account-ids'][$ad->network] : '';
 
 		$code ='<a href="http://www.adgridwork.com/?r=' . $accountId . '" style="color: #' . $ad->get('color-link') .  '; font-size: 14px" target="_blank">Free Advertising</a>';
 		$code.='<script type="text/javascript">' . "\n";
@@ -440,8 +450,8 @@ class adsensem_upgrade {
 	
 	function _render_ad_adpinion($ad)
 	{
-		global $_adsensem;
-		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? $_adsensem['account-ids'][$ad->network] : '';
+		global $_advman;
+		$accountId = !empty($_advman['account-ids'][$ad->network]) ? $_advman['account-ids'][$ad->network] : '';
 
 		if($ad->get('width')>$ad->get('height')){$xwidth=18;$xheight=17;} else {$xwidth=0;$xheight=35;}
 		$code ='';
@@ -453,8 +463,8 @@ class adsensem_upgrade {
 	
 	function _render_ad_adroll($ad)
 	{
-		global $_adsensem;
-		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? $_adsensem['account-ids'][$ad->network] : '';
+		global $_advman;
+		$accountId = !empty($_advman['account-ids'][$ad->network]) ? $_advman['account-ids'][$ad->network] : '';
 
 		$code ='';
 		$code .= '<!-- Start: Adroll Ads -->';
@@ -469,8 +479,8 @@ class adsensem_upgrade {
 	
 	function _render_ad_adsense_ad($ad)
 	{
-		global $_adsensem;
-		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? ('pub-' . $_adsensem['account-ids'][$ad->network]) : '';
+		global $_advman;
+		$accountId = !empty($_advman['account-ids'][$ad->network]) ? ('pub-' . $_advman['account-ids'][$ad->network]) : '';
 
 		$code='';
 		
@@ -493,7 +503,7 @@ class adsensem_upgrade {
 			default				:
 				$alternateAd = $ad->get('alternate-ad');
 				if (!empty($alternateAd)) {
-					$code.= 'google_alternate_ad_url = "' . get_bloginfo('wpurl') . '/?adsensem-show-ad=' . $alternateAd . '";'  . "\n";
+					$code.= 'google_alternate_ad_url = "' . get_bloginfo('wpurl') . '/?advman-show-ad=' . $alternateAd . '";'  . "\n";
 				}
 		}
 		
@@ -512,8 +522,8 @@ class adsensem_upgrade {
 	
 	function _render_ad_adsense_link($ad)
 	{
-		global $_adsensem;
-		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? ('pub-' . $_adsensem['account-ids'][$ad->network]) : '';
+		global $_advman;
+		$accountId = !empty($_advman['account-ids'][$ad->network]) ? ('pub-' . $_advman['account-ids'][$ad->network]) : '';
 
 		$code='';
 
@@ -544,11 +554,11 @@ class adsensem_upgrade {
 	
 	function _render_ad_adsense_referral($ad)
 	{
-		global $_adsensem;
-		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? ('pub-' . $_adsensem['account-ids'][$ad->network]) : '';
+		global $_advman;
+		$accountId = !empty($_advman['account-ids'][$ad->network]) ? ('pub-' . $_advman['account-ids'][$ad->network]) : '';
 
-		//if($ad===false){$ad=$_adsensem['ads'][$_adsensem['default_ad']];}
-		//$ad=adsensem::merge_defaults($ad); //Apply defaults
+		//if($ad===false){$ad=$_advman['ads'][$_advman['default_ad']];}
+		//$ad=advman::merge_defaults($ad); //Apply defaults
 		if($ad->get('product')=='referral-image') {
 			$format = $ad->get('adformat') . '_as_rimg';
 		} else if($ad->get('product')=='referral-text') {
@@ -579,8 +589,8 @@ class adsensem_upgrade {
 	
 	function _render_ad_cj($ad)
 	{
-		global $_adsensem;
-		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? $_adsensem['account-ids'][$ad->network] : '';
+		global $_advman;
+		$accountId = !empty($_advman['account-ids'][$ad->network]) ? $_advman['account-ids'][$ad->network] : '';
 
 		$cjservers=array(
 			'www.kqzyfj.com',
@@ -614,7 +624,7 @@ class adsensem_upgrade {
 	
 	function _render_ad_crispads($ad)
 	{
-		global $_adsensem;
+		global $_advman;
 
 		if ($ad->get('codemethod')=='javascript'){
 			$code='<script type="text/javascript"><!--//<![CDATA[' . "\n";
@@ -640,8 +650,8 @@ class adsensem_upgrade {
 	}
 	function _render_ad_shoppingads($ad)
 	{
-		global $_adsensem;
-		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? $_adsensem['account-ids'][$ad->network] : '';
+		global $_advman;
+		$accountId = !empty($_advman['account-ids'][$ad->network]) ? $_advman['account-ids'][$ad->network] : '';
 
 		$code = '<script type="text/javascript"><!--' . "\n";
 		$code.= 'shoppingads_ad_client = "' . $accountId . '";' . "\n";
@@ -671,7 +681,7 @@ class adsensem_upgrade {
 	
 	function _render_ad_widgetbucks($ad)
 	{
-		global $_adsensem;
+		global $_advman;
 
 		$code ='';
 		$code .= '<!-- START CUSTOM WIDGETBUCKS CODE --><div>';
@@ -682,8 +692,8 @@ class adsensem_upgrade {
 	
 	function _render_ad_ypn($ad)
 	{
-		global $_adsensem;
-		$accountId = !empty($_adsensem['account-ids'][$ad->network]) ? $_adsensem['account-ids'][$ad->network] : '';
+		global $_advman;
+		$accountId = !empty($_advman['account-ids'][$ad->network]) ? $_advman['account-ids'][$ad->network] : '';
 
 		$code = '<script language="JavaScript">';
 		$code .= '<!--';

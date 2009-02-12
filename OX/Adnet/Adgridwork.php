@@ -2,7 +2,7 @@
 if(!ADVMAN_VERSION){die();}
 require_once(ADVMAN_PATH . '/OX/Adnet.php');	
 
-$_adsensem_networks['OX_Adnet_Adgridwork'] = array(
+$_advman_networks['OX_Adnet_Adgridwork'] = array(
 		'www-create' => 'http://www.adgridwork.com/u.php?page=submitsite',
 		'www-signup'	=>	'http://www.adgridwork.com/?r=18501',														 
 		 );

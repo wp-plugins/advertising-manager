@@ -8,17 +8,17 @@ class Template_EditAd_Openx extends Template_EditAd
 		// Call parent first!
 		parent::Template_EditAd();
 		// Account
-		add_meta_box('adsensem_account', __('Account Details', 'adsensem'), array(get_class($this), 'displaySectionAccount'), 'adsensem', 'advanced', 'high');
+		add_meta_box('advman_account', __('Account Details', 'advman'), array(get_class($this), 'displaySectionAccount'), 'advman', 'advanced', 'high');
 		// Remove Format Meta box
-		remove_meta_box('adsensem_format', 'adsensem', 'normal');
+		remove_meta_box('advman_format', 'advman', 'normal');
 	}
 	
 	function displaySectionAccount($ad)
 	{
 ?><div style="font-size:small;">
 <p>
-	<label for="adsensem-slot"><?php _e('Slot ID:'); ?></label>
-	<input type="text" name="adsensem-slot" style="width:200px" id="adsensem-slot" value="<?php echo $ad->get('slot'); ?>" />
+	<label for="advman-slot"><?php _e('Slot ID:'); ?></label>
+	<input type="text" name="advman-slot" style="width:200px" id="advman-slot" value="<?php echo $ad->get('slot'); ?>" />
 </p>
 </div>
 <br />

@@ -2,7 +2,7 @@
 if(!ADVMAN_VERSION){die();}
 require_once(ADVMAN_PATH . '/OX/Adnet.php');	
 
-$_adsensem_networks['OX_Adnet_Adbrite'] = array(
+$_advman_networks['OX_Adnet_Adbrite'] = array(
 	'www-create' => 'http://www.adbrite.com/zones/commerce/purchase.php?product_id_array=22',
 	'www-signup'	=>	'http://www.adbrite.com/mb/landing_both.php?spid=51549&afb=120x60-1-blue',														 
  );

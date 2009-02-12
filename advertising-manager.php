@@ -16,67 +16,67 @@ $template = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP26' : 'WP27';
 @define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . '/Template/' . $template);
 
 // INCLUDES
-if ($handle = opendir(ADS_PATH . '/OX/Adnet/')) {
+if ($handle = opendir(ADVMAN_PATH . '/OX/Adnet/')) {
     while (false !== ($file = readdir($handle))) {
 		// Make sure that the first character does not start with a '.' (omit hidden files like '.', '..', '.svn', etc.)
 		if ($file[0] != '.') {
-			require_once(ADS_PATH . '/OX/Adnet/' . $file);
+			require_once(ADVMAN_PATH . '/OX/Adnet/' . $file);
 		}
     }
     closedir($handle);
 }
-require_once(ADS_PATH . '/OX/Tools.php');
+require_once(ADVMAN_PATH . '/OX/Tools.php');
 
 // DATA
-$_adsensem = get_option('plugin_adsensem');
-$_adsensem_notices = array();
+$_advman = get_option('plugin_adsensem');
+$_advman_notices = array();
 
-class adsensem
+class advman
 {
 	/**
 	 * The init function is called upon the 'plugins_loaded' action
 	 */
 	function init()
 	{
-		global $_adsensem;
+		global $_advman;
 		
 		//Only run main site code if setup & functional
-		if (adsensem::setup_is_valid()) {
+		if (advman::setup_is_valid()) {
 			// Add a filter for displaying an ad in the content
-			add_filter('the_content', array('adsensem','filter_ads'));
+			add_filter('the_content', array('advman','filter_ads'));
 			// Add an action when the wordpress footer displays
-			add_action('wp_footer', array('adsensem','footer'));
-			add_action('admin_menu', array('adsensem','init_admin'));
-			add_action('widgets_init',  array('adsensem','init_widgets'), 1);
+			add_action('wp_footer', array('advman','footer'));
+			add_action('admin_menu', array('advman','init_admin'));
+			add_action('widgets_init',  array('advman','init_widgets'), 1);
 
-			if (version_compare($_adsensem['version'], ADVMAN_VERSION, '<')) {
+			if (version_compare($_advman['version'], ADVMAN_VERSION, '<')) {
 				include_once('class-upgrade.php');
 				
 				//Backup cycle
 				$backup = get_option('plugin_adsensem_backup');
-				$backup[adsensem::major_version($_adsensem['version'])] = $_adsensem;
+				$backup[advman::major_version($_advman['version'])] = $_advman;
 				update_option('plugin_adsensem_backup',$backup);
 				unset($backup);
 				
-				adsensem_upgrade::go();
-				update_option('plugin_adsensem', $_adsensem);
+				advman_upgrade::go();
+				update_option('plugin_adsensem', $_advman);
 			}
 			
 		} else {
 			// Get basic array
-			$_adsensem = adsensem::get_initial_array();
+			$_advman = advman::get_initial_array();
 			
 			// Check to see if Adsense Deluxe should be upgraded
 			$deluxe = get_option('acmetech_adsensedeluxe');
 			if (is_array($deluxe)) {
-				adsensem::add_notice('upgrade adsense-deluxe','Advertising Manager has detected a previous installation of <strong>Adsense Deluxe</strong>. Import settings?','yn');
+				advman::add_notice('upgrade adsense-deluxe','Advertising Manager has detected a previous installation of <strong>Adsense Deluxe</strong>. Import settings?','yn');
 			}
 			
-			update_option('plugin_adsensem', $_adsensem);
+			update_option('plugin_adsensem', $_advman);
 		}
 		
 		// Sync with OpenX
-		adsensem::sync();
+		advman::sync();
 	}
 	
 	/**
@@ -85,18 +85,18 @@ class adsensem
 	function init_admin()
 	{
 		//Pull in the admin functions before triggering
-		require_once('class-admin.php');
-		adsensem_admin::init_admin();
+		require_once(ADVMAN_PATH . '/class-admin.php');
+		advman_admin::init_admin();
 	}
 
 	/**
-	 * Check to see if the $_adsensem array is valid
+	 * Check to see if the $_advman array is valid
 	 */
 	function setup_is_valid()
 	{
-		global $_adsensem;
-		if (is_array($_adsensem)) {
-			if(is_array($_adsensem['ads'])) {
+		global $_advman;
+		if (is_array($_advman)) {
+			if(is_array($_advman['ads'])) {
 				return true;
 			}
 		}
@@ -110,36 +110,36 @@ class adsensem
 	}
 		
 	/**
-	 * Initialise the Adsensem array
+	 * Initialise the advman array
 	 */
 	function get_initial_array()
 	{
-		$_adsensem = array();
-		$_adsensem['ads'] = array();
-		$_adsensem['next_ad_id'] = 1;
-		$_adsensem['default-ad'] = '';
-		$_adsensem['version'] = ADVMAN_VERSION;
+		$_advman = array();
+		$_advman['ads'] = array();
+		$_advman['next_ad_id'] = 1;
+		$_advman['default-ad'] = '';
+		$_advman['version'] = ADVMAN_VERSION;
 		
-		return $_adsensem;
+		return $_advman;
 	}
 	
 	function init_widgets()
 	{
-		global $_adsensem;
+		global $_advman;
 		/* SITE SECTION: WIDGET DISPLAY CODE
 		/* Add the blocks to the Widget panel for positioning WP2.2+*/
 		
-		if (!empty($_adsensem['ads'])) {
-			foreach ($_adsensem['ads'] as $id => $ad) {
+		if (!empty($_advman['ads'])) {
+			foreach ($_advman['ads'] as $id => $ad) {
 				$name = $ad->name;
 				$args = array('name' => $name, 'height' => $ad->get('height', true), 'width' => $ad->get('width', true));
 				if (function_exists('wp_register_sidebar_widget')) {
 					//$id, $name, $output_callback, $options = array()
-					wp_register_sidebar_widget("adsensem-$name", "Ad#$name", array('adsensem','widget'), $args, $name);
-//					wp_register_widget_control("adsensem-$name", "Ad#$name", array('adsensem','widget_control'), $args, $name); 
+					wp_register_sidebar_widget("advman-$name", "Ad#$name", array('advman','widget'), $args, $name);
+//					wp_register_widget_control("advman-$name", "Ad#$name", array('advman','widget_control'), $args, $name); 
 				} elseif (function_exists('register_sidebar_module') ) {
-					register_sidebar_module("Ad #$name", 'advman_sbm_widget', "adsensem-$name", $args );
-//					register_sidebar_module_control("Ad #$name", array('adsensem','widget_control'), "adsensem-$name");
+					register_sidebar_module("Ad #$name", 'advman_sbm_widget', "advman-$name", $args );
+//					register_sidebar_module_control("Ad #$name", array('advman','widget_control'), "advman-$name");
 				}			
 			}
 		}
@@ -147,32 +147,32 @@ class adsensem
 	
 	function sync()
 	{
-		global $_adsensem;
+		global $_advman;
 		
-		if (empty($_adsensem['last-sync']) || (mktime(0,0,0) - $_adsensem['last-sync'] > 0) ) {
-			$_adsensem['last-sync'] = mktime(0,0,0);
-			update_option('plugin_adsensem', $_adsensem);
+		if (empty($_advman['last-sync']) || (mktime(0,0,0) - $_advman['last-sync'] > 0) ) {
+			$_advman['last-sync'] = mktime(0,0,0);
+			update_option('plugin_adsensem', $_advman);
 			// CALL OPENX SYNC!
 		}
 	}
 	
 	function add_notice($action,$text,$confirm=false)
 	{
-		global $_adsensem;
-		$_adsensem['notices'][$action]['text'] = $text;
-		$_adsensem['notices'][$action]['confirm'] = $confirm;
+		global $_advman;
+		$_advman['notices'][$action]['text'] = $text;
+		$_advman['notices'][$action]['confirm'] = $confirm;
 	}
 	
 	function remove_notice($action)
 	{
-		global $_adsensem;
-		if (!empty($_adsensem['notices'][$action])) {
-			unset($_adsensem['notices'][$action]); //=false;
+		global $_advman;
+		if (!empty($_advman['notices'][$action])) {
+			unset($_advman['notices'][$action]); //=false;
 		}
 	}
 
 	
-	// This is the function that outputs adsensem widget.
+	// This is the function that outputs advman widget.
 	function widget($args,$n='')
 	{
 		// $args is an array of strings that help widgets to conform to
@@ -180,17 +180,17 @@ class adsensem
 		// and after_title are the array keys. Default tags: li and h2.
 		extract($args); //nb. $name comes out of this, hence the use of $n
 		
-		global $_adsensem;
+		global $_advman;
       
 		//If name not passed in (Sidebar Modules), extract from the widget-id (WordPress Widgets)
 		if ($n=='') {
-			$n = substr($args['widget_id'],9);   //Chop off beginning adsensem- bit
+			$n = substr($args['widget_id'],9);   //Chop off beginning advman- bit
 		}
 		
 		if ($n !== 'default-ad') {
-			$ad = $_adsensem['ads'][$n];
+			$ad = $_advman['ads'][$n];
 		} else {
-			$ad = $_adsensem['ads'][$_adsensem['default-ad']];
+			$ad = $_advman['ads'][$_advman['default-ad']];
 		}
 		
 		if ($ad->is_available()) {
@@ -218,13 +218,13 @@ class adsensem
 
 	function filter_ad_callback($matches)
 	{
-		global $_adsensem;
+		global $_advman;
 		
 		if ($matches[1] == '') { /* default ad */
-			$matches[1] = $_adsensem['default-ad'];
+			$matches[1] = $_advman['default-ad'];
 		}
 		
-		$ad = adsensem::select_ad($matches[1]);
+		$ad = advman::select_ad($matches[1]);
 		if (!empty($ad)) {
 			return $ad->get_ad();
 		}
@@ -233,12 +233,12 @@ class adsensem
 	
 	function select_ad($name)
 	{
-		global $_adsensem;
+		global $_advman;
 		
 		// Find the ads which match the name
 		$ads = array();
 		$totalWeight = 0;
-		foreach ($_adsensem['ads'] as $id => $ad) {
+		foreach ($_advman['ads'] as $id => $ad) {
 			if ( ($ad->name == $name) && ($ad->is_available()) ) {
 				$ads[] = $ad;
 				$totalWeight += $ad->get('weight', true);
@@ -263,28 +263,28 @@ class adsensem
 	<!--adsense#name--> for named ad or <!--adsense--> for default */
 	function filter_ads($content)
 	{
-		global $_adsensem;
-		if (!empty($_adsensem['default-ad'])) {
-			$content = preg_replace_callback(array("/<!--adsense-->/","/<!--am-->/","/\[ad\]/"),array('adsensem','filter_ad_callback'),$content);
+		global $_advman;
+		if (!empty($_advman['default-ad'])) {
+			$content = preg_replace_callback(array("/<!--adsense-->/","/<!--am-->/","/\[ad\]/"),array('advman','filter_ad_callback'),$content);
 		}
 		
-		$content = preg_replace_callback(array("/<!--adsense#(.*)-->/","/<!--am#(.*)-->/","/\[ad#(.*)\]/"),array('adsensem','filter_ad_callback'),$content);
+		$content = preg_replace_callback(array("/<!--adsense#(.*)-->/","/<!--am#(.*)-->/","/\[ad#(.*)\]/"),array('advman','filter_ad_callback'),$content);
 		
 		return $content;
 	}
 }
 
 // SHOW ADS - OLDER VERSION
-if (!function_exists('adsensem_ad')) {
-	function adsensem_ad($name = false)
+if (!function_exists('advman_ad')) {
+	function advman_ad($name = false)
 	{
-		global $_adsensem;
+		global $_advman;
 		
 		if (empty($name)) { /* default ad */
-			$name = $_adsensem['default-ad'];
+			$name = $_advman['default-ad'];
 		}
 		
-		$ad = adsensem::select_ad($name);
+		$ad = advman::select_ad($name);
 		if (!empty($ad)) {
 			echo $ad->get_ad();
 		}
@@ -293,35 +293,35 @@ if (!function_exists('adsensem_ad')) {
 
 
 /* SHOW ALTERNATE AD UNITS */
-if (!empty($_REQUEST['adsensem-show-ad'])) {
-	$name = OX_Tools::sanitize_name($_REQUEST['adsensem-show-ad']);
+if (!empty($_REQUEST['advman-show-ad'])) {
+	$name = OX_Tools::sanitize_name($_REQUEST['advman-show-ad']);
 	echo '<html><body>';
-	adsensem_ad($name);
+	advman_ad($name);
 	echo '</body></html>';
 	die(0);
 }
 /* END SHOW ALTERNATE AD UNITS */
 // SHOW AN AD BY ID
-if (!empty($_REQUEST['adsensem-show-ad-id'])) {
-	$id = OX_Tools::sanitize_number($_REQUEST['adsensem-show-ad-id']);
-	if (!empty($_adsensem['ads'][$id])) {
-		echo '<html><body>' . $_adsensem['ads'][$_REQUEST['adsensem-show-ad-id']]->get_ad() . '</body></html>';
+if (!empty($_REQUEST['advman-show-ad-id'])) {
+	$id = OX_Tools::sanitize_number($_REQUEST['advman-show-ad-id']);
+	if (!empty($_advman['ads'][$id])) {
+		echo '<html><body>' . $_advman['ads'][$_REQUEST['advman-show-ad-id']]->get_ad() . '</body></html>';
 	}
 	die(0);
 }
 
 // END
 if (is_admin()) {
-	require_once('class-admin.php');
+	require_once(ADVMAN_PATH . '/class-admin.php');
 
 	/* REVERT TO PREVIOUS BACKUP OF AD DATABASE */
-	if (!empty($_REQUEST['adsensem-revert-db'])) {
-		$version = OX_Tools::sanitize_number($_REQUEST['adsensem-revert-db']);
+	if (!empty($_REQUEST['advman-revert-db'])) {
+		$version = OX_Tools::sanitize_number($_REQUEST['advman-revert-db']);
 		$backup = get_option('plugin_adsensem_backup');
 		if (!empty($backup[$version])) {
-			$_adsensem = $backup[$version];
-			update_option('plugin_adsensem',$_adsensem);
-			if (!empty($_REQUEST['adsensem-block-upgrade'])) {
+			$_advman = $backup[$version];
+			update_option('plugin_adsensem',$_advman);
+			if (!empty($_REQUEST['advman-block-upgrade'])) {
 				die();
 			}
 		}
@@ -330,34 +330,34 @@ if (is_admin()) {
 	
 	
 	/* PRE-OUTPUT PROCESSING - e.g. NOTICEs (upgrade-adsense-deluxe) */
-	if (!empty($_POST['adsensem-mode'])) {
-		$mode = OX_Tools::sanitize_key($_POST['adsensem-mode']);
+	if (!empty($_POST['advman-mode'])) {
+		$mode = OX_Tools::sanitize_key($_POST['advman-mode']);
 		if ($mode == 'notice') {
-			$action = OX_Tools::sanitize_key($_POST['adsensem-action']);
+			$action = OX_Tools::sanitize_key($_POST['advman-action']);
 			switch ($action) {
 				case 'upgrade adsense-deluxe':
-					if ($_POST['adsensem-notice-confirm-yes']) {
-						require_once('class-upgrade.php');
-						adsensem_upgrade::adsense_deluxe_to_3_0();
-						adsensem::remove_notice('upgrade adsense-deluxe');
+					if ($_POST['advman-notice-confirm-yes']) {
+						require_once(ADVMAN_PATH . '/class-upgrade.php');
+						advman_upgrade::adsense_deluxe_to_3_0();
+						advman::remove_notice('upgrade adsense-deluxe');
 					} else {
-						adsensem::remove_notice('upgrade adsense-deluxe');
+						advman::remove_notice('upgrade adsense-deluxe');
 					}
-					update_option('plugin_adsensem', $_adsensem);
+					update_option('plugin_adsensem', $_advman);
 					break;	
 				case 'optimise':
-					$yes = isset($_POST['adsensem-notice-confirm-yes']);
+					$yes = isset($_POST['advman-notice-confirm-yes']);
 					if ($yes) {
-						adsensem_admin::_set_auto_optimise(true);
+						advman_admin::_set_auto_optimise(true);
 					} else {
-						adsensem_admin::_set_auto_optimise(false);
+						advman_admin::_set_auto_optimise(false);
 					}
-					adsensem::remove_notice('optimise');
-					update_option('plugin_adsensem', $_adsensem);
+					advman::remove_notice('optimise');
+					update_option('plugin_adsensem', $_advman);
 					break;
 				case 'activate advertising-manager':
-					adsensem::remove_notice('activate advertising-manager');
-					update_option('plugin_adsensem', $_adsensem);
+					advman::remove_notice('activate advertising-manager');
+					update_option('plugin_adsensem', $_advman);
 					break;
 			}
 		}
@@ -371,9 +371,9 @@ if (is_admin()) {
 function advman_sbm_widget($args)
 {
 	global $k2sbm_current_module;
-	adsensem::widget($args,$k2sbm_current_module->options['name']);
+	advman::widget($args,$k2sbm_current_module->options['name']);
 }
 /* SIDEBAR MODULES COMPATIBILITY FUNCTION */
 
-add_action('plugins_loaded', array('adsensem','init'), 1);	
+add_action('plugins_loaded', array('advman','init'), 1);	
 ?>

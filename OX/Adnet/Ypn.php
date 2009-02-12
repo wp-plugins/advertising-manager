@@ -2,7 +2,7 @@
 if(!ADVMAN_VERSION){die();}
 require_once(ADVMAN_PATH . '/OX/Adnet.php');	
 
-$_adsensem_networks['OX_Adnet_Ypn'] = array(
+$_advman_networks['OX_Adnet_Ypn'] = array(
 	//'www-create' => 'http://www.adbrite.com/zones/commerce/purchase.php?product_id_array=22',
 	'www-signup'	=>	'http://ypn.yahoo.com/',														 
 );
@@ -87,16 +87,24 @@ class OX_Adnet_Ypn extends OX_Adnet
 			$code = str_replace("ctxt_ad_uc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_uc{$matches[1]}={$matches[2]}\"{{color-link}}\"", $code);
 		}
 		
+		$width = '';
+		$height = '';
 		if (preg_match('/ctxt_ad_width( *)=( *)(\d*)/', $code, $matches)) {
 			$width = $matches[3];
-			$this->set('width', $width);
 			$code = str_replace("ctxt_ad_width{$matches[1]}={$matches[2]}{$matches[3]}", "ctxt_ad_width{$matches[1]}={$matches[2]}{{width}}", $code);
-			if (preg_match('/ctxt_ad_height( *)=( *)(\d*)/', $code, $matches)) {
-				$height = $matches[3];
-				$this->set('height', $height);
-				$code = str_replace("ctxt_ad_height{$matches[1]}={$matches[2]}{$matches[3]}", "ctxt_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
-				$this->set('adformat', $width . 'x' . $height);
-			}
+		}
+		if (preg_match('/ctxt_ad_height( *)=( *)(\d*)/', $code, $matches)) {
+			$height = $matches[3];
+			$code = str_replace("ctxt_ad_height{$matches[1]}={$matches[2]}{$matches[3]}", "ctxt_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
+		}
+		if ($width != '') {
+			$this->set('width', $width);
+		}
+		if ($height != '') {
+			$this->set('height', $height);
+		}
+		if (($width != '') && ($height != '')) {
+			$this->set('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 		
 		$this->set('code', $code);

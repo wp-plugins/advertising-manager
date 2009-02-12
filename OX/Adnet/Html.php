@@ -2,7 +2,7 @@
 if(!ADVMAN_VERSION){die();}
 require_once(ADVMAN_PATH . '/OX/Adnet.php');	
 
-$_adsensem_networks['OX_Adnet_Html']  = array(
+$_advman_networks['OX_Adnet_Html']  = array(
 	'www-signup'		=>	'',
 );
 
@@ -36,15 +36,22 @@ class OX_Adnet_Html extends OX_Adnet
 		parent::import_settings($code);
 		
 		//Attempt to find html width/height strings
+		$width = '';
+		$height = '';
 		if(preg_match('/width="(\w*)"/', $code, $matches)!=0) {
 			$width = $matches[1];
 		}
 		if(preg_match('/height="(\w*)"/', $code, $matches)!=0) {
 			$height = $matches[1];
 		}
-		
-		if (!empty($width) && !empty($height)) {
-			$this->set('adformat', $width . 'x' . $height);
+		if ($width != '') {
+			$this->set('width', $width);
+		}
+		if ($height != '') {
+			$this->set('height', $height);
+		}
+		if (($width != '') && ($height != '')) {
+			$this->set('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 	}
 }

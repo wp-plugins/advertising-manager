@@ -32,14 +32,14 @@ class OX_Adnet
 	//Global start up functions for all network classes	
 	function OX_Adnet()
 	{
-		global $_adsensem;
+		global $_advman;
 		
 		$this->network = get_class($this);
 		
 		// Set defaults if they are not already set
-		if (!is_array($_adsensem['defaults'][$this->network])) {
+		if (!is_array($_advman['defaults'][$this->network])) {
 			$this->reset_defaults();
-			update_option('plugin_adsensem', $_adsensem);
+			update_option('plugin_adsensem', $_advman);
 		}
 		
 		$this->name = '';
@@ -74,10 +74,10 @@ class OX_Adnet
 	 */
 	function get_default($key)
 	{
-		global $_adsensem;
+		global $_advman;
 		
-		if (isset($_adsensem['defaults'][$this->network][$key])) {
-			return $_adsensem['defaults'][$this->network][$key];
+		if (isset($_advman['defaults'][$this->network][$key])) {
+			return $_advman['defaults'][$this->network][$key];
 		} else {
 			return '';
 		}
@@ -89,12 +89,12 @@ class OX_Adnet
 	 */
 	function set_default($key, $value)
 	{
-		global $_adsensem;
+		global $_advman;
 		
 		if (is_null($value)) {
-			unset($_adsensem['defaults'][get_class()][$key]);
+			unset($_advman['defaults'][$this->network][$key]);
 		} else {
-			$_adsensem['defaults'][get_class()][$key] = $value;
+			$_advman['defaults'][$this->network][$key] = $value;
 		}
 	}
 	
@@ -164,7 +164,7 @@ class OX_Adnet
 	
 	function get_ad()
 	{
-		global $_adsensem;
+		global $_advman;
 		
 		$search = array();
 		$replace = array();
@@ -212,8 +212,8 @@ class OX_Adnet
 	
 	function reset_defaults()
 	{
-		global $_adsensem;
-		$_adsensem['defaults'][$this->network] = $this->get_default_properties();
+		global $_advman;
+		$_advman['defaults'][$this->network] = $this->get_default_properties();
 	}	
 	
 	function get_default_properties()
@@ -241,48 +241,57 @@ class OX_Adnet
 	
 	function save_defaults()
 	{
-		global $_adsensem;
+		global $_advman;
 		
 		$properties = $this->get_default_properties();
 		if (!empty($properties)) {
 			foreach ($properties as $property => $default) {
-				if (isset($_POST['adsensem-' . $property])) {
-					$_adsensem['defaults'][$this->network][$property] = stripslashes($_POST['adsensem-' . $property]);
+				if (isset($_POST['advman-' . $property])) {
+					$value = stripslashes($_POST['advman-' . $property]);
+					$this->set_default($property, $value);
 				}
 			}
 		}
+
+		// Set width and height for non-custom formats
+		$format = $this->get_default('adformat');
+		if (!empty($format) && ($format !== 'custom')) {
+			list($width, $height, $null) = split('[x]', $format);
+			$this->set_default('width', $width);
+			$this->set_default('height', $height);
+		}
 		
 		// add an item to the audit trail
-		$revisions = !empty($_adsensem['defaults'][$this->network]['revisions']) ? $_adsensem['defaults'][$this->network]['revisions'] : array();
+		$revisions = !empty($_advman['defaults'][$this->network]['revisions']) ? $_advman['defaults'][$this->network]['revisions'] : array();
 		$revisions = OX_Tools::add_revision($revisions);
-		$_adsensem['defaults'][$this->network]['revisions'] = $revisions;
+		$_advman['defaults'][$this->network]['revisions'] = $revisions;
 	}
 	
 	function save_settings()
 	{
-		global $_adsensem;	
+		global $_advman;	
 		
-		if (isset($_POST['adsensem-name'])) {
-			$this->name = $_POST['adsensem-name'];
+		if (isset($_POST['advman-name'])) {
+			$this->name = $_POST['advman-name'];
 		}
 		
-		if (isset($_POST['adsensem-active'])) {
-			$this->active = ($_POST['adsensem-active'] == 'yes');
+		if (isset($_POST['advman-active'])) {
+			$this->active = ($_POST['advman-active'] == 'yes');
 		}
 		
 		// Save some standard properties
 		$properties = $this->get_default_properties();
 		if (!empty($properties)) {
 			foreach ($properties as $property => $default) {
-				if (isset($_POST['adsensem-' . $property])) {
-					$this->set($property, stripslashes($_POST['adsensem-' . $property]));
+				if (isset($_POST['advman-' . $property])) {
+					$this->set($property, stripslashes($_POST['advman-' . $property]));
 				}
 			}
 		}
 		
 		// Set width and height for non-custom formats
 		$format = $this->get('adformat');
-		if ($format !== 'custom') {
+		if (!empty($format) && ($format !== 'custom')) {
 			list($width, $height, $null) = split('[x]', $format);
 			$this->set('width', $width);
 			$this->set('height', $height);
@@ -301,9 +310,9 @@ class OX_Adnet
 	//Convert defined ads into a simple list for outputting as alternates. Maybe limit types by network (once multiple networks supported)
 	function get_alternate_ads()
 	{
-		global $_adsensem;
+		global $_advman;
 		$compat=array();
-		foreach($_adsensem['ads'] as $oname => $oad){
+		foreach($_advman['ads'] as $oname => $oad){
 			if( ($this->network !== $oad->network ) && ($this->get('width', true)==$oad->get('width', true)) && ($this->get('height', true)==$oad->get('height', true)) ){ $compat[$oname]=$oname; }
 		}
 		return $compat;

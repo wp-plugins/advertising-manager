@@ -2,7 +2,7 @@
 if(!ADVMAN_VERSION){die();}
 require_once(ADVMAN_PATH . '/OX/Adnet.php');	
 
-$_adsensem_networks['OX_Adnet_Crispads']	= array(
+$_advman_networks['OX_Adnet_Crispads']	= array(
 		'www-create' => 'http://www.crispads.com/spinner/www/admin/zone-edit.php',
 		'www-signup' => 'http://www.crispads.com/'
 		);
@@ -58,16 +58,24 @@ class OX_Adnet_Crispads extends OX_Adnet
 		}
 		
 		//Only available on IFRAME ads
+		$width = '';
+		$height = '';
 		if (preg_match('/width="(\w*)"/', $code, $matches) != 0) {
 			$width = $matches[1]; 
-			if (preg_match('/height="(\w*)"/', $code, $matches) != 0) {
-				$height = $matches[1];
-				$this->set('width', $width);
-				$this->set('height', $height);
-				$this->set('adformat', $width . 'x' . $height); //Only set if both width and height present
-				$code = str_replace("width=\"{$width}\"", "width=\"{{width}}\"", $code);
-				$code = str_replace("height=\"{$height}\"", "height=\"{{height}}\"", $code);
-			}
+			$code = str_replace("width=\"{$width}\"", "width=\"{{width}}\"", $code);
+		}
+		if (preg_match('/height="(\w*)"/', $code, $matches) != 0) {
+			$height = $matches[1];
+			$code = str_replace("height=\"{$height}\"", "height=\"{{height}}\"", $code);
+		}
+		if ($width != '') {
+			$this->set('width', $width);
+		}
+		if ($height != '') {
+			$this->set('height', $height);
+		}
+		if (($width != '') && ($height != '')) {
+			$this->set('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 		
 		$code = str_replace('INSERT_RANDOM_NUMBER_HERE', '{{random}}', $code);

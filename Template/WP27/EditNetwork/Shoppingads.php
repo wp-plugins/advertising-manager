@@ -8,31 +8,31 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 		// Call parent first!
 		parent::Template_EditNetwork();
 		// Colors
-		add_meta_box('adsensem_colors', __('Colors', 'adsensem'), array(get_class($this), 'displaySectionColors'), 'adsensem', 'normal');
+		add_meta_box('advman_colors', __('Colors', 'advman'), array(get_class($this), 'displaySectionColors'), 'advman', 'normal');
 		// Link Options
-		add_meta_box('adsensem_style', __('Style', 'adsensem'), array(get_class($this), 'displaySectionStyle'), 'adsensem', 'normal');
+		add_meta_box('advman_style', __('Style', 'advman'), array(get_class($this), 'displaySectionStyle'), 'advman', 'normal');
 		// Campaign
-		add_meta_box('adsensem_campaign', __('Campaign', 'adsensem'), array(get_class($this), 'displaySectionCampaign'), 'adsensem', 'advanced');
+		add_meta_box('advman_campaign', __('Campaign', 'advman'), array(get_class($this), 'displaySectionCampaign'), 'advman', 'advanced');
 	}
 	
 	function displaySectionFormat($ad)
 	{
-?>	<table id="adsensem-settings-ad_format">
-	<tr id="adsensem-form-adformat">
-		<td class="adsensem_label"><label for="adsensem-adformat"><?php _e('Format:'); ?></label></td>
+?>	<table id="advman-settings-ad_format">
+	<tr id="advman-form-adformat">
+		<td class="advman_label"><label for="advman-adformat"><?php _e('Format:'); ?></label></td>
 		<td>
-			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
-				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
+			<select name="advman-adformat" id="advman-adformat" onchange="advman_form_update(this);">
+				<optgroup id="advman-optgroup-horizontal" label="Horizontal">
 					<option<?php echo ($ad->get_default('adformat') == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>
 					<option<?php echo ($ad->get_default('adformat') == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> 468 x 60 Banner</option>
 					<option<?php echo ($ad->get_default('adformat') == '234x60' ? ' selected="selected"' : ''); ?> value="234x60"> 234 x 60 Half Banner</option>
 				</optgroup>
-				<optgroup id="adsensem-optgroup-vertical" label="Vertical">
+				<optgroup id="advman-optgroup-vertical" label="Vertical">
 					<option<?php echo ($ad->get_default('adformat') == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> 120 x 600 Skyscraper</option>
 					<option<?php echo ($ad->get_default('adformat') == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> 160 x 600 Wide Skyscraper</option>
 					<option<?php echo ($ad->get_default('adformat') == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> 120 x 240 Vertical Banner</option>
 				</optgroup>
-				<optgroup id="adsensem-optgroup-square" label="Square">
+				<optgroup id="advman-optgroup-square" label="Square">
 					<option<?php echo ($ad->get_default('adformat') == '336x280' ? ' selected="selected"' : ''); ?> value="336x280"> 336 x 280 Large Rectangle</option>
 					<option<?php echo ($ad->get_default('adformat') == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> 300 x 250 Medium Rectangle</option>
 					<option<?php echo ($ad->get_default('adformat') == '250x250' ? ' selected="selected"' : ''); ?> value="250x250"> 250 x 250 Square</option>
@@ -55,18 +55,18 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 ?><div style="font-size:small;">
 <table>
 <tr>
-	<td class="adsensem-label"><label for="adsensem-attitude"><?php _e('Attitude:'); ?></label></td>
+	<td class="advman-label"><label for="advman-attitude"><?php _e('Attitude:'); ?></label></td>
 	<td>
-		<select name="adsensem-attitude" id="adsensem-attitude">
+		<select name="advman-attitude" id="advman-attitude">
 			<option<?php echo ($ad->get_default('attitude') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 			<option<?php echo ($ad->get_default('attitude') == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 		</select>
 	</td>
 </tr>
 <tr>
-	<td class="adsensem-label"><label for="adsensem-new-window"><?php _e('New Window:'); ?></label></td>
+	<td class="advman-label"><label for="advman-new-window"><?php _e('New Window:'); ?></label></td>
 	<td>
-		<select name="adsensem-new-window" id="adsensem-new-window">
+		<select name="advman-new-window" id="advman-new-window">
 			<option<?php echo ($ad->get_default('new-window') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 			<option<?php echo ($ad->get_default('new-window') == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 		</select>
@@ -81,29 +81,29 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 	
 	function displaySectionColors($ad)
 	{
-?>	<table id="adsensem-settings-colors" width="100%">
+?>	<table id="advman-settings-colors" width="100%">
 	<tr>
 		<td>
 			<table>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-border"><?php _e('Border:'); ?></label></td>
-				<td>#<input name="adsensem-color-border" onChange="adsensem_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get_default('color-border'); ?>" /></td>
+				<td class="advman_label"><label for="advman-color-border"><?php _e('Border:'); ?></label></td>
+				<td>#<input name="advman-color-border" onChange="advman_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get_default('color-border'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-bg"><?php _e('Background:'); ?></label></td>
-				<td>#<input name="adsensem-color-bg" onChange="adsensem_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get_default('color-bg'); ?>" /></td>
+				<td class="advman_label"><label for="advman-color-bg"><?php _e('Background:'); ?></label></td>
+				<td>#<input name="advman-color-bg" onChange="advman_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get_default('color-bg'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-text"><?php _e('Title:'); ?></label></td>
-				<td>#<input name="adsensem-color-title" onChange="adsensem_update_color(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get_default('color-title'); ?>" /></td>
+				<td class="advman_label"><label for="advman-color-text"><?php _e('Title:'); ?></label></td>
+				<td>#<input name="advman-color-title" onChange="advman_update_color(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get_default('color-title'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-price"><?php _e('Text:'); ?></label></td>
-				<td>#<input name="adsensem-color-text" onChange="adsensem_update_color(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get_default('color-text'); ?>" /></td>
+				<td class="advman_label"><label for="advman-color-price"><?php _e('Text:'); ?></label></td>
+				<td>#<input name="advman-color-text" onChange="advman_update_color(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get_default('color-text'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-link"><?php _e('Link:'); ?></label></td>
-				<td>#<input name="adsensem-color-link" onChange="adsensem_update_color(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get_default('color-link'); ?>" /></td>
+				<td class="advman_label"><label for="advman-color-link"><?php _e('Link:'); ?></label></td>
+				<td>#<input name="advman-color-link" onChange="advman_update_color(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get_default('color-link'); ?>" /></td>
 			</tr>
 			</table>
 		</td>
@@ -131,12 +131,12 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 ?><div style="font-size:small;">
 <table>
 <tr>
-	<td class="adsensem-label"><label for="adsensem-campaign"><?php _e('Camapign:'); ?></label></td>
-	<td><input type="text" name="adsensem-campaign" style="width:200px" id="adsensem-campaign" value="<?php echo $ad->get_default('campaign'); ?>" /></td>
+	<td class="advman-label"><label for="advman-campaign"><?php _e('Camapign:'); ?></label></td>
+	<td><input type="text" name="advman-campaign" style="width:200px" id="advman-campaign" value="<?php echo $ad->get_default('campaign'); ?>" /></td>
 </tr>
 <tr>
-	<td class="adsensem-label"><label for="adsensem-keywords"><?php _e('Keywords:'); ?></label></td>
-	<td><input type="text" name="adsensem-keywords" style="width:200px" id="adsensem-keywords" value="<?php echo $ad->get_default('keywords'); ?>" /></td>
+	<td class="advman-label"><label for="advman-keywords"><?php _e('Keywords:'); ?></label></td>
+	<td><input type="text" name="advman-keywords" style="width:200px" id="advman-keywords" value="<?php echo $ad->get_default('keywords'); ?>" /></td>
 </tr>
 </table>
 </div>

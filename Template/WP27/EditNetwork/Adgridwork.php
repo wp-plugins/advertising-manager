@@ -8,17 +8,17 @@ class Template_EditNetwork_Adgridwork extends Template_EditNetwork
 		// Call parent first!
 		parent::Template_EditNetwork();
 		// Colors
-		add_meta_box('adsensem_colors', __('Colors', 'adsensem'), array(get_class($this), 'displaySectionColors'), 'adsensem', 'normal');
+		add_meta_box('advman_colors', __('Colors', 'advman'), array(get_class($this), 'displaySectionColors'), 'advman', 'normal');
 	}
 	
 	function displaySectionFormat($ad)
 	{
-?>	<table id="adsensem-settings-ad_format">
-	<tr id="adsensem-form-adformat">
-		<td class="adsensem_label"><label for="adsensem-adformat"><?php _e('Format:'); ?></label></td>
+?>	<table id="advman-settings-ad_format">
+	<tr id="advman-form-adformat">
+		<td class="advman_label"><label for="advman-adformat"><?php _e('Format:'); ?></label></td>
 		<td>
-			<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
-				<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
+			<select name="advman-adformat" id="advman-adformat" onchange="advman_form_update(this);">
+				<optgroup id="advman-optgroup-horizontal" label="Horizontal">
 					<option<?php echo ($ad->get_default('adformat') == '800x90' ? ' selected="selected"' : ''); ?> value="800x90"> 800 x 90 Large Leaderboard</option>
 					<option<?php echo ($ad->get_default('adformat') == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>
 					<option<?php echo ($ad->get_default('adformat') == '600x90' ? ' selected="selected"' : ''); ?> value="600x90"> 600 x 90 Small Leaderboard</option>
@@ -27,13 +27,13 @@ class Template_EditNetwork_Adgridwork extends Template_EditNetwork
 					<option<?php echo ($ad->get_default('adformat') == '234x60' ? ' selected="selected"' : ''); ?> value="234x60"> 234 x 60 Half Banner</option>
 					<option<?php echo ($ad->get_default('adformat') == '200x90' ? ' selected="selected"' : ''); ?> value="200x90"> 200 x 90 Tall Half Banner</option>
 				</optgroup>
-				<optgroup id="adsensem-optgroup-vertical" label="Vertical">
+				<optgroup id="advman-optgroup-vertical" label="Vertical">
 					<option<?php echo ($ad->get_default('adformat') == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> 120 x 600 Skyscraper</option>
 					<option<?php echo ($ad->get_default('adformat') == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> 160 x 600 Wide Skyscraper</option>
 					<option<?php echo ($ad->get_default('adformat') == '200x360' ? ' selected="selected"' : ''); ?> value="200x360"> 200 x 360 Wide Half Banner</option>
 					<option<?php echo ($ad->get_default('adformat') == '200x270' ? ' selected="selected"' : ''); ?> value="200x270"> 200 x 270 Wide Short Banner</option>
 				</optgroup>
-				<optgroup id="adsensem-optgroup-square" label="Square">
+				<optgroup id="advman-optgroup-square" label="Square">
 					<option<?php echo ($ad->get_default('adformat') == '336x280' ? ' selected="selected"' : ''); ?> value="336x280"> 336 x 280 Large Rectangle</option>
 					<option<?php echo ($ad->get_default('adformat') == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> 300 x 250 Medium Rectangle</option>
 					<option<?php echo ($ad->get_default('adformat') == '250x250' ? ' selected="selected"' : ''); ?> value="250x250"> 250 x 250 Square</option>
@@ -53,29 +53,29 @@ class Template_EditNetwork_Adgridwork extends Template_EditNetwork
 	
 	function displaySectionColors($ad)
 	{
-?>	<table id="adsensem-settings-colors" width="100%">
+?>	<table id="advman-settings-colors" width="100%">
 	<tr>
 		<td>
 			<table>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-border"><?php _e('Border:'); ?></label></td>
-				<td>#<input name="adsensem-color-border" onChange="adsensem_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get_default('color-border'); ?>" /></td>
+				<td class="advman_label"><label for="advman-color-border"><?php _e('Border:'); ?></label></td>
+				<td>#<input name="advman-color-border" onChange="advman_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get_default('color-border'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-title"><?php _e('Title:'); ?></label></td>
-				<td>#<input name="adsensem-color-title" onChange="adsensem_update_color(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get_default('color-title'); ?>" /></td>
+				<td class="advman_label"><label for="advman-color-title"><?php _e('Title:'); ?></label></td>
+				<td>#<input name="advman-color-title" onChange="advman_update_color(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get_default('color-title'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-bg"><?php _e('Background:'); ?></label></td>
-				<td>#<input name="adsensem-color-bg" onChange="adsensem_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get_default('color-bg'); ?>" /></td>
+				<td class="advman_label"><label for="advman-color-bg"><?php _e('Background:'); ?></label></td>
+				<td>#<input name="advman-color-bg" onChange="advman_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get_default('color-bg'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-text"><?php _e('Text:'); ?></label></td>
-				<td>#<input name="adsensem-color-text" onChange="adsensem_update_color(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get_default('color-text'); ?>" /></td>
+				<td class="advman_label"><label for="advman-color-text"><?php _e('Text:'); ?></label></td>
+				<td>#<input name="advman-color-text" onChange="advman_update_color(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get_default('color-text'); ?>" /></td>
 			</tr>
 			<tr>
-				<td class="adsensem_label"><label for="adsensem-color-link"><?php _e('URL:'); ?></label></td>
-				<td>#<input name="adsensem-color-link" onChange="adsensem_update_color(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get_default('color-link'); ?>" /></td>
+				<td class="advman_label"><label for="advman-color-link"><?php _e('URL:'); ?></label></td>
+				<td>#<input name="advman-color-link" onChange="advman_update_color(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get_default('color-link'); ?>" /></td>
 			</tr>
 			</table>
 		</td>

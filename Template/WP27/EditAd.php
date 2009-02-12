@@ -10,25 +10,25 @@ class Template_EditAd
 		wp_enqueue_script('jquery-ui-draggable');
 		
 		// Ad Format
-		add_meta_box('adsensem_format', __('Ad Format', 'adsensem'), array(get_class($this), 'displaySectionFormat'), 'adsensem', 'normal');
+		add_meta_box('advman_format', __('Ad Format', 'advman'), array(get_class($this), 'displaySectionFormat'), 'advman', 'normal');
 		// Display Options
-		add_meta_box('adsensem_display_options', __('Display Options', 'adsensem'), array(get_class($this), 'displaySectionDisplayOptions'), 'adsensem', 'normal');
+		add_meta_box('advman_display_options', __('Display Options', 'advman'), array(get_class($this), 'displaySectionDisplayOptions'), 'advman', 'normal');
 		// Optimisation
-		add_meta_box('adsensem_optimisation', __('Optimization', 'adsensem'), array(get_class($this), 'displaySectionOptimisation'), 'adsensem', 'advanced');
+		add_meta_box('advman_optimisation', __('Optimization', 'advman'), array(get_class($this), 'displaySectionOptimisation'), 'advman', 'advanced');
 		// Code
-		add_meta_box('adsensem_code', __('Code', 'adsensem'), array(get_class($this), 'displaySectionCode'), 'adsensem', 'advanced');
+		add_meta_box('advman_code', __('Code', 'advman'), array(get_class($this), 'displaySectionCode'), 'advman', 'advanced');
 		// Revisions
-		add_meta_box('adsensem_history', __('History', 'adsensem'), array(get_class($this), 'displaySectionHistory'), 'adsensem', 'advanced', 'low');
+		add_meta_box('advman_history', __('History', 'advman'), array(get_class($this), 'displaySectionHistory'), 'advman', 'advanced', 'low');
 	}
 	
 	function display($target = null)
 	{
 		// Get our options and see if we're handling a form submission.
-		global $_adsensem;
-		global $_adsensem_networks;
+		global $_advman;
+		global $_advman_networks;
 		
 		$id = $target;
-		$ad = $_adsensem['ads'][$id];
+		$ad = $_advman['ads'][$id];
 		list($last_user, $t) = OX_Tools::get_last_edit($ad);
 		if ((time() - $t) < (30 * 24 * 60 * 60)) { // less than 30 days ago
 			$last_timestamp =  human_time_diff($t);
@@ -42,10 +42,10 @@ class Template_EditAd
 <div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
 	<h2>Edit Settings for <?php echo $ad->networkName; ?> Ad: <span class="<?php echo strtolower($ad->network); ?>"><?php echo "[$id] " . $ad->name; ?></span></h2>
-	<form action="" method="post" id="adsensem-form" enctype="multipart/form-data">
-	<input type="hidden" name="adsensem-mode" id="adsensem-mode" value="edit_ad">
-	<input type="hidden" name="adsensem-action" id="adsensem-action">
-	<input type="hidden" name="adsensem-action-target" id="adsensem-action-target" value="<?php echo $id; ?>">
+	<form action="" method="post" id="advman-form" enctype="multipart/form-data">
+	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
+	<input type="hidden" name="advman-action" id="advman-action">
+	<input type="hidden" name="advman-action-target" id="advman-action-target" value="<?php echo $id; ?>">
 <?php  
 	wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );  
 	wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );  
@@ -62,7 +62,7 @@ class Template_EditAd
 							<div id="minor-publishing-actions">
 								<div id="save-action"></div>
 								<div id="preview-action">
-									<a class="preview button" href="<?php echo get_bloginfo('wpurl'); ?>/wp-admin/edit.php?page=advertising-manager-manage-ads&adsensem-show-ad-id=<?php echo $id ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview Ad', 'advman'); ?></a>
+									<a class="preview button" href="<?php echo get_bloginfo('wpurl'); ?>/wp-admin/edit.php?page=advertising-manager-manage-ads&advman-show-ad-id=<?php echo $id ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview Ad', 'advman'); ?></a>
 									<input type="hidden" name="wp-preview" id="wp-preview" value="" />
 								</div>
 								<div class="clear"></div>
@@ -70,7 +70,7 @@ class Template_EditAd
 							<div id="misc-publishing-actions">
 							<div class="misc-pub-section">
 								<label for="post_status"><?php _e('Status:', 'advman'); ?></label>
-								<b><a href="javascript:submit();" class="edit-post-status hide-if-no-js" onclick="document.getElementById('adsensem-action').value='<?php echo $ad->active ? 'deactivate' : 'activate'; ?>'; document.getElementById('adsensem-form').submit();"><?php echo ($ad->active) ? __('Active', 'advman') : __('Paused', 'advman'); ?></a></b>
+								<b><a href="javascript:submit();" class="edit-post-status hide-if-no-js" onclick="document.getElementById('advman-action').value='<?php echo $ad->active ? 'deactivate' : 'activate'; ?>'; document.getElementById('advman-form').submit();"><?php echo ($ad->active) ? __('Active', 'advman') : __('Paused', 'advman'); ?></a></b>
 							</div>
 							<div class="misc-pub-section curtime misc-pub-section-last">
 								<span id="timestamp"><?php echo __('Last edited', 'advman') . ' <abbr title="' . $last_timestamp2 . '"><b>' . $last_timestamp . __(' ago', 'advman') . '</b></abbr> by ' . $last_user; ?></span>
@@ -80,9 +80,9 @@ class Template_EditAd
 					</div>
 					<div id="major-publishing-actions">
 						<div id="publishing-action">
-							<a class="submitdelete deletion" href="javascript:submit();" onclick="document.getElementById('adsensem-action').value='cancel'; document.getElementById('adsensem-form').submit();"><?php _e('Cancel', 'advmgr') ?></a>&nbsp;&nbsp;&nbsp;
-							<input type="submit" class="button-primary" id="advman_apply" tabindex="5" accesskey="p" value="<?php _e('Apply', 'advman'); ?>" onclick="document.getElementById('adsensem-action').value='apply';" />
-							<input type="submit" class="button-primary" id="advman_save" tabindex="5" accesskey="p" value="<?php _e('Save', 'advman'); ?>" onclick="document.getElementById('adsensem-action').value='save';" />
+							<a class="submitdelete deletion" href="javascript:submit();" onclick="document.getElementById('advman-action').value='cancel'; document.getElementById('advman-form').submit();"><?php _e('Cancel', 'advmgr') ?></a>&nbsp;&nbsp;&nbsp;
+							<input type="submit" class="button-primary" id="advman_apply" tabindex="5" accesskey="p" value="<?php _e('Apply', 'advman'); ?>" onclick="document.getElementById('advman-action').value='apply';" />
+							<input type="submit" class="button-primary" id="advman_save" tabindex="5" accesskey="p" value="<?php _e('Save', 'advman'); ?>" onclick="document.getElementById('advman-action').value='save';" />
 						</div>
 						<div class="clear"></div>
 					</div>
@@ -93,9 +93,9 @@ class Template_EditAd
 			<h3 class='hndle'><span><?php _e('Shortcuts', 'advman'); ?></span></h3>
 			<div class="inside">
 				<p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
-				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('You are about to copy the <?php echo $ad->networkName; ?> ad:\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\nAre you sure?\n(Press \'Cancel\' to do nothing, \'OK\' to copy)')){document.getElementById('adsensem-action').value='copy'; document.getElementById('adsensem-form').submit(); } else {return false;}">Copy this ad</a></p>
-				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('You are about to permanently delete the <?php echo $ad->networkName; ?> ad:\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\nAre you sure?\n(Press \'Cancel\' to keep, \'OK\' to delete)')){document.getElementById('adsensem-action').value='delete'; document.getElementById('adsensem-form').submit(); } else {return false;}">Delete this ad</a></p>
-				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('adsensem-action').value='edit'; document.getElementById('adsensem-action-target').value='<?php echo $ad->network ?>'; document.getElementById('adsensem-form').submit();">Edit <?php echo $ad->networkName ?> Defaults</a></p>
+				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('You are about to copy the <?php echo $ad->networkName; ?> ad:\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\nAre you sure?\n(Press \'Cancel\' to do nothing, \'OK\' to copy)')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}">Copy this ad</a></p>
+				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('You are about to permanently delete the <?php echo $ad->networkName; ?> ad:\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\nAre you sure?\n(Press \'Cancel\' to keep, \'OK\' to delete)')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}">Delete this ad</a></p>
+				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-action-target').value='<?php echo $ad->network ?>'; document.getElementById('advman-form').submit();">Edit <?php echo $ad->networkName ?> Defaults</a></p>
 			</div>
 		</div>
 		<div id="categorydiv" class="postbox " >
@@ -103,7 +103,7 @@ class Template_EditAd
 			<h3 class='hndle'><span><?php _e('Notes', 'advman'); ?></span></h3>
 			<div class="inside">
 				<label for="ad_code"><?php _e('Display any notes about this ad here:', 'advman'); ?></label><br /><br />
-				<textarea rows="8" cols="28" name="adsensem-notes" id="adsensem-notes"><?php echo $ad->get('notes'); ?></textarea><br />
+				<textarea rows="8" cols="28" name="advman-notes" id="advman-notes"><?php echo $ad->get('notes'); ?></textarea><br />
 			</div>
 		</div>
 	</div>
@@ -116,11 +116,11 @@ class Template_EditAd
 		// Title
 		$this->displaySectionTitle($ad);
 		// Show normal boxes
-		do_meta_boxes('adsensem','normal',$ad);
+		do_meta_boxes('advman','normal',$ad);
 		// Show advanced screen
 		$this->displayAdvanced($ad);
 		// Show advanced boxes
-		do_meta_boxes('adsensem','advanced',$ad);
+		do_meta_boxes('advman','advanced',$ad);
 ?>
 	</form>
 </div><!-- wpwrap -->
@@ -133,7 +133,7 @@ class Template_EditAd
 ?><div id="titlediv">
 	<h3><label for="title"><?php _e('Name', 'advman'); ?></label></h3>
 <div id="titlewrap">
-	<input type="text" name="adsensem-name" size="30" value="<?php echo $ad->name ?>" id="title" autocomplete="off" />
+	<input type="text" name="advman-name" size="30" value="<?php echo $ad->name ?>" id="title" autocomplete="off" />
 </div><!-- titlewrap -->
 <br />
 <span style="font-size:smaller;color:gray;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php _e('Ads with the same name will rotate according to their relative weights.', 'advman'); ?></span>
@@ -145,25 +145,25 @@ class Template_EditAd
 	{
 		$format = $ad->get('adformat');
 		
-?><table id="adsensem-settings-ad_format">
-<tr id="adsensem-form-adformat">
-	<td class="adsensem_label"><label for="adsensem-adformat"><?php _e('Format:', 'advman'); ?></label></td>
+?><table id="advman-settings-ad_format">
+<tr id="advman-form-adformat">
+	<td class="advman_label"><label for="advman-adformat"><?php _e('Format:', 'advman'); ?></label></td>
 	<td>
-		<select name="adsensem-adformat" id="adsensem-adformat" onchange="adsensem_form_update(this);">
-			<optgroup id="adsensem-optgroup-default" label="Default">
+		<select name="advman-adformat" id="advman-adformat" onchange="advman_form_update(this);">
+			<optgroup id="advman-optgroup-default" label="Default">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 			</optgroup>
-			<optgroup id="adsensem-optgroup-horizontal" label="Horizontal">
+			<optgroup id="advman-optgroup-horizontal" label="Horizontal">
 				<option<?php echo ($format == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>
 				<option<?php echo ($format == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> 468 x 60 Banner</option>
 				<option<?php echo ($format == '234x60' ? ' selected="selected"' : ''); ?> value="234x60"> 234 x 60 Half Banner</option>
 			</optgroup>
-			<optgroup id="adsensem-optgroup-vertical" label="Vertical">
+			<optgroup id="advman-optgroup-vertical" label="Vertical">
 				<option<?php echo ($format == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> 120 x 600 Skyscraper</option>
 				<option<?php echo ($format == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> 160 x 600 Wide Skyscraper</option>
 				<option<?php echo ($format == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> 120 x 240 Vertical Banner</option>
 			</optgroup>
-			<optgroup id="adsensem-optgroup-square" label="Square">
+			<optgroup id="advman-optgroup-square" label="Square">
 				<option<?php echo ($format == '336x280' ? ' selected="selected"' : ''); ?> value="336x280"> 336 x 280 Large Rectangle</option>
 				<option<?php echo ($format == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> 300 x 250 Medium Rectangle</option>
 				<option<?php echo ($format == '250x250' ? ' selected="selected"' : ''); ?> value="250x250"> 250 x 250 Square</option>
@@ -171,18 +171,18 @@ class Template_EditAd
 				<option<?php echo ($format == '180x150' ? ' selected="selected"' : ''); ?> value="180x150"> 180 x 150 Small Rectangle</option>
 				<option<?php echo ($format == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> 125 x 125 Button</option>
 			</optgroup>
-			<optgroup id="adsensem-optgroup-custom" label="Custom">
+			<optgroup id="advman-optgroup-custom" label="Custom">
 				<option<?php echo ($format == 'custom' ? ' selected="selected"' : ''); ?> value="custom"> Custom width and height</option>
 			</optgroup>
 		</select>
 	</td>
 	<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('adformat'); ?>"></td>
 </tr>
-<tr id="adsensem-settings-custom">
-	<td class="adsensem_label"><label for="adsensem-width"><?php _e('Dimensions:'); ?></label></td>
+<tr id="advman-settings-custom">
+	<td class="advman_label"><label for="advman-width"><?php _e('Dimensions:'); ?></label></td>
 	<td>
-		<input name="adsensem-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('width')); ?>" /> x
-		<input name="adsensem-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('height')); ?>" /> px
+		<input name="advman-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('width')); ?>" /> x
+		<input name="advman-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('height')); ?>" /> px
 	</td>
 </tr>
 </table>
@@ -207,8 +207,8 @@ class Template_EditAd
 	<table>
 	<tr>
 		<td style="white-space:nowrap">
-			<label for="adsensem-show-home"><?php _e('On Homepage:', 'advman'); ?></label>
-			<select name="adsensem-show-home" id="adsensem-show-home">
+			<label for="advman-show-home"><?php _e('On Homepage:', 'advman'); ?></label>
+			<select name="advman-show-home" id="advman-show-home">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				<option<?php echo ($ad->get('show-home') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 				<option<?php echo ($ad->get('show-home') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
@@ -217,8 +217,8 @@ class Template_EditAd
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
 		<td style="white-space:nowrap">
-			<label for="adsensem-show-author"><?php _e('By Author:', 'advman'); ?></label>
-			<select name="adsensem-show-author" id="adsensem-show-author">
+			<label for="advman-show-author"><?php _e('By Author:', 'advman'); ?></label>
+			<select name="advman-show-author" id="advman-show-author">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				<option<?php echo ($ad->get('show-author') == 'all' ? " selected='selected'" : ''); ?> value="all"> <?php _e('All Authors', 'advman'); ?></option>
 <?php foreach ($users as $user) : ?>
@@ -230,8 +230,8 @@ class Template_EditAd
 	</tr>
 	<tr>
 		<td style="white-space:nowrap">
-			<label for="adsensem-show-page"><?php _e('On Posts:', 'advman'); ?></label>
-			<select name="adsensem-show-post" id="adsensem-show-post">
+			<label for="advman-show-page"><?php _e('On Posts:', 'advman'); ?></label>
+			<select name="advman-show-post" id="advman-show-post">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				<option<?php echo ($ad->get('show-post') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 				<option<?php echo ($ad->get('show-post') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
@@ -243,8 +243,8 @@ class Template_EditAd
 	</tr>
 	<tr>
 		<td style="white-space:nowrap">
-			<label for="adsensem-show-page"><?php _e('On Pages:', 'advman'); ?></label>
-			<select name="adsensem-show-page" id="adsensem-show-page">
+			<label for="advman-show-page"><?php _e('On Pages:', 'advman'); ?></label>
+			<select name="advman-show-page" id="advman-show-page">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				<option<?php echo ($ad->get('show-page') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 				<option<?php echo ($ad->get('show-page') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
@@ -256,8 +256,8 @@ class Template_EditAd
 	</tr>
 	<tr>
 		<td style="white-space:nowrap">
-			<label for="adsensem-show-archive"><?php _e('On Archives:', 'advman'); ?></label>
-			<select name="adsensem-show-archive" id="adsensem-show-archive">
+			<label for="advman-show-archive"><?php _e('On Archives:', 'advman'); ?></label>
+			<select name="advman-show-archive" id="advman-show-archive">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				<option<?php echo ($ad->get('show-archive') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 				<option<?php echo ($ad->get('show-archive') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
@@ -269,8 +269,8 @@ class Template_EditAd
 	</tr>
 	<tr>
 		<td style="white-space:nowrap">
-			<label class="adsensem_label" for="adsensem-show-search"><?php _e('On Search:', 'advman'); ?></label>
-			<select name="adsensem-show-search" id="adsensem-show-search">
+			<label class="advman_label" for="advman-show-search"><?php _e('On Search:', 'advman'); ?></label>
+			<select name="advman-show-search" id="advman-show-search">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				<option<?php echo ($ad->get('show-search') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
 				<option<?php echo ($ad->get('show-search') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
@@ -297,21 +297,21 @@ class Template_EditAd
 	{
 ?><div style="font-size:small;">
 <p>
-	<label for="adsensem-weight"><?php _e('Weight:'); ?></label>
-	<input type="text" name="adsensem-weight" style="width:50px" id="adsensem-weight" value="<?php echo $ad->get('weight'); ?>" />
+	<label for="advman-weight"><?php _e('Weight:'); ?></label>
+	<input type="text" name="advman-weight" style="width:50px" id="advman-weight" value="<?php echo $ad->get('weight'); ?>" />
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('weight'); ?>">
 </p>
 <br />
 <p>
-	<label for="adsensem-openx-market" class="selectit">
-		<input name="adsensem-openx-market" type="checkbox" id="adsensem-openx-market" value="yes"<?php echo ($ad->get('openx-market') == 'yes' ? ' checked="checked"' : ''); ?> onChange="document.getElementById('adsensem-openx-market-cpm').disabled = (!this.checked); document.getElementById('adsensem-openx-market-cpm').style.color = (this.checked ? 'black' : 'gray'); document.getElementById('adsensem-openx-market-cpm-label').style.color = (this.checked ? 'black' : 'lightgray');" />
+	<label for="advman-openx-market" class="selectit">
+		<input name="advman-openx-market" type="checkbox" id="advman-openx-market" value="yes"<?php echo ($ad->get('openx-market') == 'yes' ? ' checked="checked"' : ''); ?> onChange="document.getElementById('advman-openx-market-cpm').disabled = (!this.checked); document.getElementById('advman-openx-market-cpm').style.color = (this.checked ? 'black' : 'gray'); document.getElementById('advman-openx-market-cpm-label').style.color = (this.checked ? 'black' : 'lightgray');" />
 		OpenX Market Enabled
 	</label>
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('openx-market'); ?>">
 </p>
 <p>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="adsensem-openx-market-cpm-label" for="adsensem-openx-market-cpm"><?php _e('Average eCPM:'); ?></label>
-	<input type="text" name="adsensem-openx-market-cpm" style="width:50px" id="adsensem-openx-market-cpm" value="<?php echo $ad->get('openx-market-cpm'); ?>"<?php echo ($ad->get('openx-market') != 'yes' ? ' disabled="disabled"' : ''); ?> />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="advman-openx-market-cpm-label" for="advman-openx-market-cpm"><?php _e('Average eCPM:'); ?></label>
+	<input type="text" name="advman-openx-market-cpm" style="width:50px" id="advman-openx-market-cpm" value="<?php echo $ad->get('openx-market-cpm'); ?>"<?php echo ($ad->get('openx-market') != 'yes' ? ' disabled="disabled"' : ''); ?> />
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('openx-market-cpm'); ?>">
 </p>
 </div>
@@ -324,11 +324,11 @@ class Template_EditAd
 	{
 ?><div style="font-size:small;">
 	<label for="html_before"><?php _e('HTML Code Before'); ?></label><br />
-	<textarea rows="1" cols="60" name="adsensem-html-before" id="adsensem-html-before" onfocus="this.select();"><?php echo $ad->get('html-before'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('html-before'); ?>"><br /><br />
+	<textarea rows="1" cols="60" name="advman-html-before" id="advman-html-before" onfocus="this.select();"><?php echo $ad->get('html-before'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('html-before'); ?>"><br /><br />
 	<label for="ad_code"><?php _e('Ad Code'); ?></label><br />
-	<textarea rows="6" cols="60" id="adsensem-code" style="background:#cccccc" onfocus="this.select();" onclick="this.select();" readonly="readonly"><?php echo $ad->render_ad(); ?></textarea><br /><br />
+	<textarea rows="6" cols="60" id="advman-code" style="background:#cccccc" onfocus="this.select();" onclick="this.select();" readonly="readonly"><?php echo $ad->render_ad(); ?></textarea><br /><br />
 	<label for="html_after"><?php _e('HTML Code After'); ?></label><br />
-	<textarea rows="1" cols="60" name="adsensem-html-after" id="adsensem-html-after" onfocus="this.select();"><?php echo $ad->get('html-after'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('html-after'); ?>"><br /><br />
+	<textarea rows="1" cols="60" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $ad->get('html-after'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('html-after'); ?>"><br /><br />
 </div>
 <br />
 <span style="font-size:x-small;color:gray;">Place any HTML code you want to display before or after your tag in the appropriate section.  If you want to change your ad network tag, you need to import the new tag again.</span>

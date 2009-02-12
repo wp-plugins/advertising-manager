@@ -2,7 +2,7 @@
 if(!ADVMAN_VERSION){die();}
 require_once(ADVMAN_PATH . '/OX/Adnet.php');	
 
-$_adsensem_networks['OX_Adnet_Adpinion'] = array(
+$_advman_networks['OX_Adnet_Adpinion'] = array(
 	'www-create'	=>	'http://www.adpinion.com/',
 	'www-signup'		=>	'http://www.adpinion.com/',
 );
@@ -75,6 +75,8 @@ class OX_Adnet_Adpinion extends OX_Adnet
 		// Import parent settings first!
 		parent::import_settings($code);
 		
+		$width = '';
+		$height = '';
 		if (preg_match("/website=(\w*)/", $code, $matches) != 0) {
 			$this->set('account-id', $matches[1]);
 			$code = str_replace("website={$matches[1]}", "website={{account-id}}'", $code);
@@ -91,9 +93,15 @@ class OX_Adnet_Adpinion extends OX_Adnet
 			$code = str_replace("style=\"width:{$matches[1]}px;height:{$matches[2]}px", "style=\"width:{{xwidth}}px;height:{{xheight}}px", $code);
 		}
 		
-		$this->set('width', $width);
-		$this->set('height', $height);
-		$this->set('adformat', $width . 'x' . $height);
+		if ($width != '') {
+			$this->set('width', $width);
+		}
+		if ($height != '') {
+			$this->set('height', $height);
+		}
+		if (($width != '') && ($height != '')) {
+			$this->set('adformat', $width . 'x' . $height);
+		}
 		
 		$this->set('code', $code);
 	}

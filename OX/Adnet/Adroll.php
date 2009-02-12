@@ -2,7 +2,7 @@
 if(!ADVMAN_VERSION){die();}
 require_once(ADVMAN_PATH . '/OX/Adnet.php');	
 
-$_adsensem_networks['OX_Adnet_Adroll'] = array(
+$_advman_networks['OX_Adnet_Adroll'] = array(
 	'www-create'	=>	'http://www.adroll.com/home',
 	'www-signup'		=>	'http://www.adroll.com/tag/wordpress?r=ZPERWFQF25BGNG5EDWYBUV',
 );
@@ -65,11 +65,11 @@ class OX_Adnet_Adroll extends OX_Adnet
 	?><tr><td><p>Configuration is available through <a href="http://www.adroll.com/" target="_blank">Adroll's site</a>. Specific links to configure
 			this ad unit are below:</p>
 	<ul>
-	<li><a href="http://www.adroll.com/private/publishers/adsensemanagernetwork/adspace/manage/IPCY22UCBBFBVL6HIN6X2D" target="_blank">Manage Ad</a><br />
+	<li><a href="http://www.adroll.com/private/publishers/advmananagernetwork/adspace/manage/IPCY22UCBBFBVL6HIN6X2D" target="_blank">Manage Ad</a><br />
 			Configure ad rotation and display settings.</li>
-	<li><a href="http://www.adroll.com/private/publishers/adsensemanagernetwork/adspace/edit/IPCY22UCBBFBVL6HIN6X2D" target="_blank">Edit Ad</a><br />
+	<li><a href="http://www.adroll.com/private/publishers/advmananagernetwork/adspace/edit/IPCY22UCBBFBVL6HIN6X2D" target="_blank">Edit Ad</a><br />
 			Change dimensions, positioning and tags.</li>
-	<li><a href="http://www.adroll.com/private/publishers/adsensemanagernetwork/adspace/adcode/IPCY22UCBBFBVL6HIN6X2D" target="_blank">Get Ad Code</a><br />
+	<li><a href="http://www.adroll.com/private/publishers/advmananagernetwork/adspace/adcode/IPCY22UCBBFBVL6HIN6X2D" target="_blank">Get Ad Code</a><br />
 			Get current ad code for this unit.</li>
 	</ul></td></tr><?php
 	}

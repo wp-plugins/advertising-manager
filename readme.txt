@@ -54,13 +54,13 @@ Yes. While the original purpose of being able to modify colours etc. without dig
 
 = How do I place Ad code at the top, bottom, left, right, etc. of the page? =
 
-There is a (nice tutorial here)[http://www.tamba2.org.uk/wordpress/adsense/] which explains positioning using code in template files. You can use this together with Advertising Manager: just place the ad code tags <?php adsensem_ad(); ?> where it says "place code here". 
+There is a (nice tutorial here)[http://www.tamba2.org.uk/wordpress/adsense/] which explains positioning using code in template files. You can use this together with Advertising Manager: just place the ad code tags <?php advman_ad(); ?> where it says "place code here". 
 
 = Upgrading has gone a bit wrong... What can I do? =
 
-To revert to an old copy of your Ad database, go to your Dashboard and add ?adsensem-revert-db=X to your URL. Replace X with the major version that you want to revert to.
+To revert to an old copy of your Ad database, go to your Dashboard and add ?advman-revert-db=X to your URL. Replace X with the major version that you want to revert to.
  
-If the latest version to work was 2.1, enter: ?adsensem-revert-db=2
+If the latest version to work was 2.1, enter: ?advman-revert-db=2
 
 Load the page and Advertising Manager will revert to that version of the database and re-attempt the upgrade.
 

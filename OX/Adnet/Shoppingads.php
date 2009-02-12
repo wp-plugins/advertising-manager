@@ -2,7 +2,7 @@
 if(!ADVMAN_VERSION){die();}
 require_once(ADVMAN_PATH . '/OX/Adnet.php');	
 
-$_adsensem_networks['OX_Adnet_Shoppingads'] = array(
+$_advman_networks['OX_Adnet_Shoppingads'] = array(
 		'www-create'	=>	'http://shoppingads.com/getcode/',
 		'www-signup'	=>	'http://www.shoppingads.com/refer_1ebff04bf5805f6da1b4',
 		 );
@@ -69,20 +69,24 @@ class OX_Adnet_Shoppingads extends OX_Adnet
 		}
 		
 		//Process dimensions and fake adformat (to auto-select from list when editing) (NO CUSTOM OPTIONS)
+		$width = '';
+		$height = '';
 		if (preg_match("/shoppingads_ad_height(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$s1 = $matches[1];
-			$s2 = $matches[2];
-			$q1 = $matches[3];
 			$height = $matches[4];
-			$q2 = $matches[5];
-			if (preg_match("/shoppingads_ad_width(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-				$width = $matches[4];
-				$this->set('width', $width);
-				$this->set('height', $height);
-				$this->set('adformat', $width . 'x' . $height);
-				$code = str_replace("shoppingads_ad_height{$s1}={$s2}{$q1}{$height}{$q2}", "shoppingads_ad_height{$s1}={$s2}{$q1}{{height}}{$q2}", $code);
-				$code = str_replace("shoppingads_ad_width{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_ad_width{$matches[1]}={$matches[2]}{$matches[3]}{{width}}{$matches[5]}", $code);
-			}
+			$code = str_replace("shoppingads_ad_height{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_ad_height{$matches[1]}={$matches[2]}{$matches[3]}{{height}}{$matches[5]}", $code);
+		}
+		if (preg_match("/shoppingads_ad_width(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
+			$width = $matches[4];
+			$code = str_replace("shoppingads_ad_width{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_ad_width{$matches[1]}={$matches[2]}{$matches[3]}{{width}}{$matches[5]}", $code);
+		}
+		if ($width != '') {
+			$this->set('width', $width);
+		}
+		if ($height != '') {
+			$this->set('height', $height);
+		}
+		if (($width != '') && ($height != '')) {
+			$this->set('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 		
 		if (preg_match("/shoppingads_ad_kw(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {

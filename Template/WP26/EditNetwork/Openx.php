@@ -8,7 +8,7 @@ class Template_EditNetwork_Openx extends Template_EditNetwork
 		// Call parent first!
 		parent::Template_EditNetwork();
 		// Remove Format Meta box
-		remove_meta_box('adsensem_format', 'adsensem', 'normal');
+		remove_meta_box('advman_format', 'advman', 'normal');
 	}
 }
 ?>

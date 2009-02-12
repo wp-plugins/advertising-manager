@@ -6,16 +6,16 @@ class Template_CreateAd
 	function display($target = null)
 	{
 		// Get our options and see if we're handling a form submission.
-		global $_adsensem;
-		global $_adsensem_networks;
+		global $_advman;
+		global $_advman_networks;
 ?>	<div class="wrap">
-		<form action="" method="post" id="adsensem-form" enctype="multipart/form-data">
-			<input type="hidden" name="adsensem-mode" id="adsensem-mode" value="create_ad">	
-			<input type="hidden" name="adsensem-action" id="adsensem-action">
-			<input type="hidden" name="adsensem-action-target" id="adsensem-action-target">
+		<form action="" method="post" id="advman-form" enctype="multipart/form-data">
+			<input type="hidden" name="advman-mode" id="advman-mode" value="create_ad">	
+			<input type="hidden" name="advman-action" id="advman-action">
+			<input type="hidden" name="advman-action-target" id="advman-action-target">
 			<h2><?php _e('Create Ads', 'advman'); ?></h2>
 			<ul class="subsubsub">
-				<li><a href="javascript:submit();" onclick="document.getElementById('adsensem-action').value='list'; document.getElementById('adsensem-form').submit();" ><?php _e('Show Ads', 'advman'); ?> (<?php echo sizeof($_adsensem['ads']); ?>)</a> |</li>
+				<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='list'; document.getElementById('advman-form').submit();" ><?php _e('Show Ads', 'advman'); ?> (<?php echo sizeof($_advman['ads']); ?>)</a> |</li>
 				<li><a href="" class="current"><?php _e('Create New Ad', 'advman'); ?></a></li>
 			</ul>
 			
@@ -25,11 +25,11 @@ class Template_CreateAd
 					<h3><?php _e('Step 1: Import Your Ad Code', 'advman'); ?></h3>
 					<p><?php _e('Simply <strong>paste your Ad Code below</strong> and Import!', 'advman'); ?></p>
 					<div>
-						<textarea rows="5" cols="65" name="adsensem-code" id="adsensem-code"></textarea>
+						<textarea rows="5" cols="65" name="advman-code" id="advman-code"></textarea>
 						<p class="submit" style="text-align:right;vertical-align:bottom;">
-							<input type="button" value="<?php _e('Cancel', 'advman'); ?>" onclick="document.getElementById('adsensem-action').value='cancel'; this.form.submit();">		
-							<input type="button" value="<?php _e('Clear', 'advman'); ?>" onclick="document.getElementById('adsensem-code').value='';">		
-							<input style="font-weight:bold;" type="submit" value="<?php _e('Import to New Ad Unit&raquo;', 'advman'); ?>" onclick="document.getElementById('adsensem-action').value='import';">
+							<input type="button" value="<?php _e('Cancel', 'advman'); ?>" onclick="document.getElementById('advman-action').value='cancel'; this.form.submit();">		
+							<input type="button" value="<?php _e('Clear', 'advman'); ?>" onclick="document.getElementById('advman-code').value='';">		
+							<input style="font-weight:bold;" type="submit" value="<?php _e('Import to New Ad Unit&raquo;', 'advman'); ?>" onclick="document.getElementById('advman-action').value='import';">
 						</p>
 					</div>		
 				</td>

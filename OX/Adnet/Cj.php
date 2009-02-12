@@ -2,7 +2,7 @@
 if(!ADVMAN_VERSION){die();}
 require_once(ADVMAN_PATH . '/OX/Adnet.php');	
 
-$_adsensem_networks['OX_Adnet_Cj'] = array(
+$_advman_networks['OX_Adnet_Cj'] = array(
 		'www-create' => 'https://members.cj.com/member/publisher/accounts/listmyadvertisers.do?sortKey=active_start_date&sortOrder=DESC',
 		'www-signup'		=>	'http://www.qksrv.net/click-2335597-7282777',
 	);
@@ -110,16 +110,24 @@ class OX_Adnet_Cj extends OX_Adnet
 			$code = str_replace(" target=\"_blank\"", "{{new-window}}", $code);
 		}
 		
+		$width = '';
+		$height = '';
 		if (preg_match('/width="(\w*)"/', $code, $matches) != 0) {
 			$width = $matches[1];
-			if (preg_match('/height="(\w*)"/', $code, $matches) != 0) {
-				$height = $matches[1];
-				$this->set('width', $width);
-				$this->set('height', $height);
-				$this->set('adformat', $width . 'x' . $height); //Only set if both width and height present
-				$code = str_replace("width=\"{$width}\"", "width=\"{{width}}\"", $code);
-				$code = str_replace("height=\"{$height}\"", "height=\"{{height}}\"", $code);
-			}
+			$code = str_replace("width=\"{$width}\"", "width=\"{{width}}\"", $code);
+		}
+		if (preg_match('/height="(\w*)"/', $code, $matches) != 0) {
+			$height = $matches[1];
+			$code = str_replace("height=\"{$height}\"", "height=\"{{height}}\"", $code);
+		}
+		if ($width != '') {
+			$this->set('width', $width);
+		}
+		if ($height != '') {
+			$this->set('height', $height);
+		}
+		if (($width != '') && ($height != '')) {
+			$this->set('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 		
 		$this->set('code', $code);
