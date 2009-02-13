@@ -48,7 +48,7 @@ This plugin is under active development: if you experience problems, please firs
 Yes.
 
 
-= How do I display an ad?
+= How do I display an ad? =
 There are a number of ways.  Some of them include:
 1.  From a post or page, enter [ad] for the default ad, or [ad#name] where 'name' is the name of the ad you want to display.
 2.  From a template, enter <?php advman_ad() ?> for the default ad, or <?php advman_ad('name') ?> where 'name' is the name of the ad you want to display.
@@ -107,12 +107,9 @@ Load the page and Advertising Manager will revert to that version of the databas
 * Re-introduce 'limit ads per page' (per Adsense T&C)
 * Link into OpenX Sync and OpenX Market for optimisation
 * Test Widget / Sidebar functionality through the K2 Theme
-* Test with WP 2.7
 * More testing the upgrade functionality from Adsense Deluxe, Adsense Manager, OpenX WP Plug-in
-* Make it able to translate in different languages
 * Ad Zones to allow grouping of ads at a particular location, and switching depending on the visitors language, country, etc.
 * Auto-inserting of ads into posts based on configurable rules (i.e. All Posts, 2nd Paragraph)
-* Localisation: multi-language support
 * Support for Amazon Affiliates and any other networks I hear about.
 
 == Change Log ==
