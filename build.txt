@@ -1,10 +1,15 @@
 // HERE IS HOW TO BUILD A VERSION
-1.  Increase the ADVMAN_VERSION at the top of advertising-manager.php
-2.  Increate the version in the comments at the top of advertising-manager.php
-3.  Update the Readme.txt file with any changes in documentation.
-4.  Check in all code.
-5.  Translation steps...!
-6.  Follow the build process below:
+1.  Check in all code.
+2.  Generate a translation pot template here:  http://wordpress.org/extend/plugins/advertising-manager/admin/
+3.  Copy the translation template to the pootle server: scp advman.pot pootle@openx.org:/home/pootle/Pootle/po/advman/templates/
+4.  Translate (at least English!):  http://translate.openx.org/en/advman/index.html?editing=1
+5.  Generate the .mo file:  http://translate.openx.org/en/advman/advman.mo
+6.  (Repeat for each language that needs to be updated)
+7.  Copy all .mo files to the languages directory
+8.  Increase the ADVMAN_VERSION at the top of advertising-manager.php
+9.  Increate the version in the comments at the top of advertising-manager.php
+10.  Update the Readme.txt file with any changes in documentation.
+11.  Follow the build process below:
 
 mkdir build
 cd build
@@ -13,4 +18,3 @@ mv trunk advertising-manager
 zip -r advertising-manager.zip advertising-manager/
 
 
-scp advman.pot pootle@openx.org:/home/pootle/Pootle/po/advman/templates/
