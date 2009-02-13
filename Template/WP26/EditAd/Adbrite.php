@@ -19,22 +19,22 @@ class Template_EditAd_Adbrite extends Template_EditAd
 		
 ?><table id="advman-settings-ad_format">
 	<tr id="advman-form-adformat">
-		<td class="advman_label"><label for="advman-adformat"><?php _e('Format:'); ?></label></td>
+		<td class="advman_label"><label for="advman-adformat"><?php _e('Format:', 'advman'); ?></label></td>
 		<td>
 			<select name="advman-adformat" id="advman-adformat" onchange="advman_form_update(this);">
 				<optgroup id="advman-optgroup-default" label="Default">
 					<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="advman-optgroup-horizontal" label="Horizontal">
-					<option<?php echo ($format == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>
-					<option<?php echo ($format == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> 468 x 60 Banner</option>
+					<option<?php echo ($format == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> <?php _e('728 x 90 Leaderboard', 'advman'); ?></option>
+					<option<?php echo ($format == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> <?php _e('468 x 60 Banner', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="advman-optgroup-vertical" label="Vertical">
-					<option<?php echo ($format == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> 120 x 600 Skyscraper</option>
-					<option<?php echo ($format == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> 160 x 600 Wide Skyscraper</option>
+					<option<?php echo ($format == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> <?php _e('120 x 600 Skyscraper', 'advman'); ?></option>
+					<option<?php echo ($format == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> <?php _e('160 x 600 Wide Skyscraper', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="advman-optgroup-square" label="Square">
-					<option<?php echo ($format == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> 300 x 250 Medium Rectangle</option>
+					<option<?php echo ($format == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> <?php _e('300 x 250 Medium Rectangle', 'advman'); ?></option>
 				</optgroup>
 			</select>
 		</td>
@@ -44,7 +44,7 @@ class Template_EditAd_Adbrite extends Template_EditAd
 	</tr>
 	</table>
 <br />
-<span style="font-size:x-small;color:gray;">Select one of the supported ad format sizes.</span>
+<span style="font-size:x-small;color:gray;"><?php _e('Select one of the supported ad format sizes.', 'advman'); ?></span>
 <?php
 	}
 	
@@ -90,7 +90,7 @@ class Template_EditAd_Adbrite extends Template_EditAd
 </tr>
 </table>
 <br />
-<span style="font-size:x-small;color:gray;"><?php echo __('Select one of the ad format sizes supported by', 'advman') . ' ' . $ad->networkName; ?>.</span>
+<span style="font-size:x-small;color:gray;"><?php _e('Choose how you want your ad to appear.  Enter the RGB value of the color in the appropriate box.  The sample ad to the right will show you what your color scheme looks like.', 'advman'); ?></span>
 <?php
 	}
 	

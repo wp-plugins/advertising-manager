@@ -26,15 +26,15 @@ class Template_EditAd_Adbrite extends Template_EditAd
 					<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="advman-optgroup-horizontal" label="Horizontal">
-					<option<?php echo ($format == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> 728 x 90 Leaderboard</option>
-					<option<?php echo ($format == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> 468 x 60 Banner</option>
+					<option<?php echo ($format == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> <?php _e('728 x 90 Leaderboard', 'advman'); ?></option>
+					<option<?php echo ($format == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> <?php _e('468 x 60 Banner', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="advman-optgroup-vertical" label="Vertical">
-					<option<?php echo ($format == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> 120 x 600 Skyscraper</option>
-					<option<?php echo ($format == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> 160 x 600 Wide Skyscraper</option>
+					<option<?php echo ($format == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> <?php _e('120 x 600 Skyscraper', 'advman'); ?></option>
+					<option<?php echo ($format == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> <?php _e('160 x 600 Wide Skyscraper', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="advman-optgroup-square" label="Square">
-					<option<?php echo ($format == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> 300 x 250 Medium Rectangle</option>
+					<option<?php echo ($format == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> <?php _e('300 x 250 Medium Rectangle', 'advman'); ?></option>
 				</optgroup>
 			</select>
 		</td>
@@ -98,11 +98,11 @@ class Template_EditAd_Adbrite extends Template_EditAd
 	{
 ?><table>
 <tr>
-	<td><label for="advman-slot"><?php _e('Account ID:'); ?></label></td>
+	<td><label for="advman-slot"><?php _e('Account ID:', 'advman'); ?></label></td>
 	<td><input type="text" name="advman-account-id" style="width:200px" id="advman-account-id" value="<?php echo $ad->get('account-id'); ?>" /></td>
 </tr>
 <tr>
-	<td><label for="advman-slot"><?php _e('Slot ID:'); ?></label></td>
+	<td><label for="advman-slot"><?php _e('Slot ID:', 'advman'); ?></label></td>
 	<td><input type="text" name="advman-slot" style="width:200px" id="advman-slot" value="<?php echo $ad->get('slot'); ?>" /></td>
 </tr>
 </table>

@@ -1,9 +1,9 @@
 <?php
 require_once(ADVMAN_PATH . '/Template/WP27/EditAd.php');
 
-class Template_EditAd_Adpinion extends Template_EditAd
+class Template_EditAd_Adify extends Template_EditAd
 {
-	function Template_EditAd_Adpinion()
+	function Template_EditAd_Adify()
 	{
 		// Call parent first!
 		parent::Template_EditAd();
@@ -15,7 +15,7 @@ class Template_EditAd_Adpinion extends Template_EditAd
 	{
 		$format = $ad->get('adformat');
 		
-?>	<table id="advman-settings-ad_format">
+?><table id="advman-settings-ad_format">
 	<tr id="advman-form-adformat">
 		<td class="advman_label"><label for="advman-adformat"><?php _e('Format:'); ?></label></td>
 		<td>
@@ -48,16 +48,14 @@ class Template_EditAd_Adpinion extends Template_EditAd
 	
 	function displaySectionAccount($ad)
 	{
-?><div style="font-size:small;">
-<table>
+?><table>
 <tr>
-	<td><label for="advman-slot"><?php _e('Account ID:'); ?></label></td>
+	<td><label for="advman-slot"><?php _e('Account ID:', 'advman'); ?></label></td>
 	<td><input type="text" name="advman-account-id" style="width:200px" id="advman-account-id" value="<?php echo $ad->get('account-id'); ?>" /></td>
 </tr>
 </table>
-</div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php _e('The Account ID is your ID for your Adpinion account.', 'advman'); ?></span>
+<span style="font-size:x-small; color:gray;"><?php _e('The Account ID is your ID for your Adify account.', 'advman'); ?></span>
 <?php
 	}
 }
