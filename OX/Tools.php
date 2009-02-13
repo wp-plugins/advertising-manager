@@ -22,7 +22,7 @@ class OX_Tools
 			return $number;
 		}
 		
-		return preg_replace('/[^0-9\x]/i', '', $number);
+		return preg_replace('/[^0-9x]/i', '', $number);
 	}
 	function sanitize_key($string)
 	{

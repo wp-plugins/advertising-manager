@@ -70,7 +70,7 @@ class Template_ListAds
 					<strong>Default Ad</strong> indicates which ad will be displayed in a space on your site where no specific ID is used.<br />
 					Ads with the <strong>same name</strong> rotate according to their relative weights.
 				</p>
-				<p>Ads can be included in <strong>templates</strong> using <code>&lt;?php advman_ad('name'); ?&gt;</code> or <code>&lt;?php advman_ad(); ?&gt;</code> for the default Ad.<br />
+				<p>Ads can be included in <strong>templates</strong> using <code>&lt;?php adsensem_ad('name'); ?&gt;</code> or <code>&lt;?php adsensem_ad(); ?&gt;</code> for the default Ad.<br />
 					Ads can be inserted into <strong>posts / pages</strong> using <code>[ad#name]</code> or <code>[ad]</code> for the default Ad. <br/>
 					Note that the old <code>&lt;!--adsense#name--&gt;</code> style still works if you prefer it.
 				</p>

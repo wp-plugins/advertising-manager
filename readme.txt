@@ -44,17 +44,41 @@ This plugin is under active development: if you experience problems, please firs
 
 == Frequently Asked Questions ==
 
+= Does Advertising Manager support Wordpress MU (multi-user)? =
+Yes.
+
+
+= How do I display an ad?
+There are a number of ways.  Some of them include:
+1.  From a post or page, enter [ad] for the default ad, or [ad#name] where 'name' is the name of the ad you want to display.
+2.  From a template, enter <?php advman_ad() ?> for the default ad, or <?php advman_ad('name') ?> where 'name' is the name of the ad you want to display.
+3.  Other legacy methods of calling an ad include:  <?php adsensem_ad() ?> or <?php adsensem_ad('name') ?> for backwards compatibility with Adsense Manager; and <!--adsense#name--> for backwards compatibility with Adsense Deluxe.
+
+
+= Can Advertising Manager work in my language? =
+Yes.  Advertising Manager is Localised.  If your blog is in another language, and Advertising Manager shows in English, then it is most likely that a translation has not been done.
+Don't worry - if you are a native speaker in English as well as your local language, you can register here:
+
+http://translate.openx.org/projects/advman/
+
+Your translation will be included in the next version of Advertising manager.  For more information, my contact details can be found here:
+http://forum.openx.org/index.php?showuser=3
+
+
 = Why does changing Ad Format/Dimensions sometimes not change the size of the ad? =
 
 For some ad networks (e.g. WidgetBucks, Adroll, etc.) the dimensions of ads are managed through the online interface. There is no way to change these settings from within the WordPress system that would work reliably. You do not have to update these dimension settings if you update your Ad online, however, it can be useful in correctly identifying 'Alternate Ads' for AdSense blocks.
 
+
 = Do I still need Advertising Manager now I can manage ads through Google's system? =
 
-Yes. While the original purpose of being able to modify colours etc. without digging into code is now gone (although still supported) there are other advantages to Advertising Manager. For example: positioning, and placement of networks other than Google Adsense.  Additionally there are some plans afoot to provide intelligent ad placing methods to make all this work even better.
+Advertising manager allows you to rotate ads, easily turn on/off ads, place them in your blog, and many features other than configuration of the ad colors and format.  It a critical tool to use if you want to make more from your advertising.
+
 
 = How do I place Ad code at the top, bottom, left, right, etc. of the page? =
 
-There is a (nice tutorial here)[http://www.tamba2.org.uk/wordpress/adsense/] which explains positioning using code in template files. You can use this together with Advertising Manager: just place the ad code tags <?php advman_ad(); ?> where it says "place code here". 
+There is a (nice tutorial here)[http://www.tamba2.org.uk/wordpress/adsense/] which explains positioning using code in template files. You can use this together with Advertising Manager: just place the ad code tags <?php advman_ad('name'); ?> where it says "place code here". 
+
 
 = Upgrading has gone a bit wrong... What can I do? =
 
@@ -64,14 +88,14 @@ If the latest version to work was 2.1, enter: ?advman-revert-db=2
 
 Load the page and Advertising Manager will revert to that version of the database and re-attempt the upgrade.
 
+
 = How can I share revenue with my authors? =
-1.  Load YOUR ad into Advertising manager.
-1.  Set the weight of this ad to be 100.
-1.  Configure the other parameters of the ad as you see fit.
-1.  Copy this ad.  Make sure to keep the name the same (so the ad will rotate).
-1.  In 'Display Options', select the author who you want to share revenue with.
-1.  In 'Account Details' section, replace the ID with your partner's ID.
-1.  Depending on what % you want to show, set the weight appropriately.  For example, if you want to show 2 ads from your author for every 1 ad for you, then set the author ad weight to 200 (e.g. 200 / (200 + 100) = 66.7% rev share)
+
+1.  Load YOUR ad into Advertising Manager.
+1.  Load your AUTHOR's ad into Advertising Manager
+1.  In your author's ad, be sure to select the authors username in Display Options
+1.  Set the weights of the ads according to your revenue share.  The easiest way to do this is to set YOUR ad weight to 36, and then set the weight of your author's ad according to the revenue share deal.  For 10% revenue share, set the author ad weight to 4; 20% = 9; 33% = 18; 40% = 24; 50% = 36; 60% = 54; 66.7% = 72; 70% = 84; 80% = 144; 90% = 324.  For the nerdy wonks out there, the formula is (AUTHOR AD WEIGHT) = (MY AD WEIGHT * REVENUE SHARE) / (1 - REVENUE SHARE)
+
 
 = Where can I get more information? =
 
