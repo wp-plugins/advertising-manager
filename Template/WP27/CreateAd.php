@@ -17,15 +17,16 @@ class Template_CreateAd
 		
 ?><div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
-	<h2><?php _e('Create Ad:', 'advman'); ?></h2>
+	<h2><?php _e('Create Ad', 'advman'); ?></h2>
 	<form action="" method="post" id="advman-form" enctype="multipart/form-data">
 	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
 	<input type="hidden" name="advman-action" id="advman-action">
 	<input type="hidden" name="advman-action-target" id="advman-action-target">
 
 	<ul class="subsubsub">
-		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='list'; document.getElementById('advman-form').submit();" >Show Ads (<?php echo sizeof($_advman['ads']); ?>)</a> |</li>
-		<li><a href="" class="current"><?php _e('Create New Ad', 'advman'); ?></a></li>
+		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='list'; document.getElementById('advman-form').submit();"><?php _e('Show Ads', 'advman'); ?> <span class="count">(<?php echo sizeof($_advman['ads']); ?>)</span></a> |</li>
+		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='create'; document.getElementById('advman-form').submit();" class="current"><?php _e('Create New Ad', 'advman'); ?></a> |</li>
+		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='settings'; document.getElementById('advman-form').submit();"><?php _e('Settings', 'advman'); ?></a></li>
 	</ul>
 	<br />
 	<p>&nbsp;</p>

@@ -24,7 +24,7 @@ class Template_ListAds
 		
 ?><div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
-<h2>Manage Your Advertising</h2>
+<h2><?php _e('Manage Your Advertising', 'advman'); ?></h2>
 <script type='text/javascript'>
 /* <![CDATA[ */
 function ADS_setAction(action, id, name, network)
@@ -53,9 +53,10 @@ function ADS_setAction(action, id, name, network)
 <input type="hidden" id="advman-action-target" name="advman-action-target" />
 
 <ul class="subsubsub">
-<li><a href=''  class="current">Show Ads <span class="count">(<?php echo sizeof($_advman['ads']); ?>)</span></a> |</li>
-
-<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='create'; document.getElementById('advman-form').submit();" >Create New Ad</a></li></ul>
+	<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='list'; document.getElementById('advman-form').submit();" class="current"><?php _e('Show Ads', 'advman'); ?> <span class="count">(<?php echo sizeof($_advman['ads']); ?>)</span></a> |</li>
+	<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='create'; document.getElementById('advman-form').submit();"><?php _e('Create New Ad', 'advman'); ?></a> |</li>
+	<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='settings'; document.getElementById('advman-form').submit();"><?php _e('Settings', 'advman'); ?></a></li>
+</ul>
 
 <input type="hidden" name="mode" value="list" />
 

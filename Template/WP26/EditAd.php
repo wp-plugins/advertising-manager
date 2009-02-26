@@ -29,7 +29,6 @@ class Template_EditAd
 		
 		$id = $target;
 		$ad = $_advman['ads'][$id];
-		$network_name = $ad->networkName;
 		list($last_user, $t) = OX_Tools::get_last_edit($ad);
 		if ((time() - $t) < (30 * 24 * 60 * 60)) { // less than 30 days ago
 			$last_timestamp =  human_time_diff($t);
@@ -48,7 +47,7 @@ class Template_EditAd
 	wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );  
 	wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );  
 ?><div class="wrap">
-	<h2>Edit Settings for <?php echo $network_name; ?> Ad: <span class="<?php echo strtolower($ad->network); ?>"><?php echo "[$id] " . $ad->name; ?></span></h2>
+	<h2><?php printf(__('Edit Settings for %s Ad:', 'advman'), $ad->networkName); ?> <span class="<?php echo strtolower($ad->network); ?>"><?php echo "[$id] " . $ad->name; ?></span></h2>
 <div id="poststuff">
 <div class="submitbox" id="submitpost">
 <div id="previewview">
@@ -79,7 +78,7 @@ class Template_EditAd
 	<ul>
 		<li><a href="javascript:submit();" onclick="if(confirm('You are about to copy the <?php echo $ad->networkName; ?> ad:\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\nAre you sure?\n(Press \'Cancel\' to do nothing, \'OK\' to copy)')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}">Copy this ad</a></li>
 		<li><a href="javascript:submit();" onclick="if(confirm('You are about to permanently delete the <?php echo $ad->networkName; ?> ad:\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\nAre you sure?\n(Press \'Cancel\' to keep, \'OK\' to delete)')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}">Delete this ad</a></li>
-		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-action-target').value='<?php echo $ad->network ?>'; document.getElementById('advman-form').submit();">Edit <?php echo $network_name ?> Defaults</a></li>
+		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-action-target').value='<?php echo $ad->network ?>'; document.getElementById('advman-form').submit();">Edit <?php echo $ad->networkName ?> Defaults</a></li>
 	</ul>
 
 	<h5>Notes</h5>
@@ -272,7 +271,7 @@ class Template_EditAd
 	
 	function displayAdvanced($ad)
 	{
-?><h2>Advanced Options</h2>
+?><h2><?php _e('Advanced Options', 'advman'); ?></h2>
 <?php		
 	}
 	

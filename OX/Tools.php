@@ -55,6 +55,10 @@ class OX_Tools
 	
 	function add_revision($revisions = null)
 	{
+		// Get the user login information
+		global $user_login;
+		get_currentuserinfo();
+		
 		// If there is no revisions, use my own revisions
 		if (!is_array($revisions)) {
 			$revisions = array();
@@ -63,7 +67,7 @@ class OX_Tools
 		// Deal with revisions
 		$r = array();
 		$now = mktime();
-		$r[$now] = get_current_user();
+		$r[$now] = $user_login;
 		
 		// Get rid of revisions more than 30 days old
 		if (!empty($revisions)) {

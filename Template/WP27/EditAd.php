@@ -41,7 +41,7 @@ class Template_EditAd
 
 <div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
-	<h2>Edit Settings for <?php echo $ad->networkName; ?> Ad: <span class="<?php echo strtolower($ad->network); ?>"><?php echo "[$id] " . $ad->name; ?></span></h2>
+	<h2><?php printf(__('Edit Settings for %s Ad:', 'advman'), $ad->networkName); ?> <span class="<?php echo strtolower($ad->network); ?>"><?php echo "[$id] " . $ad->name; ?></span></h2>
 	<form action="" method="post" id="advman-form" enctype="multipart/form-data">
 	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
 	<input type="hidden" name="advman-action" id="advman-action">
@@ -289,7 +289,7 @@ class Template_EditAd
 	
 	function displayAdvanced($ad)
 	{
-?><h2>Advanced Options</h2>
+?><h2><?php _e('Advanced Options', 'advman'); ?></h2>
 <?php		
 	}
 	

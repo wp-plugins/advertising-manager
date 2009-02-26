@@ -49,7 +49,7 @@ class Template_EditNetwork
 	wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );  
 	wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );  
 ?><div class="wrap">
-	<h2>Edit <span class="<?php echo strtolower($ad->network); ?>"><?php echo $ad->networkName; ?></span> Defaults</h2>
+	<h2><?php printf(__('Edit %s Defaults', 'advman'), "<span class='" . strtolower($ad->network) . "'>" . $ad->networkName . "</span>"); ?></h2>
 <div id="poststuff">
 <div class="submitbox" id="submitpost">
 <div id="previewview">
@@ -224,7 +224,7 @@ class Template_EditNetwork
 	
 	function displayAdvanced($ad)
 	{
-?><h2>Advanced Options</h2>
+?><h2><?php _e('Advanced Options', 'advman'); ?></h2>
 <?php		
 	}
 	

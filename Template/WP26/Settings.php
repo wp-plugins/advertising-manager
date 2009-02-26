@@ -18,13 +18,18 @@ class Template_Settings
 <?php endif; ?>
 
 <div class="wrap">
-	<div id="icon-options-general" class="icon32"><br /></div>
 <h2><?php _e('Ad Settings', 'advman'); ?></h2>
 
 <form action="" method="post" id="advman-form" enctype="multipart/form-data">
 <input type="hidden" name="advman-mode" id="advman-mode" value="settings" />
 <input type="hidden" name="advman-action" id="advman-action" value="save" />
 <input type="hidden" name="advman-action-target" id="advman-action-target" />
+
+<ul class="subsubsub">
+	<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='list'; document.getElementById('advman-form').submit();"><?php _e('Show Ads', 'advman'); ?> (<?php echo sizeof($_advman['ads']); ?>)</a> |</li>
+	<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='create'; document.getElementById('advman-form').submit();"><?php _e('Create New Ad', 'advman'); ?></a> |</li>
+	<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='settings'; document.getElementById('advman-form').submit();" class="current"><?php _e('Settings', 'advman'); ?></a></li>
+</ul>
 
 <table class="form-table">
 <tr valign="top">

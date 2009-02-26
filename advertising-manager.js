@@ -25,11 +25,9 @@
 		s = document.getElementById('advman-adtype');
 		if (s) {
 			n = s.length;
-			//alert('n='+n);
 			for (i=0; i<n; i++) {
 				v = s.options[i].value;
 				r = document.getElementById('advman-form-'+v+'-format');
-				//alert('n='+n+',i='+i+',v='+v+',r='+r);
 				if (r) {
 					r.style.display = s.options[i].selected ? '' : 'none';
 				}

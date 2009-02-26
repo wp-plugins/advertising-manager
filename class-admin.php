@@ -20,6 +20,7 @@ class advman_admin
 	function init_admin()
 	{
 		global $_advman;
+		global $wp_version;
 		
 		add_action('admin_head', array('advman_admin','add_header_script'));
 		add_action('admin_footer', array('advman_admin','admin_callback_editor'));
@@ -28,8 +29,12 @@ class advman_admin
 		wp_enqueue_script('postbox');
 		
 //		add_submenu_page('edit.php',"Ads", "Ads", 10, "advertising-manager-manage-ads", array('advman_admin','admin_manage'));
-		add_management_page("Ads", "Ads", 10, "advertising-manager-manage-ads", array('advman_admin','admin_manage'));
-		add_options_page("Advertising Manager Settings", "Ads", 10, "advertising-manager-options", array('advman_admin','admin_options'));
+		if (version_compare($wp_version,"2.7-alpha", '>')) {
+			add_options_page("Advertising", "Advertising", 10, "advertising-manager-manage-ads", array('advman_admin','admin_manage'));
+		} else {
+			add_management_page("Advertising", "Advertising", 10, "advertising-manager-manage-ads", array('advman_admin','admin_manage'));
+		}
+//		add_options_page("Advertising Manager Settings", "Ads", 10, "advertising-manager-options", array('advman_admin','admin_options'));
 		add_action( 'admin_notices', array('advman_admin','admin_notices'), 1 );
 		
 		$email = get_option('admin_email');
@@ -371,12 +376,20 @@ class advman_admin
 				break;
 			
 			case 'save' :
-				if (is_numeric($target)) {
-					advman_admin::_save_ad($target);
+				if ($mode == 'settings') {
+					advman_admin::_save_settings();
 				} else {
-					advman_admin::_save_network($target);
+					if (is_numeric($target)) {
+						advman_admin::_save_ad($target);
+					} else {
+						advman_admin::_save_network($target);
+					}
+					$mode = 'list_ads';
 				}
-				$mode = 'list_ads';
+				break;
+			
+			case 'settings' :
+				$mode = 'settings';
 				break;
 			
 			default :
@@ -421,6 +434,12 @@ class advman_admin
 					$templateClassName = 'Template_EditNetwork';
 				}
 				$templateClass = new $templateClassName;
+				$templateClass->display($target);
+				break;
+			
+			case 'settings' :
+				include_once(ADVMAN_TEMPLATE_PATH . '/Settings.php');
+				$templateClass = new Template_Settings();
 				$templateClass->display($target);
 				break;
 			

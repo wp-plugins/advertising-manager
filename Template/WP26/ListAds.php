@@ -12,10 +12,11 @@ class Template_ListAds
 				<input type="hidden" id="advman-mode" name="advman-mode" value="list_ads" />
 				<input type="hidden" id="advman-action" name="advman-action" />
 				<input type="hidden" id="advman-action-target" name="advman-action-target" />
-			<h2>Manage Your Advertising</h2>
+			<h2><?php _e('Manage Your Advertising', 'advman'); ?></h2>
 			<ul class="subsubsub">
-				<li><a href='' class="current">Show Ads (<?php echo sizeof($_advman['ads']); ?>)</a> |</li>
-				<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='create'; document.getElementById('advman-form').submit();" >Create New Ad</a></li>
+				<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='list'; document.getElementById('advman-form').submit();" class="current"><?php _e('Show Ads', 'advman'); ?> (<?php echo sizeof($_advman['ads']); ?>)</a> |</li>
+				<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='create'; document.getElementById('advman-form').submit();"><?php _e('Create New Ad', 'advman'); ?></a> |</li>
+				<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='settings'; document.getElementById('advman-form').submit();" ><?php _e('Settings', 'advman'); ?></a></li>
 			</ul>
 			
 				<table id="manage-ads" class="widefat">

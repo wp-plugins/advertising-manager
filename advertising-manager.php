@@ -33,6 +33,7 @@ require_once(ADVMAN_PATH . '/OX/Tools.php');
 // DATA
 $_advman = get_option('plugin_adsensem');
 $_advman_notices = array();
+$_advman_counter = array();
 
 class advman
 {
@@ -222,6 +223,7 @@ class advman
 	function filter_ad_callback($matches)
 	{
 		global $_advman;
+		global $_advman_counter;
 		
 		if ($matches[1] == '') { /* default ad */
 			$matches[1] = $_advman['default-ad'];
@@ -229,6 +231,7 @@ class advman
 		
 		$ad = advman::select_ad($matches[1]);
 		if (!empty($ad)) {
+			advman::update_counters($ad);
 			return $ad->get_ad();
 		}
 		return '';
@@ -275,27 +278,51 @@ class advman
 		
 		return $content;
 	}
-}
-
-// SHOW ADS - OLDER VERSION
-if (!function_exists('adsensem_ad')) {
-	function adsensem_ad($name = false)
+	
+	function update_counters($ad)
 	{
-		global $_advman;
+		global $_adsensem_counters;
 		
-		if (empty($name)) { /* default ad */
-			$name = $_advman['default-ad'];
-		}
-		
-		$ad = advman::select_ad($name);
 		if (!empty($ad)) {
-			echo $ad->get_ad();
+			if (empty($_adsensem_counters['id'][$ad->id])) {
+				$_adsensem_counters['id'][$ad->id] = 1;
+			} else {
+				$_adsensem_counters['id'][$ad->id]++;
+			}
+			
+			if (empty($_adsensem_counters['network'][$ad->network])) {
+				$_adsensem_counters['network'][$ad->network] = 1;
+			} else {
+				$_adsensem_counters['network'][$ad->network]++;
+			}
 		}
 	}
 }
 
+// SHOW ADS
+if (!function_exists('adsensem_ad')) {
+	function adsensem_ad($name = false)
+	{
+		return advman_ad($name);
+	}
+}
 
-/* SHOW ALTERNATE AD UNITS */
+function advman_ad($name = false)
+{
+	global $_advman;
+	
+	if (empty($name)) { /* default ad */
+		$name = $_advman['default-ad'];
+	}
+	
+	$ad = advman::select_ad($name);
+	if (!empty($ad)) {
+		advman::update_counters($ad);
+		echo $ad->get_ad();
+	}
+}
+
+// SHOW AN AD BY ITS NAME
 if (!empty($_REQUEST['advman-show-ad'])) {
 	$name = OX_Tools::sanitize_name($_REQUEST['advman-show-ad']);
 	echo '<html><body>';
@@ -303,12 +330,14 @@ if (!empty($_REQUEST['advman-show-ad'])) {
 	echo '</body></html>';
 	die(0);
 }
-/* END SHOW ALTERNATE AD UNITS */
+
 // SHOW AN AD BY ID
 if (!empty($_REQUEST['advman-show-ad-id'])) {
 	$id = OX_Tools::sanitize_number($_REQUEST['advman-show-ad-id']);
 	if (!empty($_advman['ads'][$id])) {
-		echo '<html><body>' . $_advman['ads'][$_REQUEST['advman-show-ad-id']]->get_ad() . '</body></html>';
+		$ad = $_advman['ads'][$id];
+		advman::update_counters($ad);
+		echo '<html><body>' . $ad->get_ad() . '</body></html>';
 	}
 	die(0);
 }

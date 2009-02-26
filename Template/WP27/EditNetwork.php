@@ -44,7 +44,7 @@ class Template_EditNetwork
 
 <div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
-	<h2>Edit <span class="<?php echo strtolower($ad->network); ?>"><?php echo $ad->networkName; ?></span> Defaults</h2>
+	<h2><?php printf(__('Edit %s Defaults', 'advman'), "<span class='" . strtolower($ad->network) . "'>" . $ad->networkName . "</span>"); ?></h2>
 	<form action="" method="post" id="advman-form" enctype="multipart/form-data">
 	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
 	<input type="hidden" name="advman-action" id="advman-action">
@@ -243,7 +243,7 @@ class Template_EditNetwork
 	
 	function displayAdvanced($ad)
 	{
-?><h2>Advanced Options</h2>
+?><h2><?php _e('Advanced Options', 'advman'); ?></h2>
 <?php		
 	}
 	
