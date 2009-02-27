@@ -96,7 +96,7 @@ class Template_EditNetwork
 			<div class="handlediv" title="<?php _e('Click to toggle', 'advman'); ?>"><br /></div>
 			<h3 class='hndle'><span>Notes</span></h3>
 			<div class="inside">
-				<label for="ad_code"><?php _e('Display any notes about this ad here:'); ?></label><br /><br />
+				<label for="ad_code"><?php _e('Display any notes about this ad here:', 'advman'); ?></label><br /><br />
 				<textarea rows="8" cols="28" name="advman-notes" id="advman-notes"><?php echo $ad->get_default('notes'); ?></textarea><br />
 			</div>
 		</div>
@@ -160,7 +160,7 @@ class Template_EditNetwork
 </tr>
 </table>
 <br />
-<span style="font-size:x-small;color:gray;">Select one of the supported ad format sizes. If your ad size is not one of the standard sizes, select 'Custom' and fill in your size.</span>
+<span style="font-size:x-small;color:gray;"><?php _e('Select one of the supported ad format sizes. If your ad size is not one of the standard sizes, select Custom and fill in your size.', 'advman'); ?></span>
 <?php
 	}
 	
@@ -258,7 +258,7 @@ class Template_EditNetwork
 <p>
 	<label for="advman-openx-market" class="selectit">
 		<input name="advman-openx-market" type="checkbox" id="advman-openx-market" value="yes"<?php echo ($ad->get_default('openx-market') == 'yes' ? ' checked="checked"' : ''); ?> onChange="document.getElementById('advman-openx-market-cpm').disabled = (!this.checked); document.getElementById('advman-openx-market-cpm').style.color = (this.checked ? 'black' : 'gray'); document.getElementById('advman-openx-market-cpm-label').style.color = (this.checked ? 'black' : 'lightgray');" />
-		OpenX Market Enabled
+		<?php _e('OpenX Market Enabled', 'advman'); ?>
 	</label>
 </p>
 <p>
@@ -280,7 +280,7 @@ class Template_EditNetwork
 	<textarea rows="1" cols="60" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $ad->get_default('html-after'); ?></textarea><br /><br />
 </div>
 <br />
-<span style="font-size:x-small;color:gray;">Place any HTML code you want to display before or after your tag in the appropriate section.  If you want to change your ad network tag, you need to import the new tag again.</span>
+<span style="font-size:x-small;color:gray;"><?php _e('Place any HTML code you want to display before or after your tag in the appropriate section.  If you want to change your ad network tag, you need to import the new tag again.', 'advman'); ?></span>
 <?php
 	}
 	

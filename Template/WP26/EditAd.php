@@ -62,7 +62,7 @@ class Template_EditAd
 			<option<?php echo ($ad->active ? "" : " selected='selected'"); ?> value='no'>Paused</option>
 		</select>
 	</p>
-	<p class="curtime"><?php echo __('Last edited', 'advman') . ' <abbr title="' . $last_timestamp2 . '"><b>' . $last_timestamp . __(' ago', 'advman') . '</b></abbr> by ' . $last_user; ?></p>
+	<p class="curtime"><?php echo __('Last edited', 'advman') . ' <abbr title="' . $last_timestamp2 . '"><b>' . $last_timestamp . ' ' . __('ago', 'advman') . '</b></abbr> ' . __('by', 'advman') . ' ' . $last_user; ?></p>
 </div><!-- inside -->
 
 	<div style="white-space:nowrap">
@@ -81,8 +81,8 @@ class Template_EditAd
 		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-action-target').value='<?php echo $ad->network ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->networkName); ?></a></li>
 	</ul>
 
-	<h5>Notes</h5>
-	<label for="ad_code"><?php _e('Display any notes about this ad here:'); ?></label><br /><br />
+	<h5><?php _e('Notes', 'advman'); ?></h5>
+	<label for="ad_code"><?php _e('Display any notes about this ad here:', 'advman'); ?></label><br /><br />
 	<textarea rows="8" cols="22" name="advman-notes" id="advman-notes"><?php echo $ad->get('notes'); ?></textarea><br />
 </div><!-- side-info -->
 </div><!-- submitpost -->
@@ -169,7 +169,7 @@ class Template_EditAd
 </tr>
 </table>
 <br />
-<span style="font-size:x-small;color:gray;">Select one of the supported ad format sizes. If your ad size is not one of the standard sizes, select 'Custom' and fill in your size.</span>
+<span style="font-size:x-small;color:gray;"><?php _e('Select one of the supported ad format sizes. If your ad size is not one of the standard sizes, select Custom and fill in your size.', 'advman'); ?></span>
 <?php
 	}
 	
@@ -287,7 +287,7 @@ class Template_EditAd
 <p>
 	<label for="advman-openx-market" class="selectit">
 		<input name="advman-openx-market" type="checkbox" id="advman-openx-market" value="yes"<?php echo ($ad->get('openx-market') == 'yes' ? ' checked="checked"' : ''); ?> onChange="document.getElementById('advman-openx-market-cpm').disabled = (!this.checked); document.getElementById('advman-openx-market-cpm').style.color = (this.checked ? 'black' : 'gray'); document.getElementById('advman-openx-market-cpm-label').style.color = (this.checked ? 'black' : 'lightgray');" />
-		OpenX Market Enabled
+		<?php _e('OpenX Market Enabled', 'advman'); ?>
 	</label>
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('openx-market'); ?>">
 </p>
@@ -313,7 +313,7 @@ class Template_EditAd
 	<textarea rows="1" cols="60" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $ad->get('html-after'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('html-after'); ?>"><br /><br />
 </div>
 <br />
-<span style="font-size:x-small;color:gray;">Place any HTML code you want to display before or after your tag in the appropriate section.  If you want to change your ad network tag, you need to import the new tag again.</span>
+<span style="font-size:x-small;color:gray;"><?php _e('Place any HTML code you want to display before or after your tag in the appropriate section.  If you want to change your ad network tag, you need to import the new tag again.', 'advman'); ?></span>
 <?php
 	}
 	

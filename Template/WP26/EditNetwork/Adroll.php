@@ -41,7 +41,7 @@ class Template_EditNetwork_Adroll extends Template_EditNetwork
 	</tr>
 	</table>
 <br />
-<span style="font-size:x-small;color:gray;">Select one of the supported ad format sizes.</span>
+<span style="font-size:x-small;color:gray;"><?php _e('Select one of the supported ad format sizes.', 'advman'); ?></span>
 <?php
 	}
 }

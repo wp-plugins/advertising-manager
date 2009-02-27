@@ -90,9 +90,9 @@ function ADS_setAction(action, id, name, network)
 
 
 <div class="view-switch">
-	<a href="/wordpress.27/wp-admin/edit.php?mode=list"><img class="current" id="view-switch-list" src="../wp-includes/images/blank.gif" width="20" height="20" title="<?php _e('List View', 'advman'); ?>" alt="List View" /></a>
+	<a href="/wordpress.27/wp-admin/edit.php?mode=list"><img class="current" id="view-switch-list" src="../wp-includes/images/blank.gif" width="20" height="20" title="<?php _e('List View', 'advman'); ?>" alt="<?php _e('List View', 'advman'); ?>" /></a>
 
-	<a href="/wordpress.27/wp-admin/edit.php?mode=excerpt"><img  id="view-switch-excerpt" src="../wp-includes/images/blank.gif" width="20" height="20" title="Excerpt View" alt="Excerpt View" /></a>
+	<a href="/wordpress.27/wp-admin/edit.php?mode=excerpt"><img  id="view-switch-excerpt" src="../wp-includes/images/blank.gif" width="20" height="20" title="<?php _e('Excerpt View', 'advman'); ?>" alt="<?php _e('Excerpt View', 'advman'); ?>" /></a>
 </div>
 
 <div class="clear"></div>
@@ -132,15 +132,15 @@ function ADS_setAction(action, id, name, network)
 	<tr id='post-3' class='alternate author-self status-publish iedit' valign="top">
 		<th scope="row" class="check-column"><input type="checkbox" name="advman-action-targets[]" value="<?php echo $ad->id; ?>" /></th>
 		<td class="post-title column-title">
-			<strong><a class="row-title" href="javascript:ADS_setAction('edit','<?php echo $ad->id; ?>');" title="Edit the ad &quot;<?php echo $ad->name; ?>&quot;">[<?php echo $ad->id; ?>] <?php echo $ad->name; ?></a></strong>
+			<strong><a class="row-title" href="javascript:ADS_setAction('edit','<?php echo $ad->id; ?>');" title="<?php printf(__('Edit the ad &quot;%s&quot;', 'advman'), $ad->name); ?>">[<?php echo $ad->id; ?>] <?php echo $ad->name; ?></a></strong>
 			<div class="row-actions">
-				<span class='edit'><a href="javascript:ADS_setAction('edit','<?php echo $ad->id; ?>');" title="Edit the ad &quot;<?php echo $ad->name; ?>&quot;">Edit</a> | </span>
-				<span class='edit'><a class='submitdelete' title="<?php _e('Copy this ad', 'advman'); ?>" href="javascript:ADS_setAction('copy','<?php echo $ad->id; ?>');">Copy</a> | </span>
+				<span class='edit'><a href="javascript:ADS_setAction('edit','<?php echo $ad->id; ?>');" title="<?php printf(__('Edit the ad &quot;%s&quot;', 'advman'), $ad->name); ?>"><?php _e('Edit', 'advman'); ?></a> | </span>
+				<span class='edit'><a class='submitdelete' title="<?php _e('Copy this ad', 'advman'); ?>" href="javascript:ADS_setAction('copy','<?php echo $ad->id; ?>');"><?php _e('Copy', 'advman'); ?></a> | </span>
 				<span class='edit'><a class='submitdelete' title="<?php _e('Delete this ad', 'advman'); ?>" href="javascript:ADS_setAction('delete','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>', '<?php echo $ad->networkName; ?>');" onclick=""><?php _e('Delete', 'advman'); ?></a> | </span>
 				<span class='edit'><a href="<?php echo get_bloginfo('wpurl'); ?>/wp-admin/edit.php?page=advertising-manager-manage-ads&advman-show-ad-id=<?php echo $id ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview', 'advman'); ?></a></span>
 			</div>
 		</td>
-		<td class="author column-author"><a href="javascript:ADS_setAction('edit','<?php echo $ad->network; ?>');" title="Edit the ad network &quot;<?php echo $ad->networkName; ?>&quot;"><?php echo $ad->networkName; ?></a></td>
+		<td class="author column-author"><a href="javascript:ADS_setAction('edit','<?php echo $ad->network; ?>');" title="<?php printf(__('Edit the ad network &quot;%s&quot;', 'advman'), $ad->networkName); ?>"><?php echo $ad->networkName; ?></a></td>
 		<td class="categories column-categories"> <?php echo $this->displayFormat($ad); ?></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('<?php echo ($ad->active) ? 'deactivate' : 'activate'; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $_advman['default-ad']) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>

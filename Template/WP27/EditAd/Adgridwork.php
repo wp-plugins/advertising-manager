@@ -55,7 +55,7 @@ class Template_EditAd_Adgridwork extends Template_EditAd
 	</tr>
 	</table>
 <br />
-<span style="font-size:x-small;color:gray;">Select one of the supported ad format sizes.</span>
+<span style="font-size:x-small;color:gray;"><?php _e('Select one of the supported ad format sizes.', 'advman'); ?></span>
 <?php
 	}
 	
@@ -96,19 +96,19 @@ class Template_EditAd_Adgridwork extends Template_EditAd
 			<div id="ad-color-bg" style="margin-top:1em;width:200px;background: #<?php echo htmlspecialchars($ad->get('color-bg', true), ENT_QUOTES); ?>;">
 			<div id="ad-color-border" style="font: 10px arial, sans-serif; border: 1px solid #<?php echo htmlspecialchars($ad->get('color-border', true), ENT_QUOTES); ?>" class="linkunit-wrapper">
 			<div id="ad-color-title" style="color: #<?php echo htmlspecialchars($ad->get('color-title', true), ENT_QUOTES); ?>; font: 11px verdana, arial, sans-serif; padding: 2px;">
-				<b><u>Linked Title</u></b><br /></div>
+				<b><u><?php _e('Linked Title', 'advman'); ?></u></b><br /></div>
 			<div id="ad-color-text" style="color: #<?php echo htmlspecialchars($ad->get('color-text', true), ENT_QUOTES); ?>; padding: 2px;" class="text">
-				Advertiser's ad text here<br /></div>
+				<?php _e('Advertiser\'s ad text here', 'advman'); ?><br /></div>
 			<div id="ad-color-link" style="color: #<?php echo htmlspecialchars($ad->get('color-link', true), ENT_QUOTES); ?>; font: 10px verdana, arial, sans-serif; padding: 2px;">
-				www.advertiser-url.com<br /></div>
+				<?php _e('www.advertiser-url.com', 'advman'); ?><br /></div>
 			<div style="color: #000; padding: 2px;" class="rtl-safe-align-right">
-				&nbsp;<u>Ads by <?php echo $ad->networkName; ?></u></div>
+				&nbsp;<u><?php printf(__('Ads by %s', 'advman'), $ad->networkName); ?></u></div>
 			</div>			
 		</td>
 	</tr>
 	</table>
 <br />
-<span style="font-size:x-small;color:gray;">Select one of the ad format sizes supported by Adgridwork.  Enter multiple channels separated by '+' signs.</span>
+<span style="font-size:x-small;color:gray;"><?php _e('Select one of the supported ad format sizes.', 'advman'); ?></span>
 <?php
 	}
 	

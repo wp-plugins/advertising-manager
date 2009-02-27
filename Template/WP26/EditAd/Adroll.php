@@ -49,7 +49,7 @@ class Template_EditAd_Adroll extends Template_EditAd
 	</tr>
 	</table>
 <br />
-<span style="font-size:x-small;color:gray;">Select one of the supported ad format sizes.</span>
+<span style="font-size:x-small;color:gray;"><?php _e('Select one of the supported ad format sizes.', 'advman'); ?></span>
 <?php
 	}
 	

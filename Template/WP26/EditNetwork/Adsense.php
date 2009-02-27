@@ -100,7 +100,7 @@ class Template_EditNetwork_Adsense extends Template_EditNetwork
 	</tr>
 	</table>
 <br />
-<span style="font-size:x-small;color:gray;">Select one of the ad format sizes supported by Google Adsense.</span>
+<span style="font-size:x-small;color:gray;"><?php _e('Select one of the supported ad format sizes.', 'advman'); ?></span>
 <?php
 	}
 	
@@ -140,9 +140,9 @@ class Template_EditNetwork_Adsense extends Template_EditNetwork
 		<td>
 			<div id="ad-color-bg" style="margin-top:1em;width:200px;background: #<?php echo ($ad->get_default('color-bg')) ? $ad->get_default('color-bg') : 'FFFFFF'; ?>;">
 				<div id="ad-color-border" style="font: 10px arial, sans-serif; border: 1px solid #<?php echo ($ad->get_default('color-border')) ? $ad->get_default('color-border') : 'FF0000'; ?>" class="linkunit-wrapper">
-					<div id="ad-color-title" style="color: #<?php echo ($ad->get_default('color-title')) ? $ad->get_default('color-title') : '00FFFF'; ?>; font: 11px verdana, arial, sans-serif; padding: 2px;"><b><u>Linked Title</u></b><br /></div>
-					<div id="ad-color-text" style="color: #<?php echo ($ad->get_default('color-text')) ? $ad->get_default('color-text') : '000000'; ?>; padding: 2px;" class="text">Advertiser's ad text here<br /></div>
-					<div id="ad-color-link" style="color: #<?php echo ($ad->get_default('color-link')) ? $ad->get_default('color-link') : '008000'; ?>; font: 10px verdana, arial, sans-serif; padding: 2px;">www.advertiser-url.com<br /></div>
+					<div id="ad-color-title" style="color: #<?php echo ($ad->get_default('color-title')) ? $ad->get_default('color-title') : '00FFFF'; ?>; font: 11px verdana, arial, sans-serif; padding: 2px;"><b><u><?php _e('Linked Title', 'advman'); ?></u></b><br /></div>
+					<div id="ad-color-text" style="color: #<?php echo ($ad->get_default('color-text')) ? $ad->get_default('color-text') : '000000'; ?>; padding: 2px;" class="text"><?php _e('Advertiser\'s ad text here', 'advman'); ?><br /></div>
+					<div id="ad-color-link" style="color: #<?php echo ($ad->get_default('color-link')) ? $ad->get_default('color-link') : '008000'; ?>; font: 10px verdana, arial, sans-serif; padding: 2px;"><?php _e('www.advertiser-url.com', 'advman'); ?><br /></div>
 					<div style="color: #000; padding: 2px;" class="rtl-safe-align-right">&nbsp;<u>Ads by Google Adsense</u></div>
 				</div>
 			</div>
