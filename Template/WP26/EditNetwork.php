@@ -36,8 +36,8 @@ class Template_EditNetwork
 				break; // just get first one - the array is sorted by reverse date
 			}
 		} else {
-			$last_user = 'Unknown';
-			$last_timestamp = 'More than 30 days ago';
+			$last_user = __('Unknown', 'advman');
+			$last_timestamp = sprintf(__('More than %d days ago', 'advman'), 30);
 		}
 ?>
 
@@ -61,9 +61,9 @@ class Template_EditNetwork
 
 	<div style="white-space:nowrap">
 	<p class="submit">
-	<input type="button" value="Cancel" onclick="document.getElementById('advman-action').value='cancel'; this.form.submit();" />
-	<input type="button" value="Apply" onclick="document.getElementById('advman-action').value='apply'; this.form.submit();" />
-	<input type="submit" value="Save &raquo;" class="button button-highlighted" onclick="document.getElementById('advman-action').value='save';" />
+	<input type="button" value="<?php _e('Cancel', 'advman'); ?>" onclick="document.getElementById('advman-action').value='cancel'; this.form.submit();" />
+	<input type="button" value="<?php _e('Apply', 'advman'); ?>" onclick="document.getElementById('advman-action').value='apply'; this.form.submit();" />
+	<input type="submit" value="<?php _e('Save &raquo;', 'advman'); ?>" class="button button-highlighted" onclick="document.getElementById('advman-action').value='save';" />
 	</p>
 	</div>
 
@@ -272,7 +272,7 @@ class Template_EditNetwork
 ?><ul class='post-revisions'>
 <?php
 		if (empty($revisions)) {
-?>		<li>More than 30 days ago<span style="color:gray"> by Unknown</span></li>
+?>		<li><?php printf(__('More than %d days ago', 'advman'), 30) ?><span style="color:gray"> <?php _e('by Unknown', 'advman'); ?></span></li>
 <?php
 		} else {
 			$now = mktime();

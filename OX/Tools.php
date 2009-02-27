@@ -38,7 +38,7 @@ class OX_Tools
 	
 	function get_last_edit($ad)
 	{
-		$last_user = 'Unknown';
+		$last_user = __('Unknown', 'advman');
 		$last_timestamp = 0;
 		
 		$revisions = $ad->get('revisions');

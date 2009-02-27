@@ -342,7 +342,7 @@ class Template_EditAd
 ?><ul class='post-revisions'>
 <?php
 		if (empty($revisions)) {
-?>		<li>More than 30 days ago<span style="color:gray"> by Unknown</span></li>
+?>		<li><?php printf(__('More than %d days ago', 'advman'), 30) ?><span style="color:gray"> <?php _e('by Unknown', 'advman'); ?></span></li>
 <?php
 		} else {
 			$now = mktime();

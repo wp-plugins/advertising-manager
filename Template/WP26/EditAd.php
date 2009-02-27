@@ -67,18 +67,18 @@ class Template_EditAd
 
 	<div style="white-space:nowrap">
 	<p class="submit">
-	<input type="button" value="Cancel" onclick="document.getElementById('advman-action').value='cancel'; this.form.submit();">
-	<input type="button" value="Apply" onclick="document.getElementById('advman-action').value='apply'; this.form.submit();">
-	<input type="submit" value="Save &raquo;" class="button button-highlighted" onclick="document.getElementById('advman-action').value='save';" />
+	<input type="button" value="<?php _e('Cancel', 'advman'); ?>" onclick="document.getElementById('advman-action').value='cancel'; this.form.submit();">
+	<input type="button" value="<?php _e('Apply', 'advman'); ?>" onclick="document.getElementById('advman-action').value='apply'; this.form.submit();">
+	<input type="submit" value="<?php _e('Save &raquo;', 'advman'); ?>" class="button button-highlighted" onclick="document.getElementById('advman-action').value='save';" />
 	</p>
 	</div>
 
 <div class="side-info">
-	<h5>Shortcuts</h5>
+	<h5><?php _e('Shortcuts', 'advman'); ?></h5>
 	<ul>
-		<li><a href="javascript:submit();" onclick="if(confirm('You are about to copy the <?php echo $ad->networkName; ?> ad:\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\nAre you sure?\n(Press \'Cancel\' to do nothing, \'OK\' to copy)')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}">Copy this ad</a></li>
-		<li><a href="javascript:submit();" onclick="if(confirm('You are about to permanently delete the <?php echo $ad->networkName; ?> ad:\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\nAre you sure?\n(Press \'Cancel\' to keep, \'OK\' to delete)')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}">Delete this ad</a></li>
-		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-action-target').value='<?php echo $ad->network ?>'; document.getElementById('advman-form').submit();">Edit <?php echo $ad->networkName ?> Defaults</a></li>
+		<li><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to copy the %s ad:', 'advman'), $ad->networkName); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to do nothing, OK to copy)', 'advman'); ?>')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Copy this ad', 'advman'); ?></a></li>
+		<li><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->networkName); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></li>
+		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-action-target').value='<?php echo $ad->network ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->networkName); ?></a></li>
 	</ul>
 
 	<h5>Notes</h5>
@@ -324,7 +324,7 @@ class Template_EditAd
 ?><ul class='post-revisions'>
 <?php
 		if (empty($revisions)) {
-?>		<li>More than 30 days ago<span style="color:gray"> by Unknown</span></li>
+?>		<li><?php printf(__('More than %d days ago', 'advman'), 30) ?><span style="color:gray"> <?php _e('by Unknown', 'advman'); ?></span></li>
 <?php
 		} else {
 			$now = mktime();

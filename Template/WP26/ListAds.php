@@ -47,7 +47,7 @@ class Template_ListAds
 						<input class="button" type="submit" value="Copy" onClick="document.getElementById('advman-action').value='copy'; document.getElementById('advman-action-target').value='<?php echo $id; ?>';">
 <?php
 				if ( ($id != $_advman['default-ad']) || (count($_advman['ads']) == 1) ) {
-?>						<input class="button" type="submit" value="Delete" onClick="if(confirm('You are about to permanently delete the <?php echo $ad->networkName; ?> ad:\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\nAre you sure?\n(Press \'Cancel\' to keep, \'OK\' to delete)')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-action-target').value='<?php echo $id; ?>';} else {return false;}">
+?>						<input class="button" type="submit" value="<?php _e('Delete', 'advman'); ?>" onClick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->networkName); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-action-target').value='<?php echo $id; ?>';} else {return false;}">
 					</td>
 <?php
 				}

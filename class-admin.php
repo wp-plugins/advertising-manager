@@ -28,13 +28,11 @@ class advman_admin
 		wp_enqueue_script('prototype');
 		wp_enqueue_script('postbox');
 		
-//		add_submenu_page('edit.php',"Ads", "Ads", 10, "advertising-manager-manage-ads", array('advman_admin','admin_manage'));
 		if (version_compare($wp_version,"2.7-alpha", '>')) {
-			add_options_page("Advertising", "Advertising", 10, "advertising-manager-manage-ads", array('advman_admin','admin_manage'));
+			add_options_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 10, "advertising-manager-manage-ads", array('advman_admin','admin_manage'));
 		} else {
-			add_management_page("Advertising", "Advertising", 10, "advertising-manager-manage-ads", array('advman_admin','admin_manage'));
+			add_management_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 10, "advertising-manager-manage-ads", array('advman_admin','admin_manage'));
 		}
-//		add_options_page("Advertising Manager Settings", "Ads", 10, "advertising-manager-options", array('advman_admin','admin_options'));
 		add_action( 'admin_notices', array('advman_admin','admin_notices'), 1 );
 		
 		$email = get_option('admin_email');

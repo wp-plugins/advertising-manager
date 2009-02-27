@@ -65,26 +65,26 @@ function ADS_setAction(action, id, name, network)
 
 <div class="alignleft actions">
 <select id="advman-bulk-top" name="action">
-<option value="" selected="selected">Bulk Actions</option>
-<option value="copy">Copy</option>
-<option value="delete">Delete</option>
+<option value="" selected="selected"><?php _e('Bulk Actions', 'advman'); ?></option>
+<option value="copy"><?php _e('Copy', 'advman'); ?></option>
+<option value="delete"><?php _e('Delete', 'advman'); ?></option>
 </select>
-<input type="submit" value="Apply" name="doaction" id="doaction" class="button-secondary action" onclick="document.getElementById('advman-action').value = document.getElementById('advman-bulk-top').value;" />
+<input type="submit" value="<?php _e('Apply', 'advman'); ?>" name="doaction" id="doaction" class="button-secondary action" onclick="document.getElementById('advman-action').value = document.getElementById('advman-bulk-top').value;" />
 
 <select name='advman-filter-network' class='postform' >
-	<option value='0'> View all ad types </option>
+	<option value='0'> <?php _e('View all ad types', 'advman'); ?> </option>
 <?php foreach ($networks as $network => $networkName): ?>
-	<option class="level-0"<?php echo ($filterNetwork == $network) ? ' selected' : '' ?> value="<?php echo $network ?>"> View only <?php echo $networkName ?> ads </option>
+	<option class="level-0"<?php echo ($filterNetwork == $network) ? ' selected' : '' ?> value="<?php echo $network ?>"> <?php printf(__('View only %s ads', 'advman'), $networkName); ?> </option>
 <?php endforeach; ?>
 </select>
 <select name='advman-filter-active' class='postform' >
-	<option value='0'> View all ad statuses </option>
-	<option class="level-0"<?php echo ($filterActive == 'active') ? ' selected' : '' ?> value="active"> View active ads only </option>
-	<option class="level-0"<?php echo ($filterActive == 'inactive') ? ' selected' : '' ?> value="inactive"> View paused ads only </option>
+	<option value='0'> <?php _e('View all ad statuses', 'advman'); ?> </option>
+	<option class="level-0"<?php echo ($filterActive == 'active') ? ' selected' : '' ?> value="active"> <?php _e('View active ads only', 'advman'); ?> </option>
+	<option class="level-0"<?php echo ($filterActive == 'inactive') ? ' selected' : '' ?> value="inactive"> <?php _e('View paused ads only', 'advman'); ?> </option>
 </select>
-<input type="submit" id="post-query-submit" value="Filter" class="button-secondary" onclick="document.getElementById('advman-action').value = 'filter';" />
+<input type="submit" id="post-query-submit" value="<?php _e('Filter', 'advman'); ?>" class="button-secondary" onclick="document.getElementById('advman-action').value = 'filter';" />
 <?php if ( !empty($filterActive) || !empty($filterNetwork)) : ?>
-<input type="submit" value="Clear" class="button-secondary" onclick="document.getElementById('advman-action').value = 'clear';" />
+<input type="submit" value="<?php _e('Clear', 'advman'); ?>" class="button-secondary" onclick="document.getElementById('advman-action').value = 'clear';" />
 <?php endif ?>
 </div>
 
@@ -142,13 +142,13 @@ function ADS_setAction(action, id, name, network)
 		</td>
 		<td class="author column-author"><a href="javascript:ADS_setAction('edit','<?php echo $ad->network; ?>');" title="Edit the ad network &quot;<?php echo $ad->networkName; ?>&quot;"><?php echo $ad->networkName; ?></a></td>
 		<td class="categories column-categories"> <?php echo $this->displayFormat($ad); ?></td>
-		<td class="categories column-tags"><a href="javascript:ADS_setAction('<?php echo ($ad->active) ? 'deactivate' : 'activate'; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? 'Yes' : 'No'; ?></a></td>
-		<td class="categories column-tags"><a href="javascript:ADS_setAction('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $_advman['default-ad']) ? 'Yes' : 'No'; ?></a></td>
+		<td class="categories column-tags"><a href="javascript:ADS_setAction('<?php echo ($ad->active) ? 'deactivate' : 'activate'; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
+		<td class="categories column-tags"><a href="javascript:ADS_setAction('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $_advman['default-ad']) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
 <?php
 		list($last_user, $t) = OX_Tools::get_last_edit($ad);
 		$last_timestamp = (time() - $t) < (30 * 24 * 60 * 60) ? human_time_diff($t) : __('> 30 days', 'advman');
 		$last_timestamp2 = date('l, F jS, Y @ h:ia', $t);
-?>		<td class="date column-date"><abbr title="<?php echo $last_timestamp2 ?>"><?php echo $last_timestamp . __(' ago', 'advman'); ?></abbr><br /><?php echo __('by ', 'advman') . $last_user; ?></td>
+?>		<td class="date column-date"><abbr title="<?php echo $last_timestamp2 ?>"><?php echo $last_timestamp . __(' ago', 'advman'); ?></abbr><br /> <?php echo __('by', 'advman') . ' ' . $last_user; ?></td>
 	</tr>
 <?php endif; ?>
 <?php endif; ?>
@@ -158,11 +158,11 @@ function ADS_setAction(action, id, name, network)
 <div class="tablenav">
 	<div class="alignleft actions">
 		<select id="advman-bulk-bottom" name="action">
-		<option value="" selected="selected">Bulk Actions</option>
-		<option value="copy">Copy</option>
-		<option value="delete">Delete</option>
+			<option value="" selected="selected"><?php _e('Bulk Actions', 'advman'); ?></option>
+			<option value="copy"><?php _e('Copy', 'advman'); ?></option>
+			<option value="delete"><?php _e('Delete', 'advman'); ?></option>
 		</select>
-		<input type="submit" value="Apply" name="doaction" id="doaction" class="button-secondary action" onclick="document.getElementById('advman-action').value = document.getElementById('advman-bulk-bottom').value;" />
+		<input type="submit" value="<?php _e('Apply', 'advman'); ?>" name="doaction" id="doaction" class="button-secondary action" onclick="document.getElementById('advman-action').value = document.getElementById('advman-bulk-bottom').value;" />
 		<br class="clear" />
 	</div>
 	<br class="clear" />

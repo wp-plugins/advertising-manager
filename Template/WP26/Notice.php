@@ -12,7 +12,7 @@ class Template_Notice
 				<input type="hidden" name="advman-mode" value="notice">		
 				<input type="hidden" name="advman-action" value="<?php echo $action; ?>">												
 <?php
-				echo str_replace('Advertising Manager','<strong>Advertising Manager</strong>',$notice['text']);
+				echo $notice['text'];
 				if ($notice['confirm'] == 'yn') {
 ?>				<input name="advman-notice-confirm-yes" type="submit" value="Yes">
 				<input name="advman-notice-confirm-no" type="submit" value="No">
