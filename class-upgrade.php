@@ -29,6 +29,11 @@ class advman_upgrade {
 			$upgraded = true;
 		}
 	
+		if (version_compare($_advman['version'], '3.3.7', '<')) {
+			advman_upgrade::v3_3_3_to_3_3_7();
+			$upgraded = true;
+		}
+	
 		if ($upgraded) {
 			//Write notice, ONLY IF UPGRADE HAS OCCURRED
 			if ($optimiseMsg) {
@@ -39,7 +44,11 @@ class advman_upgrade {
 		}
 	}
 
-	
+	function v3_3_3_to_3_3_7()
+	{
+		global $_advman;
+		$_advman['settings']['openx-sync'] = true;
+	}
 	function v3_0_to_3_3_3()
 	{
 		global $_advman;

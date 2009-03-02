@@ -13,21 +13,16 @@ class Template_ListAds
 				<input type="hidden" id="advman-action" name="advman-action" />
 				<input type="hidden" id="advman-action-target" name="advman-action-target" />
 			<h2><?php _e('Manage Your Advertising', 'advman'); ?></h2>
-			<ul class="subsubsub">
-				<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='list'; document.getElementById('advman-form').submit();" class="current"><?php _e('Show Ads', 'advman'); ?> (<?php echo sizeof($_advman['ads']); ?>)</a> |</li>
-				<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='create'; document.getElementById('advman-form').submit();"><?php _e('Create New Ad', 'advman'); ?></a> |</li>
-				<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='settings'; document.getElementById('advman-form').submit();" ><?php _e('Settings', 'advman'); ?></a></li>
-			</ul>
 			
 				<table id="manage-ads" class="widefat">
 				<thead>
 				<tr style="height:3em; vertical-align:middle; white-space:nowrap">
-					<th>Name</th>
-					<th>Format</th>
-					<th>Modify</th>
-					<th style="text-align:center;">Active</th>
-					<th style="text-align:center;">Default</th>
-					<th>Notes</th>
+					<th><?php _e('Name', 'advman'); ?></th>
+					<th><?php _e('Format', 'advman'); ?></th>
+					<th><?php _e('Modify', 'advman'); ?></th>
+					<th style="text-align:center;"><?php _e('Active', 'advman'); ?></th>
+					<th style="text-align:center;"><?php _e('Default', 'advman'); ?></th>
+					<th><?php _e('Notes', 'advman'); ?></th>
 				</tr>
 				</thead>
 <?php

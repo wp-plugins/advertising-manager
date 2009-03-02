@@ -10,7 +10,7 @@ class Template_Notice
 
 ?>				<div id="message" class="updated fade">
 					<p>
-						<form action="edit.php?page=advertising-manager-manage-ads" method="post" id="advman-config-manage" enctype="multipart/form-data">
+						<form action="edit.php?page=advman-manage" method="post" id="advman-config-manage" enctype="multipart/form-data">
 						<input type="hidden" name="advman-mode" value="notice">		
 						<input type="hidden" name="advman-action" value="<?php echo $action; ?>">												
 						<?php echo $notice['text']; ?>

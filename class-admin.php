@@ -29,15 +29,17 @@ class advman_admin
 		wp_enqueue_script('postbox');
 		
 		if (version_compare($wp_version,"2.7-alpha", '>')) {
-			add_options_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 10, "advertising-manager-manage-ads", array('advman_admin','admin_manage'));
+			add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-manage', array('advman_admin','manage'));
+			add_submenu_page('advman-manage', __('Edit Ads', 'advman'), __('Edit', 'advman'), 8, 'advman-manage', array('advman_admin','manage'));
+			add_submenu_page('advman-manage', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-create', array('advman_admin','create'));
+			add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('advman_admin','settings'));
 		} else {
-			add_management_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 10, "advertising-manager-manage-ads", array('advman_admin','admin_manage'));
+			add_menu_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-manage', array('advman_admin','manage'));
+			add_submenu_page('advman-manage', __('Edit Ads', 'advman'), __('Edit', 'advman'), 8, 'advman-manage', array('advman_admin','manage'));
+			add_submenu_page('advman-manage', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-create', array('advman_admin','create'));
+			add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('advman_admin','settings'));
 		}
 		add_action( 'admin_notices', array('advman_admin','admin_notices'), 1 );
-		
-		$email = get_option('admin_email');
-		$user = get_current_user();
-		$siteurl = get_option('siteurl');
 	}
 			
 	/**
@@ -166,6 +168,7 @@ class advman_admin
 		global $_advman;
 		
 		$_advman['settings']['openx-market'] = !empty($_POST['advman-openx-market']);
+		$_advman['settings']['openx-sync'] = !empty($_POST['advman-openx-sync']);
 		$_advman['settings']['openx-market-cpm'] = !empty($_POST['advman-openx-market-cpm']) ? OX_Tools::sanitize_number($_POST['advman-openx-market-cpm']) : '0.20';
 	}
 	function _copy_ad($target)
@@ -280,7 +283,7 @@ class advman_admin
 		update_option('plugin_adsensem', $_advman);
 	}
 		
-	function admin_manage()
+	function manage()
 	{
 		
 		// Get our options and see if we're handling a form submission.
@@ -326,10 +329,6 @@ class advman_admin
 						advman_admin::_copy_ad($target);
 					}
 				}
-				break;
-			
-			case 'create' :
-				$mode = 'create_ad';
 				break;
 			
 			case 'deactivate' :
@@ -402,12 +401,6 @@ class advman_admin
 				$templateListAds->display($target, $filter);
 				break;
 			
-			case 'create_ad' :
-				include_once(ADVMAN_TEMPLATE_PATH . '/CreateAd.php');
-				$templateClass = new Template_CreateAd();
-				$templateClass->display($target);
-				break;
-			
 			case 'edit_ad' :
 				$shortName = $_advman['ads'][$target]->shortName;
 				if (file_exists(ADVMAN_TEMPLATE_PATH . '/EditAd/' . $shortName . '.php')) {
@@ -444,10 +437,21 @@ class advman_admin
 		}
 	}
 	
+	/**
+	 * This function is called from the Wordpress Ads menu
+	 */
+	function create()
+	{
+		include_once(ADVMAN_TEMPLATE_PATH . '/CreateAd.php');
+		
+		$templateClass = new Template_CreateAd();
+		$templateClass->display();
+	}
 	
-/* 		Define basic settings for the Adsense Manager - for block control use admin_manage */
-
-	function admin_options()
+	/**
+	 * This function is called from the Wordpress Settings menu
+	 */
+	function settings()
 	{
 		// Get our options and see if we're handling a form submission.
 		global $_advman;
@@ -468,7 +472,7 @@ class advman_admin
 	function add_header_script()
 	{
 		$page = !empty($_GET['page']) ? $_GET['page'] : '';
-		if ($page == 'advertising-manager-manage-ads') {
+		if ($page == 'advman-manage') {
 ?><link type="text/css" rel="stylesheet" href="<?php echo get_bloginfo('wpurl') ?>/wp-content/plugins/advertising-manager/advertising-manager.css" />
 <script src="<?php echo get_bloginfo('wpurl') ?>/wp-content/plugins/advertising-manager/advertising-manager.js"></script>
 <?php

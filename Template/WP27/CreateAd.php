@@ -23,13 +23,6 @@ class Template_CreateAd
 	<input type="hidden" name="advman-action" id="advman-action">
 	<input type="hidden" name="advman-action-target" id="advman-action-target">
 
-	<ul class="subsubsub">
-		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='list'; document.getElementById('advman-form').submit();"><?php _e('Show Ads', 'advman'); ?> <span class="count">(<?php echo sizeof($_advman['ads']); ?>)</span></a> |</li>
-		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='create'; document.getElementById('advman-form').submit();" class="current"><?php _e('Create New Ad', 'advman'); ?></a> |</li>
-		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='settings'; document.getElementById('advman-form').submit();"><?php _e('Settings', 'advman'); ?></a></li>
-	</ul>
-	<br />
-	<p>&nbsp;</p>
 	<p><h3><?php _e('Step 1: Import Your Ad Code', 'advman'); ?></h3></p>
 	<p><?php _e('Simply <strong>paste your Ad Code below</strong> and Import!', 'advman'); ?></p>
 	

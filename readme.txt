@@ -20,8 +20,6 @@ Automatic Ad Code Importer for all supported networks.
 Widgets & Sidebar Modules compatible (as used in the popular K2 theme).
 Automatic limiting of Ads to meet network T&Cs (Google 3 units/page)
 
-[Extended instructions are available here...](http://www.mutube.com/mu/getting-started-with-advertising-manager-3x).
-
 This plugin is under active development: if you experience problems, please first make sure you have the latest version installed. Feature requests, bug reports and comments can be submitted [here](http://forum.openx.org/index.php?showforum=74).
 
 
@@ -34,11 +32,11 @@ This plugin is under active development: if you experience problems, please firs
 
 == Installation ==
 
-1. Unzip the downloaded package and upload the Adsense Manager folder into your Wordpress plugins folder
+1. Unzip the downloaded package and transfer the advertising-manager folder into your wp-content/plugins folder
 1. Log into your WordPress admin panel
-1. Go to Plugins and “Activate” the plugin
-1. Previous installations will be updated and a notice displayed. If you have not used Advertising Manager before but have used Adsense Manager or Adsense Deluxe, you will be offered the change to import those ads.
-1. “Advertising Manager” will now be displayed in your Options section and “Ads” appears under Manage.
+1. Go to Plugins and “Activate” the Advertising Manager plug-in
+1. Previous installations will be updated and a notice displayed. If you have not used Advertising Manager before but have used Adsense Manager or Adsense Deluxe, you will be asked to import those ads.
+1. There will now be 'Advertising' displayed under the 'Settings' section (WP2.7) or 'Manage' section (WP2.6 and below).
 1. Import, create and modifty your Ad blocks under Manage » Ad Units
 
 
@@ -96,10 +94,6 @@ Load the page and Advertising Manager will revert to that version of the databas
 1.  In your author's ad, be sure to select the authors username in Display Options
 1.  Set the weights of the ads according to your revenue share.  The easiest way to do this is to set YOUR ad weight to 36, and then set the weight of your author's ad according to the revenue share deal.  For 10% revenue share, set the author ad weight to 4; 20% = 9; 33% = 18; 40% = 24; 50% = 36; 60% = 54; 66.7% = 72; 70% = 84; 80% = 144; 90% = 324.  For the nerdy wonks out there, the formula is (AUTHOR AD WEIGHT) = (MY AD WEIGHT * REVENUE SHARE) / (1 - REVENUE SHARE)
 
-
-= Where can I get more information? =
-
-[Complete usage instructions are available here.](http://www.mutube.com/mu/getting-started-with-advertising-manager-3x)
 
 == To Do ==
 
