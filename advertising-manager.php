@@ -56,19 +56,7 @@ class advman
 			add_action('admin_menu', array('advman','init_admin'));
 			add_action('widgets_init',  array('advman','init_widgets'), 1);
 
-			if (version_compare($_advman['version'], ADVMAN_VERSION, '<')) {
-				include_once('class-upgrade.php');
-				
-				//Backup cycle
-				$backup = get_option('plugin_adsensem_backup');
-				$backup[advman::major_version($_advman['version'])] = $_advman;
-				update_option('plugin_adsensem_backup',$backup);
-				unset($backup);
-				
-				advman_upgrade::go();
-				update_option('plugin_adsensem', $_advman);
-			}
-			
+			OX_Tools::check_upgrade();
 		} else {
 			// Get basic array
 			$_advman = advman::get_initial_array();
@@ -133,6 +121,10 @@ class advman
 	function init_widgets()
 	{
 		global $_advman;
+		
+		// Make sure that we have upgraded if needed
+		OX_Tools::check_upgrade();
+		
 		/* SITE SECTION: WIDGET DISPLAY CODE
 		/* Add the blocks to the Widget panel for positioning WP2.2+*/
 		

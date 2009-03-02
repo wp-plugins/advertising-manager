@@ -82,6 +82,7 @@ class OX_Tools
 		krsort($r);
 		return $r;
 	}
+	
 	function post_url($url, $data, $optional_headers = null)
 	{
 		$params = array('http' => array(
@@ -103,6 +104,22 @@ class OX_Tools
 			return false; //silently fail
 		}
 		return $response;
+	}
+	
+	function check_upgrade()
+	{
+		if (version_compare($_advman['version'], ADVMAN_VERSION, '<')) {
+			include_once(ADVMAN_PATH . '/class-upgrade.php');
+			
+			//Backup cycle
+			$backup = get_option('plugin_adsensem_backup');
+			$backup[advman::major_version($_advman['version'])] = $_advman;
+			update_option('plugin_adsensem_backup',$backup);
+			unset($backup);
+			
+			advman_upgrade::go();
+			update_option('plugin_adsensem', $_advman);
+		}
 	}
 }
 ?>
