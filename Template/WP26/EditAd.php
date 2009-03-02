@@ -51,7 +51,7 @@ class Template_EditAd
 <div id="poststuff">
 <div class="submitbox" id="submitpost">
 <div id="previewview">
-	<a id='advman-ad-preview' href='<?php echo get_bloginfo('wpurl'); ?>/wp-admin/edit.php?page=advertising-manager-manage-ads&advman-show-ad-id=<?php echo $id ?>' target="wp_preview">Preview this Ad</a>	
+	<a id='advman-ad-preview' href='<?php echo get_bloginfo('wpurl'); ?>/wp-admin/edit.php?page=advman-manage&advman-show-ad-id=<?php echo $id ?>' target="wp_preview">Preview this Ad</a>	
 </div><!-- previewview -->
 
 <div class="inside">

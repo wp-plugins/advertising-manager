@@ -62,7 +62,7 @@ class Template_EditAd
 							<div id="minor-publishing-actions">
 								<div id="save-action"></div>
 								<div id="preview-action">
-									<a class="preview button" href="<?php echo get_bloginfo('wpurl'); ?>/wp-admin/edit.php?page=advertising-manager-manage-ads&advman-show-ad-id=<?php echo $id ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview Ad', 'advman'); ?></a>
+									<a class="preview button" href="<?php echo get_bloginfo('wpurl'); ?>/wp-admin/edit.php?page=advman-manage&advman-show-ad-id=<?php echo $id ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview Ad', 'advman'); ?></a>
 									<input type="hidden" name="wp-preview" id="wp-preview" value="" />
 								</div>
 								<div class="clear"></div>
