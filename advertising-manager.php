@@ -48,26 +48,14 @@ class advman
 		global $_advman;
 		
 		//Only run main site code if setup & functional
-		if (advman::setup_is_valid()) {
+		if (OX_Tools::is_data_valid()) {
 			// Add a filter for displaying an ad in the content
 			add_filter('the_content', array('advman','filter_ads'));
 			// Add an action when the wordpress footer displays
 			add_action('wp_footer', array('advman','footer'));
 			add_action('admin_menu', array('advman','init_admin'));
 			add_action('widgets_init',  array('advman','init_widgets'), 1);
-
-			OX_Tools::check_upgrade();
-		} else {
-			// Get basic array
-			$_advman = advman::get_initial_array();
 			
-			// Check to see if Adsense Deluxe should be upgraded
-			$deluxe = get_option('acmetech_adsensedeluxe');
-			if (is_array($deluxe)) {
-				advman::add_notice('upgrade adsense-deluxe','Advertising Manager has detected a previous installation of <strong>Adsense Deluxe</strong>. Import settings?','yn');
-			}
-			
-			update_option('plugin_adsensem', $_advman);
 		}
 		
 		// Sync with OpenX
@@ -84,62 +72,33 @@ class advman
 		advman_admin::init_admin();
 	}
 
-	/**
-	 * Check to see if the $_advman array is valid
-	 */
-	function setup_is_valid()
-	{
-		global $_advman;
-		if (is_array($_advman)) {
-			if(is_array($_advman['ads'])) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	function major_version($v)
 	{
 		$mv=explode('.', $v);
 		return $mv[0]; //Return major version
 	}
 		
-	/**
-	 * Initialise the advman array
-	 */
-	function get_initial_array()
-	{
-		$_advman = array();
-		$_advman['ads'] = array();
-		$_advman['next_ad_id'] = 1;
-		$_advman['default-ad'] = '';
-		$_advman['version'] = ADVMAN_VERSION;
-		
-		return $_advman;
-	}
-	
 	function init_widgets()
 	{
 		global $_advman;
 		
-		// Make sure that we have upgraded if needed
-		OX_Tools::check_upgrade();
-		
 		/* SITE SECTION: WIDGET DISPLAY CODE
 		/* Add the blocks to the Widget panel for positioning WP2.2+*/
 		
-		if (!empty($_advman['ads'])) {
-			foreach ($_advman['ads'] as $id => $ad) {
-				$name = $ad->name;
-				$args = array('name' => $name, 'height' => $ad->get('height', true), 'width' => $ad->get('width', true));
-				if (function_exists('wp_register_sidebar_widget')) {
-					//$id, $name, $output_callback, $options = array()
-					wp_register_sidebar_widget("advman-$name", "Ad#$name", array('advman','widget'), $args, $name);
-//					wp_register_widget_control("advman-$name", "Ad#$name", array('advman','widget_control'), $args, $name); 
-				} elseif (function_exists('register_sidebar_module') ) {
-					register_sidebar_module("Ad #$name", 'advman_sbm_widget', "advman-$name", $args );
-//					register_sidebar_module_control("Ad #$name", array('advman','widget_control'), "advman-$name");
-				}			
+		if (OX_Tools::is_data_valid()) {
+			if (!empty($_advman['ads'])) {
+				foreach ($_advman['ads'] as $id => $ad) {
+					$name = $ad->name;
+					$args = array('name' => $name, 'height' => $ad->get('height', true), 'width' => $ad->get('width', true));
+					if (function_exists('wp_register_sidebar_widget')) {
+						//$id, $name, $output_callback, $options = array()
+						wp_register_sidebar_widget("advman-$name", "Ad#$name", array('advman','widget'), $args, $name);
+	//					wp_register_widget_control("advman-$name", "Ad#$name", array('advman','widget_control'), $args, $name); 
+					} elseif (function_exists('register_sidebar_module') ) {
+						register_sidebar_module("Ad #$name", 'advman_sbm_widget', "advman-$name", $args );
+	//					register_sidebar_module_control("Ad #$name", array('advman','widget_control'), "advman-$name");
+					}			
+				}
 			}
 		}
 	}
@@ -300,19 +259,19 @@ class advman
 	
 	function update_counters($ad)
 	{
-		global $_adsensem_counters;
+		global $_advman_counter;
 		
 		if (!empty($ad)) {
-			if (empty($_adsensem_counters['id'][$ad->id])) {
-				$_adsensem_counters['id'][$ad->id] = 1;
+			if (empty($_advman_counter['id'][$ad->id])) {
+				$_advman_counter['id'][$ad->id] = 1;
 			} else {
-				$_adsensem_counters['id'][$ad->id]++;
+				$_advman_counter['id'][$ad->id]++;
 			}
 			
-			if (empty($_adsensem_counters['network'][$ad->network])) {
-				$_adsensem_counters['network'][$ad->network] = 1;
+			if (empty($_advman_counter['network'][$ad->network])) {
+				$_advman_counter['network'][$ad->network] = 1;
 			} else {
-				$_adsensem_counters['network'][$ad->network]++;
+				$_advman_counter['network'][$ad->network]++;
 			}
 		}
 	}

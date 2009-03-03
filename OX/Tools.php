@@ -106,8 +106,28 @@ class OX_Tools
 		return $response;
 	}
 	
-	function check_upgrade()
+	function is_data_valid()
 	{
+		global $_advman;
+		
+		// If there is no data (or no readable data), create an initial array
+		if (empty($_advman['version']) || !is_array($_advman['ads'])) {
+			// Build an initial array
+			$_advman = array();
+			$_advman['ads'] = array();
+			$_advman['next_ad_id'] = 1;
+			$_advman['default-ad'] = '';
+			$_advman['version'] = ADVMAN_VERSION;
+			
+			// If there is no Advertising Manager data, check to see if we can import from Adsense Deluxe
+			$deluxe = get_option('acmetech_adsensedeluxe');
+			if (is_array($deluxe)) {
+				advman::add_notice('upgrade adsense-deluxe',__('<strong>Advertising Manager</strong> has detected a previous installation of <strong>Adsense Deluxe</strong>. Import settings?'),'yn');
+			}
+			
+			update_option('plugin_adsensem', $_advman);
+		}
+		
 		if (version_compare($_advman['version'], ADVMAN_VERSION, '<')) {
 			include_once(ADVMAN_PATH . '/class-upgrade.php');
 			
@@ -120,6 +140,8 @@ class OX_Tools
 			advman_upgrade::go();
 			update_option('plugin_adsensem', $_advman);
 		}
+		
+		return true;
 	}
 }
 ?>

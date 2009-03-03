@@ -369,24 +369,24 @@ class advman_upgrade {
 	function adsense_deluxe_to_3_0()
 	{
 		global $_advman;
-		$deluxe=get_option('acmetech_adsensedeluxe');
+		$deluxe = get_option('acmetech_adsensedeluxe');
 		
-			foreach($deluxe['ads'] as $key => $vals){
-				$ad=advman_admin::import_ad($vals['code']);
-				$name=advman_admin::generate_name($vals['name']);
-				
-				$ad->name = $name;
-				
-				$ad->set('show-home', ($deluxe['enabled_for']['home'] == 1) ? 'yes' : 'no');
-				$ad->set('show-post', ($deluxe['enabled_for']['posts'] == 1) ? 'yes' : 'no');
-				$ad->set('show-archive', ($deluxe['enabled_for']['archives'] == 1) ? 'yes' : 'no');
-				$ad->set('show-page', ($deluxe['enabled_for']['page'] == 1) ? 'yes' : 'no');
-				$_advman['ads'][$name] = $ad;
-				
-				if ($vals['make_default'] == 1) {
-					$_advman['default-ad'] = $name;
-				}
+		foreach ($deluxe['ads'] as $key => $vals) {
+			$ad = advman_admin::import_ad($vals['code']);
+			$name = advman_admin::generate_name($vals['name']);
+			
+			$ad->name = $name;
+			
+			$ad->set('show-home', ($deluxe['enabled_for']['home'] == 1) ? 'yes' : 'no');
+			$ad->set('show-post', ($deluxe['enabled_for']['posts'] == 1) ? 'yes' : 'no');
+			$ad->set('show-archive', ($deluxe['enabled_for']['archives'] == 1) ? 'yes' : 'no');
+			$ad->set('show-page', ($deluxe['enabled_for']['page'] == 1) ? 'yes' : 'no');
+			$_advman['ads'][$name] = $ad;
+			
+			if ($vals['make_default'] == 1) {
+				$_advman['default-ad'] = $name;
 			}
+		}
 		
 		OX_Tools::sort($_advman['ads']);
 	}
