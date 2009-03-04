@@ -20,7 +20,7 @@ Automatic Ad Code Importer for all supported networks.
 Widgets & Sidebar Modules compatible (as used in the popular K2 theme).
 Automatic limiting of Ads to meet network T&Cs (Google 3 units/page)
 
-This plugin is under active development: if you experience problems, please first make sure you have the latest version installed. Feature requests, bug reports and comments can be submitted [here](http://forum.openx.org/index.php?showforum=74).
+This plugin is under active development: if you experience problems, please first make sure you have the latest version installed. More detailed information, including documentation, as well as bug and feature request trackers can be found [here](http://code.openx.org/projects/show/advertising-manager).
 
 
 == Screenshots ==
@@ -35,9 +35,9 @@ This plugin is under active development: if you experience problems, please firs
 1. Unzip the downloaded package and transfer the advertising-manager folder into your wp-content/plugins folder
 1. Log into your WordPress admin panel
 1. Go to Plugins and “Activate” the Advertising Manager plug-in
-1. Previous installations will be updated and a notice displayed. If you have not used Advertising Manager before but have used Adsense Manager or Adsense Deluxe, you will be asked to import those ads.
-1. There will now be 'Advertising' displayed under the 'Settings' section (WP2.7) or 'Manage' section (WP2.6 and below).
-1. Import, create and modifty your Ad blocks under Manage » Ad Units
+
+More detailed installation instructions can be found [here](http://code.openx.org/wiki/advertising-manager/Installation_Instructions).
+If you are upgrading from Adsense Manager, Adsense Deluxe, or a previous version of Advertising Manager, upgrade instructions can be found [here](http://code.openx.org/wiki/advertising-manager/Upgrading_Instructions).
 
 
 == Frequently Asked Questions ==
@@ -52,6 +52,7 @@ There are a number of ways.  Some of them include:
 2.  From a template, enter <?php advman_ad() ?> for the default ad, or <?php advman_ad('name') ?> where 'name' is the name of the ad you want to display.
 3.  Other legacy methods of calling an ad include:  <?php adsensem_ad() ?> or <?php adsensem_ad('name') ?> for backwards compatibility with Adsense Manager; and <!--adsense#name--> for backwards compatibility with Adsense Deluxe.
 
+More detailed instuctions can be found in the documentation:  [Concepts - Placing ads on your blog](http://code.openx.org/wiki/advertising-manager/Placing_ads_on_your_blog)
 
 = Can Advertising Manager work in my language? =
 Yes.  Advertising Manager is Localised.  If your blog is in another language, and Advertising Manager shows in English, then it is most likely that a translation has not been done.
