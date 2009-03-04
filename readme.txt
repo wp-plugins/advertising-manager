@@ -26,7 +26,9 @@ This plugin is under active development: if you experience problems, please firs
 == Screenshots ==
 
 [WP Advertising Manager List Screen in WP 2.7](http://blog.openx.org/wp-content/uploads/advertising-manager-list-wp-27.png "WP Advertising Manager List Screen in WP 2.7")
+
 [WP Advertising Manager Edit Screen in WP 2.7](http://blog.openx.org/wp-content/uploads/advertising-manager-edit-wp-27.png "WP Advertising Manager Edit Screen in WP 2.7")
+
 [WP Advertising Manager List Screen in WP 2.6](http://blog.openx.org/wp-content/uploads/picture-10.png "WP Advertising Manager List Screen in WP 2.6")
 
 
