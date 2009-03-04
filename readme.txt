@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=martin%2
 Tags: adsense, ad, link, referral, manage, widget, google, adbrite, adify, cj, adpinion, shoppingads, ypn, widgetbucks, openx, adroll, affiliate, crispads, adgridwork
 Tested up to: 2.7
 Requires at least: 2.5.0
-Stable tag: 3.2.13
+Stable tag: 3.3.8
 
 Advertising Manager simplifies managing Google Adsense and other Ads Networks on your blog.
 

@@ -6,6 +6,7 @@
 http://wordpress.org/extend/plugins/advertising-manager/admin/
 
 3.  Copy the translation template to the pootle server:
+cd ~/Downloads/
 mv advertising-manager.pot advman.pot
 scp advman.pot pootle@openx.org:/home/pootle/Pootle/po/advman/templates/
 rm advman.pot
@@ -13,14 +14,30 @@ rm advman.pot
 4.  Update the templates:
 http://translate.openx.org/projects/advman/admin.html?doupdatelanguage=1&updatelanguage=en
 
-4.  Translate (at least English!):
+5.  Translate (at least English!):
 http://translate.openx.org/en/advman/index.html?editing=1
 
-5.  Generate the .mo file for all languages:
-http://translate.openx.org/en/advman/advman-en_US.mo
-http://translate.openx.org/es/advman/advman-es_ES.mo
+6.  Generate the .mo file for all languages:
+cd ~/Sites/advertising-manager/trunk/languages/
+rm *.mo
+curl http://translate.openx.org/ar/advman/advman.mo -o advman-ar.mo
+curl http://translate.openx.org/cs/advman/advman.mo -o advman-cs_CZ.mo
+curl http://translate.openx.org/de/advman/advman.mo -o advman-de_DE.mo
+curl http://translate.openx.org/el/advman/advman.mo -o advman-el.mo
+curl http://translate.openx.org/en/advman/advman.mo -o advman-en_US.mo
+curl http://translate.openx.org/es/advman/advman.mo -o advman-es_ES.mo
+curl http://translate.openx.org/hu/advman/advman.mo -o advman-hu_HU.mo
+curl http://translate.openx.org/id/advman/advman.mo -o advman-id_ID.mo
+curl http://translate.openx.org/ja/advman/advman.mo -o advman-ja.mo
+curl http://translate.openx.org/ko/advman/advman.mo -o advman-ko_KR.mo
+curl http://translate.openx.org/pt_PT/advman/advman.mo -o advman-pt_PT.mo
+curl http://translate.openx.org/tr/advman/advman.mo -o advman-tr.mo
+svn add *.mo
+svn ci -m "Updated languages from translation server"
 
-6.  Copy all .mo files to the languages directory
+New language names follow the ISO format used in Wordpress:
+http://codex.wordpress.org/WordPress_Localization
+
 
 7.  Increase the ADVMAN_VERSION at the top of advertising-manager.php
 

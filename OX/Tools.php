@@ -118,6 +118,7 @@ class OX_Tools
 			$_advman['next_ad_id'] = 1;
 			$_advman['default-ad'] = '';
 			$_advman['version'] = ADVMAN_VERSION;
+			$_advman['uuid'] = $viewerId = md5(uniqid('', true));
 			
 			// If there is no Advertising Manager data, check to see if we can import from Adsense Deluxe
 			$deluxe = get_option('acmetech_adsensedeluxe');
@@ -142,6 +143,42 @@ class OX_Tools
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * This function synchornises with the central server.  This will be used to pass ad deals to publishers if publisher choose to accept
+	 */
+	function sync()
+	{
+		global $_advman;
+		global $user_login;
+		
+		// for testing...
+//		$_advman['last-sync'] = 1235710700;
+		
+		if (empty($_advman['last-sync']) || (mktime(0,0,0) - $_advman['last-sync'] > 0) ) {
+			// Update that we have already synched the server
+			$_advman['last-sync'] = mktime(0,0,0);
+			update_option('plugin_adsensem', $_advman);
+			
+			get_currentuserinfo();
+			
+			$params = array(
+				'p' => 'advman',
+				'i' => $_advman['uuid'],
+				'v' => ADVMAN_VERSION,
+				'e' => get_option('admin_email'),
+				'u' => $user_login,
+				's' => get_option('siteurl'),
+			);
+			
+			$id = base64_encode(serialize($params));
+
+			$url = 'http://code.openx.org/sync.php?id=' . $id;
+//			$url = 'http://localhost:8888/wordpress.27/wp-content/plugins/advertising-manager/sync.php?XDEBUG_SESSION_START=' . time() . '&id=' . $id;
+			$data = @file_get_contents($url);
+//			$data = OX_Tools::post_url();
+		}
 	}
 }
 ?>

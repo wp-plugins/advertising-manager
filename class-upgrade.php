@@ -24,32 +24,33 @@ class advman_upgrade {
 		}
 		
 		if (version_compare($_advman['version'], '3.3.4', '<')) {
-			advman_upgrade::v3_0_to_3_3_3();
+			advman_upgrade::v3_0_to_3_3_4();
 			$optimiseMsg = true;
 			$upgraded = true;
 		}
 	
-		if (version_compare($_advman['version'], '3.3.7', '<')) {
-			advman_upgrade::v3_3_3_to_3_3_7();
+		if (version_compare($_advman['version'], '3.3.8', '<')) {
+			advman_upgrade::v3_3_4_to_3_3_8();
 			$upgraded = true;
 		}
 	
 		if ($upgraded) {
 			//Write notice, ONLY IF UPGRADE HAS OCCURRED
 			if ($optimiseMsg) {
-				advman::add_notice('optimise','<strong>Advertising Manager</strong> has upgraded its settings from a previous version of <strong>Adsense Manager</strong><br />Would you like Advertising Manager to enable <a href="www.switzer.org">auto optimisation</a>? (RECOMMENDED)','yn');
+				advman::add_notice('optimise','<strong>Advertising Manager</strong> has been upgraded from <strong>Adsense Manager</strong>.  Enable <a href="http://code.openx.org/wiki/advertising-manager/Auto_Optimization" target="_new">auto optimisation</a>? (RECOMMENDED)','yn');
 			}
 			$_advman['version'] = ADVMAN_VERSION;
 			update_option('plugin_adsensem', $_advman);
 		}
 	}
 
-	function v3_3_3_to_3_3_7()
+	function v3_3_4_to_3_3_8()
 	{
 		global $_advman;
 		$_advman['settings']['openx-sync'] = true;
+		$_advman['uuid'] = $viewerId = md5(uniqid('', true));
 	}
-	function v3_0_to_3_3_3()
+	function v3_0_to_3_3_4()
 	{
 		global $_advman;
 		$old = $_advman;
