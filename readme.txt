@@ -37,6 +37,7 @@ This plugin is under active development: if you experience problems, please firs
 1. Go to Plugins and “Activate” the Advertising Manager plug-in
 
 More detailed installation instructions can be found [here](http://code.openx.org/wiki/advertising-manager/Installation_Instructions).
+
 If you are upgrading from Adsense Manager, Adsense Deluxe, or a previous version of Advertising Manager, upgrade instructions can be found [here](http://code.openx.org/wiki/advertising-manager/Upgrading_Instructions).
 
 
