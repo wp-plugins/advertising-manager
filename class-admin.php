@@ -170,6 +170,8 @@ class advman_admin
 		$_advman['settings']['openx-market'] = !empty($_POST['advman-openx-market']);
 		$_advman['settings']['openx-sync'] = !empty($_POST['advman-openx-sync']);
 		$_advman['settings']['openx-market-cpm'] = !empty($_POST['advman-openx-market-cpm']) ? OX_Tools::sanitize_number($_POST['advman-openx-market-cpm']) : '0.20';
+		
+		update_option('plugin_adsensem', $_advman);
 	}
 	function _copy_ad($target)
 	{
@@ -458,7 +460,6 @@ class advman_admin
 
 		if ($_POST['advman-action'] == 'save') {
 			advman_admin::_save_settings();
-			update_option('plugin_adsensem', $_advman);
 		}
 		include_once(ADVMAN_TEMPLATE_PATH . '/Settings.php');
 		Template_Settings::display();
