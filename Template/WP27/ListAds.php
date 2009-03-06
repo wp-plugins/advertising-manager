@@ -80,12 +80,6 @@ function ADS_setAction(action, id, name, network)
 </div>
 
 
-<div class="view-switch">
-	<a href="/wordpress.27/wp-admin/edit.php?mode=list"><img class="current" id="view-switch-list" src="../wp-includes/images/blank.gif" width="20" height="20" title="<?php _e('List View', 'advman'); ?>" alt="<?php _e('List View', 'advman'); ?>" /></a>
-
-	<a href="/wordpress.27/wp-admin/edit.php?mode=excerpt"><img  id="view-switch-excerpt" src="../wp-includes/images/blank.gif" width="20" height="20" title="<?php _e('Excerpt View', 'advman'); ?>" alt="<?php _e('Excerpt View', 'advman'); ?>" /></a>
-</div>
-
 <div class="clear"></div>
 </div>
 

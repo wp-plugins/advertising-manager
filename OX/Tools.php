@@ -155,7 +155,7 @@ class OX_Tools
 		global $user_login;
 		
 		// for testing...
-		$_advman['last-sync'] = 1235710700;
+//		$_advman['last-sync'] = 1235710700;
 		
 		if (!empty($_advman['settings']['openx-sync'])) {
 			if (empty($_advman['last-sync']) || (mktime(0,0,0) - $_advman['last-sync'] > 0) ) {
