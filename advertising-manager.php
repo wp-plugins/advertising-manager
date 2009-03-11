@@ -15,7 +15,7 @@ Author URI: http://www.mutube.com/
 load_plugin_textdomain('advman', false, 'advertising-manager/languages');
 
 // DEFINITIONS
-@define("ADVMAN_VERSION", "3.3.8");
+@define("ADVMAN_VERSION", "3.3.9");
 @define('ADVMAN_PATH', dirname(__FILE__));
 global $wp_version;
 $template = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP26' : 'WP27';
