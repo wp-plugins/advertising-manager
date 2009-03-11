@@ -403,6 +403,10 @@ class advman_admin
 				$templateListAds->display($target, $filter);
 				break;
 			
+			case 'create_ad' :
+				advman_admin::create();
+				break;
+			
 			case 'edit_ad' :
 				$shortName = $_advman['ads'][$target]->shortName;
 				if (file_exists(ADVMAN_TEMPLATE_PATH . '/EditAd/' . $shortName . '.php')) {
@@ -456,8 +460,6 @@ class advman_admin
 	function settings()
 	{
 		// Get our options and see if we're handling a form submission.
-		global $_advman;
-
 		if ($_POST['advman-action'] == 'save') {
 			advman_admin::_save_settings();
 		}

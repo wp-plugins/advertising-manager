@@ -18,7 +18,7 @@ class Template_CreateAd
 ?><div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
 	<h2><?php _e('Create Ad', 'advman'); ?></h2>
-	<form action="" method="post" id="advman-form" enctype="multipart/form-data">
+	<form action="admin.php?page=advman-manage" method="post" id="advman-form" enctype="multipart/form-data">
 	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
 	<input type="hidden" name="advman-action" id="advman-action">
 	<input type="hidden" name="advman-action-target" id="advman-action-target">
