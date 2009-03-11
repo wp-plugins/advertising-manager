@@ -49,12 +49,16 @@ http://codex.wordpress.org/WordPress_Localization
 9.  Update the Readme.txt file with any changes in documentation.  Validate here:
 http://wordpress.org/extend/plugins/about/validator/
 
-10.  Follow the build process below:
+10. Add a zipped file to the repository:
+Follow the build process below:
 
 mkdir build
 cd build
 svn export http://svn.wp-plugins.org/advertising-manager/trunk
 mv trunk advertising-manager
-zip -r advertising-manager.zip advertising-manager/
+zip -r advertising-manager-3.3.9.zip advertising-manager/
+
+http://code.openx.org/projects/list_files/advertising-manager
+
 
 
