@@ -114,3 +114,12 @@ As a general rule the version X.Y.Z increments Z with bugfixes, Y with additiona
 
 * **3.3.9** Public beta - rotating ads, Adify support, much bug fixing and code restructuring
 * **3.3.4** First alpha version that is separate from Adsense Manager
+
+
+== Licence ==
+
+This plugin is released under the GPL - you can use it free of charge on your personal or commercial blog. Make sure to submit back to the project any changes that you make!
+
+== Translations ==
+
+The plugin comes with various translations, please refer to the [WordPress Codex](http://codex.wordpress.org/Installing_WordPress_in_Your_Language "Installing WordPress in Your Language") for more information about activating the translation. If you want to help to translate the plugin to your language, please have a look at the advman.pot file which contains all defintions and may be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poedit](http://www.poedit.net/) (Windows).

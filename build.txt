@@ -41,7 +41,10 @@ http://codex.wordpress.org/WordPress_Localization
 
 7.  Increase the ADVMAN_VERSION at the top of advertising-manager.php
 
-8.  Increate the version in the comments at the top of advertising-manager.php
+8.  Increate the version:
+- in the comments at the top of advertising-manager.php
+- in the code at the top of advertising-manager.php
+- in the readme file
 
 9.  Update the Readme.txt file with any changes in documentation.  Validate here:
 http://wordpress.org/extend/plugins/about/validator/
