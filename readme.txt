@@ -1,7 +1,7 @@
 === Advertising Manager ===
 Contributors: switzer, mutube
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=martin%2efitzpatrick%40gmail%2ecom&item_name=Donation%20to%20mutube%2ecom&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
-Tags: ad, adserver, advertising, affiliate, banner, link, referral, manager, server, widget, google, adbrite, adgridwork, adify, adpinion, adroll, adsense, crispads, cj, openx, shoppingads, widgetbucks, ypn
+Tags: ad, adbrite, adgridwork, adify, admin, adpinion, adroll, ads, adsense, adserver, advertisement, advertising, affiliate, banner, banners, cj, commercial, crispads, google, income, link, manager, media, money, openx, plugin, random, referral, revenue, rotator, seo, server, shoppingads, widget, widgetbucks, yahoo, ypn
 Requires at least: 2.5
 Tested up to: 2.7
 Stable tag: 3.3.9
