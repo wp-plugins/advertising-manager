@@ -56,7 +56,7 @@ mkdir build
 cd build
 svn export http://svn.wp-plugins.org/advertising-manager/trunk
 mv trunk advertising-manager
-zip -r advertising-manager-3.3.9.zip advertising-manager/
+zip -r advertising-manager-3.3.10.zip advertising-manager/
 
 http://code.openx.org/projects/list_files/advertising-manager
 
