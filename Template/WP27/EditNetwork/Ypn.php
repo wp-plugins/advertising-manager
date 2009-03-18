@@ -8,7 +8,7 @@ class Template_EditNetwork_Ypn extends Template_EditNetwork
 		// Call parent first!
 		parent::Template_EditNetwork();
 		// Colors
-		add_meta_box('advman_colors', __('Colors', 'advman'), array(get_class($this), 'displaySectionColors'), 'advman', 'normal');
+		add_meta_box('advman_colors', __('Default Ad Appearance Settings', 'advman'), array(get_class($this), 'displaySectionColors'), 'advman', 'default');
 	}
 	function displaySectionColors($ad)
 	{
@@ -18,27 +18,27 @@ class Template_EditNetwork_Ypn extends Template_EditNetwork
 		<table>
 		<tr>
 			<td class="advman_label"><label for="advman-color-border"><?php _e('Border:'); ?></label></td>
-			<td>#<input name="advman-color-border" onChange="advman_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get_default('color-border'); ?>" /></td>
+			<td>#<input name="advman-color-border" onChange="advman_update_ad(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get_default('color-border'); ?>" /></td>
 			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-border'); ?>"></td>
 		</tr>
 		<tr>
 			<td class="advman_label"><label for="advman-color-title"><?php _e('Title:'); ?></label></td>
-			<td>#<input name="advman-color-title" onChange="advman_update_color(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get_default('color-title'); ?>" /></td>
+			<td>#<input name="advman-color-title" onChange="advman_update_ad(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get_default('color-title'); ?>" /></td>
 			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-title'); ?>"></td>
 		</tr>
 		<tr>
 			<td class="advman_label"><label for="advman-color-bg"><?php _e('Background:'); ?></label></td>
-			<td>#<input name="advman-color-bg" onChange="advman_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get_default('color-bg'); ?>" /></td>
+			<td>#<input name="advman-color-bg" onChange="advman_update_ad(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get_default('color-bg'); ?>" /></td>
 			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-bg'); ?>"></td>
 		</tr>
 		<tr>
 			<td class="advman_label"><label for="advman-color-text"><?php _e('Text:'); ?></label></td>
-			<td>#<input name="advman-color-text" onChange="advman_update_color(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get_default('color-text'); ?>" /></td>
+			<td>#<input name="advman-color-text" onChange="advman_update_ad(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get_default('color-text'); ?>" /></td>
 			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-text'); ?>"></td>
 		</tr>
 		<tr>
 			<td class="advman_label"><label for="advman-color-link"><?php _e('URL:'); ?></label></td>
-			<td>#<input name="advman-color-link" onChange="advman_update_color(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get_default('color-link'); ?>" /></td>
+			<td>#<input name="advman-color-link" onChange="advman_update_ad(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get_default('color-link'); ?>" /></td>
 			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-link'); ?>"></td>
 		</tr>
 		</table>

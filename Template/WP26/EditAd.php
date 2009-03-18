@@ -10,9 +10,9 @@ class Template_EditAd
 		wp_enqueue_script('jquery-ui-draggable');
 		
 		// Ad Format
-		add_meta_box('advman_format', __('Ad Format', 'advman'), array(get_class($this), 'displaySectionFormat'), 'advman', 'normal');
-		// Display Options
-		add_meta_box('advman_display_options', __('Display Options', 'advman'), array(get_class($this), 'displaySectionDisplayOptions'), 'advman', 'normal');
+		add_meta_box('advman_format', __('Ad Format', 'advman'), array(get_class($this), 'displaySectionFormat'), 'advman', 'default');
+		// Website Display Options
+		add_meta_box('advman_display_options', __('Website Display Options', 'advman'), array(get_class($this), 'displaySectionDisplayOptions'), 'advman', 'default');
 		// Optimisation
 		add_meta_box('advman_optimisation', __('Optimization', 'advman'), array(get_class($this), 'displaySectionOptimisation'), 'advman', 'advanced');
 		// Code
@@ -51,7 +51,7 @@ class Template_EditAd
 <div id="poststuff">
 <div class="submitbox" id="submitpost">
 <div id="previewview">
-	<a id='advman-ad-preview' href='<?php echo get_bloginfo('wpurl'); ?>/wp-admin/edit.php?page=advman-manage&advman-show-ad-id=<?php echo $id ?>' target="wp_preview">Preview this Ad</a>	
+	<a id='advman-ad-preview' href="<?php echo $ad->get_preview_url(); ?>" target="wp_preview">Preview this Ad</a>	
 </div><!-- previewview -->
 
 <div class="inside">
@@ -93,7 +93,7 @@ class Template_EditAd
 		// Title
 		$this->displaySectionTitle($ad);
 		// Show normal boxes
-		do_meta_boxes('advman','normal',$ad);
+		do_meta_boxes('advman','default',$ad);
 		// Show advanced screen
 		$this->displayAdvanced($ad);
 		// Show advanced boxes
@@ -265,7 +265,7 @@ class Template_EditAd
 	</table>
 </div>
 <br />
-<span style="font-size:x-small;color:gray;">Display options determine where on your website your ads will appear.</span>
+<span style="font-size:x-small;color:gray;">Website display options determine where on your website your ads will appear.</span>
 <?php
 	}
 	
@@ -340,5 +340,10 @@ class Template_EditAd
 <br />
 <span style="font-size:x-small; color:gray;"><?php _e('The last 30 days of revisions are stored for each ad.', 'advman'); ?></span>
 <?php
+	}
+	
+	function getPreviewUrl($ad)
+	{
+		return get_bloginfo('wpurl') . '/wp-admin/edit.php?page=advman-manage&advman-ad-id=' . $ad->id;
 	}
 }

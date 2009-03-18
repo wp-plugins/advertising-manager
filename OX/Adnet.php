@@ -123,10 +123,19 @@ class OX_Adnet
 	function is_available()
 	{
 		global $post;
+		global $_advman_counter;
+		
 		// Filter by active
 		if (!$this->active) {
 			return false;
 		}
+		
+		// Filter by counter
+		$counter = $this->get_default('counter');
+		if (!empty($counter) && ($_advman_counter['network'][$this->network] >= $counter)) {
+			return false;
+		}
+		
 		// Filter by author
 		$author = $this->get('show-author', true);
 		if (!empty($author) && ($author != 'all')) {
@@ -188,28 +197,9 @@ class OX_Adnet
 		}
 		
 		return str_replace($search, $replace, $this->get('code'));
+//		return $this->get('code');
 	}
 		
-	function customiseSection($mode, $section)
-	{
-		return false;
-	}
-	
-	function displaySection($mode, $section)
-	{
-		return;
-	}
-	
-	function displayBeforeSection($mode, $section)
-	{
-		return;
-	}
-	
-	function displayAfterSection($mode, $section)
-	{
-		return;
-	}
-	
 	function reset_defaults()
 	{
 		global $_advman;
@@ -222,6 +212,7 @@ class OX_Adnet
 			'account-id' => '',
 			'adformat' => '728x90',
 			'code' => '',
+			'counter' => '',
 			'height' => '90',
 			'html-after' => '',
 			'html-before' => '',
@@ -326,6 +317,16 @@ class OX_Adnet
 	function import_settings($code)
 	{
 		$this->set('code', $code);
+	}
+	
+	function get_name_url()
+	{
+		return get_bloginfo('wpurl') . '/wp-admin/edit.php?page=advman-manage&advman-ad-name=' . $this->name;
+	}
+	
+	function get_preview_url()
+	{
+		return get_bloginfo('wpurl') . '/wp-admin/edit.php?page=advman-manage&advman-ad-id=' . $this->id;
 	}
 }
 

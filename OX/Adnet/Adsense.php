@@ -43,6 +43,7 @@ class OX_Adnet_Adsense extends OX_Adnet
 			'color-link' => 'FF0000',
 			'color-text' => '646360',
 			'color-title' => '000000',
+			'counter' => '3',
 			'height' => '728',
 			'partner' => '',
 			'slot' => '',

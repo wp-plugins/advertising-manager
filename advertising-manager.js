@@ -10,16 +10,19 @@
 	}
 		
 		
-	function advman_update_color(element,id,what)
+	function advman_update_ad(element,id,what)
 	{
 		target = document.getElementById(id);
 		switch (what) {
 			case 'bg':	target.style.background='#' + element.value; break;
 			case 'border':	target.style.border='1px solid #' + element.value; break;
+			case 'font-text':
+			case 'font-title':
+				target.style.fontFamily=element.value; break;
 			default : target.style.color='#' + element.value; break;
 		}
 	}
-		
+	
 	function advman_update_formats()
 	{
 		s = document.getElementById('advman-adtype');

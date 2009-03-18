@@ -33,10 +33,10 @@ class OX_Adnet_Adbrite extends OX_Adnet
 	{
 		$properties = array(
 			'adformat' => '250x250',
-			'color-bg' 	=> 'FFFFFF',
-			'color-border'=> 'FFFFFF',
-			'color-text'	=> '000000',
-			'color-title'	=> '0000FF',
+			'color-bg' => 'FFFFFF',
+			'color-border' => 'FFFFFF',
+			'color-text' => '000000',
+			'color-title' => '0000FF',
 			'height' => '250',
 			'slot' => '',
 			'width' => '250',

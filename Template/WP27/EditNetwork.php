@@ -9,14 +9,16 @@ class Template_EditNetwork
 		wp_enqueue_script('postbox');
 		wp_enqueue_script('jquery-ui-draggable');
 		
+		// Counter
+		add_meta_box('advman_counter', __('Ad Network Settings', 'advman'), array(get_class($this), 'displaySectionCounter'), 'advman', 'high');
 		// Ad Format
-		add_meta_box('advman_format', __('Ad Format', 'advman'), array(get_class($this), 'displaySectionFormat'), 'advman', 'normal');
-		// Display Options
-		add_meta_box('advman_display_options', __('Display Options', 'advman'), array(get_class($this), 'displaySectionDisplayOptions'), 'advman', 'normal');
+		add_meta_box('advman_format', __('Ad Format Defaults', 'advman'), array(get_class($this), 'displaySectionFormat'), 'advman', 'default');
+		// Website Display Options
+		add_meta_box('advman_display_options', __('Default Website Display Options', 'advman'), array(get_class($this), 'displaySectionDisplayOptions'), 'advman', 'default');
 		// Optimisation
-		add_meta_box('advman_optimisation', __('Optimization', 'advman'), array(get_class($this), 'displaySectionOptimisation'), 'advman', 'advanced');
+		add_meta_box('advman_optimisation', __('Default Optimization Settings', 'advman'), array(get_class($this), 'displaySectionOptimisation'), 'advman', 'advanced');
 		// Code
-		add_meta_box('advman_code', __('Code', 'advman'), array(get_class($this), 'displaySectionCode'), 'advman', 'advanced');
+		add_meta_box('advman_code', __('Default HTML Code', 'advman'), array(get_class($this), 'displaySectionCode'), 'advman', 'advanced');
 		// Revisions
 		add_meta_box('advman_history', __('History', 'advman'), array(get_class($this), 'displaySectionHistory'), 'advman', 'advanced', 'low');
 	}
@@ -44,7 +46,7 @@ class Template_EditNetwork
 
 <div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
-	<h2><?php printf(__('Edit %s Defaults', 'advman'), "<span class='" . strtolower($ad->network) . "'>" . $ad->networkName . "</span>"); ?></h2>
+	<h2><?php printf(__('Edit %s Network Settings', 'advman'), "<span class='" . strtolower($ad->network) . "'>" . $ad->networkName . "</span>"); ?></h2>
 	<form action="" method="post" id="advman-form" enctype="multipart/form-data">
 	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
 	<input type="hidden" name="advman-action" id="advman-action">
@@ -107,10 +109,14 @@ class Template_EditNetwork
 	<div id="post-body-content" class="has-sidebar-content">
 
 <?php
-		// Show normal boxes
-		do_meta_boxes('advman','normal',$ad);
+		// Show ad network settings boxes
+		do_meta_boxes('advman','high',$ad);
 		// Show advanced screen
-		$this->displayAdvanced($ad);
+		$this->displayLineBreak($ad, 'Ad Network Defaults');
+		// Show defaults boxes
+		do_meta_boxes('advman','default',$ad);
+		// Show advanced screen
+		$this->displayLineBreak($ad, 'Advanced Options');
 		// Show advanced boxes
 		do_meta_boxes('advman','advanced',$ad);
 ?>
@@ -120,33 +126,48 @@ class Template_EditNetwork
 <?php
 	}
 	
+	function displaySectionCounter($ad)
+	{
+?><div style="font-size:small;">
+<p>
+	<label for="advman-weight"><?php _e('Maximum ads per page:'); ?></label>
+	<input type="text" name="advman-counter" style="width:50px" id="advman-counter" value="<?php echo $ad->get_default('counter'); ?>" />
+</p>
+</div>
+<br />
+<span style="font-size:x-small; color:gray;"><?php _e('Enter the maximum number of times an ad from this network can display on a single page.  Leave this field blank if you do not want to set restrictions on this ad network.  Note that if you have more ad slots on the page, then other ads will run in the remaining slots.  There are some networks that only allow a certain number of their ads to run on a webpage.  For example, Google Adsense allows only 3 ads per page.', 'advman'); ?></span>
+<?php
+	}
+	
 	function displaySectionFormat($ad)
 	{
+		$format = $ad->get_default('adformat');
+		
 ?><table id="advman-settings-ad_format">
 <tr id="advman-form-adformat">
 	<td class="advman_label"><label for="advman-adformat"><?php _e('Format:'); ?></label></td>
 	<td>
 		<select name="advman-adformat" id="advman-adformat" onchange="advman_form_update(this);">
 			<optgroup id="advman-optgroup-horizontal" label="Horizontal">
-				<option<?php echo ($ad->get_default('adformat') == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> <?php _e('728 x 90 Leaderboard', 'advman'); ?></option>
-				<option<?php echo ($ad->get_default('adformat') == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> <?php _e('468 x 60 Banner', 'advman'); ?></option>
-				<option<?php echo ($ad->get_default('adformat') == '234x60' ? ' selected="selected"' : ''); ?> value="234x60"> <?php _e('234 x 60 Half Banner', 'advman'); ?></option>
+				<option<?php echo ($format == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> <?php _e('728 x 90 Leaderboard', 'advman'); ?></option>
+				<option<?php echo ($format == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> <?php _e('468 x 60 Banner', 'advman'); ?></option>
+				<option<?php echo ($format == '234x60' ? ' selected="selected"' : ''); ?> value="234x60"> <?php _e('234 x 60 Half Banner', 'advman'); ?></option>
 			</optgroup>
 			<optgroup id="advman-optgroup-vertical" label="Vertical">
-				<option<?php echo ($ad->get_default('adformat') == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> <?php _e('120 x 600 Skyscraper', 'advman'); ?></option>
-				<option<?php echo ($ad->get_default('adformat') == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> <?php _e('160 x 600 Wide Skyscraper', 'advman'); ?></option>
-				<option<?php echo ($ad->get_default('adformat') == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> <?php _e('120 x 240 Vertical Banner', 'advman'); ?></option>
+				<option<?php echo ($format == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> <?php _e('120 x 600 Skyscraper', 'advman'); ?></option>
+				<option<?php echo ($format == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> <?php _e('160 x 600 Wide Skyscraper', 'advman'); ?></option>
+				<option<?php echo ($format == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> <?php _e('120 x 240 Vertical Banner', 'advman'); ?></option>
 			</optgroup>
 			<optgroup id="advman-optgroup-square" label="Square">
-				<option<?php echo ($ad->get_default('adformat') == '336x280' ? ' selected="selected"' : ''); ?> value="336x280"> <?php _e('336 x 280 Large Rectangle', 'advman'); ?></option>
-				<option<?php echo ($ad->get_default('adformat') == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> <?php _e('300 x 250 Medium Rectangle', 'advman'); ?></option>
-				<option<?php echo ($ad->get_default('adformat') == '250x250' ? ' selected="selected"' : ''); ?> value="250x250"> <?php _e('250 x 250 Square', 'advman'); ?></option>
-				<option<?php echo ($ad->get_default('adformat') == '200x200' ? ' selected="selected"' : ''); ?> value="200x200"> <?php _e('200 x 200 Small Square', 'advman'); ?></option>
-				<option<?php echo ($ad->get_default('adformat') == '180x150' ? ' selected="selected"' : ''); ?> value="180x150"> <?php _e('180 x 150 Small Rectangle'); ?></option>
-				<option<?php echo ($ad->get_default('adformat') == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> <?php _e('125 x 125 Button', 'advman'); ?></option>
+				<option<?php echo ($format == '336x280' ? ' selected="selected"' : ''); ?> value="336x280"> <?php _e('336 x 280 Large Rectangle', 'advman'); ?></option>
+				<option<?php echo ($format == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> <?php _e('300 x 250 Medium Rectangle', 'advman'); ?></option>
+				<option<?php echo ($format == '250x250' ? ' selected="selected"' : ''); ?> value="250x250"> <?php _e('250 x 250 Square', 'advman'); ?></option>
+				<option<?php echo ($format == '200x200' ? ' selected="selected"' : ''); ?> value="200x200"> <?php _e('200 x 200 Small Square', 'advman'); ?></option>
+				<option<?php echo ($format == '180x150' ? ' selected="selected"' : ''); ?> value="180x150"> <?php _e('180 x 150 Small Rectangle'); ?></option>
+				<option<?php echo ($format == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> <?php _e('125 x 125 Button', 'advman'); ?></option>
 			</optgroup>
 			<optgroup id="advman-optgroup-custom" label="Custom">
-				<option<?php echo ($ad->get_default('adformat') == 'custom' ? ' selected="selected"' : ''); ?> value="custom"> Custom width and height</option>
+				<option<?php echo ($format == 'custom' ? ' selected="selected"' : ''); ?> value="custom"> Custom width and height</option>
 			</optgroup>
 		</select>
 	</td>
@@ -237,13 +258,13 @@ class Template_EditNetwork
 	</table>
 </div>
 <br />
-<span style="font-size:x-small;color:gray;">Display options determine where on your website your ads will appear.</span>
+<span style="font-size:x-small;color:gray;">Website display options determine where on your website your ads will appear.</span>
 <?php
 	}
 	
-	function displayAdvanced($ad)
+	function displayLineBreak($ad, $text)
 	{
-?><h2><?php _e('Advanced Options', 'advman'); ?></h2>
+?><h2><?php _e($text, 'advman'); ?></h2>
 <?php		
 	}
 	

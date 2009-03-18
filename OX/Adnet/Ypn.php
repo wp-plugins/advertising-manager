@@ -3,7 +3,6 @@ if(!ADVMAN_VERSION){die();}
 require_once(ADVMAN_PATH . '/OX/Adnet.php');	
 
 $_advman_networks['OX_Adnet_Ypn'] = array(
-	//'www-create' => 'http://www.adbrite.com/zones/commerce/purchase.php?product_id_array=22',
 	'www-signup'	=>	'http://ypn.yahoo.com/',														 
 );
 

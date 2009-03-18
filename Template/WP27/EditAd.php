@@ -10,9 +10,9 @@ class Template_EditAd
 		wp_enqueue_script('jquery-ui-draggable');
 		
 		// Ad Format
-		add_meta_box('advman_format', __('Ad Format', 'advman'), array(get_class($this), 'displaySectionFormat'), 'advman', 'normal');
-		// Display Options
-		add_meta_box('advman_display_options', __('Display Options', 'advman'), array(get_class($this), 'displaySectionDisplayOptions'), 'advman', 'normal');
+		add_meta_box('advman_format', __('Ad Format', 'advman'), array(get_class($this), 'displaySectionFormat'), 'advman', 'default');
+		// Website Display Options
+		add_meta_box('advman_display_options', __('Website Display Options', 'advman'), array(get_class($this), 'displaySectionDisplayOptions'), 'advman', 'default');
 		// Optimisation
 		add_meta_box('advman_optimisation', __('Optimization', 'advman'), array(get_class($this), 'displaySectionOptimisation'), 'advman', 'advanced');
 		// Code
@@ -62,7 +62,7 @@ class Template_EditAd
 							<div id="minor-publishing-actions">
 								<div id="save-action"></div>
 								<div id="preview-action">
-									<a class="preview button" href="<?php echo get_bloginfo('wpurl'); ?>/wp-admin/edit.php?page=advman-manage&advman-show-ad-id=<?php echo $id ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview Ad', 'advman'); ?></a>
+									<a class="preview button" href="<?php echo $ad->get_preview_url(); ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview Ad', 'advman'); ?></a>
 									<input type="hidden" name="wp-preview" id="wp-preview" value="" />
 								</div>
 								<div class="clear"></div>
@@ -116,7 +116,7 @@ class Template_EditAd
 		// Title
 		$this->displaySectionTitle($ad);
 		// Show normal boxes
-		do_meta_boxes('advman','normal',$ad);
+		do_meta_boxes('advman','default',$ad);
 		// Show advanced screen
 		$this->displayAdvanced($ad);
 		// Show advanced boxes
@@ -283,7 +283,7 @@ class Template_EditAd
 	</table>
 </div>
 <br />
-<span style="font-size:x-small;color:gray;"><?php _e('Display options determine where on your website your ads will appear.', 'advman'); ?></span>
+<span style="font-size:x-small;color:gray;"><?php _e('Website display options determine where on your website your ads will appear.', 'advman'); ?></span>
 <?php
 	}
 	

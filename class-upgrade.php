@@ -34,6 +34,11 @@ class advman_upgrade {
 			$upgraded = true;
 		}
 	
+		if (version_compare($_advman['version'], '3.3.10', '<')) {
+			advman_upgrade::v3_3_10();
+			$upgraded = true;
+		}
+	
 		if ($upgraded) {
 			//Write notice, ONLY IF UPGRADE HAS OCCURRED
 			if ($optimiseMsg) {
@@ -44,6 +49,21 @@ class advman_upgrade {
 		}
 	}
 
+	function v3_3_10()
+	{
+		global $_advman;
+		
+		if (!empty($_advman['defaults'])) {
+			foreach ($_advman['defaults'] as $n => $default) {
+				$counter = '';
+				if ($n == 'OX_Adnet_Adsense') {
+					$counter = '3';
+				}
+				$_advman['defaults'][$n]['counter'] = $counter;
+			}
+		}
+	}
+	
 	function v3_3_4_to_3_3_8()
 	{
 		global $_advman;
@@ -513,7 +533,7 @@ class advman_upgrade {
 			default				:
 				$alternateAd = $ad->get('alternate-ad');
 				if (!empty($alternateAd)) {
-					$code.= 'google_alternate_ad_url = "' . get_bloginfo('wpurl') . '/?advman-show-ad=' . $alternateAd . '";'  . "\n";
+					$code.= 'google_alternate_ad_url = "' . get_bloginfo('wpurl') . '/?advman-ad-name=' . $alternateAd . '";'  . "\n";
 				}
 		}
 		

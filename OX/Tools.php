@@ -1,6 +1,25 @@
 <?php
 class OX_Tools
 {
+	function get_template($name, $ad = null)
+	{
+		$className = null;
+		
+		if (!empty($ad)) {
+			$shortName = $ad->shortName;
+			if (file_exists(ADVMAN_TEMPLATE_PATH . "/{$name}/{$shortName}.php")) {
+				include_once(ADVMAN_TEMPLATE_PATH . "/{$name}/{$shortName}.php");
+				$className = "Template_{$name}_{$shortName}";
+			}
+		}
+		if (empty($className)) {
+			include_once(ADVMAN_TEMPLATE_PATH . "/{$name}.php");
+			$className = "Template_{$name}";
+		}
+		
+		return new $className;
+	}
+	
 	function sort($ads)
 	{
 		uasort($ads, array('OX_Tools', '_sort_by_class'));

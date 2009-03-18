@@ -398,9 +398,8 @@ class advman_admin
 		
 		switch ($mode) {
 			case 'list_ads' :
-				include_once(ADVMAN_TEMPLATE_PATH . '/ListAds.php');
-				$templateListAds = new Template_ListAds();
-				$templateListAds->display($target, $filter);
+				$template = OX_Tools::get_template('ListAds');
+				$template->display();
 				break;
 			
 			case 'create_ad' :
@@ -408,38 +407,21 @@ class advman_admin
 				break;
 			
 			case 'edit_ad' :
-				$shortName = $_advman['ads'][$target]->shortName;
-				if (file_exists(ADVMAN_TEMPLATE_PATH . '/EditAd/' . $shortName . '.php')) {
-					include_once(ADVMAN_TEMPLATE_PATH . '/EditAd/' . $shortName . '.php');
-					$templateClassName = 'Template_EditAd_' . $shortName;
-				} else {
-					include_once(ADVMAN_TEMPLATE_PATH . '/EditAd.php');
-					$templateClassName = 'Template_EditAd';
-				}
-				$templateClass = new $templateClassName;
-				$templateClass->display($target);
+				$ad = $_advman['ads'][$target];
+				$template = OX_Tools::get_template('EditAd', $ad);
+				$template->display($target);
 				break;
 			
 			case 'edit_network' :
-				$networkAd = new $target;
-				$shortName = $networkAd->shortName;
-				if (file_exists(ADVMAN_TEMPLATE_PATH . '/EditNetwork/' . $shortName . '.php')) {
-					include_once(ADVMAN_TEMPLATE_PATH . '/EditNetwork/' . $shortName . '.php');
-					$templateClassName = 'Template_EditNetwork_' . $shortName;
-				} else {
-					include_once(ADVMAN_TEMPLATE_PATH . '/EditNetwork.php');
-					$templateClassName = 'Template_EditNetwork';
-				}
-				$templateClass = new $templateClassName;
-				$templateClass->display($target);
+				$ad = new $target;
+				$template = OX_Tools::get_template('EditNetwork', $ad);
+				$template->display($target);
 				break;
 			
 			case 'settings' :
-				include_once(ADVMAN_TEMPLATE_PATH . '/Settings.php');
-				$templateClass = new Template_Settings();
-				$templateClass->display($target);
+				$template = OX_Tools::get_template('Settings');
+				$template->display();
 				break;
-			
 		}
 	}
 	
@@ -448,10 +430,9 @@ class advman_admin
 	 */
 	function create()
 	{
-		include_once(ADVMAN_TEMPLATE_PATH . '/CreateAd.php');
-		
-		$templateClass = new Template_CreateAd();
-		$templateClass->display();
+		$template = OX_Tools::get_template('CreateAd');
+		$template->display();
+		break;
 	}
 	
 	/**

@@ -8,11 +8,13 @@ class Template_EditNetwork_Adsense extends Template_EditNetwork
 		// Call parent first!
 		parent::Template_EditNetwork();
 		// Colors
-		add_meta_box('advman_colors', __('Colors', 'advman'), array(get_class($this), 'displaySectionColors'), 'advman', 'normal');
+		add_meta_box('advman_colors', __('Default Ad Appearance Settings', 'advman'), array(get_class($this), 'displaySectionColors'), 'advman', 'default');
 	}
 	
 	function displaySectionFormat($ad)
 	{
+		$format = $ad->get_default('adformat');
+		
 ?>	<table id="advman-settings-ad_format">
 <?php
 		if ($ad->get_default('adtype') == 'slot') {
@@ -40,22 +42,22 @@ class Template_EditNetwork_Adsense extends Template_EditNetwork
 		<td>
 			<select name="advman-adformat" id="advman-adformat" onchange="advman_form_update(this);">
 				<optgroup id="advman-optgroup-horizontal" label="Horizontal">
-					<option<?php echo ($ad->get_default('adformat') == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> <?php _e('728 x 90 Leaderboard', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> <?php _e('468 x 60 Banner', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '234x60' ? ' selected="selected"' : ''); ?> value="234x60"> <?php _e('234 x 60 Half Banner', 'advman'); ?></option>
+					<option<?php echo ($format == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> <?php _e('728 x 90 Leaderboard', 'advman'); ?></option>
+					<option<?php echo ($format == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> <?php _e('468 x 60 Banner', 'advman'); ?></option>
+					<option<?php echo ($format == '234x60' ? ' selected="selected"' : ''); ?> value="234x60"> <?php _e('234 x 60 Half Banner', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="advman-optgroup-vertical" label="Vertical">
-					<option<?php echo ($ad->get_default('adformat') == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> <?php _e('120 x 600 Skyscraper', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> <?php _e('160 x 600 Wide Skyscraper', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> <?php _e('120 x 240 Vertical Banner', 'advman'); ?></option>
+					<option<?php echo ($format == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> <?php _e('120 x 600 Skyscraper', 'advman'); ?></option>
+					<option<?php echo ($format == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> <?php _e('160 x 600 Wide Skyscraper', 'advman'); ?></option>
+					<option<?php echo ($format == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> <?php _e('120 x 240 Vertical Banner', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="advman-optgroup-square" label="Square">
-					<option<?php echo ($ad->get_default('adformat') == '336x280' ? ' selected="selected"' : ''); ?> value="336x280"> <?php _e('336 x 280 Large Rectangle', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> <?php _e('300 x 250 Medium Rectangle', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '250x250' ? ' selected="selected"' : ''); ?> value="250x250"> <?php _e('250 x 250 Square', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '200x200' ? ' selected="selected"' : ''); ?> value="200x200"> <?php _e('200 x 200 Small Square', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '180x150' ? ' selected="selected"' : ''); ?> value="180x150"> <?php _e('180 x 150 Small Rectangle'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> <?php _e('125 x 125 Button', 'advman'); ?></option>
+					<option<?php echo ($format == '336x280' ? ' selected="selected"' : ''); ?> value="336x280"> <?php _e('336 x 280 Large Rectangle', 'advman'); ?></option>
+					<option<?php echo ($format == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> <?php _e('300 x 250 Medium Rectangle', 'advman'); ?></option>
+					<option<?php echo ($format == '250x250' ? ' selected="selected"' : ''); ?> value="250x250"> <?php _e('250 x 250 Square', 'advman'); ?></option>
+					<option<?php echo ($format == '200x200' ? ' selected="selected"' : ''); ?> value="200x200"> <?php _e('200 x 200 Small Square', 'advman'); ?></option>
+					<option<?php echo ($format == '180x150' ? ' selected="selected"' : ''); ?> value="180x150"> <?php _e('180 x 150 Small Rectangle'); ?></option>
+					<option<?php echo ($format == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> <?php _e('125 x 125 Button', 'advman'); ?></option>
 				</optgroup>
 			</select>
 		</td>
@@ -67,14 +69,14 @@ class Template_EditNetwork_Adsense extends Template_EditNetwork
 		<td>
 			<select name="advman-linkformat" id="advman-linkformat" onchange="advman_form_update(this);">
 				<optgroup id="advman-optgroup-horizontal" label="Horizontal">
-					<option<?php echo ($ad->get_default('adformat') == '728x15' ? ' selected="selected"' : ''); ?> value="728x15"> <?php _e('728 x 15', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '468x15' ? ' selected="selected"' : ''); ?> value="468x15"> <?php _e('468 x 15', 'advman'); ?></option>
+					<option<?php echo ($format == '728x15' ? ' selected="selected"' : ''); ?> value="728x15"> <?php _e('728 x 15', 'advman'); ?></option>
+					<option<?php echo ($format == '468x15' ? ' selected="selected"' : ''); ?> value="468x15"> <?php _e('468 x 15', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="advman-optgroup-square" label="Square">
-					<option<?php echo ($ad->get_default('adformat') == '200x90' ? ' selected="selected"' : ''); ?> value="200x90"> <?php _e('200 x 90', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '180x90' ? ' selected="selected"' : ''); ?> value="180x90"> <?php _e('180 x 90', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '160x90' ? ' selected="selected"' : ''); ?> value="160x90"> <?php _e('160 x 90', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '120x90' ? ' selected="selected"' : ''); ?> value="120x90"> <?php _e('120 x 90', 'advman'); ?></option>
+					<option<?php echo ($format == '200x90' ? ' selected="selected"' : ''); ?> value="200x90"> <?php _e('200 x 90', 'advman'); ?></option>
+					<option<?php echo ($format == '180x90' ? ' selected="selected"' : ''); ?> value="180x90"> <?php _e('180 x 90', 'advman'); ?></option>
+					<option<?php echo ($format == '160x90' ? ' selected="selected"' : ''); ?> value="160x90"> <?php _e('160 x 90', 'advman'); ?></option>
+					<option<?php echo ($format == '120x90' ? ' selected="selected"' : ''); ?> value="120x90"> <?php _e('120 x 90', 'advman'); ?></option>
 				</optgroup>
 			</select>
 		</td>
@@ -84,16 +86,16 @@ class Template_EditNetwork_Adsense extends Template_EditNetwork
 		<td>
 			<select name="advman-referralformat" id="advman-referralformat" onchange="advman_form_update(this);">
 				<optgroup id="advman-optgroup-horizontal" label="Horizontal">
-					<option<?php echo ($ad->get_default('adformat') == '110x32' ? ' selected="selected"' : ''); ?> value="110x32"> <?php _e('110 x 32', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '120x60' ? ' selected="selected"' : ''); ?> value="120x60"> <?php _e('120 x 60', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '180x60' ? ' selected="selected"' : ''); ?> value="180x60"> <?php _e('180 x 60', 'advman'); ?></option>
-					<option<?php echo ($ad->get_default('adformat') == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> <?php _e('468 x 60', 'advman'); ?></option>
+					<option<?php echo ($format == '110x32' ? ' selected="selected"' : ''); ?> value="110x32"> <?php _e('110 x 32', 'advman'); ?></option>
+					<option<?php echo ($format == '120x60' ? ' selected="selected"' : ''); ?> value="120x60"> <?php _e('120 x 60', 'advman'); ?></option>
+					<option<?php echo ($format == '180x60' ? ' selected="selected"' : ''); ?> value="180x60"> <?php _e('180 x 60', 'advman'); ?></option>
+					<option<?php echo ($format == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> <?php _e('468 x 60', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="advman-optgroup-square" label="Square">
-					<option<?php echo ($ad->get_default('adformat') == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> <?php _e('125 x 125', 'advman'); ?></option>
+					<option<?php echo ($format == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> <?php _e('125 x 125', 'advman'); ?></option>
 				</optgroup>
 				<optgroup id="advman-optgroup-vertical" label="Vertical">
-					<option<?php echo ($ad->get_default('adformat') == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> <?php _e('120 x 240', 'advman'); ?></option>
+					<option<?php echo ($format == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> <?php _e('120 x 240', 'advman'); ?></option>
 				</optgroup>
 			</select>
 		</td>
@@ -117,23 +119,23 @@ class Template_EditNetwork_Adsense extends Template_EditNetwork
 			<table>
 			<tr>
 				<td class="advman_label"><label for="advman-color-border"><?php _e('Border:'); ?></label></td>
-				<td>#<input name="advman-color-border" onChange="advman_update_color(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get_default('color-border'); ?>" /></td>
+				<td>#<input name="advman-color-border" onChange="advman_update_ad(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get_default('color-border'); ?>" /></td>
 			</tr>
 			<tr>
 				<td class="advman_label"><label for="advman-color-title"><?php _e('Title:'); ?></label></td>
-				<td>#<input name="advman-color-title" onChange="advman_update_color(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get_default('color-title'); ?>" /></td>
+				<td>#<input name="advman-color-title" onChange="advman_update_ad(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get_default('color-title'); ?>" /></td>
 			</tr>
 			<tr>
 				<td class="advman_label"><label for="advman-color-bg"><?php _e('Background:'); ?></label></td>
-				<td>#<input name="advman-color-bg" onChange="advman_update_color(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get_default('color-bg'); ?>" /></td>
+				<td>#<input name="advman-color-bg" onChange="advman_update_ad(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get_default('color-bg'); ?>" /></td>
 			</tr>
 			<tr>
 				<td class="advman_label"><label for="advman-color-text"><?php _e('Text:'); ?></label></td>
-				<td>#<input name="advman-color-text" onChange="advman_update_color(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get_default('color-text'); ?>" /></td>
+				<td>#<input name="advman-color-text" onChange="advman_update_ad(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get_default('color-text'); ?>" /></td>
 			</tr>
 			<tr>
 				<td class="advman_label"><label for="advman-color-link"><?php _e('URL:'); ?></label></td>
-				<td>#<input name="advman-color-link" onChange="advman_update_color(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get_default('color-link'); ?>" /></td>
+				<td>#<input name="advman-color-link" onChange="advman_update_ad(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get_default('color-link'); ?>" /></td>
 			</tr>
 			</table>
 		</td>

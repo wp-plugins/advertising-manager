@@ -15,7 +15,7 @@ Author URI: http://www.mutube.com/
 load_plugin_textdomain('advman', false, 'advertising-manager/languages');
 
 // DEFINITIONS
-@define("ADVMAN_VERSION", "3.3.9");
+@define("ADVMAN_VERSION", "3.3.10");
 @define('ADVMAN_PATH', dirname(__FILE__));
 global $wp_version;
 $template = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP26' : 'WP27';
@@ -217,7 +217,7 @@ class advman
 			$content = preg_replace_callback(array("/<!--adsense-->/","/<!--am-->/","/\[ad\]/"),array('advman','filter_ad_callback'),$content);
 		}
 		
-		$content = preg_replace_callback(array("/<!--adsense#(.*)-->/","/<!--am#(.*)-->/","/\[ad#(.*)\]/"),array('advman','filter_ad_callback'),$content);
+		$content = preg_replace_callback(array("/<!--adsense#(.*?)-->/","/<!--am#(.*?)-->/","/\[ad#(.*?)\]/"),array('advman','filter_ad_callback'),$content);
 		
 		return $content;
 	}
@@ -266,21 +266,19 @@ function advman_ad($name = false)
 }
 
 // SHOW AN AD BY ITS NAME
-if (!empty($_REQUEST['advman-show-ad'])) {
-	$name = OX_Tools::sanitize_name($_REQUEST['advman-show-ad']);
-	echo '<html><body>';
+if (!empty($_REQUEST['advman-ad-name'])) {
+	$name = OX_Tools::sanitize_key($_REQUEST['advman-ad-name']);
 	advman_ad($name);
-	echo '</body></html>';
 	die(0);
 }
 
 // SHOW AN AD BY ID
-if (!empty($_REQUEST['advman-show-ad-id'])) {
-	$id = OX_Tools::sanitize_number($_REQUEST['advman-show-ad-id']);
+if (!empty($_REQUEST['advman-ad-id'])) {
+	$id = OX_Tools::sanitize_number($_REQUEST['advman-ad-id']);
 	if (!empty($_advman['ads'][$id])) {
 		$ad = $_advman['ads'][$id];
 		advman::update_counters($ad);
-		echo '<html><body>' . $ad->get_ad() . '</body></html>';
+		echo $ad->get_ad();
 	}
 	die(0);
 }

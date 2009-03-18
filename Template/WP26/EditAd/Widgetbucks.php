@@ -10,7 +10,7 @@ class Template_EditAd_Widgetbucks extends Template_EditAd
 		// Account
 		add_meta_box('advman_account', __('Account Details', 'advman'), array(get_class($this), 'displaySectionAccount'), 'advman', 'advanced', 'high');
 		// Remove Format Meta box
-		remove_meta_box('advman_format', 'advman', 'normal');
+		remove_meta_box('advman_format', 'advman', 'default');
 	}
 	
 	function displaySectionAccount($ad)
