@@ -18,7 +18,7 @@ http://translate.openx.org/projects/advman/admin.html?doupdatelanguage=1&updatel
 http://translate.openx.org/en/advman/index.html?editing=1
 
 6.  Generate the .mo file for all languages:
-cd ~/Sites/advertising-manager/trunk/languages/
+cd ~/code/advertising-manager/trunk/languages/
 rm *.mo
 curl http://translate.openx.org/ar/advman/advman.mo -o advman-ar.mo
 curl http://translate.openx.org/cs/advman/advman.mo -o advman-cs_CZ.mo
@@ -39,12 +39,12 @@ New language names follow the ISO format used in Wordpress:
 http://codex.wordpress.org/WordPress_Localization
 
 
-7.  Increase the ADVMAN_VERSION at the top of advertising-manager.php
-
-8.  Increate the version:
+8.  Increase the version:
 - in the comments at the top of advertising-manager.php
 - in the code at the top of advertising-manager.php
 - in the readme file
+
+8.  Add to the changelog
 
 9.  Update the Readme.txt file with any changes in documentation.  Validate here:
 http://wordpress.org/extend/plugins/about/validator/
