@@ -52,7 +52,7 @@ class Template_EditAd_Adsense extends Template_EditAd
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php _e('The Account ID is your ID for your Google Adsense account.  The Partner ID is the ID for a partner revenue sharing account, usually your blog hosting provider.  Note that a Partner ID does not necessarily mean that your partner is sharing revenues.  Google Adsense will notify you if this is the case.  The Slot ID is the ID of this specific ad slot.  All of these items should be filled in upon import.', 'advman'); ?></span>
+<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->networkName); ?> <?php _e('The Partner ID is the ID for a partner revenue sharing account, usually your blog hosting provider.  Note that a Partner ID does not necessarily mean that your partner is sharing revenues.  Google Adsense will notify you if this is the case.', 'advman'); ?> <?php _e('The Slot ID is the ID of this specific ad slot.', 'advman'); ?></span>
 <?php
 	}
 	

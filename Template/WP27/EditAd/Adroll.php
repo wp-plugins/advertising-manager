@@ -68,7 +68,7 @@ class Template_EditAd_Adroll extends Template_EditAd
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php _e('The Account ID is your ID for your Adroll account.  The Slot ID is the ID of this specific ad slot.', 'advman'); ?></span>
+<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->networkName); ?> <?php _e('The Slot ID is the ID of this specific ad slot.', 'advman'); ?></span>
 <?php
 	}
 }
