@@ -8,8 +8,11 @@
 			case 'advman-adtype':advman_update_formats(); break;
 		}
 	}
-		
-		
+	
+	function advman_select_update(element)
+	{
+		element.style.color = (element.options[0].selected) ? 'gray' : 'black';
+	}
 	function advman_update_ad(element,id,what)
 	{
 		target = document.getElementById(id);
