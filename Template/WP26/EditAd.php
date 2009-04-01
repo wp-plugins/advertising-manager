@@ -118,7 +118,7 @@ class Template_EditAd
 	<input type="text" name="advman-name" size="30" value="<?php echo $ad->name ?>" id="title" autocomplete="off" />
 </div><!-- titlewrap -->
 <br />
-<span style="font-size:smaller;color:gray;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ads with the same name will rotate according to their relative weights.</span>
+<span style="font-size:smaller;color:gray;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php _e('Enter the name of this ad.  Ads with the same name will rotate according to their relative weights.', 'advman'); ?></span>
 </div><!-- titlediv -->
 <?php
 	}
@@ -298,7 +298,7 @@ class Template_EditAd
 </p>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying. OpenX Market optimised ads will display an alternative ad if it will make more money than this ad. Set the avarage amount you make from this network per 1000 ads (eCPM), and Advertising Manager will automatically optimise on the OpenX Market.', 'advman'); ?></span>
+<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying.', 'advman'); ?> <?php _e('OpenX Market optimised ads will display an alternative ad if it will make more money than this ad. Set the avarage amount you make from this network per 1000 ads (eCPM) in the Average CPM field, and Advertising Manager will automatically optimise on the OpenX Market.', 'advman'); ?></span>
 <?php
 	}
 	
