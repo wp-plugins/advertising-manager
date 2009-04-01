@@ -155,7 +155,7 @@ class Template_EditNetwork_Chitika extends Template_EditNetwork
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->networkName); ?> <?php _e('Enter a channel if you want to break out your reporting by different sections (e.g. home page, post detail)', 'advman'); ?> <?php printf(__('The Alternate URL will be called if %s does not have an ad to display.', 'advman'), $ad->networkName); ?></span>
+<span style="font-size:x-small; color:gray;"><?php _e('Enter a channel if you want to break out your reporting by different sections (e.g. home page, post detail)', 'advman'); ?> <?php printf(__('The Alternate URL will be called if %s does not have an ad to display.', 'advman'), $ad->networkName); ?></span>
 <?php
 	}
 }
