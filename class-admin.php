@@ -432,7 +432,6 @@ class advman_admin
 	{
 		$template = OX_Tools::get_template('CreateAd');
 		$template->display();
-		break;
 	}
 	
 	/**
