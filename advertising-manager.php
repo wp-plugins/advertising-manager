@@ -17,19 +17,21 @@ load_plugin_textdomain('advman', false, 'advertising-manager/languages');
 // DEFINITIONS
 @define("ADVMAN_VERSION", "3.3.10");
 @define('ADVMAN_PATH', dirname(__FILE__));
+@define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
+
 global $wp_version;
 $template = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP26' : 'WP27';
 @define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . '/Template/' . $template);
 
 // INCLUDES
-if ($handle = opendir(ADVMAN_PATH . '/OX/Adnet/')) {
-    while (false !== ($file = readdir($handle))) {
+if ($advman_handle = opendir(ADVMAN_PATH . '/OX/Adnet/')) {
+    while (false !== ($advman_file = readdir($advman_handle))) {
 		// Make sure that the first character does not start with a '.' (omit hidden files like '.', '..', '.svn', etc.)
-		if ($file[0] != '.') {
-			require_once(ADVMAN_PATH . '/OX/Adnet/' . $file);
+		if ($advman_file[0] != '.') {
+			require_once(ADVMAN_PATH . '/OX/Adnet/' . $advman_file);
 		}
     }
-    closedir($handle);
+    closedir($advman_handle);
 }
 require_once(ADVMAN_PATH . '/OX/Tools.php');
 
