@@ -1,0 +1,43 @@
+Find Wordpress MO file:
+http://svn.automattic.com/wordpress-i18n/
+scp pt_PT.mo marketing@marketing.openx.org:~
+
+Pootle:
+
+Language Server:
+cd /var/www/html/demo.advman.openx.org
+mkdir pt_PT
+cp -r wordpress/* pt_PT/
+cd pt_PT/wp-content/plugins/
+ln -s ../../../advertising-manager
+cd ../../..
+
+Database:
+mysql -uroot -p
+create database demo_advman_openx_org_pt_PT;
+grant all privileges on demo_advman_openx_org_pt_PT.* to 'demo_advman'@'localhost' identified by 'hoolo0';
+
+Make directory writable for install:
+chmod a+w pt_PT/
+
+Install:
+http://demo.advman.openx.org/pt_PT/
+database:  demo_advman_openx_org_pt_PT
+username:  demo_advman
+password:  hoolo0
+
+Blog Title:  Advertising Manager Demo Blog
+Email:  scott@switzer.org
+
+CHANGE PASSWORD TO:  password
+ACTIVATE PLUGIN
+
+Install:
+chmod o-w pt_PT/
+vi pt_PT/wp-config.php
+WPLANG='pt_PT';
+
+mkdir pt_PT/wp-content/languages
+mv ~/pt_PT.mo pt_PT/wp-content/languages/
+
+
