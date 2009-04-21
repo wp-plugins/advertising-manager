@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Komodo Project File - DO NOT EDIT -->
-<project id="aff210d5-327a-d549-8180-0a4823846191" kpf_version="4" name="AdvertisingManager.kpf">
-<preference-set idref="aff210d5-327a-d549-8180-0a4823846191">
-  <boolean id="import_live">1</boolean>
-</preference-set>
-</project>
