@@ -8,29 +8,18 @@ $_advman_networks['OX_Adnet_Adbrite'] = array(
 */
 class OX_Adnet_Adbrite extends OX_Adnet
 {
-	/**
-	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
-	 */
-	var $shortName = 'Adbrite';
-	
-	/**
-	 * The URL for the home page of the ad network site
-	 */
-	var $url = 'http://www.adbrite.com';
-	
-	/**
-	 * The name of the network.  Used when displaying ads by network.
-	 */
-	var $networkName = 'AdBrite';
-	
 	function OX_Adnet_Adbrite()
 	{
+		self::$shortName = 'Adbrite';
+		self::$url = 'http://www.adbrite.com';
+		self::$networkName = 'AdBrite';
 		$this->OX_Adnet();
 	}
 		
 	function get_default_properties()
 	{
 		$properties = array(
+			'account-id' => '',
 			'adformat' => '250x250',
 			'color-bg' => 'FFFFFF',
 			'color-border' => 'FFFFFF',
@@ -46,19 +35,12 @@ class OX_Adnet_Adbrite extends OX_Adnet
 	
 	function get_ad_formats()
 	{
-		$formats = array(
-			'horizontal' => array(
-				'728x90' => __('728 x 90 Leaderboard', 'advman'),
-				'468x60' => __('468 x 60 Banner', 'advman'),
-			),
-			'vertical' => array(
-				'120x600' => __('120 x 600 Skyscraper', 'advman'),
-				'160x600' => __('160 x 600 Wide Skyscraper', 'advman'),
-			),
-			'square' => array(
-				'300x250' => __('300 x 250 Medium Rectangle', 'advman'),
-			),
-		);
+		return array('728x90', '468x60', '120x600', '160x600', '300x250');
+	}
+	
+	function get_ad_colors()
+	{
+		return array('border', 'title', 'bg', 'text');
 	}
 	
 	function import_detect_network($code)
