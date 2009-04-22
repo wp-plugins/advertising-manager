@@ -21,15 +21,9 @@ class Template_EditAd
 		add_meta_box('advman_history', __('History', 'advman'), array(get_class($this), 'displaySectionHistory'), 'advman', 'advanced', 'low');
 	}
 	
-	function display($target = null)
+	function display($ad)
 	{
-		// Get our options and see if we're handling a form submission.
-		global $_advman;
-		global $_advman_networks;
-		
-		$id = $target;
-		$ad = $_advman['ads'][$id];
-		list($last_user, $t) = OX_Tools::get_last_edit($ad);
+		list($last_user, $t) = $ad->get_last_edit();
 		if ((time() - $t) < (30 * 24 * 60 * 60)) { // less than 30 days ago
 			$last_timestamp =  human_time_diff($t);
 			$last_timestamp2 = date('l, F jS, Y @ h:ia', $t);
@@ -41,7 +35,7 @@ class Template_EditAd
 
 <div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
-	<h2><?php printf(__('Edit Settings for %s Ad:', 'advman'), $ad->networkName); ?> <span class="<?php echo strtolower($ad->network); ?>"><?php echo "[$id] " . $ad->name; ?></span></h2>
+	<h2><?php printf(__('Edit Settings for %s Ad:', 'advman'), $ad->networkName); ?> <span class="<?php echo strtolower($ad->network); ?>"><?php echo "[{$ad->id}] " . $ad->name; ?></span></h2>
 	<form action="" method="post" id="advman-form" enctype="multipart/form-data">
 	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
 	<input type="hidden" name="advman-action" id="advman-action">
