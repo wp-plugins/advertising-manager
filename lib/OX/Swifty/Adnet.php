@@ -3,46 +3,32 @@ class OX_Adnet
 {
 	var $name; //Name of this ad
 	var $id; // ID of the ad
-	var $title; //Used in widget displays only
 	var $p; //$p holds Ad properties (e.g. dimensions etc.) - acessible through $this->get(''); see $this->get_default('') for default merged
 	var $active; //whether this ad can display
-
-	/**
-	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
-	 */
-	var $shortName = 'Ad';
 	
-	/**
-	 * The URL for the home page of the ad network site
-	 */
-	var $url = '';
-	
-	/**
-	 * The name of the network.  Used when displaying ads by network.
-	 */
-	var $network = '';
-	
-	/**
-	 * The name of the network.  Used when displaying ads by network.
-	 */
-	var $networkName = '';
+	static $defaults;
+	static $revisions;
+	static $shortName = 'Ad';
+	static $url = '';
+	static $networkName = '';
 	
 	//Global start up functions for all network classes	
 	function OX_Adnet()
 	{
-		global $_advman;
+		global $advman_engine;
 		
-		$this->network = get_class($this);
-		
-		// Set defaults if they are not already set
-		if (!is_array($_advman['defaults'][$this->network])) {
-			$this->reset_defaults();
-			update_option('plugin_adsensem', $_advman);
-		}
-		
-		$this->name = '';
-		$this->title = '';
 		$this->active = true;
+		$this->name = OX_Tools::generate_name(self::$shortName);
+	}
+	
+	function getNetworkName()
+	{
+		return self::$networkName;
+	}
+	
+	function getNetwork()
+	{
+		return get_class($this);
 	}
 	
 	/**
@@ -66,62 +52,50 @@ class OX_Adnet
 		return $this->p[$key];
 	}
 	
-	/**
-	 * Returns the default for the given property
-	 * @param $key the property in which to retrieve the default
-	 */
 	function get_default($key)
 	{
-		global $_advman;
-		
-		if (isset($_advman['defaults'][$this->network][$key])) {
-			return $_advman['defaults'][$this->network][$key];
-		} else {
-			return '';
-		}
+		$defaults = self::$defaults;
+		return isset($defaults[$key]) ? $defaults[$key] : '';
 	}
 	
 	/**
-	 * Returns the default for the given property
-	 * @param $key the property in which to retrieve the default
+	 * Returns the given property
+	 * @param $key the property that is to be set
+	 * @param $value the value to set the property to.  If the value is null, the property will be deleted.
+	 * @param $default if true, the default will be set.  Otherwise, the property will be set.
 	 */
-	function set_default($key, $value)
+	function set($key, $value, $default = false)
 	{
-		global $_advman;
+		$properties = $default ? self::$defaults : $this->p;
+		
+		$v = isset($properties[$key]) ? $properties[$key] : null;
 		
 		if (is_null($value)) {
-			unset($_advman['defaults'][$this->network][$key]);
+			unset($properties[$key]);
 		} else {
-			$_advman['defaults'][$this->network][$key] = $value;
+			$properties[$key] = $value;
+		}
+		
+		if ($default) {
+			self::$defaults = $properties;
+		} else {
+			$this->p = $properties;
+		}
+		
+		if ($key == 'adformat' && $key !== 'custom') {
+			list($width, $height, $null) = split('[x]', $value);
+			$this->set('width', $width, $default);
+			$this->set('height', $height, $default);
 		}
 	}
 	
 	/**
-	 * Sets a given property to a value
-	 * @param $key the property in which to set the value
-	 * @param $value the value in which to set the property.
+	 * Is this ad able to be displayed given the context, user, etc.?
 	 */
-	function set($key, $value)
-	{
-		if (!empty($key)) {
-			if (!is_null($value)) {
-				$this->p[$key] = $value;
-			} else {
-				unset($this->p[$key]);
-			}
-		}
-	}
-	
-	/* Returns current setting, without defaults */
-	function p($key)
-	{
-		return isset($this->p[$key]) ? $this->p[$key] : '';
-	}
-	
 	function is_available()
 	{
+		global $advman_engine;
 		global $post;
-		global $_advman_counter;
 		
 		// Filter by active
 		if (!$this->active) {
@@ -129,8 +103,8 @@ class OX_Adnet
 		}
 		
 		// Filter by counter
-		$counter = $this->get_default('counter');
-		if (!empty($counter) && ($_advman_counter['network'][$this->network] >= $counter)) {
+		$counter = $this->get('counter', true);
+		if (!empty($counter) && ($advman_engine->counter['network'][$this->network] >= $counter)) {
 			return false;
 		}
 		
@@ -169,45 +143,29 @@ class OX_Adnet
 		);
 	}
 	
-	function get_ad()
-	{
-		global $_advman;
-		
-		$search = array();
-		$replace = array();
-		
-		$code = $this->get('html-before', true);
-		$code.=$this->render_ad($search, $replace);
-		$code .= $this->get('html-after', true);
-		
-		return $code;
-	}
-
 	function render_ad($search = array(), $replace = array())
 	{
 		$search[] = '{{random}}';
 		$replace[] = mt_rand();
+		$search[] = '{{timestamp}}';
+		$replace[] = time();
 		
 		$properties = $this->get_default_properties();
 		foreach ($properties as $property => $default) {
 			$search[] = '{{' . $property . '}}';
 			$replace[] = $this->get($property, true);
 		}
+		$code  = $this->get('html-before', true);
+		$code .= $this->get('code');
+		$code .= $this->get('html-after', true);
 		
-		return str_replace($search, $replace, $this->get('code'));
+		return str_replace($search, $replace, $code);
 //		return $this->get('code');
 	}
-		
-	function reset_defaults()
-	{
-		global $_advman;
-		$_advman['defaults'][$this->network] = $this->get_default_properties();
-	}	
 	
 	function get_default_properties()
 	{
 		return array (
-			'account-id' => '',
 			'adformat' => '728x90',
 			'code' => '',
 			'counter' => '',
@@ -228,85 +186,6 @@ class OX_Adnet
 		);
 	}
 	
-	function save_defaults()
-	{
-		global $_advman;
-		
-		$properties = $this->get_default_properties();
-		if (!empty($properties)) {
-			foreach ($properties as $property => $default) {
-				if (isset($_POST['advman-' . $property])) {
-					$value = stripslashes($_POST['advman-' . $property]);
-					$this->set_default($property, $value);
-				}
-			}
-		}
-
-		// Set width and height for non-custom formats
-		$format = $this->get_default('adformat');
-		if (!empty($format) && ($format !== 'custom')) {
-			list($width, $height, $null) = split('[x]', $format);
-			$this->set_default('width', $width);
-			$this->set_default('height', $height);
-		}
-		
-		// add an item to the audit trail
-		$revisions = !empty($_advman['defaults'][$this->network]['revisions']) ? $_advman['defaults'][$this->network]['revisions'] : array();
-		$revisions = OX_Tools::add_revision($revisions);
-		$_advman['defaults'][$this->network]['revisions'] = $revisions;
-	}
-	
-	function save_settings()
-	{
-		global $_advman;	
-		
-		if (isset($_POST['advman-name'])) {
-			$this->name = $_POST['advman-name'];
-		}
-		
-		if (isset($_POST['advman-active'])) {
-			$this->active = ($_POST['advman-active'] == 'yes');
-		}
-		
-		// Save some standard properties
-		$properties = $this->get_default_properties();
-		if (!empty($properties)) {
-			foreach ($properties as $property => $default) {
-				if (isset($_POST['advman-' . $property])) {
-					$this->set($property, stripslashes($_POST['advman-' . $property]));
-				}
-			}
-		}
-		
-		// Set width and height for non-custom formats
-		$format = $this->get('adformat');
-		if (!empty($format) && ($format !== 'custom')) {
-			list($width, $height, $null) = split('[x]', $format);
-			$this->set('width', $width);
-			$this->set('height', $height);
-		}
-		
-		// add an item to the audit trail
-		$this->add_revision();
-	}
-	
-	function add_revision()
-	{
-		$revisions = $this->get('revisions');
-		$this->set('revisions', OX_Tools::add_revision($revisions));
-	}
-	
-	//Convert defined ads into a simple list for outputting as alternates. Maybe limit types by network (once multiple networks supported)
-	function get_alternate_ads()
-	{
-		global $_advman;
-		$compat=array();
-		foreach($_advman['ads'] as $oname => $oad){
-			if( ($this->network !== $oad->network ) && ($this->get('width', true)==$oad->get('width', true)) && ($this->get('height', true)==$oad->get('height', true)) ){ $compat[$oname]=$oname; }
-		}
-		return $compat;
-	}
-	
 	function import_detect_network($code)
 	{
 		return false;
@@ -317,14 +196,68 @@ class OX_Adnet
 		$this->set('code', $code);
 	}
 	
-	function get_name_url()
-	{
-		return get_bloginfo('wpurl') . '/wp-admin/edit.php?page=advman-manage&advman-ad-name=' . $this->name;
-	}
-	
 	function get_preview_url()
 	{
 		return get_bloginfo('wpurl') . '/wp-admin/edit.php?page=advman-manage&advman-ad-id=' . $this->id;
+	}
+
+	function get_last_edit($default = false)
+	{
+		$revisions = $default ? self::$revisions : $this->get('revisions');
+		
+		$last_user = __('Unknown', 'advman');
+		$last_timestamp = 0;
+		
+		if (!empty($revisions)) {
+			foreach($revisions as $t => $u) {
+				$last_user = $u;
+				$last_timestamp = $t;
+				break; // just get first one - the array is sorted by reverse date
+			}
+		}
+		
+		return array($last_user, $last_timestamp);
+	}
+	
+	function add_revision($default = false)
+	{
+		if ($default) {
+			$revisions = self::$revisions;
+		} else {
+			$revisions = $this->get('revisions');
+		}
+		
+		// Get the user login information
+		global $user_login;
+		get_currentuserinfo();
+		
+		// If there is no revisions, use my own revisions
+		if (!is_array($revisions)) {
+			$revisions = array();
+		}
+		
+		// Deal with revisions
+		$r = array();
+		$now = mktime();
+		$r[$now] = $user_login;
+		
+		// Get rid of revisions more than 30 days old
+		if (!empty($revisions)) {
+			foreach ($revisions as $ts => $user) {
+				$days = (strtotime($now) - strtotime($ts)) / 86400 + 1;
+				if ($days <= 30) {
+					$r[$ts] = $user;
+				}
+			}
+		}
+		
+		krsort($r);
+		
+		if ($default) {
+			self::$revisions = $r;
+		} else {
+			$this->set('revisions', $r);
+		}
 	}
 }
 

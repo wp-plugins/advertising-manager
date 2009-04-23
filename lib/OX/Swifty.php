@@ -10,89 +10,117 @@ class OX_Swifty
 	var $counter;
 	var $actions;
 	
-	function OX_Swifty($dal)
+	function OX_Swifty()
 	{
-		$this->dal = $dal;
+		// Functions here are initialisation only - plugins have not been loaded (so we cannot initialise data)
 		$this->counter = array();
 		$this->ad_networks = array();
 		$this->actions = array();
-		
-		// Sync with openx
+	}
+	
+	function init($dalClass)
+	{
+		$this->dal = new $dalClass;
+		// Sync with OpenX
 		$this->sync();
 	}
 	
-	function addAction($key, $data)
+	function getDal()
 	{
-		$action = $this->actions[$key];
-		if (empty($action)) {
-			$action = array();
+		if (!is_object($this->dal)) {
+			$this->dal = new $this->dalClassName;
 		}
-		$action[] = $data;
+		return $this->dal;
+	}
+	
+	function addAction($key, $value)
+	{
+		$actions = $this->actions[$key];
+		if (empty($actions)) {
+			$actions = array();
+		}
+		$actions[] = $value;
 		
-		$this->actions[$key] = $action;
+		$this->actions[$key] = $actions;
 	}
-	function getAction($action)
+	
+	function getAction($key)
 	{
-		return $this->actions[$action];
+		return $this->actions[$key];
 	}
-	function getKey($key)
+	
+	function saveAdSettings($id)
 	{
-		return $this->dal->getKey($key);
-	}
-	function setKey($key, $value)
-	{
-		return $this->dal->setKey($key, $value);
-	}
-	function getVersion()
-	{
-		return $this->dal->getVersion();
-	}
-	function addAd($ad)
-	{
-		return $this->dal->addAd($ad);
-	}
-	function saveAd($id, $properties)
-	{
-		$ad = $this->dal->getAd($id);
+		$dal = $this->getDal();
+		$ad = $dal->getAd($id);
 		
 		if ($ad) {
 			$ad->saveSettings($properties);
-			return $this->dal->setAd($id, $ad);
+			return $dal->setAd($id, $ad);
 		}
 		
 		return false;
 	}
 	
-	function saveAdNetwork($id, $network)
+	function saveNetworkSettings($id)
 	{
-		$network = $this->dal->getAdNetwork($id);
+		$dal = $this->getDal();
+		$network = $dal->getAdNetwork($id);
 		
 		if ($network) {
 			$network->saveSettings($properties);
-			return $this->dal->setAdNetwork($id, $network);
+			return $dal->setAdNetwork($id, $network);
 		}
 		
 		return false;
 	}
-	function copyAd($id)
+	
+	function addAd($ad)
 	{
-		$ad = $this->dal->getAd($id);
-		
-		if ($ad) {
-			return $this->dal->insertAd($ad);
-		}
-		
-		return false;
+		$dal = $this->getDal();
+		return $dal->addAd($ad);
 	}
 	
 	function getAds()
 	{
-		return $this->dal->getAds();
+		$dal = $this->getDal();
+		return $dal->getAds();
 	}
 	
-	function deleteAd($id)
+	function getAd($id)
 	{
-		return $this->dal->deleteAd($id);
+		$dal = $this->getDal();
+		return $dal->getAd($id);
+	}
+	
+	function setAd($ad)
+	{
+		$dal = $this->getDal();
+		return $dal->setAd($ad);
+	}
+	
+	function getKey($name)
+	{
+		$dal = $this->getDal();
+		return $dal->getKey($name);
+	}
+	
+	function setKey($name, $value)
+	{
+		$dal = $this->getDal();
+		return $dal->setKey($name, $value);
+	}
+	
+	function copyAd($id)
+	{
+		$dal = $this->getDal();
+		$ad = $dal->getAd($id);
+		
+		if ($ad) {
+			return $dal->insertAd($ad);
+		}
+		
+		return false;
 	}
 	
 	function importAdTag($tag)
@@ -120,7 +148,7 @@ class OX_Swifty
 		
 		$id = $this->addAd($ad);
 		
-		return $id;
+		return $ad;
 	}
 	
 	function setAdActive($id, $active)
@@ -137,20 +165,6 @@ class OX_Swifty
 		}
 	}
 		
-	function setZoneDefault($zoneId, $adId)
-	{
-		global $_advman;
-		
-		//Set selected advert as active
-		$id = advman_admin::validate_id($id);
-		
-		$name = $_advman['ads'][$id]->name;
-		if ($name != $_advman['default-ad']) {
-			$_advman['default-ad'] = $name;
-			update_option('plugin_adsensem', $_advman);
-		}
-	}
-	
 	// turn on/off optimisation across openx for all ads
 	function _set_auto_optimise($active)
 	{
@@ -203,10 +217,10 @@ class OX_Swifty
 				$_advman_counter['id'][$ad->id]++;
 			}
 			
-			if (empty($_advman_counter['network'][$ad->network])) {
-				$_advman_counter['network'][$ad->network] = 1;
+			if (empty($_advman_counter['network'][$ad->getNetwork()])) {
+				$_advman_counter['network'][$ad->getNetwork()] = 1;
 			} else {
-				$_advman_counter['network'][$ad->network]++;
+				$_advman_counter['network'][$ad->getNetwork()]++;
 			}
 		}
 	}

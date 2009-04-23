@@ -18,17 +18,17 @@ class OX_Adnet_Adgridwork extends OX_Adnet
 	/**
 	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
 	 */
-	var $shortName = 'Adgridwork';
+	static $shortName = 'Adgridwork';
 	
 	/**
 	 * The URL for the home page of the ad network site
 	 */
-	var $url = 'http://www.adgridwork.com';
+	static $url = 'http://www.adgridwork.com';
 	
 	/**
 	 * The name of the network.  Used when displaying ads by network.
 	 */
-	var $networkName = 'AdGridWork';
+	static $networkName = 'AdGridWork';
 	
 	function OX_Adnet_Adgridwork()
 	{
@@ -38,6 +38,7 @@ class OX_Adnet_Adgridwork extends OX_Adnet
 	function get_default_properties()
 	{
 		$properties = array(
+			'account-id' => '',
 			'color-bg' 	=> 'FFFFFF',
 			'color-border'=> '646360',
 			'color-link' => 'FF0000',

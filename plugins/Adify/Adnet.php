@@ -11,17 +11,17 @@ class OX_Adnet_Adify extends OX_Adnet
 	/**
 	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
 	 */
-	var $shortName = 'Adify';
+	static $shortName = 'Adify';
 	
 	/**
 	 * The URL for the home page of the ad network site
 	 */
-	var $url = 'http://www.adify.com';
+	static $url = 'http://www.adify.com';
 	
 	/**
 	 * The name of the network.  Used when displaying ads by network.
 	 */
-	var $networkName = 'Adify';
+	static $networkName = 'Adify';
 	
 	function OX_Adnet_Adify()
 	{
@@ -31,6 +31,7 @@ class OX_Adnet_Adify extends OX_Adnet
 	function get_default_properties()
 	{
 		$properties = array(
+			'account-id' => '',
 			'adformat' => '250x250',
 			'color-bg' 	=> 'FFFFFF',
 			'color-border'=> 'FFFFFF',

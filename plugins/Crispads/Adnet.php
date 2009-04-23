@@ -11,17 +11,17 @@ class OX_Adnet_Crispads extends OX_Adnet
 	/**
 	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
 	 */
-	var $shortName = 'Crispads';
+	static $shortName = 'Crispads';
 	
 	/**
 	 * The URL for the home page of the ad network site
 	 */
-	var $url = 'http://www.crispads.com';
+	static $url = 'http://www.crispads.com';
 	
 	/**
 	 * The name of the network.  Used when displaying ads by network.
 	 */
-	var $networkName = 'Crisp Ads';
+	static $networkName = 'Crisp Ads';
 	
 	function OX_Adnet_Crispads()
 	{

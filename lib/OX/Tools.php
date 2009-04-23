@@ -19,25 +19,24 @@ class OX_Tools
 		}
 	}
 
-	function get_template($name, $ad = null)
+	/**
+	 * Get a template based on the class of an object
+	 */
+	function get_template($name, $class = null)
 	{
-		global $wp_version;
-
-		// Get the template path
-		$version = (version_compare($wp_version,"2.7-alpha", "<")) ? '2.6' : '2.7';
-		$path = ADVMAN_LIB . "/OX/Admin/Templates/Wordpress/{$version}";
-
 		$className = null;
 		
-		if (!empty($ad)) {
+		if (is_object($class)) {
 			$shortName = $ad->shortName;
-			if (file_exists("{$path}/{$name}/{$shortName}.php")) {
-				include_once("{$path}/{$name}/{$shortName}.php");
-				$className = "Template_{$name}_{$shortName}";
+			$template = OX_Admin_Wordpress::get_action('display_template_' . $name, get_class($class));
+			
+			if (file_exists($template[0])) {
+				include_once($template[0]);
+				$className = $template[1];
 			}
 		}
 		if (empty($className)) {
-			include_once("{$path}/{$name}.php");
+			include_once(OX_TEMPLATE_PATH . "/{$name}.php");
 			$className = "Template_{$name}";
 		}
 		
@@ -62,114 +61,87 @@ class OX_Tools
 		return strcmp(get_class($a), get_class($b));
 	}
 	
-	function sanitize_number($number)
+	function organize_colors($colors)
 	{
-		return preg_replace('/[^0-9\.\-]/i', '', $number);
-	}
-	function sanitize_format($number)
-	{
-		if (strtolower($number) == 'custom') {
-			return $number;
+		$clr = array();
+		$clr['border'] = __('Border:', 'advman');
+		$clr['bg'] = __('Background:', 'advman');
+		$clr['title'] = __('Title:', 'advman');
+		$clr['text'] = __('Text:', 'advman');
+		
+		foreach ($clr as $name => $label) {
+			if (!in_array($name, $colors)) {
+				unset($clr[$name]);
+			}
 		}
 		
-		return preg_replace('/[^0-9x]/i', '', $number);
+		return $clr;
 	}
-	function sanitize_field($string)
+	
+	function organize_formats($formats)
 	{
-		return str_replace("\0", '', $string);
-	}
-	function sanitize_key($string)
-	{
-		if (is_array($string)) {
-			$a = array();
-			foreach ($string as $n => $str) {
-				$a[$n] = OX_Tools::sanitize_key($str);
-			}
-			return $a;
-		}
-		return preg_replace('#[^a-z0-9-_]#i', '', $string);
-	}
+		$fmt = array();
+		$fmt['horizontal']['728x90'] = __('728 x 90 Leaderboard', 'advman');
+		$fmt['horizontal']['468x60'] = __('468 x 60 Banner', 'advman');
+		$fmt['horizontal']['234x60'] = __('234 x 60 Half Banner', 'advman');
+		$fmt['vertical']['120x600'] = __('120 x 600 Skyscraper', 'advman');
+		$fmt['vertical']['160x600'] = __('160 x 600 Wide Skyscraper', 'advman');
+		$fmt['square']['300x250'] = __('300 x 250 Medium Rectangle', 'advman');
+		$fmt['custom']['custom'] = __('Custom width and height', 'advman');
 
-	function get_key($key, $default = null)
-	{
-		return OX_Tools::_get_key($key, $default, $_GET);
-	}
-	function get_key_request($key, $default = null)
-	{
-		return OX_Tools::_get_key($key, $default, $_REQUEST);
-	}
-	function get_post_key($key, $default = null)
-	{
-		return OX_Tools::_get_key($key, $default, $_POST);
-	}
-	function get_post_field($field, $default = null)
-	{
-		return OX_Tools::_get_field($field, $default, $_POST);
-	}
-	function _get_field($field, $default, $array)
-	{
-		$value = $array[$field];
-		if (isset($array[$field])) {
-			return OX_Tools::sanitize_field($array[$field]);
-		}
-		
-		return $default;
-	}
-	function _get_key($key, $default, $array)
-	{
-		$value = $array[$key];
-		if (isset($array[$key])) {
-			return OX_Tools::sanitize_key($array[$key]);
-		}
-		
-		return $default;
-	}
-	
-	function get_last_edit($ad)
-	{
-		$last_user = __('Unknown', 'advman');
-		$last_timestamp = 0;
-		
-		$revisions = $ad->get('revisions');
-		if (!empty($revisions)) {
-			foreach($revisions as $t => $u) {
-				$last_user = $u;
-				$last_timestamp = $t;
-				break; // just get first one - the array is sorted by reverse date
-			}
-		}
-		
-		return array($last_user, $last_timestamp);
-	}
-	
-	function add_revision($revisions = null)
-	{
-		// Get the user login information
-		global $user_login;
-		get_currentuserinfo();
-		
-		// If there is no revisions, use my own revisions
-		if (!is_array($revisions)) {
-			$revisions = array();
-		}
-		
-		// Deal with revisions
-		$r = array();
-		$now = mktime();
-		$r[$now] = $user_login;
-		
-		// Get rid of revisions more than 30 days old
-		if (!empty($revisions)) {
-			foreach ($revisions as $ts => $user) {
-				$days = (strtotime($now) - strtotime($ts)) / 86400 + 1;
-				if ($days <= 30) {
-					$r[$ts] = $user;
+		foreach ($fmt as $section => $fmt1) {
+			foreach ($fmt1 as $name => $label) {
+				if (!in_array($name, $formats)) {
+					unset($fmt[$section][$name]);
+					if (empty($fmt[$section])) {
+						unset($fmt[$section]);
+					}
 				}
 			}
 		}
 		
-		krsort($r);
-		return $r;
+		$sct['horizontal'] = __('Horizontal', 'advman');
+		$sct['vertical'] = __('Vertical', 'advman');
+		$sct['square'] = __('Square', 'advman');
+		$sct['custom'] = __('Custom', 'advman');
+		
+		foreach ($sct as $section => $name) {
+			if (!isset($fmt[$section])) {
+				unset($sct[$section]);
+			}
+		}
+		
+		return array('sections' => $sct, 'formats' => $fmt);
+	}
+	
+	function sanitize($field, $type = null)
+	{
+		if (is_array($field)) {
+			$a = array();
+			foreach ($field as $name => $value) {
+				$n = OX_Tools::sanitize($name, 'key');
+				$v = OX_Tools::sanitize($value, $type);
+				$a[$n] = $v;
+			}
+			return $a;
+		}
+		switch ($type) {
+			case 'n' :
+			case 'number' :
+			case 'int' :
+				return preg_replace('#[^0-9\.\-]#i', '', $field);
+				break;
+			case 'format' :
+				return $field == 'custom' ? $field : preg_replace('#[^0-9x]#i', '', $field);
+				break;
+			case 'key' :
+				return preg_replace('#[^a-z0-9-_]#i', '', $field);
+
+			default :
+				return stripslashes(str_replace("\0", '', $field));
+				break;
+		}
+		
 	}
 	
 	function post_url($url, $data, $optional_headers = null)
@@ -196,11 +168,8 @@ class OX_Tools
 	}
 	function generate_name($base = null)
 	{
-		global $_advman;
-		
-		if (empty($base)) {
-			$base = 'ad';
-		}
+		global $advman_engine;
+		$ads = $advman_engine->getAds();
 		
 		// Generate a unique name if no name was specified
 		$unique = false;
@@ -208,7 +177,7 @@ class OX_Tools
 		$name = $base;
 		while (!$unique) {
 			$unique = true;
-			foreach ($_advman['ads'] as $ad) {
+			foreach ($ads as $ad) {
 				if ($ad->name == $name) {
 					$unique = false;
 					break;
@@ -220,31 +189,6 @@ class OX_Tools
 		}
 		
 		return $name;
-	}
-
-	function validate_id($id)
-	{
-		global $_advman;
-		$validId = false;
-		
-		if (is_numeric($id) && !empty($_advman['ads'][$id])) {
-			$validId = $id;
-		}
-		
-		return $validId;
-	}
-	
-	function generate_id()
-	{
-		global $_advman;
-		if (empty($_advman['next_ad_id'])) {
-			$_advman['next_ad_id'] = 1;
-		}
-		
-		$nextId = $_advman['next_ad_id'];
-		$_advman['next_ad_id'] = $nextId + 1;
-		
-		return $nextId;
 	}
 }
 ?>

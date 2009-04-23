@@ -14,17 +14,17 @@ class OX_Adnet_Adsense extends OX_Adnet
 	/**
 	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
 	 */
-	var $shortName = 'Adsense';
+	static $shortName = 'Adsense';
 	
 	/**
 	 * The URL for the home page of the ad network site
 	 */
-	var $url = 'http://www.google.com/adsense';
+	static $url = 'http://www.google.com/adsense';
 	
 	/**
 	 * The name of the network.  Used when displaying ads by network.
 	 */
-	var $networkName = 'Google Adsense';
+	static $networkName = 'Google Adsense';
 	
 	function OX_Adnet_Adsense()
 	{
@@ -34,6 +34,7 @@ class OX_Adnet_Adsense extends OX_Adnet
 	function get_default_properties()
 	{
 		$properties = array(
+			'account-id' => '',
 			'adtype' => 'slot',
 			'adformat' => '728x90',
 			'channel' => '',
@@ -154,7 +155,7 @@ class OX_Adnet_Adsense extends OX_Adnet
 				$this->set('adtype', $adtype);
 			} else {
 				$this->set('adtype', 'link');
-				$this->set('linkformat', OX_Tools::sanitize_format($_POST['advman-adformat'])); //passthru
+				$this->set('linkformat', OX_Tools::sanitize($_POST['advman-adformat'], 'format')); //passthru
 			}
 		}
 		
@@ -170,13 +171,13 @@ class OX_Adnet_Adsense extends OX_Adnet
 		switch($this->get('adtype')){
 			case 'slot' :
 			case 'ad' :
-				$this->set('adformat', OX_Tools::sanitize_format($_POST['advman-adformat']));
+				$this->set('adformat', OX_Tools::sanitize($_POST['advman-adformat'], 'format'));
 				break;
 			case 'link' :
-				$this->set('adformat', OX_Tools::sanitize_format($_POST['advman-linkformat']));
+				$this->set('adformat', OX_Tools::sanitize($_POST['advman-linkformat'], 'format'));
 				break;
 			case 'ref_image' :
-				$this->set('adformat', OX_Tools::sanitize_format($_POST['advman-referralformat']));
+				$this->set('adformat', OX_Tools::sanitize($_POST['advman-referralformat'], 'format'));
 				break;
 			default :
 				$this->set('adformat', '');

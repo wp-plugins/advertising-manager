@@ -29,9 +29,9 @@ class Template_ListAds
 		$previous_network='';
 		if (is_array($_advman['ads'])) {
 			foreach ($_advman['ads'] as $id => $ad) {
-				if ($ad->networkName !== $previous_network) {
+				if ($ad->getNetworkName() !== $previous_network) {
 					Template_ListAds::_display_network_row($ad);
-					$previous_network = $ad->networkName;
+					$previous_network = $ad->getNetworkName();
 					$shade = 0;
 				}
 					
@@ -42,7 +42,7 @@ class Template_ListAds
 						<input class="button" type="submit" value="<?php _e('Copy', 'advman'); ?>" onClick="document.getElementById('advman-action').value='copy'; document.getElementById('advman-action-target').value='<?php echo $id; ?>';">
 <?php
 				if ( ($id != $_advman['default-ad']) || (count($_advman['ads']) == 1) ) {
-?>						<input class="button" type="submit" value="<?php _e('Delete', 'advman'); ?>" onClick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->networkName); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-action-target').value='<?php echo $id; ?>';} else {return false;}">
+?>						<input class="button" type="submit" value="<?php _e('Delete', 'advman'); ?>" onClick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->getNetworkName()); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-action-target').value='<?php echo $id; ?>';} else {return false;}">
 					</td>
 <?php
 				}
@@ -80,7 +80,7 @@ class Template_ListAds
 		global $_advman;
 		
 ?>				<tr class="network_header" id="default-options">
-					<td style="width:180px;"><a class="<?php echo strtolower($ad->network); ?>" href="javascript:document.getElementById('advman-form').submit();" onclick="javascript:document.getElementById('advman-action').value='edit'; document.getElementById('advman-action-target').value='<?php echo $ad->network; ?>';"><?php echo $ad->networkName; ?></a></td>
+					<td style="width:180px;"><a class="<?php echo strtolower($ad->getNetwork()); ?>" href="javascript:document.getElementById('advman-form').submit();" onclick="javascript:document.getElementById('advman-action').value='edit'; document.getElementById('advman-action-target').value='<?php echo $ad->getNetwork(); ?>';"><?php echo $ad->getNetworkName(); ?></a></td>
 					<td></td>
 					<td></td>
 					<td></td>

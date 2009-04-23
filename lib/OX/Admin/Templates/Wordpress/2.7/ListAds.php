@@ -16,7 +16,7 @@ class Template_ListAds
 				if ($ad->active) {
 					$activeAdCount++;
 				}
-				$networks[$ad->network] = $ad->networkName;
+				$networks[$ad->getNetwork()] = $ad->getNetworkName();
 			}
 		}
 		$filterActive = !empty($filter['active']) ? $filter['active'] : null;
@@ -113,7 +113,7 @@ function ADS_setAction(action, id, name, network)
 	<tbody>
 <?php foreach ($_advman['ads'] as $id => $ad) : ?>
 <?php if ( ($filterActive == 'active' && $ad->active) || ($filterActive == 'inactive' && !$ad->active) || empty($filterActive) ) : ?>
-<?php if ( ($filterNetwork == $ad->network) || empty($filterNetwork) ) : ?>
+<?php if ( ($filterNetwork == $ad->getNetwork()) || empty($filterNetwork) ) : ?>
 	<tr id='post-3' class='alternate author-self status-publish iedit' valign="top">
 		<th scope="row" class="check-column"><input type="checkbox" name="advman-action-targets[]" value="<?php echo $ad->id; ?>" /></th>
 		<td class="post-title column-title">
@@ -121,11 +121,11 @@ function ADS_setAction(action, id, name, network)
 			<div class="row-actions">
 				<span class='edit'><a href="javascript:ADS_setAction('edit','<?php echo $ad->id; ?>');" title="<?php printf(__('Edit the ad &quot;%s&quot;', 'advman'), $ad->name); ?>"><?php _e('Edit', 'advman'); ?></a> | </span>
 				<span class='edit'><a class='submitdelete' title="<?php _e('Copy this ad', 'advman'); ?>" href="javascript:ADS_setAction('copy','<?php echo $ad->id; ?>');"><?php _e('Copy', 'advman'); ?></a> | </span>
-				<span class='edit'><a class='submitdelete' title="<?php _e('Delete this ad', 'advman'); ?>" href="javascript:ADS_setAction('delete','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>', '<?php echo $ad->networkName; ?>');" onclick=""><?php _e('Delete', 'advman'); ?></a> | </span>
+				<span class='edit'><a class='submitdelete' title="<?php _e('Delete this ad', 'advman'); ?>" href="javascript:ADS_setAction('delete','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>', '<?php echo $ad->getNetworkName(); ?>');" onclick=""><?php _e('Delete', 'advman'); ?></a> | </span>
 				<span class='edit'><a href="<?php echo $ad->get_preview_url(); ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview', 'advman'); ?></a></span>
 			</div>
 		</td>
-		<td class="author column-author"><a href="javascript:ADS_setAction('edit','<?php echo $ad->network; ?>');" title="<?php printf(__('Edit the ad network &quot;%s&quot;', 'advman'), $ad->networkName); ?>"><?php echo $ad->networkName; ?></a></td>
+		<td class="author column-author"><a href="javascript:ADS_setAction('edit','<?php echo $ad->getNetwork(); ?>');" title="<?php printf(__('Edit the ad network &quot;%s&quot;', 'advman'), $ad->getNetworkName()); ?>"><?php echo $ad->getNetworkName(); ?></a></td>
 		<td class="categories column-categories"> <?php echo $this->displayFormat($ad); ?></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('<?php echo ($ad->active) ? 'deactivate' : 'activate'; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $_advman['default-ad']) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>

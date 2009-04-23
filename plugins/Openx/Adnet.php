@@ -11,17 +11,17 @@ class OX_Adnet_Openx extends OX_Adnet
 	/**
 	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
 	 */
-	var $shortName = 'Openx';
+	static $shortName = 'Openx';
 	
 	/**
 	 * The URL for the home page of the ad network site
 	 */
-	var $url = 'http://www.openx.org';
+	static $url = 'http://www.openx.org';
 	
 	/**
 	 * The name of the network.  Used when displaying ads by network.
 	 */
-	var $networkName = 'OpenX';
+	static $networkName = 'OpenX';
 	
 	function OX_Adnet_Openx()
 	{

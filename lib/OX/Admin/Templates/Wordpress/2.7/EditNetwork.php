@@ -30,7 +30,7 @@ class Template_EditNetwork
 		global $_advman_networks;
 		
 		$ad = new $target;
-		$network_name = $ad->networkName;
+		$network_name = $ad->getNetworkName();
 		$revisions = $ad->get_default('revisions');
 		if (!empty($revisions)) {
 			foreach($revisions as $t => $u) {
@@ -46,11 +46,11 @@ class Template_EditNetwork
 
 <div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
-	<h2><?php printf(__('Edit %s Network Settings', 'advman'), "<span class='" . strtolower($ad->network) . "'>" . $ad->networkName . "</span>"); ?></h2>
+	<h2><?php printf(__('Edit %s Network Settings', 'advman'), "<span class='" . strtolower($ad->getNetwork()) . "'>" . $ad->getNetworkName() . "</span>"); ?></h2>
 	<form action="" method="post" id="advman-form" enctype="multipart/form-data">
 	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
 	<input type="hidden" name="advman-action" id="advman-action">
-	<input type="hidden" name="advman-action-target" id="advman-action-target" value="<?php echo $ad->network; ?>">
+	<input type="hidden" name="advman-action-target" id="advman-action-target" value="<?php echo $ad->getNetwork(); ?>">
 <?php  
 	wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );  
 	wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );  
@@ -90,7 +90,7 @@ class Template_EditNetwork
 			<h3 class='hndle'><span><?php _e('Shortcuts', 'advman'); ?></span></h3>
 			<div class="inside">
 				<p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
-				<p class="hide-if-no-js"><a href='<?php echo $ad->url ?>' target='wp-preview'><?php echo $ad->networkName ?> Home Page</a></p>
+				<p class="hide-if-no-js"><a href='<?php echo $ad->url ?>' target='wp-preview'><?php echo $ad->getNetworkName() ?> Home Page</a></p>
 				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='reset'; document.getElementById('advman-form').submit();">Reset Default Settings</a></p>
 			</div>
 		</div>

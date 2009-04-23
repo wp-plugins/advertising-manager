@@ -18,9 +18,11 @@ load_plugin_textdomain('advman', false, 'advertising-manager/languages');
 // Load all require files that are needed for Advertising Manager
 advman_load_requires();
 // Load the Swifty Ad Engine
-$advman_engine = new OX_Swifty(new OX_Dal_Wordpress());
+$advman_engine = new OX_Swifty();
 // Load all of the plugins for Advertising Manager
 advman_load_plugins();
+// Initialise the engine after plugins have been loaded
+$advman_engine->init('OX_Dal_Wordpress');
 // Run init after the plugins are loaded
 add_action('plugins_loaded', 'advman_init', 1);	
 
@@ -31,6 +33,11 @@ function advman_load_definitions()
 	@define('ADVMAN_LIB', ADVMAN_PATH . '/lib');
 	@define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
 	@define('OX_PLUGIN_PATH', ADVMAN_PATH . '/plugins');
+
+	// Get the template path
+	global $wp_version;
+	$version = (version_compare($wp_version,"2.7-alpha", "<")) ? '2.6' : '2.7';
+	@define('OX_TEMPLATE_PATH', ADVMAN_LIB . "/OX/Admin/Templates/Wordpress/{$version}");
 }
 
 function advman_load_requires()
@@ -56,7 +63,7 @@ function advman_init()
 	
 	// An ad is being requested by its name
 	if (!empty($_REQUEST['advman-ad-name'])) {
-		$name = OX_Tools::sanitize_key($_REQUEST['advman-ad-name']);
+		$name = OX_Tools::sanitize($_REQUEST['advman-ad-name'], 'key');
 		$ad = $advman_engine->selectAd($name);
 		if (!empty($ad)) {
 			$ad->display();
@@ -66,7 +73,7 @@ function advman_init()
 	
 	// An ad is being requested by its id
 	if (!empty($_REQUEST['advman-ad-id'])) {
-		$id = OX_Tools::sanitize_number($_REQUEST['advman-ad-id']);
+		$id = OX_Tools::sanitize($_REQUEST['advman-ad-id'], 'number');
 		$ad = $advman_engine->selectAd($id);
 		if (!empty($ad)) {
 			$ad->display();
@@ -76,7 +83,7 @@ function advman_init()
 
 	/* REVERT TO PREVIOUS BACKUP OF AD DATABASE */
 	if (!empty($_REQUEST['advman-revert-db'])) {
-		$version = OX_Tools::sanitize_number($_REQUEST['advman-revert-db']);
+		$version = OX_Tools::sanitize($_REQUEST['advman-revert-db'], 'number');
 		$backup = get_option('plugin_adsensem_backup');
 		if (!empty($backup[$version])) {
 			$_advman = $backup[$version];

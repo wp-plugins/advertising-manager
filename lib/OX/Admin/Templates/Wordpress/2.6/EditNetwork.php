@@ -51,7 +51,7 @@ class Template_EditNetwork
 	wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );  
 	wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );  
 ?><div class="wrap">
-	<h2><?php printf(__('Edit %s Network Settings', 'advman'), "<span class='" . strtolower($ad->network) . "'>" . $ad->networkName . "</span>"); ?></h2>
+	<h2><?php printf(__('Edit %s Network Settings', 'advman'), "<span class='" . strtolower($ad->getNetwork()) . "'>" . $ad->getNetworkName() . "</span>"); ?></h2>
 <div id="poststuff">
 <div class="submitbox" id="submitpost">
 <div id="previewview">
@@ -72,7 +72,7 @@ class Template_EditNetwork
 <div class="side-info">
 	<h5><?php _e('Shortcuts', 'advman'); ?></h5>
 	<ul>
-		<li><a href="<?php echo $ad->url; ?>" ><?php echo $ad->networkName; ?> Home Page</a></li>
+		<li><a href="<?php echo $ad->url; ?>" ><?php echo $ad->getNetworkName(); ?> Home Page</a></li>
 	</ul>
 
 	<h5><?php _e('Notes', 'advman'); ?></h5>

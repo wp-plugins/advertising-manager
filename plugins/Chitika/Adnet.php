@@ -11,17 +11,17 @@ class OX_Adnet_Chitika extends OX_Adnet
 	/**
 	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
 	 */
-	var $shortName = 'Chitika';
+	static $shortName = 'Chitika';
 	
 	/**
 	 * The URL for the home page of the ad network site
 	 */
-	var $url = 'http://www.chitika.com';
+	static $url = 'http://www.chitika.com';
 	
 	/**
 	 * The name of the network.  Used when displaying ads by network.
 	 */
-	var $networkName = 'Chitika';
+	static $networkName = 'Chitika';
 	
 	function OX_Adnet_Chitika()
 	{
@@ -31,6 +31,7 @@ class OX_Adnet_Chitika extends OX_Adnet
 	function get_default_properties()
 	{
 		$properties = array(
+			'account-id' => '',
 			'adformat' => '728x90',
 			'alt-url' => '',
 			'channel' => '',

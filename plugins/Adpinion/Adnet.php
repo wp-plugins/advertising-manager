@@ -18,17 +18,17 @@ class OX_Adnet_Adpinion extends OX_Adnet
 	/**
 	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
 	 */
-	var $shortName = 'Adpinion';
+	static $shortName = 'Adpinion';
 	
 	/**
 	 * The URL for the home page of the ad network site
 	 */
-	var $url = 'http://www.adpinion.com';
+	static $url = 'http://www.adpinion.com';
 	
 	/**
 	 * The name of the network.  Used when displaying ads by network.
 	 */
-	var $networkName = 'Adpinion';
+	static $networkName = 'Adpinion';
 	
 	function OX_Adnet_Adpinion()
 	{
@@ -56,6 +56,7 @@ class OX_Adnet_Adpinion extends OX_Adnet
 	function get_default_properties()
 	{
 		$properties = array(
+			'account-id' => '',
 			'adformat' => '728x90',
 			'height'=> '90',
 			'width' => '728',

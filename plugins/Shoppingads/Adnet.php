@@ -11,17 +11,17 @@ class OX_Adnet_Shoppingads extends OX_Adnet
 	/**
 	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
 	 */
-	var $shortName = 'Shoppingads';
+	static $shortName = 'Shoppingads';
 	
 	/**
 	 * The URL for the home page of the ad network site
 	 */
-	var $url = 'http://www.shoppingads.com';
+	static $url = 'http://www.shoppingads.com';
 	
 	/**
 	 * The name of the network.  Used when displaying ads by network.
 	 */
-	var $networkName = 'Shopping Ads';
+	static $networkName = 'Shopping Ads';
 	
 	function OX_Adnet_Shoppingads()
 	{
@@ -31,6 +31,7 @@ class OX_Adnet_Shoppingads extends OX_Adnet
 	function get_default_properties()
 	{
 		$properties = array(
+			'account-id' => '',
 			'adformat' => '250x250',
 			'attitude' => 'cool',
 			'campaign' => '',

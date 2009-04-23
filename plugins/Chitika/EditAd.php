@@ -138,7 +138,7 @@ class Template_EditAd_Chitika extends Template_EditAd
 				<div id="ad-color-title" style="color: #<?php echo ($ad->get('color-title')) ? $ad->get('color-title') : '00FFFF'; ?>; font: 11px verdana, arial, sans-serif; padding: 2px;"><b><u><?php _e('Linked Title', 'advman'); ?></u></b><br /></div>
 				<div id="ad-color-text" style="color: #<?php echo ($ad->get('color-text')) ? $ad->get('color-text') : '000000'; ?>; padding: 2px;" class="text"><?php _e('Advertiser\'s ad text here', 'advman'); ?><br /></div>
 				<div id="ad-color-link" style="color: #<?php echo ($ad->get('color-link')) ? $ad->get('color-link') : '008000'; ?>; font: 10px verdana, arial, sans-serif; padding: 2px;"><?php _e('www.advertiser-url.com', 'advman'); ?><br /></div>
-				<div style="color: #000; padding: 2px;" class="rtl-safe-align-right">&nbsp;<u><?php printf(__('Ads by %s', 'advman'), $ad->networkName); ?></u></div>
+				<div style="color: #000; padding: 2px;" class="rtl-safe-align-right">&nbsp;<u><?php printf(__('Ads by %s', 'advman'), $ad->getNetworkName()); ?></u></div>
 			</div>
 		</div>
 	</td>
@@ -168,7 +168,7 @@ class Template_EditAd_Chitika extends Template_EditAd
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->networkName); ?> <?php _e('Enter a channel if you want to break out your reporting by different sections (e.g. home page, post detail)', 'advman'); ?> <?php printf(__('The Alternate URL will be called if %s does not have an ad to display.', 'advman'), $ad->networkName); ?></span>
+<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->getNetworkName()); ?> <?php _e('Enter a channel if you want to break out your reporting by different sections (e.g. home page, post detail)', 'advman'); ?> <?php printf(__('The Alternate URL will be called if %s does not have an ad to display.', 'advman'), $ad->getNetworkName()); ?></span>
 <?php
 	}
 }

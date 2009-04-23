@@ -11,17 +11,17 @@ class OX_Adnet_Cj extends OX_Adnet
 	/**
 	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
 	 */
-	var $shortName = 'Cj';
+	static $shortName = 'Cj';
 	
 	/**
 	 * The URL for the home page of the ad network site
 	 */
-	var $url = 'http://www.cj.com';
+	static $url = 'http://www.cj.com';
 	
 	/**
 	 * The name of the network.  Used when displaying ads by network.
 	 */
-	var $networkName = 'Commission Junction';
+	static $networkName = 'Commission Junction';
 	
 	function OX_Adnet_Cj()
 	{
@@ -57,6 +57,7 @@ class OX_Adnet_Cj extends OX_Adnet
 	function get_default_properties()
 	{
 		$properties = array(
+			'account-id' => '',
 			'adformat' => '250x250',
 			'alt-text' => '',
 			'height' => '250',

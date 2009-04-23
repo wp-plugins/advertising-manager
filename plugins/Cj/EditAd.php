@@ -28,7 +28,7 @@ class Template_EditAd_Cj extends Template_EditAd
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->networkName); ?> <?php _e('The Slot ID is the ID of this specific ad slot.', 'advman'); ?></span>
+<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->getNetworkName()); ?> <?php _e('The Slot ID is the ID of this specific ad slot.', 'advman'); ?></span>
 <?php
 	}
 	

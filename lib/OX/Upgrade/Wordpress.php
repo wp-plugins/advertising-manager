@@ -221,7 +221,7 @@ class OX_Upgrade_Wordpress
 					$ad->set('color-url', null);
 				}
 				// Re-import code because it was not saved in previous versions
-				if ($ad->network != 'OX_Adnet_Html') {
+				if ($ad->getNetwork() != 'OX_Adnet_Html') {
 					$code = call_user_func(array('advman_upgrade', '_render_' . $oldClass), $ad);
 					$ad->import_settings($code);
 				}
@@ -418,7 +418,7 @@ class OX_Upgrade_Wordpress
 	function _render_ad_adsense($ad)
 	{
 		global $_advman;
-		$accountId = !empty($_advman['account-ids'][$ad->network]) ? ('pub-' . $_advman['account-ids'][$ad->network]) : '';
+		$accountId = !empty($_advman['account-ids'][$ad->getNetwork()]) ? ('pub-' . $_advman['account-ids'][$ad->getNetwork()]) : '';
 
 		$code = '<script type="text/javascript"><!--' . "\n";
 		$code.= 'google_ad_client = "' . $accountId . '";' . "\n";
@@ -447,7 +447,7 @@ class OX_Upgrade_Wordpress
 	function _render_ad_adbrite($ad)
 	{
 		global $_advman;
-		$accountId = !empty($_advman['account-ids'][$ad->network]) ? $_advman['account-ids'][$ad->network] : '';
+		$accountId = !empty($_advman['account-ids'][$ad->getNetwork()]) ? $_advman['account-ids'][$ad->getNetwork()] : '';
 
 		$code ='<!-- Begin: AdBrite -->';
 		$code .= '<script type="text/javascript">' . "\n";
@@ -466,7 +466,7 @@ class OX_Upgrade_Wordpress
 	function _render_ad_adgridwork($ad)
 	{
 		global $_advman;
-		$accountId = !empty($_advman['account-ids'][$ad->network]) ? $_advman['account-ids'][$ad->network] : '';
+		$accountId = !empty($_advman['account-ids'][$ad->getNetwork()]) ? $_advman['account-ids'][$ad->getNetwork()] : '';
 
 		$code ='<a href="http://www.adgridwork.com/?r=' . $accountId . '" style="color: #' . $ad->get('color-link') .  '; font-size: 14px" target="_blank">Free Advertising</a>';
 		$code.='<script type="text/javascript">' . "\n";
@@ -484,7 +484,7 @@ class OX_Upgrade_Wordpress
 	function _render_ad_adpinion($ad)
 	{
 		global $_advman;
-		$accountId = !empty($_advman['account-ids'][$ad->network]) ? $_advman['account-ids'][$ad->network] : '';
+		$accountId = !empty($_advman['account-ids'][$ad->getNetwork()]) ? $_advman['account-ids'][$ad->getNetwork()] : '';
 
 		if($ad->get('width')>$ad->get('height')){$xwidth=18;$xheight=17;} else {$xwidth=0;$xheight=35;}
 		$code ='';
@@ -497,7 +497,7 @@ class OX_Upgrade_Wordpress
 	function _render_ad_adroll($ad)
 	{
 		global $_advman;
-		$accountId = !empty($_advman['account-ids'][$ad->network]) ? $_advman['account-ids'][$ad->network] : '';
+		$accountId = !empty($_advman['account-ids'][$ad->getNetwork()]) ? $_advman['account-ids'][$ad->getNetwork()] : '';
 
 		$code ='';
 		$code .= '<!-- Start: Adroll Ads -->';
@@ -513,7 +513,7 @@ class OX_Upgrade_Wordpress
 	function _render_ad_adsense_ad($ad)
 	{
 		global $_advman;
-		$accountId = !empty($_advman['account-ids'][$ad->network]) ? ('pub-' . $_advman['account-ids'][$ad->network]) : '';
+		$accountId = !empty($_advman['account-ids'][$ad->getNetwork()]) ? ('pub-' . $_advman['account-ids'][$ad->getNetwork()]) : '';
 
 		$code='';
 		
@@ -556,7 +556,7 @@ class OX_Upgrade_Wordpress
 	function _render_ad_adsense_link($ad)
 	{
 		global $_advman;
-		$accountId = !empty($_advman['account-ids'][$ad->network]) ? ('pub-' . $_advman['account-ids'][$ad->network]) : '';
+		$accountId = !empty($_advman['account-ids'][$ad->getNetwork()]) ? ('pub-' . $_advman['account-ids'][$ad->getNetwork()]) : '';
 
 		$code='';
 
@@ -588,7 +588,7 @@ class OX_Upgrade_Wordpress
 	function _render_ad_adsense_referral($ad)
 	{
 		global $_advman;
-		$accountId = !empty($_advman['account-ids'][$ad->network]) ? ('pub-' . $_advman['account-ids'][$ad->network]) : '';
+		$accountId = !empty($_advman['account-ids'][$ad->getNetwork()]) ? ('pub-' . $_advman['account-ids'][$ad->getNetwork()]) : '';
 
 		//if($ad===false){$ad=$_advman['ads'][$_advman['default_ad']];}
 		//$ad=advman::merge_defaults($ad); //Apply defaults
@@ -623,7 +623,7 @@ class OX_Upgrade_Wordpress
 	function _render_ad_cj($ad)
 	{
 		global $_advman;
-		$accountId = !empty($_advman['account-ids'][$ad->network]) ? $_advman['account-ids'][$ad->network] : '';
+		$accountId = !empty($_advman['account-ids'][$ad->getNetwork()]) ? $_advman['account-ids'][$ad->getNetwork()] : '';
 
 		$cjservers=array(
 			'www.kqzyfj.com',
@@ -684,7 +684,7 @@ class OX_Upgrade_Wordpress
 	function _render_ad_shoppingads($ad)
 	{
 		global $_advman;
-		$accountId = !empty($_advman['account-ids'][$ad->network]) ? $_advman['account-ids'][$ad->network] : '';
+		$accountId = !empty($_advman['account-ids'][$ad->getNetwork()]) ? $_advman['account-ids'][$ad->getNetwork()] : '';
 
 		$code = '<script type="text/javascript"><!--' . "\n";
 		$code.= 'shoppingads_ad_client = "' . $accountId . '";' . "\n";
@@ -726,7 +726,7 @@ class OX_Upgrade_Wordpress
 	function _render_ad_ypn($ad)
 	{
 		global $_advman;
-		$accountId = !empty($_advman['account-ids'][$ad->network]) ? $_advman['account-ids'][$ad->network] : '';
+		$accountId = !empty($_advman['account-ids'][$ad->getNetwork()]) ? $_advman['account-ids'][$ad->getNetwork()] : '';
 
 		$code = '<script language="JavaScript">';
 		$code .= '<!--';

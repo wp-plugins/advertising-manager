@@ -102,7 +102,7 @@ class Template_EditAd_Adgridwork extends Template_EditAd
 			<div id="ad-color-link" style="color: #<?php echo htmlspecialchars($ad->get('color-link', true), ENT_QUOTES); ?>; font: 10px verdana, arial, sans-serif; padding: 2px;">
 				<?php _e('www.advertiser-url.com', 'advman'); ?><br /></div>
 			<div style="color: #000; padding: 2px;" class="rtl-safe-align-right">
-				&nbsp;<u><?php printf(__('Ads by %s', 'advman'), $ad->networkName); ?></u></div>
+				&nbsp;<u><?php printf(__('Ads by %s', 'advman'), $ad->getNetworkName()); ?></u></div>
 			</div>			
 		</td>
 	</tr>

@@ -7,16 +7,24 @@ class OX_Dal_Wordpress extends OX_Swifty_Dal
 	
 	function OX_Dal_Wordpress()
 	{
-		$this->data = $this->loadData();
+		$this->data = $this->getData();
 		$this->_verifyData();
 	}
-	
-	function loadData($key = 'plugin_adsensem')
+/*	
+	function getAd($id);
+	function setAd($id, $ad);
+	function linkAd($id, $zones)
+	function getZone($id);
+	function getZones();
+	function setZone($id, $zone);
+	function linkZone($id, $ads);
+*/	
+	function getData($key = 'plugin_adsensem')
 	{
 		return get_option($key);
 	}
 	
-	function saveData($data = null, $key = 'plugin_adsensem')
+	function setData($data = null, $key = 'plugin_adsensem')
 	{
 		if (is_null($data)) {
 			$data = $this->data;
@@ -32,6 +40,29 @@ class OX_Dal_Wordpress extends OX_Swifty_Dal
 	{
 		$this->data[$key] = $value;
 	}
+	
+	function addAd($ad)
+	{
+		$id = $this->getKey('next_ad_id');
+		$this->setKey('next_ad_id', $id+1);
+		$ad->id = $id;
+		return $this->setAd($ad);
+	}
+	
+	function getAd($id)
+	{
+		$ads = $this->getAds();
+		return $ads[$id];
+	}
+	
+	function setAd($ad)
+	{
+		$id = $ad->id;
+		$this->data['ads'][$id] = $ad;
+		$this->setData();
+		return $id;
+	}
+	
 	function getAds()
 	{
 		return $this->getKey('ads');
@@ -84,7 +115,7 @@ class OX_Dal_Wordpress extends OX_Swifty_Dal
 				break;
 		}
 		
-		$this->saveData();
+		$this->setData();
 	}
 
 	function _verifyData()
@@ -108,21 +139,21 @@ class OX_Dal_Wordpress extends OX_Swifty_Dal
 				advman::add_notice('upgrade adsense-deluxe',__('<strong>Advertising Manager</strong> has detected a previous installation of <strong>Adsense Deluxe</strong>. Import settings?'),'yn');
 			}
 			
-			$this->saveData($data);
+			$this->setData($data);
 		}
 		
 		if (version_compare($data['version'], ADVMAN_VERSION, '<')) {
 			include_once('WordpressUpgrade.php');
 			
 			//Backup cycle
-			$backup = $this->loadData('plugin_adsensem_backup');
+			$backup = $this->getData('plugin_adsensem_backup');
 			$version = OX_Tools::major_version($data['version']);
 			$backup[$version] = $data;
-			$this->saveData($backup, 'plugin_adsensem_backup');
+			$this->setData($backup, 'plugin_adsensem_backup');
 			
 			$upgrade = new OX_Dal_WordpressUpgrade();
 			$data = $upgrade->upgrade($data);
-			$this->saveData($data);
+			$this->setData($data);
 		}
 	}
 }

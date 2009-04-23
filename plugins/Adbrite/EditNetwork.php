@@ -74,7 +74,7 @@ class Template_EditNetwork_Adbrite extends Template_EditNetwork
 			<div id="ad-color-text" style="color: #<?php echo htmlspecialchars($ad->get_default('color-text'), ENT_QUOTES); ?>; padding: 2px;" class="text">
 				<?php _e('Advertiser\'s ad text here', 'advman'); ?><br /></div>
 			<div style="color: #000; padding: 2px;" class="rtl-safe-align-right">
-				&nbsp;<u><?php printf(__('Ads by %s', 'advman'), $ad->networkName); ?></u></div>
+				&nbsp;<u><?php printf(__('Ads by %s', 'advman'), $ad->getNetworkName()); ?></u></div>
 			</div>
 		</td>
 	</tr>

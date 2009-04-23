@@ -1,12 +1,17 @@
 <?php
+// Init some params
+$myPath = OX_PLUGIN_PATH . '/Adpinion';
+$myClass = 'OX_Adnet_Adpinion';
 
+require_once ("{$myPath}/Adnet.php");
+
+// Register the ad network on the adserver engine
 global $advman_engine;
-require_once (OX_PLUGIN_PATH . '/Adpinion/Adnet.php');
-$advman_engine->addAction('register_ad_network', 'OX_Adnet_Adpinion');
-
+$advman_engine->addAction('register_ad_network', $myClass);
+// Register the ad network templates if admin
 if (is_admin()) {
-	$advman_engine->addAction('display_template', array('EditAd', 'Template_EditAd_Adpinion', OX_PLUGIN_PATH . '/Adpinion/EditAd.php'));
-	$advman_engine->addAction('display_template', array('EditNetwork', 'Template_EditNetwork_Adpinion', OX_PLUGIN_PATH . '/Adpinion/EditNetwork.php'));
+	OX_Admin_Wordpress::add_action('display_template_EditAd', $myClass, array("{$myPath}/EditAd.php", "{$myClass}_Template_EditAd"));
+	OX_Admin_Wordpress::add_action('display_template_EditNetwork', $myClass, array("{$myPath}/EditNetwork.php", "{$myClass}_Template_EditNetwork"));
 }
 
 ?>

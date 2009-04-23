@@ -3,6 +3,8 @@ require_once (ADVMAN_LIB . '/OX/Tools.php');
 
 class OX_Admin_Wordpress
 {
+	static $actions;
+	
 	/**
 	 * Initialise menu items, notices, etc.
 	 */
@@ -28,10 +30,10 @@ class OX_Admin_Wordpress
 		add_action('admin_notices', array('OX_Admin_Wordpress','display_notices'), 1 );
 		
 		/* PRE-OUTPUT PROCESSING - e.g. NOTICEs (upgrade-adsense-deluxe) */
-		$mode = OX_Tools::get_post_key('advman-mode');
+		$mode = OX_Tools::sanitize($_POST['advman-mode'], 'key');
 		if ($mode == 'notice') {
-			$action = OX_Tools::get_post_key('advman-action');
-			$yes = OX_Tools::get_post_key('advman-notice-confirm-yes');
+			$action = OX_Tools::sanitize($_POST['advman-action'], 'key');
+			$yes = OX_Tools::sanitize($_POST['advman-notice-confirm-yes'], 'key');
 			switch ($action) {
 				case 'upgrade adsense-deluxe':
 					if ($yes) {
@@ -51,6 +53,23 @@ class OX_Admin_Wordpress
 		}
 	}
 	
+	function add_action($action, $name, $value)
+	{
+		$actions = self::$actions;
+		$actions[$action][$name] = $value;
+		self::$actions = $actions;
+	}
+	
+	function get_action($action, $name)
+	{
+		$actions = self::$actions;
+		
+		if (!empty($actions[$action][$name])) {
+			return $actions[$action][$name];
+		}
+		
+		return null;
+	}
 	function add_notice($action,$text,$confirm=false)
 	{
 		global $advman_engine;
@@ -72,6 +91,35 @@ class OX_Admin_Wordpress
 		}
 	}
 	
+	function save_properties(&$ad, $default = false)
+	{
+		global $advman_engine;
+		
+		// Set the ad properties (if not setting default properties)
+		if (!$default) {
+			if (isset($_POST['advman-name'])) {
+				$ad->name = OX_Tools::sanitize($_POST['advman-name'], 'key');
+			}
+			
+			if (isset($_POST['advman-active'])) {
+				$ad->active = ($_POST['advman-active'] == 'yes');
+			}
+		}
+		
+		$properties = $ad->get_default_properties();
+		if (!empty($properties)) {
+			foreach ($properties as $property => $d) {
+				if (isset($_POST["advman-{$property}"])) {
+					$value = OX_Tools::sanitize($_POST["advman-{$property}"]);
+					$ad->set($property, $value, $default);
+				}
+			}
+		}
+		
+		$ad->add_revision($default);
+	}
+	
+	
 	/**
 	 * Process input from the Admin UI.  Called staticly from the Wordpress form screen.
 	 */
@@ -79,64 +127,70 @@ class OX_Admin_Wordpress
 	{
 		global $advman_engine;
 		
-		$mode = OX_Tools::get_post_key('advman-mode');
-		$action = OX_Tools::get_post_key('advman-action');
-		$target = OX_Tools::get_post_key('advman-target');
-		$targets = OX_Tools::get_post_key('advman-targets');
-		
-		$id = intval($target);
 		$filter = null;
+		$mode = OX_Tools::sanitize($_POST['advman-mode'], 'key');
+		$action = OX_Tools::sanitize($_POST['advman-action'], 'key');
+		$target = OX_Tools::sanitize($_POST['advman-target'], 'key');
+		$targets = OX_Tools::sanitize($_POST['advman-targets'], 'key');
+		
+		// For operations on a single ad
+		if (is_numeric($target)) {
+			$id = intval($target);
+			$ad = $advman_engine->getAd($id);
+		}
+		
+		// For operations on multiple ads
+		if (is_array($targets)) {
+			$ids = array();
+			$ads = array();
+			foreach ($targets as $target) {
+				$i = intval($target);
+				$ids[] = $i;
+				$ads[] = $advman_engine->getAd($i);
+			}
+		}
 		
 		switch ($action) {
 			
 			case 'activate' :
-				$advman_engine->setAdActive($id, true);
-				break;
-			
-			case 'apply' :
-				$properties = OX_Admin_Wordpress::getProperties();
-				if ($mode == 'edit_ad') {
-					$ad = $advman_engine->saveAd($id, $properties);
-					$mode = 'edit_ad';
-				} elseif ($mode == 'edit_network') {
-					$network = $advman_engine->saveAdNetwork($target, $properties);
-					$mode = 'edit_network';
+				if (!$ad->active) {
+					$ad->active = true;
+					$advman_engine->setAd($ad);
 				}
-				break;
-			
-			case 'cancel' :
-				$ads = $advman_engine->getAds();
-				$mode = !empty($ads) ? 'list_ads' : 'create_ad';
 				break;
 			
 			case 'clear' :
 				break;
 			
 			case 'copy' :
-				if (!empty($id)) {
-					$ad = $advman_engine->copyAd($id);
-				} elseif (!empty($targets)) {
-					foreach ($targets as $target) {
-						$id = intval($target);
-						$advman_engine->copyAd($id);
+				if (!empty($ad)) {
+					$ad = $advman_engine->copyAd($ad->id);
+				}
+				if (!empty($ads)) {
+					foreach ($ads as $ad) {
+						$advman_engine->copyAd($ad->id);
 					}
 				}
 				break;
 			
 			case 'deactivate' :
-				$advman_engine->setAdActive($id, false);
+				if ($ad->active) {
+					$ad->active = false;
+					$advman_engine->setAd($ad);
+				}
 				break;
 			
 			case 'default' :
-				advman_admin::_set_default($target);
+				$advman_engine->setKey('default-ad', $ad->name);
 				break;
 			
 			case 'delete' :
-				if (!empty($id)) {
-					advman_admin::_delete_ad($id);
-				} elseif (!empty($targets)) {
-					foreach ($targets as $target) {
-						advman_admin::_delete_ad($target);
+				if (!empty($ad)) {
+					$ad = $advman_engine->deleteAd($ad->id);
+				}
+				if (!empty($ads)) {
+					foreach ($ads as $ad) {
+						$advman_engine->deleteAd($ad->id);
 					}
 				}
 				$mode = !empty($_advman['ads']) ? 'list_ads' : 'create_ad';
@@ -147,8 +201,8 @@ class OX_Admin_Wordpress
 				break;
 			
 			case 'filter' :
-				$filter_active = OX_Tools::get_post_key('advman-filter-active');
-				$filter_network = OX_Tools::get_post_key('advman-filter-network');
+				$filter_active = OX_Tools::sanitize($_POST['advman-filter-active'], 'key');
+				$filter_network = OX_Tools::sanitize($_POST['advman-filter-network'], 'key');
 				if (!empty($filter_active)) {
 					$filter['active'] = $filter_active;
 				}
@@ -158,9 +212,8 @@ class OX_Admin_Wordpress
 				break;
 			
 			case 'import' :
-				$tag = OX_Tools::get_post_field('advman-code');
-				$tag = stripslashes($tag);
-				$id = $advman_engine->importAdTag($tag);
+				$tag = OX_Tools::sanitize($_POST['advman-code']);
+				$ad = $advman_engine->importAdTag($tag);
 				$mode = 'edit_ad';
 				break;
 			
@@ -168,15 +221,21 @@ class OX_Admin_Wordpress
 				$mode = 'list_ads';
 				break;
 			
+			case 'apply' :
 			case 'save' :
-				if ($mode == 'settings') {
-					advman_admin::_save_settings();
-				} else {
-					if (is_numeric($target)) {
-						advman_admin::_save_ad($target);
-					} else {
-						advman_admin::_save_network($target);
-					}
+				if ($mode == 'edit_ad') {
+					OX_Admin_Wordpress::save_properties($ad);
+					$advman_engine->setAd($ad);
+				} elseif ($mode == 'edit_network') {
+					$ad = new $target;
+					OX_Admin_Wordpress::save_properties($ad, true);
+					$advman_engine->setAd($ad);
+				} elseif ($mode == 'settings') {
+					OX_Admin_Wordpress::save_settings();
+				}
+				break;
+			
+				if ($action == 'save' && $mode != 'settings') {
 					$mode = 'list_ads';
 				}
 				break;
@@ -185,6 +244,7 @@ class OX_Admin_Wordpress
 				$mode = 'settings';
 				break;
 			
+			case 'cancel' :
 			default :
 				$ads = $advman_engine->getAds();
 				$mode = !empty($ads) ? 'list_ads' : 'create_ad';
@@ -202,13 +262,11 @@ class OX_Admin_Wordpress
 				break;
 			
 			case 'edit_ad' :
-				$ad = $_advman['ads'][$target];
 				$template = OX_Tools::get_template('EditAd', $ad);
-				$template->display($target);
+				$template->display($ad);
 				break;
 			
 			case 'edit_network' :
-				$ad = new $target;
 				$template = OX_Tools::get_template('EditNetwork', $ad);
 				$template->display($target);
 				break;
@@ -251,7 +309,7 @@ class OX_Admin_Wordpress
 	{
 		
 		// Get our options and see if we're handling a form submission.
-		$action = OX_Tools::get_post_key('advman-action');
+		$action = OX_Tools::sanitize($_POST['advman-action'], 'key');
 		if ($action == 'save') {
 			global $advman_engine;
 			$advman_engine->saveSettings($settings);

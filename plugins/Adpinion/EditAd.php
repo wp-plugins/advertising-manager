@@ -57,7 +57,7 @@ class Template_EditAd_Adpinion extends Template_EditAd
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->networkName); ?></span>
+<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->getNetworkName()); ?></span>
 <?php
 	}
 }

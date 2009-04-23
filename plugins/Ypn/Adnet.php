@@ -10,17 +10,17 @@ class OX_Adnet_Ypn extends OX_Adnet
 	/**
 	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
 	 */
-	var $shortName = 'Ypn';
+	static $shortName = 'Ypn';
 	
 	/**
 	 * The URL for the home page of the ad network site
 	 */
-	var $url = 'http://ypn.yahoo.com';
+	static $url = 'http://ypn.yahoo.com';
 	
 	/**
 	 * The name of the network.  Used when displaying ads by network.
 	 */
-	var $networkName = 'Yahoo! Publisher Network';
+	static $networkName = 'Yahoo! Publisher Network';
 	
 	function OX_Adnet_Ypn()
 	{
@@ -30,6 +30,7 @@ class OX_Adnet_Ypn extends OX_Adnet
 	function get_default_properties()
 	{
 		$properties = array(
+			'account-id' => '',
 			'adformat' => '250x250',
 			'channel' => '',
 			'color-bg' => 'FFFFFF',

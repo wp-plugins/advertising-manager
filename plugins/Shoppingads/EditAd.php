@@ -146,7 +146,7 @@ class Template_EditAd_Shoppingads extends Template_EditAd
 			<div id="ad-color-text" style="color: #<?php echo htmlspecialchars($ad->get('color-text', true), ENT_QUOTES); ?>; padding: 2px;" class="text">
 				Current Bid: $5.00<br /></div>
 			<div id="ad-color-link" style="color: #<?php echo htmlspecialchars($ad->get('color-link', true), ENT_QUOTES); ?>; font: 10px verdana, arial, sans-serif; padding: 2px;">
-				&nbsp;<span style="text-decoration:underline"><?php printf(__('Ads by %s', 'advman'), $ad->networkName); ?></span></div>
+				&nbsp;<span style="text-decoration:underline"><?php printf(__('Ads by %s', 'advman'), $ad->getNetworkName()); ?></span></div>
 			</div>
 		</td>
 	</tr>

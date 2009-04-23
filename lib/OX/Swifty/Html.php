@@ -10,12 +10,12 @@ class OX_Adnet_Html extends OX_Adnet
 	/**
 	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
 	 */
-	var $shortName = 'Html';
+	static $shortName = 'Html';
 	
 	/**
 	 * The name of the network.  Used when displaying ads by network.
 	 */
-	var $networkName = 'HTML Code';
+	static $networkName = 'HTML Code';
 	
 	function OX_Adnet_Html()
 	{

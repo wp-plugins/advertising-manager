@@ -10,9 +10,9 @@ class OX_Adnet_Adbrite extends OX_Adnet
 {
 	function OX_Adnet_Adbrite()
 	{
-		self::$shortName = 'Adbrite';
-		self::$url = 'http://www.adbrite.com';
-		self::$networkName = 'AdBrite';
+		parent::$shortName = 'Adbrite';
+		parent::$url = 'http://www.adbrite.com';
+		parent::$networkName = 'AdBrite';
 		$this->OX_Adnet();
 	}
 		

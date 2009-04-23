@@ -11,17 +11,17 @@ class OX_Adnet_Adroll extends OX_Adnet
 	/**
 	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
 	 */
-	var $shortName = 'Adroll';
+	static $shortName = 'Adroll';
 	
 	/**
 	 * The URL for the home page of the ad network site
 	 */
-	var $url = 'http://www.adroll.com';
+	static $url = 'http://www.adroll.com';
 	
 	/**
 	 * The name of the network.  Used when displaying ads by network.
 	 */
-	var $networkName = 'AdRoll';
+	static $networkName = 'AdRoll';
 	
 	function OX_Adnet_Adroll()
 	{
@@ -31,6 +31,7 @@ class OX_Adnet_Adroll extends OX_Adnet
 	function get_default_properties()
 	{
 		$properties = array(
+			'account-id' => '',
 			'slot' => '',
 		);
 		

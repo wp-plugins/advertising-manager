@@ -11,17 +11,17 @@ class OX_Adnet_Widgetbucks extends OX_Adnet
 	/**
 	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
 	 */
-	var $shortName = 'Widgetbucks';
+	static $shortName = 'Widgetbucks';
 	
 	/**
 	 * The URL for the home page of the ad network site
 	 */
-	var $url = 'http://www.widgetbucks.com';
+	static $url = 'http://www.widgetbucks.com';
 	
 	/**
 	 * The name of the network.  Used when displaying ads by network.
 	 */
-	var $networkName = 'WidgetBucks';
+	static $networkName = 'WidgetBucks';
 	
 	function OX_Adnet_Widgetbucks()
 	{
