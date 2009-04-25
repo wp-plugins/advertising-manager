@@ -4,7 +4,7 @@ Plugin Name: Advertising Manager
 PLugin URI: http://code.openx.org/projects/show/advertising-manager
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer, Martin Fitzpatrick
-Version: 3.3.10
+Version: 3.3.11
 Author URI: http://www.mutube.com/
 */
 
@@ -15,13 +15,13 @@ Author URI: http://www.mutube.com/
 load_plugin_textdomain('advman', false, 'advertising-manager/languages');
 
 // DEFINITIONS
-@define("ADVMAN_VERSION", "3.3.10");
+@define("ADVMAN_VERSION", "3.3.11");
 @define('ADVMAN_PATH', dirname(__FILE__));
 @define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
 
 global $wp_version;
-$template = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP26' : 'WP27';
-@define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . '/Template/' . $template);
+$advman_template = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP26' : 'WP27';
+@define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . '/Template/' . $advman_template);
 
 // INCLUDES
 if ($advman_handle = opendir(ADVMAN_PATH . '/OX/Adnet/')) {
@@ -36,6 +36,7 @@ if ($advman_handle = opendir(ADVMAN_PATH . '/OX/Adnet/')) {
 require_once(ADVMAN_PATH . '/OX/Tools.php');
 
 // DATA
+global $_advman, $_advman_notices, $_advman_counter;
 $_advman = get_option('plugin_adsensem');
 $_advman_notices = array();
 $_advman_counter = array();
@@ -269,18 +270,18 @@ function advman_ad($name = false)
 
 // SHOW AN AD BY ITS NAME
 if (!empty($_REQUEST['advman-ad-name'])) {
-	$name = OX_Tools::sanitize_key($_REQUEST['advman-ad-name']);
-	advman_ad($name);
+	$advman_name = OX_Tools::sanitize_key($_REQUEST['advman-ad-name']);
+	advman_ad($advman_name);
 	die(0);
 }
 
 // SHOW AN AD BY ID
 if (!empty($_REQUEST['advman-ad-id'])) {
-	$id = OX_Tools::sanitize_number($_REQUEST['advman-ad-id']);
-	if (!empty($_advman['ads'][$id])) {
-		$ad = $_advman['ads'][$id];
-		advman::update_counters($ad);
-		echo $ad->get_ad();
+	$advman_id = OX_Tools::sanitize_number($_REQUEST['advman-ad-id']);
+	if (!empty($_advman['ads'][$advman_id])) {
+		$advman_ad = $_advman['ads'][$advman_id];
+		advman::update_counters($advman_ad);
+		echo $advman_ad->get_ad();
 	}
 	die(0);
 }
@@ -291,10 +292,10 @@ if (is_admin()) {
 
 	/* REVERT TO PREVIOUS BACKUP OF AD DATABASE */
 	if (!empty($_REQUEST['advman-revert-db'])) {
-		$version = OX_Tools::sanitize_number($_REQUEST['advman-revert-db']);
-		$backup = get_option('plugin_adsensem_backup');
-		if (!empty($backup[$version])) {
-			$_advman = $backup[$version];
+		$advman_version = OX_Tools::sanitize_number($_REQUEST['advman-revert-db']);
+		$advman_backup = get_option('plugin_adsensem_backup');
+		if (!empty($advman_backup[$advman_version])) {
+			$_advman = $advman_backup[$advman_version];
 			update_option('plugin_adsensem',$_advman);
 			if (!empty($_REQUEST['advman-block-upgrade'])) {
 				die();
@@ -306,10 +307,10 @@ if (is_admin()) {
 	
 	/* PRE-OUTPUT PROCESSING - e.g. NOTICEs (upgrade-adsense-deluxe) */
 	if (!empty($_POST['advman-mode'])) {
-		$mode = OX_Tools::sanitize_key($_POST['advman-mode']);
-		if ($mode == 'notice') {
-			$action = OX_Tools::sanitize_key($_POST['advman-action']);
-			switch ($action) {
+		$advman_mode = OX_Tools::sanitize_key($_POST['advman-mode']);
+		if ($advman_mode == 'notice') {
+			$advman_action = OX_Tools::sanitize_key($_POST['advman-action']);
+			switch ($advman_action) {
 				case 'upgrade adsense-deluxe':
 					if ($_POST['advman-notice-confirm-yes']) {
 						require_once(ADVMAN_PATH . '/class-upgrade.php');
@@ -321,8 +322,8 @@ if (is_admin()) {
 					update_option('plugin_adsensem', $_advman);
 					break;	
 				case 'optimise':
-					$yes = isset($_POST['advman-notice-confirm-yes']);
-					if ($yes) {
+					$advman_yes = isset($_POST['advman-notice-confirm-yes']);
+					if ($advman_yes) {
 						advman_admin::_set_auto_optimise(true);
 					} else {
 						advman_admin::_set_auto_optimise(false);
@@ -350,5 +351,5 @@ function advman_sbm_widget($args)
 }
 /* SIDEBAR MODULES COMPATIBILITY FUNCTION */
 
-add_action('plugins_loaded', array('advman','init'), 1);	
+add_action('plugins_loaded', array('advman','init'), 1);
 ?>
