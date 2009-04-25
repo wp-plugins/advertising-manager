@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=martin%2
 Tags: ad, adbrite, adgridwork, adify, admin, adpinion, adroll, ads, adsense, adserver, advertisement, advertising, affiliate, banner, banners, chitika, cj, commercial, commission, crispads, google, income, junction, link, manager, media, money, openx, plugin, random, referral, revenue, rotator, seo, server, shoppingads, widget, widgetbucks, yahoo, ypn
 Requires at least: 2.5
 Tested up to: 2.7
-Stable tag: 3.3.10
+Stable tag: 3.3.11
 
 This plugin will manage and rotate your Google Adsense and other ads on your Wordpress blog.
 
@@ -112,6 +112,7 @@ By popular demand, below are the changes for versions listed. Use this to determ
 
 As a general rule the version X.Y.Z increments Z with bugfixes, Y with additional features, and X with major overhaul.
 
+* **3.3.11** Added 'advman' to all variables which reside in the wordpress scope, to ensure that they do not stomp on other plugins
 * **3.3.10** Added Chitika support, added counter support, fixed regex for ad in posts
 * **3.3.9** Public beta - rotating ads, Adify support, much bug fixing and code restructuring
 * **3.3.4** First alpha version that is separate from Adsense Manager
