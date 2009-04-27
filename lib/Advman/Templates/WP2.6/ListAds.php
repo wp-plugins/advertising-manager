@@ -1,7 +1,7 @@
 <?php
 if(!ADVMAN_VERSION) {die();}
 
-class Template_ListAds
+class Advman_Template_List
 {
 	function display($target = null, $filter = null)
 	{
@@ -30,14 +30,14 @@ class Template_ListAds
 		if (is_array($_advman['ads'])) {
 			foreach ($_advman['ads'] as $id => $ad) {
 				if ($ad->network_name !== $previous_network) {
-					Template_ListAds::_display_network_row($ad);
+					Advman_Template_List::_display_network_row($ad);
 					$previous_network = $ad->network_name;
 					$shade = 0;
 				}
 					
 ?>				<tr class="adrow shade_<?php echo $shade; $shade = ($shade==1) ? 0 : 1; ?>">
 					<td><a class="adrow_name" href="javascript:document.getElementById('advman-form').submit();" onclick="javascript:document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo $id; ?>';"><?php echo htmlspecialchars('[' . $id . '] ' . $ad->name, ENT_QUOTES); ?></a></td>
-					<td><?php echo htmlspecialchars(Template_ListAds::_display_ad_format($ad), ENT_QUOTES); ?></td>
+					<td><?php echo htmlspecialchars(Advman_Template_List::_display_ad_format($ad), ENT_QUOTES); ?></td>
 					<td>
 						<input class="button" type="submit" value="<?php _e('Copy', 'advman'); ?>" onClick="document.getElementById('advman-action').value='copy'; document.getElementById('advman-target').value='<?php echo $id; ?>';">
 <?php

@@ -1,14 +1,10 @@
 <?php
 if(!ADVMAN_VERSION) {die();}
 
-class Template_EditNetwork
+class Advman_Template_Edit_Network
 {
-	function Template_EditNetwork()
+	function Advman_Template_Edit_Network()
 	{
-		// Scripts
-		wp_enqueue_script('postbox');
-		wp_enqueue_script('jquery-ui-draggable');
-		
 		// Counter
 		add_meta_box('advman_counter', __('Ad Network Settings', 'advman'), array(get_class($this), 'displaySectionCounter'), 'advman', 'high');
 		// Ad Format

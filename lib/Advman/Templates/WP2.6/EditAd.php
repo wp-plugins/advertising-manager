@@ -1,9 +1,9 @@
 <?php
 if(!ADVMAN_VERSION) {die();}
 
-class Template_EditAd
+class Advman_Template_Edit_Ad
 {
-	function Template_EditAd()
+	function Advman_Template_Edit_Ad()
 	{
 		// Scripts
 		wp_enqueue_script('postbox');

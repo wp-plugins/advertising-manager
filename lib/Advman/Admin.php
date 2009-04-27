@@ -235,7 +235,7 @@ class Advman_Admin
 		
 		switch ($mode) {
 			case 'list_ads' :
-				$template = Advman_Tools::get_template('ListAds');
+				$template = Advman_Tools::get_template('List');
 				$template->display();
 				break;
 			
@@ -244,12 +244,12 @@ class Advman_Admin
 				break;
 			
 			case 'edit_ad' :
-				$template = Advman_Tools::get_template('EditAd', $ad);
+				$template = Advman_Tools::get_template('Edit_Ad', $ad);
 				$template->display($ad);
 				break;
 			
 			case 'edit_network' :
-				$template = Advman_Tools::get_template('EditNetwork', $ad);
+				$template = Advman_Tools::get_template('Edit_Network', $ad);
 				$template->display($target);
 				break;
 			
