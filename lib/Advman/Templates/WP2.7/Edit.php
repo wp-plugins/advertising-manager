@@ -1,9 +1,9 @@
 <?php
-class OX_Admin_Templates_Edit
+class Advman_Templates_Edit
 {
 	var $ad;
 	var $revisions;
-	function OX_Admin_Templates_Edit($ad)
+	function Advman_Templates_Edit($ad)
 	{
 		// Ad Format
 		$formats = $ad->get_ad_formats();
@@ -144,7 +144,7 @@ class OX_Admin_Templates_Edit
 	function displaySectionFormat($ad)
 	{
 		$format = $ad->get_property('adformat');
-		$formats = OX_Tools::organize_formats($ad->get_ad_formats());
+		$formats = Advman_Tools::organize_formats($ad->get_ad_formats());
 		
 ?><table id="advman-settings-ad_format">
 <tr id="advman-form-adformat">
@@ -182,7 +182,7 @@ class OX_Admin_Templates_Edit
 	
 	function displaySectionColors($ad)
 	{
-		$colors = OX_Tools::organize_colors($ad->get_ad_colors());
+		$colors = Advman_Tools::organize_colors($ad->get_ad_colors());
 ?><table id="advman-settings-colors" width="100%">
 <tr>
 	<td>

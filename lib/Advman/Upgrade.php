@@ -1,6 +1,6 @@
 <?php
 
-class OX_Upgrade_Wordpress
+class Advman_Upgrade
 {
 	function upgrade()
 	{
@@ -20,28 +20,28 @@ class OX_Upgrade_Wordpress
 				e.g. v1.x to v3.x should be possilbe v1.x > v2.x > v3.x */
 		
 		if (version_compare($dbVersion, '3.0', '<')) {
-			OX_Upgrade_Wordpress::v2_x_to_3_0();
+			Advman_Upgrade::v2_x_to_3_0();
 			$upgraded = true;
 		}
 		
 		if (version_compare($dbVersion, '3.3.4', '<')) {
-			OX_Upgrade_Wordpress::v3_0_to_3_3_4();
+			Advman_Upgrade::v3_0_to_3_3_4();
 			$optimiseMsg = true;
 			$upgraded = true;
 		}
 	
 		if (version_compare($dbVersion, '3.3.8', '<')) {
-			OX_Upgrade_Wordpress::v3_3_4_to_3_3_8();
+			Advman_Upgrade::v3_3_4_to_3_3_8();
 			$upgraded = true;
 		}
 	
 		if (version_compare($dbVersion, '3.3.10', '<')) {
-			OX_Upgrade_Wordpress::v3_3_10();
+			Advman_Upgrade::v3_3_10();
 			$upgraded = true;
 		}
 		
 		if (version_compare($dbVersion, '3.3.11', '<')) {
-			OX_Upgrade_Wordpress::v3_3_11();
+			Advman_Upgrade::v3_3_11();
 			$upgraded = true;
 		}
 	
@@ -51,7 +51,7 @@ class OX_Upgrade_Wordpress
 				$notice = __('<strong>Advertising Manager</strong> has been upgraded from <strong>Adsense Manager</strong>.', 'advman');
 				$question = __('Enable <a>auto optimisation</a>? (RECOMMENDED)', 'advman');
 				$question = str_replace('<a>', '<a href="http://code.openx.org/wiki/advertising-manager/Auto_Optimization" target="_new">', $question);
-				OX_Admin_Wordpress::add_notice('optimise', "$notice $question", 'yn');
+				Advman_Admin::add_notice('optimise', "$notice $question", 'yn');
 			}
 			$advman_engine->setVersion(ADVMAN_VERSION);
 		}

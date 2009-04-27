@@ -12,53 +12,40 @@ Author URI: http://www.mutube.com/
 //error_reporting(E_ALL);
 
 // Load all of the definitions that are needed for Advertising Manager
-advman_load_definitions();
-// Load Localisation Plug-in
-load_plugin_textdomain('advman', false, 'advertising-manager/languages');
-// Load all require files that are needed for Advertising Manager
-advman_load_requires();
-// Load the Swifty Ad Engine
-global $advman_engine;
-$advman_engine = new OX_Swifty();
-// Load all of the plugins for Advertising Manager
-advman_load_plugins();
-// Initialise the engine after plugins have been loaded
-$advman_engine->init('OX_Dal_Wordpress');
+advman_init();
 // Run init after the plugins are loaded
-add_action('plugins_loaded', 'advman_init', 1);	
+add_action('plugins_loaded', 'advman_run', 1);
 
-function advman_load_definitions()
+function advman_init()
 {
-	@define("ADVMAN_VERSION", "3.3.10");
+	@define('ADVMAN_VERSION', '3.3.10');
 	@define('ADVMAN_PATH', dirname(__FILE__));
-	@define('ADVMAN_LIB', ADVMAN_PATH . '/lib');
+	@define('ADVMAN_LIB', ADVMAN_PATH . '/lib/Advman');
+	@define('OX_LIB', ADVMAN_PATH . '/lib/OX');
 	@define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
-	@define('OX_PLUGIN_PATH', ADVMAN_PATH . '/plugins');
 
 	// Get the template path
 	global $wp_version;
-	$version = (version_compare($wp_version,"2.7-alpha", "<")) ? '2.6' : '2.7';
-	@define('OX_TEMPLATE_PATH', ADVMAN_LIB . "/OX/Admin/Templates/Wordpress/{$version}");
-}
+	$version = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP2.6' : 'WP2.7';
+	@define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . "/lib/Advman/Templates/{$version}");
 
-function advman_load_requires()
-{
-	require_once(ADVMAN_LIB . '/OX/Tools.php');
-	require_once(ADVMAN_LIB . '/OX/Swifty.php');
-	require_once(ADVMAN_LIB . '/OX/Dal/Wordpress.php');
-	// Load admin if needed
+	// Load the language file
+	load_plugin_textdomain('advman', false, 'advertising-manager/languages');
+	
+	// Load all require files that are needed for Advertising Manager
+	require_once(OX_LIB . '/Tools.php');
+	require_once(OX_LIB . '/Swifty.php');
+	require_once(ADVMAN_LIB . '/Dal.php');
+	// First, get an instance of the ad engine
+	global $advman_engine;
+	$advman_engine = new OX_Swifty('Advman_Dal');
+	// Next, load admin if needed
 	if (is_admin()) {
-		require_once(ADVMAN_LIB . '/OX/Admin/Wordpress.php');
+		require_once(ADVMAN_LIB . '/Admin.php');
 	}
 }
 
-function advman_load_plugins()
-{
-	// Load plugins
-	OX_Tools::require_directory(ADVMAN_PATH . '/plugins');
-}
-
-function advman_init()
+function advman_run()
 {
 	global $advman_engine;
 	
@@ -103,7 +90,7 @@ function advman_init()
 	add_action('wp_footer', 'advman_footer');
 	// If admin, initialise the Admin functionality	
 	if (is_admin()) {
-		add_action('admin_menu', array('OX_Admin_Wordpress','init'));
+		add_action('admin_menu', array('Advman_Admin','init'));
 	}
 }
 

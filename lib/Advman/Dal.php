@@ -1,16 +1,16 @@
 <?php
-require_once ADVMAN_LIB . '/OX/Swifty/Dal.php';
+require_once OX_LIB . '/Swifty/Dal.php';
 
-class OX_Dal_Wordpress extends OX_Swifty_Dal
+class Advman_Dal extends OX_Swifty_Dal
 {
 	var $data;
 	
-	function OX_Dal_Wordpress()
+	function Advman_Dal()
 	{
 		$this->data = $this->_select_data();
 		$this->_verify_data();
 	}
-	function _get_data($key = 'plugin_adsensem')
+	function _select_data($key = 'plugin_adsensem')
 	{
 		return get_option($key);
 	}
@@ -52,15 +52,16 @@ class OX_Dal_Wordpress extends OX_Swifty_Dal
 			
 			//Backup cycle
 			$backup = $this->_getData('plugin_adsensem_backup');
-			$version = OX_Tools::major_version($data['version']);
-			$backup[$version] = $data;
+			$version = explode('.', $data['version']);
+			$backup[$version[0]] = $data;
 			$this->_setData($backup, 'plugin_adsensem_backup');
 			
-			$upgrade = new OX_Dal_WordpressUpgrade();
+			$upgrade = new Advman_Upgrade();
 			$data = $upgrade->upgrade($data);
 			$this->_setData($data);
 		}
 	}
+	
 	function select_setting($key)
 	{
 		switch ($key) {
@@ -86,6 +87,8 @@ class OX_Dal_Wordpress extends OX_Swifty_Dal
 				return '';
 			case 'website-url':
 				return get_option('siteurl');
+			case 'notices':
+				return $this->data['notices'];
 		}
 		return $this->data['settings'][$key];
 	}
@@ -94,6 +97,10 @@ class OX_Dal_Wordpress extends OX_Swifty_Dal
 		switch ($key) {
 			case 'last-sync':
 				$this->data['last-sync'] = $value;
+				$this->_update_data();
+				return true;
+			case 'notices' :
+				$this->data['notices'] = $value;
 				$this->_update_data();
 				return true;
 			case 'product-name':
@@ -142,6 +149,5 @@ class OX_Dal_Wordpress extends OX_Swifty_Dal
 		$this->_update_data();
 		return $id;
 	}
-	
 }
 ?>

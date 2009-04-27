@@ -25,5 +25,11 @@ class OX_Swifty_Dal
 	function delete_ads($ids)
 	{
 	}
+	function select_setting($key)
+	{
+	}
+	function update_setting($key, $value)
+	{
+	}
 }
 ?>

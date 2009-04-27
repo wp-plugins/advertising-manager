@@ -1,10 +1,8 @@
 <?php
-require_once (ADVMAN_LIB . '/OX/Tools.php');
+require_once (ADVMAN_LIB . '/Tools.php');
 
-class OX_Admin_Wordpress
+class Advman_Admin
 {
-	static $actions;
-	
 	/**
 	 * Initialise menu items, notices, etc.
 	 */
@@ -12,20 +10,20 @@ class OX_Admin_Wordpress
 	{
 		global $wp_version;
 		
-		add_action('admin_print_scripts', array('OX_Admin_Wordpress', 'add_scripts'));
+		add_action('admin_print_scripts', array('Advman_Admin', 'add_scripts'));
 		
 		if (version_compare($wp_version,"2.7-alpha", '>')) {
-			add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-manage', array('OX_Admin_Wordpress','process'));
-			add_submenu_page('advman-manage', __('Edit Ads', 'advman'), __('Edit', 'advman'), 8, 'advman-manage', array('OX_Admin_Wordpress','process'));
-			add_submenu_page('advman-manage', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-create', array('OX_Admin_Wordpress','create'));
-			add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('OX_Admin_Wordpress','settings'));
+			add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
+			add_submenu_page('advman-manage', __('Edit Ads', 'advman'), __('Edit', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
+			add_submenu_page('advman-manage', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-create', array('Advman_Admin','create'));
+			add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 		} else {
-			add_menu_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-manage', array('OX_Admin_Wordpress','process'));
-			add_submenu_page('advman-manage', __('Edit Ads', 'advman'), __('Edit', 'advman'), 8, 'advman-manage', array('OX_Admin_Wordpress','process'));
-			add_submenu_page('advman-manage', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-create', array('OX_Admin_Wordpress','create'));
-			add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('OX_Admin_Wordpress','settings'));
+			add_menu_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
+			add_submenu_page('advman-manage', __('Edit Ads', 'advman'), __('Edit', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
+			add_submenu_page('advman-manage', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-create', array('Advman_Admin','create'));
+			add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 		}
-		add_action('admin_notices', array('OX_Admin_Wordpress','display_notices'), 1 );
+		add_action('admin_notices', array('Advman_Admin','display_notices'), 1 );
 		
 		/* PRE-OUTPUT PROCESSING - e.g. NOTICEs (upgrade-adsense-deluxe) */
 		$mode = OX_Tools::sanitize($_POST['advman-mode'], 'key');
@@ -36,7 +34,7 @@ class OX_Admin_Wordpress
 				case 'upgrade adsense-deluxe':
 					if ($yes) {
 						require_once(ADVMAN_LIB . '/Upgrade/Wordpress.php');
-						OX_Upgrade_Wordpress::adsense_deluxe_to_3_0();
+						Advman_Upgrade::adsense_deluxe_to_3_0();
 					}
 					$admin->remove_notice('upgrade adsense-deluxe');
 					break;	
@@ -51,41 +49,24 @@ class OX_Admin_Wordpress
 		}
 	}
 	
-	function add_action($action, $name, $value)
-	{
-		$actions = self::$actions;
-		$actions[$action][$name] = $value;
-		self::$actions = $actions;
-	}
-	
-	function get_action($action, $name)
-	{
-		$actions = self::$actions;
-		
-		if (!empty($actions[$action][$name])) {
-			return $actions[$action][$name];
-		}
-		
-		return null;
-	}
 	function add_notice($action,$text,$confirm=false)
 	{
 		global $advman_engine;
 		
-		$notices = $advman_engine->getKey('notices');
+		$notices = $advman_engine->getSetting('notices');
 		$notices[$action]['text'] = $text;
 		$notices[$action]['confirm'] = $confirm;
-		$advman_engine->setKey('notices', $notices);
+		$advman_engine->setSetting('notices', $notices);
 	}
 	
 	function remove_notice($action)
 	{
 		global $advman_engine;
 
-		$notices = $advman_engine->getKey('notices');
+		$notices = $advman_engine->getSetting('notices');
 		if (!empty($notices[$action])) {
 			unset($notices[$action]);
-			$advman_engine->setKey('notices', $notices);
+			$advman_engine->setSetting('notices', $notices);
 		}
 	}
 	
@@ -226,14 +207,14 @@ class OX_Admin_Wordpress
 			case 'apply' :
 			case 'save' :
 				if ($mode == 'edit_ad') {
-					OX_Admin_Wordpress::save_properties($ad);
+					Advman_Admin::save_properties($ad);
 					$advman_engine->setAd($ad);
 				} elseif ($mode == 'edit_network') {
 					$ad = new $target;
-					OX_Admin_Wordpress::save_properties($ad, true);
+					Advman_Admin::save_properties($ad, true);
 					$advman_engine->setAd($ad);
 				} elseif ($mode == 'settings') {
-					OX_Admin_Wordpress::save_settings();
+					Advman_Admin::save_settings();
 				}
 			
 				if ($action == 'save' && $mode != 'settings') {
@@ -254,26 +235,26 @@ class OX_Admin_Wordpress
 		
 		switch ($mode) {
 			case 'list_ads' :
-				$template = OX_Tools::get_template('ListAds');
+				$template = Advman_Tools::get_template('ListAds');
 				$template->display();
 				break;
 			
 			case 'create_ad' :
-				OX_Admin_Wordpress::create();
+				Advman_Admin::create();
 				break;
 			
 			case 'edit_ad' :
-				$template = OX_Tools::get_template('EditAd', $ad);
+				$template = Advman_Tools::get_template('EditAd', $ad);
 				$template->display($ad);
 				break;
 			
 			case 'edit_network' :
-				$template = OX_Tools::get_template('EditNetwork', $ad);
+				$template = Advman_Tools::get_template('EditNetwork', $ad);
 				$template->display($target);
 				break;
 			
 			case 'settings' :
-				$template = OX_Tools::get_template('Settings');
+				$template = Advman_Tools::get_template('Settings');
 				$template->display();
 				break;
 		}
@@ -286,7 +267,7 @@ class OX_Admin_Wordpress
 	{
 		global $advman_engine;
 		
-		$notices = $advman_engine->getKey('notices');
+		$notices = $advman_engine->getSetting('notices');
 		if (!empty($notices)) {
 			$template = OX_Tools::get_template('Notice');
 			$template->display($notices);
@@ -316,7 +297,7 @@ class OX_Admin_Wordpress
 			$advman_engine->saveSettings($settings);
 //			advman_admin::_save_settings();
 		}
-		$template = OX_Tools::get_template('Settings');
+		$template = Advman_Tools::get_template('Settings');
 		$template->display();
 	}
 

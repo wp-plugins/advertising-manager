@@ -2,6 +2,7 @@
 
 @define('OX_SWIFTY_PATH', dirname(__FILE__) . '/Swifty');
 require_once(OX_SWIFTY_PATH . '/Adnet.php');
+require_once(OX_SWIFTY_PATH . '/Dal.php');
 
 class OX_Swifty
 {
@@ -10,17 +11,22 @@ class OX_Swifty
 	var $counter;
 	var $actions;
 	
-	function OX_Swifty()
+	function OX_Swifty($dalClass = null)
 	{
 		// Functions here are initialisation only - plugins have not been loaded (so we cannot initialise data)
 		$this->counter = array();
 		$this->ad_networks = array();
 		$this->actions = array();
-	}
-	
-	function init($dalClass)
-	{
-		$this->dal = new $dalClass;
+		
+		// Load all Swifty plugins
+		OX_Tools::require_directory(OX_SWIFTY_PATH . '/Plugins');
+		
+		if (is_null($dalClass)) {
+			$this->dal = new OX_Swifty_Dal();
+		} else {
+			$this->dal = new $dalClass;
+		}
+		
 		// Sync with OpenX
 		$this->sync();
 	}
@@ -39,6 +45,16 @@ class OX_Swifty
 	function getAction($key)
 	{
 		return $this->actions[$key];
+	}
+	
+	function getSetting($key)
+	{
+		return $this->dal->select_setting($key);
+	}
+	
+	function setSetting($key)
+	{
+		return $this->dal->update_setting($key);
 	}
 	
 	function saveAdProperties($id)
@@ -206,7 +222,7 @@ class OX_Swifty
 	 */
 	function sync()
 	{
-		$sync = $this->dal->getSetting('openx-sync');
+		$sync = $this->dal->select_setting('openx-sync');
 		if ($sync) {
 			$timestamp = $this->dal->select_setting('last-sync');
 //			$timestamp = 1235710700; //FOR TESTING

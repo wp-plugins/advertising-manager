@@ -1,7 +1,5 @@
 <?php
-if(!ADVMAN_VERSION) {die();}
-
-class Template_ListAds
+class Advman_Template_ListAds
 {
 	function display($target = null, $filter = null)
 	{
