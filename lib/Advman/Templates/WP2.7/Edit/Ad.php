@@ -1,43 +1,26 @@
 <?php
-class Advman_Templates_Edit_Ad extends Advman_Templates_Edit
+//require_once(ADVMAN_TEMPLATE_PATH . '/Edit.php');
+
+class Advman_Template_Edit_Ad
 {
-	var $ad;
-	function Advman_Templates_Edit_Ad($ad)
+	function display($ad)
 	{
-		$this->ad = $ad;
+		$c = get_class($this);
 		
-		// Ad Format
-		$formats = $ad->get_ad_formats();
-		if (!empty($formats)) {
-			add_meta_box('advman_format', __('Ad Format', 'advman'), array(get_class($this), 'displaySectionFormat'), 'advman', 'default');
-		}
+		// Main pane - default options
+		add_meta_box('advman_format', __('Ad Format', 'advman'), array($c, 'display_format'), 'advman', 'main');
+		add_meta_box('advman_display_options', __('Website Display Options', 'advman'), array($c, 'display_options'), 'advman', 'main');
+		// Main pane - advanced options
+		add_meta_box('advman_optimisation', __('Optimization', 'advman'), array($c, 'display_optimisation'), 'advman', 'advanced');
+		add_meta_box('advman_code', __('Code', 'advman'), array($c, 'display_code'), 'advman', 'advanced');
+		// Main pane - low priority options
+		add_meta_box('advman_history', __('History', 'advman'), array($c, 'display_history'), 'advman', 'main', 'advanced');
+		// Sidebar - default options
+		add_meta_box('advman_submit', __('Save Settings', 'advman'), array($c, 'display_save_settings'), 'advman', 'side');
+		add_meta_box('advman_shortcuts', __('Shortcuts', 'advman'), array($c, 'display_shortcuts'), 'advman', 'side');
+		add_meta_box('advman_notes', __('Notes', 'advman'), array($c, 'display_notes'), 'advman', 'side');
 		
-		// Colors
-		$colors = $ad->get_ad_colors();
-		if (!empty($colors)) {
-			add_meta_box('advman_colors', __('Ad Appearance', 'advman'), array(get_class($this), 'displaySectionColors'), 'advman', 'default');
-		}
-		
-		// Account
-		$properties = $ad->get_network_property_defaults();
-		if (!empty($properties['account-id'])) {
-			add_meta_box('advman_account', __('Account Details', 'advman'), array(get_class($this), 'displaySectionAccount'), 'advman', 'advanced', 'high');
-		}
-		// Website Display Options
-		add_meta_box('advman_display_options', __('Website Display Options', 'advman'), array(get_class($this), 'displaySectionDisplayOptions'), 'advman', 'default');
-		// Optimisation
-		add_meta_box('advman_optimisation', __('Optimization', 'advman'), array(get_class($this), 'displaySectionOptimisation'), 'advman', 'advanced');
-		// Code
-		add_meta_box('advman_code', __('Code', 'advman'), array(get_class($this), 'displaySectionCode'), 'advman', 'advanced');
-		// Revisions
-		add_meta_box('advman_history', __('History', 'advman'), array(get_class($this), 'displaySectionHistory'), 'advman', 'advanced', 'low');
-	}
-	
-	function display()
-	{
-		$ad = $this->ad;
-		
-		list($last_user, $t) = $ad->get_last_edit();
+		list($last_user, $t) = OX_Tools::get_last_edit($ad);
 		if ((time() - $t) < (30 * 24 * 60 * 60)) { // less than 30 days ago
 			$last_timestamp =  human_time_diff($t);
 			$last_timestamp2 = date('l, F jS, Y @ h:ia', $t);
@@ -45,15 +28,56 @@ class Advman_Templates_Edit_Ad extends Advman_Templates_Edit
 			$last_timestamp =  __('> 30 days', 'advman');
 			$last_timestamp2 = '';
 		}
+		
+		// Title
+		$this->display_title($ad);
+		// Show normal boxes
+		do_meta_boxes('advman','default',$ad);
+		// Show advanced screen
+		$this->display_advanced($ad);
+		// Show advanced boxes
+		do_meta_boxes('advman','advanced',$ad);
+	}
+	
+	function display_title($ad)
+	{
+?><div id="advman_title_div">
+	<h3><label for="advman_title"><?php _e('Name', 'advman'); ?></label></h3>
+	<div id="advman_titlewrap">
+		<input type="text" name="advman-name" size="30" value="<?php echo $ad->name ?>" id="advman_title" autocomplete="off" />
+	</div><!-- advman_titlewrap -->
+<?php $this->display_help('Ads with the same name will rotate according to their relative weights.'); ?>
+</div><!-- titlediv -->
+<?php
+	}
+	
+	function display_help($msg)
+	{
+		if (!is_array($msg)) {
+			$msg = array($msg);
+		}
+		
+		$mm = '';
+		foreach ($msg as $m) {
+			$mm .= _e($msg, 'advman') . ' ';
+		}
+?>
+	<br />
+	<span style="font-size:smaller;color:gray;"><?php echo $mm; ?></span>
+<?php
+	}
+
+	function display_old($ad)
+	{
 ?>
 
 <div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
-	<h2><?php printf(__('Edit Settings for %s Ad:', 'advman'), $ad->network_name); ?> <span class="<?php echo strtolower($ad->network); ?>"><?php echo "[{$ad->id}] " . $ad->name; ?></span></h2>
+	<h2><?php printf(__('Edit Settings for %s Ad:', 'advman'), $ad->networkName); ?> <span class="<?php echo strtolower($ad->network); ?>"><?php echo "[$id] " . $ad->name; ?></span></h2>
 	<form action="" method="post" id="advman-form" enctype="multipart/form-data">
 	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
 	<input type="hidden" name="advman-action" id="advman-action">
-	<input type="hidden" name="advman-target" id="advman-target" value="<?php echo $ad->id; ?>">
+	<input type="hidden" name="advman-action-target" id="advman-action-target" value="<?php echo $id; ?>">
 <?php  
 	wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );  
 	wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );  
@@ -64,54 +88,18 @@ class Advman_Templates_Edit_Ad extends Advman_Templates_Edit
 				<div class="handlediv" title="<?php _e('Click to toggle', 'advman'); ?>"><br /></div>
 				<h3 class='hndle'><span><?php _e('Save Settings', 'advman'); ?></span></h3>
 				<div class="inside">
-					<div class="submitbox" id="submitpost">
-						<div id="minor-publishing">
-							<div style="display:none;"><input type="submit" name="save" value="<?php _e('Save', 'advman'); ?>" /></div>
-							<div id="minor-publishing-actions">
-								<div id="save-action"></div>
-								<div id="preview-action">
-									<a class="preview button" href="<?php echo $ad->get_preview_url(); ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview Ad', 'advman'); ?></a>
-									<input type="hidden" name="wp-preview" id="wp-preview" value="" />
-								</div>
-								<div class="clear"></div>
-							</div>
-							<div id="misc-publishing-actions">
-							<div class="misc-pub-section">
-								<label for="post_status"><?php _e('Status:', 'advman'); ?></label>
-								<b><a href="javascript:submit();" class="edit-post-status hide-if-no-js" onclick="document.getElementById('advman-action').value='<?php echo $ad->active ? 'deactivate' : 'activate'; ?>'; document.getElementById('advman-form').submit();"><?php echo ($ad->active) ? __('Active', 'advman') : __('Paused', 'advman'); ?></a></b>
-							</div>
-							<div class="misc-pub-section curtime misc-pub-section-last">
-								<span id="timestamp"><?php echo __('Last edited', 'advman') . ' <abbr title="' . $last_timestamp2 . '"><b>' . $last_timestamp . __(' ago', 'advman') . '</b></abbr> ' . __('by', 'advman') . ' ' . $last_user; ?></span>
-							</div>
-						</div>
-						<div class="clear"></div>
-					</div>
-					<div id="major-publishing-actions">
-						<div id="publishing-action">
-							<a class="submitdelete deletion" href="javascript:submit();" onclick="document.getElementById('advman-action').value='cancel'; document.getElementById('advman-form').submit();"><?php _e('Cancel', 'advmgr') ?></a>&nbsp;&nbsp;&nbsp;
-							<input type="submit" class="button-primary" id="advman_apply" tabindex="5" accesskey="p" value="<?php _e('Apply', 'advman'); ?>" onclick="document.getElementById('advman-action').value='apply';" />
-							<input type="submit" class="button-primary" id="advman_save" tabindex="5" accesskey="p" value="<?php _e('Save', 'advman'); ?>" onclick="document.getElementById('advman-action').value='save';" />
-						</div>
-						<div class="clear"></div>
-					</div>
 				</div>
 			</div>
 		</div>
 		<div id="tagsdiv" class="postbox " >
 			<h3 class='hndle'><span><?php _e('Shortcuts', 'advman'); ?></span></h3>
 			<div class="inside">
-				<p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
-				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to copy the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to do nothing, OK to copy)', 'advman'); ?>')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Copy this ad', 'advman'); ?></a></p>
-				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></p>
-				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo $ad->network ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
 			</div>
 		</div>
 		<div id="categorydiv" class="postbox " >
 			<div class="handlediv" title="<?php _e('Click to toggle', 'advman'); ?>"><br /></div>
 			<h3 class='hndle'><span><?php _e('Notes', 'advman'); ?></span></h3>
 			<div class="inside">
-				<label for="ad_code"><?php _e('Display any notes about this ad here:', 'advman'); ?></label><br /><br />
-				<textarea rows="8" cols="28" name="advman-notes" id="advman-notes"><?php echo $ad->get_property('notes'); ?></textarea><br />
 			</div>
 		</div>
 	</div>
@@ -121,14 +109,6 @@ class Advman_Templates_Edit_Ad extends Advman_Templates_Edit
 	<div id="post-body-content" class="has-sidebar-content">
 
 <?php
-		// Title
-		$this->displaySectionTitle($ad);
-		// Show normal boxes
-		do_meta_boxes('advman','default',$ad);
-		// Show advanced screen
-		$this->displayAdvanced($ad);
-		// Show advanced boxes
-		do_meta_boxes('advman','advanced',$ad);
 ?>
 	</form>
 </div><!-- wpwrap -->
@@ -136,23 +116,10 @@ class Advman_Templates_Edit_Ad extends Advman_Templates_Edit
 <?php
 	}
 	
-	function displaySectionTitle($ad)
-	{
-?><div id="titlediv">
-	<h3><label for="title"><?php _e('Name', 'advman'); ?></label></h3>
-<div id="titlewrap">
-	<input type="text" name="advman-name" size="30" value="<?php echo $ad->name ?>" id="title" autocomplete="off" />
-</div><!-- titlewrap -->
-<br />
-<span style="font-size:smaller;color:gray;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php _e('Enter the name of this ad.  Ads with the same name will rotate according to their relative weights.', 'advman'); ?></span>
-</div><!-- titlediv -->
-<?php
-	}
 	
 	function displaySectionFormat($ad)
 	{
-		$format = $ad->get_property('adformat');
-		$formats = Advman_Tools::organize_formats($ad->get_ad_formats());
+		$format = $ad->get('adformat');
 		
 ?><table id="advman-settings-ad_format">
 <tr id="advman-form-adformat">
@@ -162,98 +129,49 @@ class Advman_Templates_Edit_Ad extends Advman_Templates_Edit
 			<optgroup id="advman-optgroup-default" label="Default">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 			</optgroup>
-<?php foreach ($formats['sections'] as $sectionName => $sectionLabel) : ?>
-			<optgroup id="advman-optgroup-<?php echo $sectionName ?>" label="<? echo $sectionLabel ?>">
-<?php foreach ($formats['formats'][$sectionName] as $formatName => $formatLabel) : ?>
-				<option<?php echo ($format == $formatName ? ' selected="selected"' : ''); ?> value="<?php echo $formatName; ?>"> <?php echo $formatLabel; ?></option>
-<?php endforeach; ?>
+			<optgroup id="advman-optgroup-horizontal" label="Horizontal">
+				<option<?php echo ($format == '728x90' ? ' selected="selected"' : ''); ?> value="728x90"> <?php _e('728 x 90 Leaderboard', 'advman'); ?></option>
+				<option<?php echo ($format == '468x60' ? ' selected="selected"' : ''); ?> value="468x60"> <?php _e('468 x 60 Banner', 'advman'); ?></option>
+				<option<?php echo ($format == '234x60' ? ' selected="selected"' : ''); ?> value="234x60"> <?php _e('234 x 60 Half Banner', 'advman'); ?></option>
 			</optgroup>
-<?php endforeach; ?>
+			<optgroup id="advman-optgroup-vertical" label="Vertical">
+				<option<?php echo ($format == '120x600' ? ' selected="selected"' : ''); ?> value="120x600"> <?php _e('120 x 600 Skyscraper', 'advman'); ?></option>
+				<option<?php echo ($format == '160x600' ? ' selected="selected"' : ''); ?> value="160x600"> <?php _e('160 x 600 Wide Skyscraper', 'advman'); ?></option>
+				<option<?php echo ($format == '120x240' ? ' selected="selected"' : ''); ?> value="120x240"> <?php _e('120 x 240 Vertical Banner', 'advman'); ?></option>
+			</optgroup>
+			<optgroup id="advman-optgroup-square" label="Square">
+				<option<?php echo ($format == '336x280' ? ' selected="selected"' : ''); ?> value="336x280"> <?php _e('336 x 280 Large Rectangle', 'advman'); ?></option>
+				<option<?php echo ($format == '300x250' ? ' selected="selected"' : ''); ?> value="300x250"> <?php _e('300 x 250 Medium Rectangle', 'advman'); ?></option>
+				<option<?php echo ($format == '250x250' ? ' selected="selected"' : ''); ?> value="250x250"> <?php _e('250 x 250 Square', 'advman'); ?></option>
+				<option<?php echo ($format == '200x200' ? ' selected="selected"' : ''); ?> value="200x200"> <?php _e('200 x 200 Small Square', 'advman'); ?></option>
+				<option<?php echo ($format == '180x150' ? ' selected="selected"' : ''); ?> value="180x150"> <?php _e('180 x 150 Small Rectangle'); ?></option>
+				<option<?php echo ($format == '125x125' ? ' selected="selected"' : ''); ?> value="125x125"> <?php _e('125 x 125 Button', 'advman'); ?></option>
+			</optgroup>
+			<optgroup id="advman-optgroup-custom" label="Custom">
+				<option<?php echo ($format == 'custom' ? ' selected="selected"' : ''); ?> value="custom"> Custom width and height</option>
+			</optgroup>
 		</select>
 	</td>
-	<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get('adformat', true); ?>"></td>
+	<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('adformat'); ?>"></td>
 </tr>
-<?php if (!empty($formats['sections']['custom'])) : ?>
 <tr id="advman-settings-custom">
 	<td class="advman_label"><label for="advman-width"><?php _e('Dimensions:'); ?></label></td>
 	<td>
-		<input name="advman-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_property('width')); ?>" /> x
-		<input name="advman-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_property('height')); ?>" /> px
+		<input name="advman-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('width')); ?>" /> x
+		<input name="advman-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('height')); ?>" /> px
 	</td>
 </tr>
-<?php endif; ?>
 </table>
 <br />
-<span style="font-size:x-small;color:gray;"><?php _e('Select one of the supported ad format sizes.', 'advman'); ?> <?php if (!empty($formats['sections']['custom'])) _e('If your ad size is not one of the standard sizes, select Custom and fill in your size.', 'advman'); ?></span>
+<span style="font-size:x-small;color:gray;"><?php _e('Select one of the supported ad format sizes. If your ad size is not one of the standard sizes, select Custom and fill in your size.', 'advman'); ?></span>
 <?php
 	}
 	
-	function displaySectionColors($ad)
-	{
-		$colors = Advman_Tools::organize_colors($ad->get_ad_colors());
-?><table id="advman-settings-colors" width="100%">
-<tr>
-	<td>
-		<table>
-<?php foreach ($colors as $section => $label) : ?>
-		<tr>
-			<td class="advman_label"><label for="advman-color-<?php echo $section ?>"><?php echo $label; ?></label></td>
-			<td>#<input name="advman-color-<?php echo $section ?>" onChange="advman_update_ad(this,'ad-color-<?php echo $section ?>','<?php echo $section ?>');" size="6" value="<?php echo $ad->get('color-' . $section); ?>" /></td>
-			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('color-' . $section); ?>"></td>
-		</tr>
-<?php endforeach; ?>
-		</table>
-	</td>
-	<td>
-<?php if (!empty($colors['bg'])) : ?>
-		<div id="ad-color-bg" style="margin-top:1em;width:200px;background: #<?php echo htmlspecialchars($ad->get('color-bg', true), ENT_QUOTES); ?>;">
-<?php endif; ?>
-<?php if (!empty($colors['border'])) : ?>
-		<div id="ad-color-border" style="font: 10px arial, sans-serif; border: 1px solid #<?php echo htmlspecialchars($ad->get('color-border', true), ENT_QUOTES); ?>" class="linkunit-wrapper">
-<?php endif; ?>
-<?php if (!empty($colors['title'])) : ?>
-		<div id="ad-color-title" style="color: #<?php echo htmlspecialchars($ad->get_property('color-title', true), ENT_QUOTES); ?>; font: 11px verdana, arial, sans-serif; padding: 2px;"><b><u><?php _e('Linked Title', 'advman'); ?></u></b><br /></div>
-<?php endif; ?>
-<?php if (!empty($colors['text'])) : ?>
-		<div id="ad-color-text" style="color: #<?php echo htmlspecialchars($ad->get_property('color-text', true), ENT_QUOTES); ?>; padding: 2px;" class="text"><?php _e('Advertiser\'s ad text here', 'advman'); ?><br /></div>
-<?php endif; ?>
-		<div style="color: #000; padding: 2px;" class="rtl-safe-align-right">
-			&nbsp;<u><?php printf(__('Ads by %s', 'advman'), $ad->network_name); ?></u></div>
-		</div>
-	</td>
-</tr>
-</table>
-<br />
-<span style="font-size:x-small;color:gray;"><?php _e('Choose how you want your ad to appear.  Enter the RGB value of the color in the appropriate box.  The sample ad to the right will show you what your color scheme looks like.', 'advman'); ?></span>
-<?php
-	}
-	
-	function displaySectionAccount($ad)
-	{
-		$properties = $ad->get_network_property_defaults();
-?><table>
-<?php if (isset($properties['account-id'])) : ?>
-<tr>
-	<td><label for="advman-slot"><?php _e('Account ID:', 'advman'); ?></label></td>
-	<td><input type="text" name="advman-account-id" style="width:200px" id="advman-account-id" value="<?php echo $ad->get_property('account-id'); ?>" /></td>
-</tr>
-<?php endif; ?>
-<?php if (isset($properties['slot'])) : ?>
-<tr>
-	<td><label for="advman-slot"><?php _e('Slot ID:', 'advman'); ?></label></td>
-	<td><input type="text" name="advman-slot" style="width:200px" id="advman-slot" value="<?php echo $ad->get_property('slot'); ?>" /></td>
-</tr>
-<?php endif; ?>
-</table>
-<br />
-<span style="font-size:x-small; color:gray;"><?php if (isset($properties['account-id'])) printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->network_name); ?> <?php if (isset($properties['account-id'])) _e('The Slot ID is the ID of this specific ad slot.', 'advman'); ?></span>
-<?php
-	}
 	function displaySectionDisplayOptions($ad)
 	{
 		// Query the users
 		$users = get_users_of_blog();
-		$defaultAuthor = $ad->get_network_property('show-author');
+		$defaultAuthor = $ad->get_default('show-author');
 		if (is_numeric($defaultAuthor)) {
 			$u = get_users_of_blog($defaultAuthor);
 			$defaultAuthor = $u[0]->display_name;
@@ -268,19 +186,19 @@ class Advman_Templates_Edit_Ad extends Advman_Templates_Edit
 			<label for="advman-show-home"><?php _e('On Homepage:', 'advman'); ?></label>
 			<select name="advman-show-home" id="advman-show-home">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->get_property('show-home') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->get_property('show-home') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+				<option<?php echo ($ad->get('show-home') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->get('show-home') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('show-home'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('show-home'); ?>">
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
 		<td style="white-space:nowrap">
 			<label for="advman-show-author"><?php _e('By Author:', 'advman'); ?></label>
-			<select name="advman-show-author" id="advman-show-author" onchange="advman_select_update(this);">
-				<option style="color:gray" value=""> <?php echo $defaultAuthor . ' ' . __('(Default)', 'advman'); ?></option>
-				<option style="color:black"<?php echo ($ad->get_property('show-author') == 'all' ? " selected='selected'" : ''); ?> value="all"> <?php _e('All Authors', 'advman'); ?></option>
+			<select name="advman-show-author" id="advman-show-author">
+				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
+				<option<?php echo ($ad->get('show-author') == 'all' ? " selected='selected'" : ''); ?> value="all"> <?php _e('All Authors', 'advman'); ?></option>
 <?php foreach ($users as $user) : ?>
-				<option style="color:black"<?php echo ($ad->get_property('show-author') == $user->user_id ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
+				<option<?php echo ($ad->get('show-author') == $user->user_id ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
 <?php endforeach; ?>
 			</select>
 			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $defaultAuthor; ?>">
@@ -291,10 +209,10 @@ class Advman_Templates_Edit_Ad extends Advman_Templates_Edit
 			<label for="advman-show-page"><?php _e('On Posts:', 'advman'); ?></label>
 			<select name="advman-show-post" id="advman-show-post">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->get_property('show-post') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->get_property('show-post') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+				<option<?php echo ($ad->get('show-post') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->get('show-post') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('show-post'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('show-post'); ?>">
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
 		<td></td>
@@ -304,10 +222,10 @@ class Advman_Templates_Edit_Ad extends Advman_Templates_Edit
 			<label for="advman-show-page"><?php _e('On Pages:', 'advman'); ?></label>
 			<select name="advman-show-page" id="advman-show-page">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->get_property('show-page') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->get_property('show-page') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+				<option<?php echo ($ad->get('show-page') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->get('show-page') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('show-page'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('show-page'); ?>">
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
 		<td></td>
@@ -317,10 +235,10 @@ class Advman_Templates_Edit_Ad extends Advman_Templates_Edit
 			<label for="advman-show-archive"><?php _e('On Archives:', 'advman'); ?></label>
 			<select name="advman-show-archive" id="advman-show-archive">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->get_property('show-archive') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->get_property('show-archive') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+				<option<?php echo ($ad->get('show-archive') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->get('show-archive') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('show-archive'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('show-archive'); ?>">
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
 		<td></td>
@@ -330,10 +248,10 @@ class Advman_Templates_Edit_Ad extends Advman_Templates_Edit
 			<label class="advman_label" for="advman-show-search"><?php _e('On Search:', 'advman'); ?></label>
 			<select name="advman-show-search" id="advman-show-search">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->get_property('show-search') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->get_property('show-search') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+				<option<?php echo ($ad->get('show-search') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($ad->get('show-search') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 			</select>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('show-search'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('show-search'); ?>">
 		</td>
 		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
 		<td></td>
@@ -356,25 +274,25 @@ class Advman_Templates_Edit_Ad extends Advman_Templates_Edit
 ?><div style="font-size:small;">
 <p>
 	<label for="advman-weight"><?php _e('Weight:'); ?></label>
-	<input type="text" name="advman-weight" style="width:50px" id="advman-weight" value="<?php echo $ad->get_property('weight'); ?>" />
-	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('weight'); ?>">
+	<input type="text" name="advman-weight" style="width:50px" id="advman-weight" value="<?php echo $ad->get('weight'); ?>" />
+	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('weight'); ?>">
 </p>
 <br />
 <p>
 	<label for="advman-openx-market" class="selectit">
-		<input name="advman-openx-market" type="checkbox" id="advman-openx-market" value="yes"<?php echo ($ad->get_property('openx-market') == 'yes' ? ' checked="checked"' : ''); ?> onChange="document.getElementById('advman-openx-market-cpm').disabled = (!this.checked); document.getElementById('advman-openx-market-cpm').style.color = (this.checked ? 'black' : 'gray'); document.getElementById('advman-openx-market-cpm-label').style.color = (this.checked ? 'black' : 'lightgray');" />
+		<input name="advman-openx-market" type="checkbox" id="advman-openx-market" value="yes"<?php echo ($ad->get('openx-market') == 'yes' ? ' checked="checked"' : ''); ?> onChange="document.getElementById('advman-openx-market-cpm').disabled = (!this.checked); document.getElementById('advman-openx-market-cpm').style.color = (this.checked ? 'black' : 'gray'); document.getElementById('advman-openx-market-cpm-label').style.color = (this.checked ? 'black' : 'lightgray');" />
 		<?php _e('OpenX Market Enabled', 'advman'); ?>
 	</label>
-	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('openx-market'); ?>">
+	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('openx-market'); ?>">
 </p>
 <p>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="advman-openx-market-cpm-label" for="advman-openx-market-cpm"><?php _e('Average eCPM:'); ?></label>
-	<input type="text" name="advman-openx-market-cpm" style="width:50px" id="advman-openx-market-cpm" value="<?php echo $ad->get_property('openx-market-cpm'); ?>"<?php echo ($ad->get('openx-market') != 'yes' ? ' disabled="disabled"' : ''); ?> />
-	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('openx-market-cpm'); ?>">
+	<input type="text" name="advman-openx-market-cpm" style="width:50px" id="advman-openx-market-cpm" value="<?php echo $ad->get('openx-market-cpm'); ?>"<?php echo ($ad->get('openx-market') != 'yes' ? ' disabled="disabled"' : ''); ?> />
+	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('openx-market-cpm'); ?>">
 </p>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying.', 'advman'); ?> <?php _e('OpenX Market optimised ads will display an alternative ad if it will make more money than this ad. Set the avarage amount you make from this network per 1000 ads (eCPM) in the Average CPM field, and Advertising Manager will automatically optimise on the OpenX Market.', 'advman'); ?></span>
+<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying. OpenX Market optimised ads will display an alternative ad if it will make more money than this ad. Set the avarage amount you make from this network per 1000 ads (eCPM), and Advertising Manager will automatically optimise on the OpenX Market.', 'advman'); ?></span>
 <?php
 	}
 	
@@ -382,34 +300,20 @@ class Advman_Templates_Edit_Ad extends Advman_Templates_Edit
 	{
 ?><div style="font-size:small;">
 	<label for="html_before"><?php _e('HTML Code Before'); ?></label><br />
-	<textarea rows="1" cols="60" name="advman-html-before" id="advman-html-before" onfocus="this.select();"><?php echo $ad->get_property('html-before'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-before'); ?>"><br /><br />
+	<textarea rows="1" cols="60" name="advman-html-before" id="advman-html-before" onfocus="this.select();"><?php echo $ad->get('html-before'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('html-before'); ?>"><br /><br />
 	<label for="ad_code"><?php _e('Ad Code'); ?></label><br />
-	<textarea rows="6" cols="60" id="advman-code" style="background:#cccccc" onfocus="this.select();" onclick="this.select();" readonly="readonly"><?php echo $ad->display(); ?></textarea><br /><br />
+	<textarea rows="6" cols="60" id="advman-code" style="background:#cccccc" onfocus="this.select();" onclick="this.select();" readonly="readonly"><?php echo $ad->render_ad(); ?></textarea><br /><br />
 	<label for="html_after"><?php _e('HTML Code After'); ?></label><br />
-	<textarea rows="1" cols="60" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $ad->get_property('html-after'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-after'); ?>"><br /><br />
+	<textarea rows="1" cols="60" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $ad->get('html-after'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('html-after'); ?>"><br /><br />
 </div>
 <br />
 <span style="font-size:x-small;color:gray;"><?php _e('Place any HTML code you want to display before or after your tag in the appropriate section.  If you want to change your ad network tag, you need to import the new tag again.', 'advman'); ?></span>
 <?php
 	}
-	function displaySectionCode1($ad)
-	{
-?><div style="font-size:small;">
-	<label for="html_before"><?php _e('HTML Code Before'); ?></label><br />
-	<textarea rows="1" cols="60" name="advman-html-before" id="advman-html-before" onfocus="this.select();"><?php echo $ad->get_property('html-before'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-before'); ?>"><br /><br />
-	<label for="ad_code"><?php _e('Ad Code'); ?></label><br />
-	<textarea rows="6" cols="60" name="advman-code" id="advman-code" onfocus="this.select();"><?php echo $ad->get_property('code'); ?></textarea><br /><br />
-	<label for="html_after"><?php _e('HTML Code After'); ?></label><br />
-	<textarea rows="1" cols="60" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $ad->get_property('html-after'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-after'); ?>"><br /><br />
-</div>
-<br />
-<span style="font-size:x-small;color:gray;">Place the ad code that you received from your ad network in the 'Code' section.  If you would like to display HTML code either before or after the ad, place it in the 'HTML Before' or 'HTML After' box.</span>
-<?php
-	}
 	
 	function displaySectionHistory($ad)
 	{
-		$revisions = $ad->get_property('revisions');
+		$revisions = $ad->get('revisions');
 		
 ?><ul class='post-revisions'>
 <?php
@@ -429,6 +333,56 @@ class Advman_Templates_Edit_Ad extends Advman_Templates_Edit
 ?>	</ul>
 <br />
 <span style="font-size:x-small; color:gray;"><?php _e('The last 30 days of revisions are stored for each ad.', 'advman'); ?></span>
+<?php
+	}
+	function display_shortcuts($ad)
+	{
+?>
+<p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to copy the %s ad:', 'advman'), $ad->networkName); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to do nothing, OK to copy)', 'advman'); ?>')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Copy this ad', 'advman'); ?></a></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->networkName); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-action-target').value='<?php echo $ad->network ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->networkName); ?></a></p>
+<?php
+	}
+	function display_notes($ad)
+	{
+?><label for="advman_notes"><?php _e('Display any notes about this ad here:', 'advman'); ?></label><br /><br />
+<textarea id="advman_notes" rows="8" cols="28" name="advman-notes"><?php echo $ad->get('notes'); ?></textarea><br />
+<?php
+	}
+	function display_save_settings($ad)
+	{
+?>
+<div class="submitbox" id="submitpost">
+	<div id="minor-publishing">
+		<div style="display:none;"><input type="submit" name="save" value="<?php _e('Save', 'advman'); ?>" /></div>
+		<div id="minor-publishing-actions">
+			<div id="save-action"></div>
+			<div id="preview-action">
+				<a class="preview button" href="<?php echo $ad->get_preview_url(); ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview Ad', 'advman'); ?></a>
+				<input type="hidden" name="wp-preview" id="wp-preview" value="" />
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div id="misc-publishing-actions">
+		<div class="misc-pub-section">
+			<label for="post_status"><?php _e('Status:', 'advman'); ?></label>
+			<b><a href="javascript:submit();" class="edit-post-status hide-if-no-js" onclick="document.getElementById('advman-action').value='<?php echo $ad->active ? 'deactivate' : 'activate'; ?>'; document.getElementById('advman-form').submit();"><?php echo ($ad->active) ? __('Active', 'advman') : __('Paused', 'advman'); ?></a></b>
+		</div>
+		<div class="misc-pub-section curtime misc-pub-section-last">
+			<span id="timestamp"><?php echo __('Last edited', 'advman') . ' <abbr title="' . $last_timestamp2 . '"><b>' . $last_timestamp . __(' ago', 'advman') . '</b></abbr> ' . __('by', 'advman') . ' ' . $last_user; ?></span>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<div id="major-publishing-actions">
+	<div id="publishing-action">
+		<a class="submitdelete deletion" href="javascript:submit();" onclick="document.getElementById('advman-action').value='cancel'; document.getElementById('advman-form').submit();"><?php _e('Cancel', 'advmgr') ?></a>&nbsp;&nbsp;&nbsp;
+		<input type="submit" class="button-primary" id="advman_apply" tabindex="5" accesskey="p" value="<?php _e('Apply', 'advman'); ?>" onclick="document.getElementById('advman-action').value='apply';" />
+		<input type="submit" class="button-primary" id="advman_save" tabindex="5" accesskey="p" value="<?php _e('Save', 'advman'); ?>" onclick="document.getElementById('advman-action').value='save';" />
+	</div>
+	<div class="clear"></div>
+</div>
 <?php
 	}
 }

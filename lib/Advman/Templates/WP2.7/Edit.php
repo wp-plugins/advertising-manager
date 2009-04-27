@@ -1,9 +1,11 @@
 <?php
-class Advman_Templates_Edit
+
+class Advman_Template_Edit
 {
 	var $ad;
 	var $revisions;
-	function Advman_Templates_Edit($ad)
+	
+	function Advman_Template_Edit($ad)
 	{
 		// Ad Format
 		$formats = $ad->get_ad_formats();
@@ -53,64 +55,64 @@ class Advman_Templates_Edit
 		<div id="side-info-column" class="inner-sidebar">
 			<div id='side-sortables' class='meta-box-sortables'>
 				<div id="submitdiv" class="postbox " >
-				<div class="handlediv" title="<?php _e('Click to toggle', 'advman'); ?>"><br /></div>
-				<h3 class='hndle'><span><?php _e('Save Settings', 'advman'); ?></span></h3>
-				<div class="inside">
-					<div class="submitbox" id="submitpost">
-						<div id="minor-publishing">
-							<div style="display:none;"><input type="submit" name="save" value="<?php _e('Save', 'advman'); ?>" /></div>
-							<div id="minor-publishing-actions">
-								<div id="save-action"></div>
-								<div id="preview-action">
-									<a class="preview button" href="<?php echo $ad->get_preview_url(); ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview Ad', 'advman'); ?></a>
-									<input type="hidden" name="wp-preview" id="wp-preview" value="" />
+					<div class="handlediv" title="<?php _e('Click to toggle', 'advman'); ?>"><br /></div>
+					<h3 class='hndle'><span><?php _e('Save Settings', 'advman'); ?></span></h3>
+					<div class="inside">
+						<div class="submitbox" id="submitpost">
+							<div id="minor-publishing">
+								<div style="display:none;"><input type="submit" name="save" value="<?php _e('Save', 'advman'); ?>" /></div>
+								<div id="minor-publishing-actions">
+									<div id="save-action"></div>
+									<div id="preview-action">
+										<a class="preview button" href="<?php echo $ad->get_preview_url(); ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview Ad', 'advman'); ?></a>
+										<input type="hidden" name="wp-preview" id="wp-preview" value="" />
+									</div>
+									<div class="clear"></div>
 								</div>
-								<div class="clear"></div>
+								<div id="misc-publishing-actions">
+								<div class="misc-pub-section">
+									<label for="post_status"><?php _e('Status:', 'advman'); ?></label>
+									<b><a href="javascript:submit();" class="edit-post-status hide-if-no-js" onclick="document.getElementById('advman-action').value='<?php echo $ad->active ? 'deactivate' : 'activate'; ?>'; document.getElementById('advman-form').submit();"><?php echo ($ad->active) ? __('Active', 'advman') : __('Paused', 'advman'); ?></a></b>
+								</div>
+								<div class="misc-pub-section curtime misc-pub-section-last">
+									<span id="timestamp"><?php echo __('Last edited', 'advman') . ' <abbr title="' . $last_timestamp2 . '"><b>' . $last_timestamp . __(' ago', 'advman') . '</b></abbr> ' . __('by', 'advman') . ' ' . $last_user; ?></span>
+								</div>
 							</div>
-							<div id="misc-publishing-actions">
-							<div class="misc-pub-section">
-								<label for="post_status"><?php _e('Status:', 'advman'); ?></label>
-								<b><a href="javascript:submit();" class="edit-post-status hide-if-no-js" onclick="document.getElementById('advman-action').value='<?php echo $ad->active ? 'deactivate' : 'activate'; ?>'; document.getElementById('advman-form').submit();"><?php echo ($ad->active) ? __('Active', 'advman') : __('Paused', 'advman'); ?></a></b>
-							</div>
-							<div class="misc-pub-section curtime misc-pub-section-last">
-								<span id="timestamp"><?php echo __('Last edited', 'advman') . ' <abbr title="' . $last_timestamp2 . '"><b>' . $last_timestamp . __(' ago', 'advman') . '</b></abbr> ' . __('by', 'advman') . ' ' . $last_user; ?></span>
-							</div>
+							<div class="clear"></div>
 						</div>
-						<div class="clear"></div>
-					</div>
-					<div id="major-publishing-actions">
-						<div id="publishing-action">
-							<a class="submitdelete deletion" href="javascript:submit();" onclick="document.getElementById('advman-action').value='cancel'; document.getElementById('advman-form').submit();"><?php _e('Cancel', 'advmgr') ?></a>&nbsp;&nbsp;&nbsp;
-							<input type="submit" class="button-primary" id="advman_apply" tabindex="5" accesskey="p" value="<?php _e('Apply', 'advman'); ?>" onclick="document.getElementById('advman-action').value='apply';" />
-							<input type="submit" class="button-primary" id="advman_save" tabindex="5" accesskey="p" value="<?php _e('Save', 'advman'); ?>" onclick="document.getElementById('advman-action').value='save';" />
+						<div id="major-publishing-actions">
+							<div id="publishing-action">
+								<a class="submitdelete deletion" href="javascript:submit();" onclick="document.getElementById('advman-action').value='cancel'; document.getElementById('advman-form').submit();"><?php _e('Cancel', 'advmgr') ?></a>&nbsp;&nbsp;&nbsp;
+								<input type="submit" class="button-primary" id="advman_apply" tabindex="5" accesskey="p" value="<?php _e('Apply', 'advman'); ?>" onclick="document.getElementById('advman-action').value='apply';" />
+								<input type="submit" class="button-primary" id="advman_save" tabindex="5" accesskey="p" value="<?php _e('Save', 'advman'); ?>" onclick="document.getElementById('advman-action').value='save';" />
+							</div>
+							<div class="clear"></div>
 						</div>
-						<div class="clear"></div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div id="tagsdiv" class="postbox " >
-			<h3 class='hndle'><span><?php _e('Shortcuts', 'advman'); ?></span></h3>
-			<div class="inside">
-				<p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
-				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to copy the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to do nothing, OK to copy)', 'advman'); ?>')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Copy this ad', 'advman'); ?></a></p>
-				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></p>
-				<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo $ad->network ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
+			<div id="tagsdiv" class="postbox " >
+				<h3 class='hndle'><span><?php _e('Shortcuts', 'advman'); ?></span></h3>
+				<div class="inside">
+					<p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
+					<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to copy the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to do nothing, OK to copy)', 'advman'); ?>')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Copy this ad', 'advman'); ?></a></p>
+					<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></p>
+					<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo $ad->network ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
+				</div>
 			</div>
-		</div>
-		<div id="categorydiv" class="postbox " >
-			<div class="handlediv" title="<?php _e('Click to toggle', 'advman'); ?>"><br /></div>
-			<h3 class='hndle'><span><?php _e('Notes', 'advman'); ?></span></h3>
-			<div class="inside">
-				<label for="ad_code"><?php _e('Display any notes about this ad here:', 'advman'); ?></label><br /><br />
-				<textarea rows="8" cols="28" name="advman-notes" id="advman-notes"><?php echo $ad->get_property('notes'); ?></textarea><br />
+			<div id="categorydiv" class="postbox " >
+				<div class="handlediv" title="<?php _e('Click to toggle', 'advman'); ?>"><br /></div>
+				<h3 class='hndle'><span><?php _e('Notes', 'advman'); ?></span></h3>
+				<div class="inside">
+					<label for="ad_code"><?php _e('Display any notes about this ad here:', 'advman'); ?></label><br /><br />
+					<textarea rows="8" cols="28" name="advman-notes" id="advman-notes"><?php echo $ad->get_property('notes'); ?></textarea><br />
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<div id="post-body" class="has-sidebar">
-	<div id="post-body-content" class="has-sidebar-content">
+	<div id="post-body" class="has-sidebar">
+		<div id="post-body-content" class="has-sidebar-content">
 
 <?php
 		// Title
@@ -125,19 +127,6 @@ class Advman_Templates_Edit
 	</form>
 </div><!-- wpwrap -->
 
-<?php
-	}
-	
-	function displaySectionTitle($ad)
-	{
-?><div id="titlediv">
-	<h3><label for="title"><?php _e('Name', 'advman'); ?></label></h3>
-<div id="titlewrap">
-	<input type="text" name="advman-name" size="30" value="<?php echo $ad->name ?>" id="title" autocomplete="off" />
-</div><!-- titlewrap -->
-<br />
-<span style="font-size:smaller;color:gray;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php _e('Enter the name of this ad.  Ads with the same name will rotate according to their relative weights.', 'advman'); ?></span>
-</div><!-- titlediv -->
 <?php
 	}
 	
@@ -220,27 +209,6 @@ class Advman_Templates_Edit
 <?php
 	}
 	
-	function displaySectionAccount($ad)
-	{
-		$properties = $ad->get_network_property_defaults();
-?><table>
-<?php if (isset($properties['account-id'])) : ?>
-<tr>
-	<td><label for="advman-slot"><?php _e('Account ID:', 'advman'); ?></label></td>
-	<td><input type="text" name="advman-account-id" style="width:200px" id="advman-account-id" value="<?php echo $ad->get_property('account-id'); ?>" /></td>
-</tr>
-<?php endif; ?>
-<?php if (isset($properties['slot'])) : ?>
-<tr>
-	<td><label for="advman-slot"><?php _e('Slot ID:', 'advman'); ?></label></td>
-	<td><input type="text" name="advman-slot" style="width:200px" id="advman-slot" value="<?php echo $ad->get_property('slot'); ?>" /></td>
-</tr>
-<?php endif; ?>
-</table>
-<br />
-<span style="font-size:x-small; color:gray;"><?php if (isset($properties['account-id'])) printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->network_name); ?> <?php if (isset($properties['account-id'])) _e('The Slot ID is the ID of this specific ad slot.', 'advman'); ?></span>
-<?php
-	}
 	function displaySectionDisplayOptions($ad)
 	{
 		// Query the users
@@ -367,35 +335,6 @@ class Advman_Templates_Edit
 </div>
 <br />
 <span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying.', 'advman'); ?> <?php _e('OpenX Market optimised ads will display an alternative ad if it will make more money than this ad. Set the avarage amount you make from this network per 1000 ads (eCPM) in the Average CPM field, and Advertising Manager will automatically optimise on the OpenX Market.', 'advman'); ?></span>
-<?php
-	}
-	
-	function displaySectionCode($ad)
-	{
-?><div style="font-size:small;">
-	<label for="html_before"><?php _e('HTML Code Before'); ?></label><br />
-	<textarea rows="1" cols="60" name="advman-html-before" id="advman-html-before" onfocus="this.select();"><?php echo $ad->get_property('html-before'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-before'); ?>"><br /><br />
-	<label for="ad_code"><?php _e('Ad Code'); ?></label><br />
-	<textarea rows="6" cols="60" id="advman-code" style="background:#cccccc" onfocus="this.select();" onclick="this.select();" readonly="readonly"><?php echo $ad->display(); ?></textarea><br /><br />
-	<label for="html_after"><?php _e('HTML Code After'); ?></label><br />
-	<textarea rows="1" cols="60" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $ad->get_property('html-after'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-after'); ?>"><br /><br />
-</div>
-<br />
-<span style="font-size:x-small;color:gray;"><?php _e('Place any HTML code you want to display before or after your tag in the appropriate section.  If you want to change your ad network tag, you need to import the new tag again.', 'advman'); ?></span>
-<?php
-	}
-	function displaySectionCode1($ad)
-	{
-?><div style="font-size:small;">
-	<label for="html_before"><?php _e('HTML Code Before'); ?></label><br />
-	<textarea rows="1" cols="60" name="advman-html-before" id="advman-html-before" onfocus="this.select();"><?php echo $ad->get_property('html-before'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-before'); ?>"><br /><br />
-	<label for="ad_code"><?php _e('Ad Code'); ?></label><br />
-	<textarea rows="6" cols="60" name="advman-code" id="advman-code" onfocus="this.select();"><?php echo $ad->get_property('code'); ?></textarea><br /><br />
-	<label for="html_after"><?php _e('HTML Code After'); ?></label><br />
-	<textarea rows="1" cols="60" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $ad->get_property('html-after'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-after'); ?>"><br /><br />
-</div>
-<br />
-<span style="font-size:x-small;color:gray;">Place the ad code that you received from your ad network in the 'Code' section.  If you would like to display HTML code either before or after the ad, place it in the 'HTML Before' or 'HTML After' box.</span>
 <?php
 	}
 	
