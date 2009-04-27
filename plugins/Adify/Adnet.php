@@ -8,27 +8,16 @@ $_advman_networks['OX_Adnet_Adify'] = array(
 */
 class OX_Adnet_Adify extends OX_Adnet
 {
-	/**
-	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
-	 */
-	static $shortName = 'Adify';
-	
-	/**
-	 * The URL for the home page of the ad network site
-	 */
-	static $url = 'http://www.adify.com';
-	
-	/**
-	 * The name of the network.  Used when displaying ads by network.
-	 */
-	static $networkName = 'Adify';
+	var $mnemonic = 'Adify';
+	var $network_name = 'Adify';
+	var $url = 'http://www.adify.com';
 	
 	function OX_Adnet_Adify()
 	{
 		$this->OX_Adnet();
 	}
 		
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'account-id' => '',
@@ -42,7 +31,7 @@ class OX_Adnet_Adify extends OX_Adnet
 			'width' => '250',
 		);
 		
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function import_detect_network($code)
@@ -57,7 +46,7 @@ class OX_Adnet_Adify extends OX_Adnet
 		
 		// Account ID
 		if (preg_match('/sr_adspace_id( *)=( *)(.\d)/', $code, $matches) != 0) {
-			$this->set('account-id', $matches[3]);
+			$this->set_property('account-id', $matches[3]);
 			$code = str_replace("sr_adspace_id{$matches[1]}={$matches[2]}{$matches[3]}", "sr_adspace_id{$matches[1]}={$matches[2]}{{account-id}}", $code);
 			$code = str_replace("azId={$matches[3]}", "azId={{account-id}}", $code);
 			$code = str_replace("ID #{$matches[3]}", "ID #{{account-id}}", $code);
@@ -69,19 +58,19 @@ class OX_Adnet_Adify extends OX_Adnet
 		if (preg_match('/sr_adspace_width( *)=( *)(\d*);/', $code, $matches) != 0) {
 			$width = $matches[3]; 
 			if ($width != '') {
-				$this->set('width', $width);
+				$this->set_property('width', $width);
 			}
 			$code = str_replace("sr_adspace_width{$matches[1]}={$matches[2]}{$width}", "sr_adspace_width{$matches[1]}={$matches[2]}{{width}}", $code);
 		}
 		if (preg_match('/google_ad_height( *)=( *)(\d*);/', $code, $matches) != 0) {
 			$height = $matches[3];
 			if ($height != '') {
-				$this->set('height', $height);
+				$this->set_property('height', $height);
 			}
 			$code = str_replace("sr_adspace_height{$matches[1]}={$matches[2]}{$height}", "sr_adspace_height{$matches[1]}={$matches[2]}{{height}}", $code);
 		}
 		if (($width != '') && ($height != '')) {
-			$this->set('adformat', $width . 'x' . $height);
+			$this->set_property('adformat', $width . 'x' . $height);
 		}
 	}
 }

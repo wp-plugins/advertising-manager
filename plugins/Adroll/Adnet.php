@@ -8,34 +8,23 @@ $_advman_networks['OX_Adnet_Adroll'] = array(
 */
 class OX_Adnet_Adroll extends OX_Adnet
 {
-	/**
-	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
-	 */
-	static $shortName = 'Adroll';
-	
-	/**
-	 * The URL for the home page of the ad network site
-	 */
-	static $url = 'http://www.adroll.com';
-	
-	/**
-	 * The name of the network.  Used when displaying ads by network.
-	 */
-	static $networkName = 'AdRoll';
+	var $mnemonic = 'Adroll';
+	var $network_name = 'AdRoll';
+	var $url = 'http://www.adroll.com';
 	
 	function OX_Adnet_Adroll()
 	{
 		$this->OX_Adnet();
 	}
 	
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'account-id' => '',
 			'slot' => '',
 		);
 		
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function import_detect_network($code){
@@ -52,12 +41,12 @@ class OX_Adnet_Adroll extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match("/http:\/\/(\w*).adroll.com\/(\w*)\/(\w*)\/(\w*)/", $code, $matches)!=0) { 
-			$this->set('account-id', $matches[3]);
-			$this->set('slot', $matches[4]);
+			$this->set_property('account-id', $matches[3]);
+			$this->set_property('slot', $matches[4]);
 			$code = str_replace("http://{$matches[1]}.adroll.com/{$matches[2]}/{$matches[3]}/{$matches[4]}", "http://{$matches[1]}.adroll.com/{$matches[2]}/{{account-id}}/{{slot}}", $code);
 		}
 		
-		$this->set('code', $code);
+		$this->set_property('code', $code);
 	}
 
 	function _form_settings_help()

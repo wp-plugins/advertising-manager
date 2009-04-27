@@ -8,33 +8,22 @@ $_advman_networks['OX_Adnet_Cj'] = array(
 */
 class OX_Adnet_Cj extends OX_Adnet
 {
-	/**
-	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
-	 */
-	static $shortName = 'Cj';
-	
-	/**
-	 * The URL for the home page of the ad network site
-	 */
-	static $url = 'http://www.cj.com';
-	
-	/**
-	 * The name of the network.  Used when displaying ads by network.
-	 */
-	static $networkName = 'Commission Junction';
+	var $mnemonic = 'Cj';
+	var $network_name = 'Commission Junction';
+	var $url = 'http://www.cj.com';
 	
 	function OX_Adnet_Cj()
 	{
 		$this->OX_Adnet();
 	}
 	
-	function render_ad()
+	function display()
 	{
 		$xdomains = OX_Adnet_Cj::get_domains();
 		$search[] = '{{xdomain}}';
 		$replace[] = $xdomains[array_rand($xdomains)];
 		
-		return parent::render_ad($search, $replace);
+		return parent::display($search, $replace);
 	}
 	
 	/**
@@ -54,7 +43,7 @@ class OX_Adnet_Cj extends OX_Adnet
 		'www.anrdoezrs.net');
 	}
 	
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'account-id' => '',
@@ -66,7 +55,7 @@ class OX_Adnet_Cj extends OX_Adnet
 			'status' => '',
 			'width' => '250',
 		);
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function import_detect_network($code)
@@ -85,8 +74,8 @@ class OX_Adnet_Cj extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match('/http:\/\/([.\w]*)\/click-(\d*)-(\d*)/', $code, $matches) != 0) { 
-			$this->set('account-id', $matches[2]);
-			$this->set('slot', $matches[3]); 
+			$this->set_property('account-id', $matches[2]);
+			$this->set_property('slot', $matches[3]); 
 			$code = str_replace("http://{$matches[1]}/click-{$matches[2]}-{$matches[3]}", "http://{{xdomain}}/click-{{account-id}}-{{slot}}", $code);
 		}
 
@@ -97,17 +86,17 @@ class OX_Adnet_Cj extends OX_Adnet
 		}
 		
 		if (preg_match("/onmouseover=\"window.status='([^']*)';return true;\"/", $code, $matches)) {
-			$this->set('status', $matches[1]);
+			$this->set_property('status', $matches[1]);
 			$code = str_replace("onmouseover=\"window.status='{$matches[1]}';return true;\"", "onmouseover=\"window.status='{{status}}';return true;\"", $code);
 		}
 
 		if (preg_match("/ alt=\"([^\"]*)\"/", $code, $matches)) {
-			$this->set('alt-text', $matches[1]);
+			$this->set_property('alt-text', $matches[1]);
 			$code = str_replace(" alt=\"{$matches[1]}\"", " alt=\"{{alt-text}}\"", $code);
 		}
 		
 		if ($v = strpos($code, " target=\"_blank\"")) {
-			$this->set('new-window', 'yes');
+			$this->set_property('new-window', 'yes');
 			$code = str_replace(" target=\"_blank\"", "{{new-window}}", $code);
 		}
 		
@@ -122,16 +111,16 @@ class OX_Adnet_Cj extends OX_Adnet
 			$code = str_replace("height=\"{$height}\"", "height=\"{{height}}\"", $code);
 		}
 		if ($width != '') {
-			$this->set('width', $width);
+			$this->set_property('width', $width);
 		}
 		if ($height != '') {
-			$this->set('height', $height);
+			$this->set_property('height', $height);
 		}
 		if (($width != '') && ($height != '')) {
-			$this->set('adformat', $width . 'x' . $height); //Only set if both width and height present
+			$this->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 		
-		$this->set('code', $code);
+		$this->set_property('code', $code);
 	}
 }
 /*

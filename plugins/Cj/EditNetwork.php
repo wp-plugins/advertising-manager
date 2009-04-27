@@ -19,20 +19,20 @@ class Template_EditNetwork_Cj extends Template_EditNetwork
 <table>
 <tr>
 	<td class="advman-label"><label for="advman-slot"><?php _e('Alt Text:'); ?></label></td>
-	<td><input type="text" name="advman-alt-text" style="width:300px" id="advman-alt-text" value="<?php echo $ad->get_default('alt-text'); ?>" /></td>
+	<td><input type="text" name="advman-alt-text" style="width:300px" id="advman-alt-text" value="<?php echo $ad->get_network_property('alt-text'); ?>" /></td>
 </tr>
 <tr>
 	<td class="advman-label"><label for="advman-new-window"><?php _e('New Window:'); ?></label></td>
 	<td>
 		<select name="advman-new-window" id="advman-new-window">
-			<option<?php echo ($ad->get_default('new-window') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-			<option<?php echo ($ad->get_default('new-window') == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+			<option<?php echo ($ad->get_network_property('new-window') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+			<option<?php echo ($ad->get_network_property('new-window') == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 		</select>
 	</td>
 </tr>
 <tr>
 	<td class="advman-label"><label for="advman-status"><?php _e('Status Text:'); ?></label></td>
-	<td><input type="text" name="advman-status" style="width:300px" id="advman-status" value="<?php echo $ad->get_default('status'); ?>" /></td>
+	<td><input type="text" name="advman-status" style="width:300px" id="advman-status" value="<?php echo $ad->get_network_property('status'); ?>" /></td>
 </tr>
 </table>
 </div>
@@ -43,7 +43,7 @@ class Template_EditNetwork_Cj extends Template_EditNetwork
 	
 	function displaySectionFormat($ad)
 	{
-		$format = $ad->get_default('adformat');
+		$format = $ad->get_network_property('adformat');
 		
 ?>	<table id="advman-settings-ad_format">
 	<tr id="advman-form-adformat">
@@ -84,8 +84,8 @@ class Template_EditNetwork_Cj extends Template_EditNetwork
 	<tr id="advman-settings-custom">
 		<td class="advman_label"><label for="advman-width"><?php _e('Dimensions:'); ?></label></td>
 		<td>
-			<input name="advman-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_default('width')); ?>" /> x
-			<input name="advman-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_default('height')); ?>" /> px
+			<input name="advman-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_network_property('width')); ?>" /> x
+			<input name="advman-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_network_property('height')); ?>" /> px
 		</td>
 	</tr>
 	</table>

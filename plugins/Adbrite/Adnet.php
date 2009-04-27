@@ -8,15 +8,16 @@ $_advman_networks['OX_Adnet_Adbrite'] = array(
 */
 class OX_Adnet_Adbrite extends OX_Adnet
 {
+	var $mnemonic = 'Adbrite';
+	var $network_name = 'AdBrite';
+	var $url = 'http://www.adbrite.com';
+	
 	function OX_Adnet_Adbrite()
 	{
-		parent::$shortName = 'Adbrite';
-		parent::$url = 'http://www.adbrite.com';
-		parent::$networkName = 'AdBrite';
 		$this->OX_Adnet();
 	}
 		
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'account-id' => '',
@@ -30,7 +31,7 @@ class OX_Adnet_Adbrite extends OX_Adnet
 			'width' => '250',
 		);
 		
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function get_ad_formats()
@@ -59,33 +60,33 @@ class OX_Adnet_Adbrite extends OX_Adnet
 		parent::import_settings($code);
 
 		if (preg_match("/var AdBrite_Title_Color = '(\w*)'/", $code, $matches)) {
-			$this->set('color-title', $matches[1]);
+			$this->set_property('color-title', $matches[1]);
 			$code = str_replace("var AdBrite_Title_Color = '{$matches[1]}'", "var AdBrite_Title_Color = '{{color-title}}'", $code);
 		}
 		if (preg_match("/var AdBrite_Text_Color = '(\w*)'/", $code, $matches)) {
-			$this->set('color-text', $matches[1]);
+			$this->set_property('color-text', $matches[1]);
 			$code = str_replace("var AdBrite_Text_Color = '{$matches[1]}'", "var AdBrite_Text_Color = '{{color-text}}'", $code);
 		}
 		if (preg_match("/var AdBrite_Background_Color = '(\w*)'/", $code, $matches)) {
-			$this->set('color-bg', $matches[1]);
+			$this->set_property('color-bg', $matches[1]);
 			$code = str_replace("var AdBrite_Background_Color = '{$matches[1]}'", "var AdBrite_Background_Color = '{{color-bg}}'", $code);
 		}
 		if (preg_match("/var AdBrite_Border_Color = '(\w*)'/", $code, $matches)) {
-			$this->set('color-border', $matches[1]);
+			$this->set_property('color-border', $matches[1]);
 			$code = str_replace("var AdBrite_Border_Color = '{$matches[1]}'", "var AdBrite_Border_Color = '{{color-border}}'", $code);
 		}
 		
 		if (preg_match("/zs=(\w*)/", $code, $matches) != 0) {
-			$this->set('account-id', $matches[1]);
+			$this->set_property('account-id', $matches[1]);
 			$code = str_replace("zs={$matches[1]}", "zs={{account-id}}", $code);
 		}
 		if (preg_match("/sid=(\w*)/", $code, $matches) != 0) {
-			$this->set('slot', $matches[1]);
+			$this->set_property('slot', $matches[1]);
 			$code = str_replace("sid={$matches[1]}", "sid={{slot}}", $code);
 			$code = str_replace("opid={$matches[1]}", "sid={{slot}}", $code);
 		}
 		
-		$this->set('code', $code);
+		$this->set_property('code', $code);
 	}
 }
 /*

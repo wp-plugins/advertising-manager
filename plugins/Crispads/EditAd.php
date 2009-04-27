@@ -17,11 +17,11 @@ class Template_EditAd_Crispads extends Template_EditAd
 <table>
 <tr>
 	<td><label for="advman-slot"><?php _e('Slot ID:'); ?></label></td>
-	<td><input type="text" name="advman-slot" style="width:200px" id="advman-slot" value="<?php echo $ad->get('slot'); ?>" /></td>
+	<td><input type="text" name="advman-slot" style="width:200px" id="advman-slot" value="<?php echo $ad->get_property('slot'); ?>" /></td>
 </tr>
 <tr>
 	<td><label for="advman-slot"><?php _e('Identifier:'); ?></label></td>
-	<td><input type="text" name="advman-slot" style="width:200px" id="advman-identifier" value="<?php echo $ad->get('identifier'); ?>" /></td>
+	<td><input type="text" name="advman-slot" style="width:200px" id="advman-identifier" value="<?php echo $ad->get_property('identifier'); ?>" /></td>
 </tr>
 </table>
 </div>
@@ -32,7 +32,7 @@ class Template_EditAd_Crispads extends Template_EditAd
 	
 	function displaySectionFormat($ad)
 	{
-		$format = $ad->get('adformat');
+		$format = $ad->get_property('adformat');
 		
 ?>	<table id="advman-settings-ad_format">
 	<tr id="advman-form-adformat">
@@ -71,14 +71,14 @@ class Template_EditAd_Crispads extends Template_EditAd
 			</select>
 		</td>
 		<td>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('adformat'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('adformat'); ?>">
 		</td>
 	</tr>
 	<tr id="advman-settings-custom">
 		<td class="advman_label"><label for="advman-width"><?php _e('Dimensions:'); ?></label></td>
 		<td>
-			<input name="advman-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('width')); ?>" /> x
-			<input name="advman-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('height')); ?>" /> px
+			<input name="advman-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_property('width')); ?>" /> x
+			<input name="advman-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_property('height')); ?>" /> px
 		</td>
 	</tr>
 	</table>

@@ -18,7 +18,7 @@ class Template_EditAd_Openx extends Template_EditAd
 ?><div style="font-size:small;">
 <p>
 	<label for="advman-slot"><?php _e('Slot ID:'); ?></label>
-	<input type="text" name="advman-slot" style="width:200px" id="advman-slot" value="<?php echo $ad->get('slot'); ?>" />
+	<input type="text" name="advman-slot" style="width:200px" id="advman-slot" value="<?php echo $ad->get_property('slot'); ?>" />
 </p>
 </div>
 <br />

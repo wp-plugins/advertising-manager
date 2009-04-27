@@ -19,16 +19,16 @@ class Template_EditAd_Cj extends Template_EditAd
 <table>
 <tr>
 	<td><label for="advman-slot"><?php _e('Account ID:'); ?></label></td>
-	<td><input type="text" name="advman-account-id" style="width:200px" id="advman-account-id" value="<?php echo $ad->get('account-id'); ?>" /></td>
+	<td><input type="text" name="advman-account-id" style="width:200px" id="advman-account-id" value="<?php echo $ad->get_property('account-id'); ?>" /></td>
 </tr>
 <tr>
 	<td><label for="advman-slot"><?php _e('Slot ID:'); ?></label></td>
-	<td><input type="text" name="advman-slot" style="width:200px" id="advman-slot" value="<?php echo $ad->get('slot'); ?>" /></td>
+	<td><input type="text" name="advman-slot" style="width:200px" id="advman-slot" value="<?php echo $ad->get_property('slot'); ?>" /></td>
 </tr>
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->getNetworkName()); ?> <?php _e('The Slot ID is the ID of this specific ad slot.', 'advman'); ?></span>
+<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->network_name); ?> <?php _e('The Slot ID is the ID of this specific ad slot.', 'advman'); ?></span>
 <?php
 	}
 	
@@ -38,22 +38,22 @@ class Template_EditAd_Cj extends Template_EditAd
 <table>
 <tr>
 	<td class="advman-label"><label for="advman-slot"><?php _e('Alt Text:'); ?></label></td>
-	<td><input type="text" name="advman-alt-text" style="width:300px" id="advman-alt-text" value="<?php echo $ad->get('alt-text'); ?>" /></td>
+	<td><input type="text" name="advman-alt-text" style="width:300px" id="advman-alt-text" value="<?php echo $ad->get_property('alt-text'); ?>" /></td>
 </tr>
 <tr>
 	<td class="advman-label"><label for="advman-new-window"><?php _e('New Window:'); ?></label></td>
 	<td>
 		<select name="advman-new-window" id="advman-new-window">
 			<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-			<option<?php echo ($ad->get('new-window') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-			<option<?php echo ($ad->get('new-window') == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+			<option<?php echo ($ad->get_property('new-window') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+			<option<?php echo ($ad->get_property('new-window') == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 		</select>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('new-window'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('new-window'); ?>">
 	</td>
 </tr>
 <tr>
 	<td class="advman-label"><label for="advman-status"><?php _e('Status Text:'); ?></label></td>
-	<td><input type="text" name="advman-status" style="width:300px" id="advman-status" value="<?php echo $ad->get('status'); ?>" /></td>
+	<td><input type="text" name="advman-status" style="width:300px" id="advman-status" value="<?php echo $ad->get_property('status'); ?>" /></td>
 </tr>
 </table>
 </div>
@@ -64,7 +64,7 @@ class Template_EditAd_Cj extends Template_EditAd
 	
 	function displaySectionFormat($ad)
 	{
-		$format = $ad->get('adformat');
+		$format = $ad->get_property('adformat');
 		
 ?>	<table id="advman-settings-ad_format">
 	<tr id="advman-form-adformat">
@@ -103,14 +103,14 @@ class Template_EditAd_Cj extends Template_EditAd
 			</select>
 		</td>
 		<td>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('adformat'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('adformat'); ?>">
 		</td>
 	</tr>
 	<tr id="advman-settings-custom">
 		<td class="advman_label"><label for="advman-width"><?php _e('Dimensions:'); ?></label></td>
 		<td>
-			<input name="advman-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('width')); ?>" /> x
-			<input name="advman-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get('height')); ?>" /> px
+			<input name="advman-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_property('width')); ?>" /> x
+			<input name="advman-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_property('height')); ?>" /> px
 		</td>
 	</tr>
 	</table>

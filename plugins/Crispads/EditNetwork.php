@@ -11,7 +11,7 @@ class Template_EditNetwork_Crispads extends Template_EditNetwork
 	
 	function displaySectionFormat($ad)
 	{
-		$format = $ad->get_default('adformat');
+		$format = $ad->get_network_property('adformat');
 		
 ?>	<table id="advman-settings-ad_format">
 	<tr id="advman-form-adformat">
@@ -52,8 +52,8 @@ class Template_EditNetwork_Crispads extends Template_EditNetwork
 	<tr id="advman-settings-custom">
 		<td class="advman_label"><label for="advman-width"><?php _e('Dimensions:'); ?></label></td>
 		<td>
-			<input name="advman-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_default('width')); ?>" /> x
-			<input name="advman-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_default('height')); ?>" /> px
+			<input name="advman-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_network_property('width')); ?>" /> x
+			<input name="advman-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_network_property('height')); ?>" /> px
 		</td>
 	</tr>
 	</table>

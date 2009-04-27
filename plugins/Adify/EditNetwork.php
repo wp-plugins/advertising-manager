@@ -11,7 +11,7 @@ class Template_EditNetwork_Adify extends Template_EditNetwork
 	
 	function displaySectionFormat($ad)
 	{
-		$format = $ad->get_default('adformat');
+		$format = $ad->get_network_property('adformat');
 		
 ?>	<table id="advman-settings-ad_format">
 	<tr id="advman-form-adformat">

@@ -13,7 +13,7 @@ class Template_EditAd_Adify extends Template_EditAd
 	
 	function displaySectionFormat($ad)
 	{
-		$format = $ad->get('adformat');
+		$format = $ad->get_property('adformat');
 		
 ?><table id="advman-settings-ad_format">
 	<tr id="advman-form-adformat">
@@ -37,7 +37,7 @@ class Template_EditAd_Adify extends Template_EditAd
 			</select>
 		</td>
 		<td>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('adformat'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('adformat'); ?>">
 		</td>
 	</tr>
 	</table>
@@ -51,11 +51,11 @@ class Template_EditAd_Adify extends Template_EditAd
 ?><table>
 <tr>
 	<td><label for="advman-slot"><?php _e('Account ID:', 'advman'); ?></label></td>
-	<td><input type="text" name="advman-account-id" style="width:200px" id="advman-account-id" value="<?php echo $ad->get('account-id'); ?>" /></td>
+	<td><input type="text" name="advman-account-id" style="width:200px" id="advman-account-id" value="<?php echo $ad->get_property('account-id'); ?>" /></td>
 </tr>
 </table>
 <br />
-<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->getNetworkName()); ?></span>
+<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->network_name); ?></span>
 <?php
 	}
 }

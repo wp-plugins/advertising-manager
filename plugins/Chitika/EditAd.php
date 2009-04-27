@@ -15,7 +15,7 @@ class Template_EditAd_Chitika extends Template_EditAd
 	
 	function displaySectionFormat($ad)
 	{
-		$format = $ad->get('adformat');
+		$format = $ad->get_property('adformat');
 		
 ?><table id="advman-settings-ad_format">
 	<tr id="advman-form-adformat">
@@ -58,7 +58,7 @@ class Template_EditAd_Chitika extends Template_EditAd
 			</select>
 		</td>
 		<td>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('adformat'); ?>">
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('adformat'); ?>">
 		</td>
 	</tr>
 	</table>
@@ -69,8 +69,8 @@ class Template_EditAd_Chitika extends Template_EditAd
 	
 	function displaySectionColors($ad)
 	{
-		$fontTitle = $ad->get('font-title');
-		$fontText = $ad->get('font-text');
+		$fontTitle = $ad->get_property('font-title');
+		$fontText = $ad->get_property('font-text');
 		
 ?><table id="advman-settings-colors" width="100%">
 <tr>
@@ -78,28 +78,28 @@ class Template_EditAd_Chitika extends Template_EditAd
 		<table>
 		<tr>
 			<td class="advman_label"><label for="advman-color-border"><?php _e('Border:'); ?></label></td>
-			<td>#<input name="advman-color-border" onChange="advman_update_ad(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get('color-border'); ?>" /></td>
-			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-border'); ?>"></td>
+			<td>#<input name="advman-color-border" onChange="advman_update_ad(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get_property('color-border'); ?>" /></td>
+			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('color-border'); ?>"></td>
 		</tr>
 		<tr>
 			<td class="advman_label"><label for="advman-color-title"><?php _e('Title:'); ?></label></td>
-			<td>#<input name="advman-color-title" onChange="advman_update_ad(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get('color-title'); ?>" /></td>
-			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-title'); ?>"></td>
+			<td>#<input name="advman-color-title" onChange="advman_update_ad(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get_property('color-title'); ?>" /></td>
+			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('color-title'); ?>"></td>
 		</tr>
 		<tr>
 			<td class="advman_label"><label for="advman-color-bg"><?php _e('Background:'); ?></label></td>
-			<td>#<input name="advman-color-bg" onChange="advman_update_ad(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get('color-bg'); ?>" /></td>
-			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-bg'); ?>"></td>
+			<td>#<input name="advman-color-bg" onChange="advman_update_ad(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get_property('color-bg'); ?>" /></td>
+			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('color-bg'); ?>"></td>
 		</tr>
 		<tr>
 			<td class="advman_label"><label for="advman-color-text"><?php _e('Text:'); ?></label></td>
-			<td>#<input name="advman-color-text" onChange="advman_update_ad(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get('color-text'); ?>" /></td>
-			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-text'); ?>"></td>
+			<td>#<input name="advman-color-text" onChange="advman_update_ad(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get_property('color-text'); ?>" /></td>
+			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('color-text'); ?>"></td>
 		</tr>
 		<tr>
 			<td class="advman_label"><label for="advman-color-link"><?php _e('Link:'); ?></label></td>
-			<td>#<input name="advman-color-link" onChange="advman_update_ad(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get('color-link'); ?>" /></td>
-			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_default('color-link'); ?>"></td>
+			<td>#<input name="advman-color-link" onChange="advman_update_ad(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get_property('color-link'); ?>" /></td>
+			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('color-link'); ?>"></td>
 		</tr>
 		<tr>
 			<td class="advman_label"><label for="advman-font-title"><?php _e('Title Font:'); ?></label></td>
@@ -133,12 +133,12 @@ class Template_EditAd_Chitika extends Template_EditAd
 		</table>
 	</td>
 	<td>
-		<div id="ad-color-bg" style="margin-top:1em;width:200px;background: #<?php echo ($ad->get('color-bg')) ? $ad->get('color-bg') : 'FFFFFF'; ?>;">
-			<div id="ad-color-border" style="font: 10px arial, sans-serif; border: 1px solid #<?php echo ($ad->get('color-border')) ? $ad->get('color-border') : 'FF0000'; ?>" class="linkunit-wrapper">
-				<div id="ad-color-title" style="color: #<?php echo ($ad->get('color-title')) ? $ad->get('color-title') : '00FFFF'; ?>; font: 11px verdana, arial, sans-serif; padding: 2px;"><b><u><?php _e('Linked Title', 'advman'); ?></u></b><br /></div>
-				<div id="ad-color-text" style="color: #<?php echo ($ad->get('color-text')) ? $ad->get('color-text') : '000000'; ?>; padding: 2px;" class="text"><?php _e('Advertiser\'s ad text here', 'advman'); ?><br /></div>
-				<div id="ad-color-link" style="color: #<?php echo ($ad->get('color-link')) ? $ad->get('color-link') : '008000'; ?>; font: 10px verdana, arial, sans-serif; padding: 2px;"><?php _e('www.advertiser-url.com', 'advman'); ?><br /></div>
-				<div style="color: #000; padding: 2px;" class="rtl-safe-align-right">&nbsp;<u><?php printf(__('Ads by %s', 'advman'), $ad->getNetworkName()); ?></u></div>
+		<div id="ad-color-bg" style="margin-top:1em;width:200px;background: #<?php echo ($ad->get_property('color-bg')) ? $ad->get('color-bg') : 'FFFFFF'; ?>;">
+			<div id="ad-color-border" style="font: 10px arial, sans-serif; border: 1px solid #<?php echo ($ad->get_property('color-border')) ? $ad->get('color-border') : 'FF0000'; ?>" class="linkunit-wrapper">
+				<div id="ad-color-title" style="color: #<?php echo ($ad->get_property('color-title')) ? $ad->get('color-title') : '00FFFF'; ?>; font: 11px verdana, arial, sans-serif; padding: 2px;"><b><u><?php _e('Linked Title', 'advman'); ?></u></b><br /></div>
+				<div id="ad-color-text" style="color: #<?php echo ($ad->get_property('color-text')) ? $ad->get('color-text') : '000000'; ?>; padding: 2px;" class="text"><?php _e('Advertiser\'s ad text here', 'advman'); ?><br /></div>
+				<div id="ad-color-link" style="color: #<?php echo ($ad->get_property('color-link')) ? $ad->get('color-link') : '008000'; ?>; font: 10px verdana, arial, sans-serif; padding: 2px;"><?php _e('www.advertiser-url.com', 'advman'); ?><br /></div>
+				<div style="color: #000; padding: 2px;" class="rtl-safe-align-right">&nbsp;<u><?php printf(__('Ads by %s', 'advman'), $ad->network_name); ?></u></div>
 			</div>
 		</div>
 	</td>
@@ -155,20 +155,20 @@ class Template_EditAd_Chitika extends Template_EditAd
 <table>
 <tr>
 	<td><label for="advman-slot"><?php _e('Account ID:'); ?></label></td>
-	<td><input type="text" name="advman-account-id" style="width:200px" id="advman-account-id" value="<?php echo $ad->get('account-id'); ?>" /></td>
+	<td><input type="text" name="advman-account-id" style="width:200px" id="advman-account-id" value="<?php echo $ad->get_property('account-id'); ?>" /></td>
 </tr>
 <tr>
 	<td><label for="advman-slot"><?php _e('Channel:'); ?></label></td>
-	<td><input type="text" name="advman-channel" style="width:200px" id="advman-channel" value="<?php echo $ad->get('channel'); ?>" /></td>
+	<td><input type="text" name="advman-channel" style="width:200px" id="advman-channel" value="<?php echo $ad->get_property('channel'); ?>" /></td>
 </tr>
 <tr>
 	<td><label for="advman-slot"><?php _e('Alternate URL:'); ?></label></td>
-	<td><input type="text" name="advman-alt-url" style="width:400px" id="advman-alt-url" value="<?php echo $ad->get('alt-url'); ?>" /></td>
+	<td><input type="text" name="advman-alt-url" style="width:400px" id="advman-alt-url" value="<?php echo $ad->get_property('alt-url'); ?>" /></td>
 </tr>
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->getNetworkName()); ?> <?php _e('Enter a channel if you want to break out your reporting by different sections (e.g. home page, post detail)', 'advman'); ?> <?php printf(__('The Alternate URL will be called if %s does not have an ad to display.', 'advman'), $ad->getNetworkName()); ?></span>
+<span style="font-size:x-small; color:gray;"><?php printf(__('The Account ID is your ID for your %s account.', 'advman'), $ad->network_name); ?> <?php _e('Enter a channel if you want to break out your reporting by different sections (e.g. home page, post detail)', 'advman'); ?> <?php printf(__('The Alternate URL will be called if %s does not have an ad to display.', 'advman'), $ad->network_name); ?></span>
 <?php
 	}
 }

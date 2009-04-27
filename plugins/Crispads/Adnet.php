@@ -8,33 +8,22 @@ $_advman_networks['OX_Adnet_Crispads']	= array(
 */
 class OX_Adnet_Crispads extends OX_Adnet
 {
-	/**
-	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
-	 */
-	static $shortName = 'Crispads';
-	
-	/**
-	 * The URL for the home page of the ad network site
-	 */
-	static $url = 'http://www.crispads.com';
-	
-	/**
-	 * The name of the network.  Used when displaying ads by network.
-	 */
-	static $networkName = 'Crisp Ads';
+	var $mnemonic = 'Crispads';
+	var $network_name = 'Crisp Ads';
+	var $url = 'http://www.crispads.com';
 	
 	function OX_Adnet_Crispads()
 	{
 		$this->OX_Adnet();
 	}
 
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'identifier' => '',
 			'slot' => '',
 		);
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function import_detect_network($code)
@@ -48,11 +37,11 @@ class OX_Adnet_Crispads extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match("/zoneid=(\w*)/", $code, $matches) !=0) {
-			$this->set('slot', $matches[1]);
+			$this->set_property('slot', $matches[1]);
 			$code = str_replace("zoneid={$matches[1]}", "zoneid={{slot}}", $code);
 		}
 		if (preg_match("/n=(\w*)/", $code, $matches)!=0) {
-			$this->set('identifier', $matches[1]);
+			$this->set_property('identifier', $matches[1]);
 			$code = str_replace("n={$matches[1]}", "n={{identifier}}", $code);
 		}
 		
@@ -68,18 +57,18 @@ class OX_Adnet_Crispads extends OX_Adnet
 			$code = str_replace("height=\"{$height}\"", "height=\"{{height}}\"", $code);
 		}
 		if ($width != '') {
-			$this->set('width', $width);
+			$this->set_property('width', $width);
 		}
 		if ($height != '') {
-			$this->set('height', $height);
+			$this->set_property('height', $height);
 		}
 		if (($width != '') && ($height != '')) {
-			$this->set('adformat', $width . 'x' . $height); //Only set if both width and height present
+			$this->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 		
 		$code = str_replace('INSERT_RANDOM_NUMBER_HERE', '{{random}}', $code);
 		
-		$this->set('code', $code);
+		$this->set_property('code', $code);
 	}
 }
 /*

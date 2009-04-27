@@ -17,7 +17,7 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 	
 	function displaySectionFormat($ad)
 	{
-		$format = $ad->get_default('adformat');
+		$format = $ad->get_network_property('adformat');
 		
 ?>	<table id="advman-settings-ad_format">
 	<tr id="advman-form-adformat">
@@ -60,8 +60,8 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 	<td class="advman-label"><label for="advman-attitude"><?php _e('Attitude:'); ?></label></td>
 	<td>
 		<select name="advman-attitude" id="advman-attitude">
-			<option<?php echo ($ad->get_default('attitude') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-			<option<?php echo ($ad->get_default('attitude') == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+			<option<?php echo ($ad->get_network_property('attitude') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+			<option<?php echo ($ad->get_network_property('attitude') == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 		</select>
 	</td>
 </tr>
@@ -69,8 +69,8 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 	<td class="advman-label"><label for="advman-new-window"><?php _e('New Window:'); ?></label></td>
 	<td>
 		<select name="advman-new-window" id="advman-new-window">
-			<option<?php echo ($ad->get_default('new-window') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-			<option<?php echo ($ad->get_default('new-window') == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+			<option<?php echo ($ad->get_network_property('new-window') == 'yes' ? ' selected="selected"' : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+			<option<?php echo ($ad->get_network_property('new-window') == 'no' ? ' selected="selected"' : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
 		</select>
 	</td>
 </tr>
@@ -89,36 +89,36 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 			<table>
 			<tr>
 				<td class="advman_label"><label for="advman-color-border"><?php _e('Border:'); ?></label></td>
-				<td>#<input name="advman-color-border" onChange="advman_update_ad(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get_default('color-border'); ?>" /></td>
+				<td>#<input name="advman-color-border" onChange="advman_update_ad(this,'ad-color-border','border');" size="6" value="<?php echo $ad->get_network_property('color-border'); ?>" /></td>
 			</tr>
 			<tr>
 				<td class="advman_label"><label for="advman-color-bg"><?php _e('Background:'); ?></label></td>
-				<td>#<input name="advman-color-bg" onChange="advman_update_ad(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get_default('color-bg'); ?>" /></td>
+				<td>#<input name="advman-color-bg" onChange="advman_update_ad(this,'ad-color-bg','bg');" size="6" value="<?php echo $ad->get_network_property('color-bg'); ?>" /></td>
 			</tr>
 			<tr>
 				<td class="advman_label"><label for="advman-color-text"><?php _e('Title:'); ?></label></td>
-				<td>#<input name="advman-color-title" onChange="advman_update_ad(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get_default('color-title'); ?>" /></td>
+				<td>#<input name="advman-color-title" onChange="advman_update_ad(this,'ad-color-title','title');" size="6" value="<?php echo $ad->get_network_property('color-title'); ?>" /></td>
 			</tr>
 			<tr>
 				<td class="advman_label"><label for="advman-color-price"><?php _e('Text:'); ?></label></td>
-				<td>#<input name="advman-color-text" onChange="advman_update_ad(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get_default('color-text'); ?>" /></td>
+				<td>#<input name="advman-color-text" onChange="advman_update_ad(this,'ad-color-text','text');" size="6" value="<?php echo $ad->get_network_property('color-text'); ?>" /></td>
 			</tr>
 			<tr>
 				<td class="advman_label"><label for="advman-color-link"><?php _e('Link:'); ?></label></td>
-				<td>#<input name="advman-color-link" onChange="advman_update_ad(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get_default('color-link'); ?>" /></td>
+				<td>#<input name="advman-color-link" onChange="advman_update_ad(this,'ad-color-link','link');" size="6" value="<?php echo $ad->get_network_property('color-link'); ?>" /></td>
 			</tr>
 			</table>
 		</td>
 		<td>
-			<div id="ad-color-bg" style="margin-top:1em;width:200px;background: #<?php echo htmlspecialchars($ad->get_default('color-bg'), ENT_QUOTES); ?>;">
-			<div id="ad-color-border" style="font: 10px arial, sans-serif; border: 1px solid #<?php echo htmlspecialchars($ad->get_default('color-border'), ENT_QUOTES); ?>" class="linkunit-wrapper">
+			<div id="ad-color-bg" style="margin-top:1em;width:200px;background: #<?php echo htmlspecialchars($ad->get_network_property('color-bg'), ENT_QUOTES); ?>;">
+			<div id="ad-color-border" style="font: 10px arial, sans-serif; border: 1px solid #<?php echo htmlspecialchars($ad->get_network_property('color-border'), ENT_QUOTES); ?>" class="linkunit-wrapper">
 			<img src="<?php echo get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager/shoppingads.png'?>" style="width:60%">
-			<div id="ad-color-title" style="color: #<?php echo htmlspecialchars($ad->get_default('color-title'), ENT_QUOTES); ?>; font: 11px verdana, arial, sans-serif; padding: 2px;">
+			<div id="ad-color-title" style="color: #<?php echo htmlspecialchars($ad->get_network_property('color-title'), ENT_QUOTES); ?>; font: 11px verdana, arial, sans-serif; padding: 2px;">
 				<b><u>Description of Product</u></b><br /></div>
-			<div id="ad-color-text" style="color: #<?php echo htmlspecialchars($ad->get_default('color-text'), ENT_QUOTES); ?>; padding: 2px;" class="text">
+			<div id="ad-color-text" style="color: #<?php echo htmlspecialchars($ad->get_network_property('color-text'), ENT_QUOTES); ?>; padding: 2px;" class="text">
 				Current Bid: $5.00<br /></div>
-			<div id="ad-color-link" style="color: #<?php echo htmlspecialchars($ad->get_default('color-link'), ENT_QUOTES); ?>; font: 10px verdana, arial, sans-serif; padding: 2px;">
-				&nbsp;<span style="text-decoration:underline"><?php printf(__('Ads by %s', 'advman'), $ad->getNetworkName()); ?></span></div>
+			<div id="ad-color-link" style="color: #<?php echo htmlspecialchars($ad->get_network_property('color-link'), ENT_QUOTES); ?>; font: 10px verdana, arial, sans-serif; padding: 2px;">
+				&nbsp;<span style="text-decoration:underline"><?php printf(__('Ads by %s', 'advman'), $ad->network_name); ?></span></div>
 			</div>
 		</td>
 	</tr>
@@ -134,11 +134,11 @@ class Template_EditNetwork_Shoppingads extends Template_EditNetwork
 <table>
 <tr>
 	<td class="advman-label"><label for="advman-campaign"><?php _e('Camapign:'); ?></label></td>
-	<td><input type="text" name="advman-campaign" style="width:200px" id="advman-campaign" value="<?php echo $ad->get_default('campaign'); ?>" /></td>
+	<td><input type="text" name="advman-campaign" style="width:200px" id="advman-campaign" value="<?php echo $ad->get_network_property('campaign'); ?>" /></td>
 </tr>
 <tr>
 	<td class="advman-label"><label for="advman-keywords"><?php _e('Keywords:'); ?></label></td>
-	<td><input type="text" name="advman-keywords" style="width:200px" id="advman-keywords" value="<?php echo $ad->get_default('keywords'); ?>" /></td>
+	<td><input type="text" name="advman-keywords" style="width:200px" id="advman-keywords" value="<?php echo $ad->get_network_property('keywords'); ?>" /></td>
 </tr>
 </table>
 </div>

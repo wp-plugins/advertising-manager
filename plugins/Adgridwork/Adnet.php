@@ -15,27 +15,16 @@ $_advman_networks['OX_Adnet_Adgridwork'] = array(
 
 class OX_Adnet_Adgridwork extends OX_Adnet
 {
-	/**
-	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
-	 */
-	static $shortName = 'Adgridwork';
-	
-	/**
-	 * The URL for the home page of the ad network site
-	 */
-	static $url = 'http://www.adgridwork.com';
-	
-	/**
-	 * The name of the network.  Used when displaying ads by network.
-	 */
-	static $networkName = 'AdGridWork';
+	var $mnemonic = 'Adgridwork';
+	var $network_name = 'AdGridWork';
+	var $url = 'http://www.adgridwork.com';
 	
 	function OX_Adnet_Adgridwork()
 	{
 		$this->OX_Adnet();
 	}
 		
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'account-id' => '',
@@ -47,7 +36,7 @@ class OX_Adnet_Adgridwork extends OX_Adnet
 			'slot' => '',
 		);
 		
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function import_detect_network($code)
@@ -66,54 +55,54 @@ class OX_Adnet_Adgridwork extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match("/www\.adgridwork\.com\/\?r=(\d*)/", $code, $matches)) {
-			$this->set('account-id', $matches[1]);
+			$this->set_property('account-id', $matches[1]);
 			$code = str_replace("www.adgridwork.com/?r={$matches[1]}", "www.adgridwork.com/?r={{account-id}}", $code);
 		}
 		
 		if (preg_match('/var sid = \'(\w*)\'/', $code, $matches)) {
-			$this->set('slot', $matches[1]);
+			$this->set_property('slot', $matches[1]);
 			$code = str_replace("var sid = '{$matches[1]}'", "var sid = '{{slot}}'", $code);
 		}
 		
 		if (preg_match('/style=\"color: #(\w*);/', $code, $matches)) {
-			$this->set('color-link', $matches[1]);
+			$this->set_property('color-link', $matches[1]);
 			$code = str_replace("style=\"color: #{$matches[1]};", "style=\"color: #{{color-link}};", $code);
 		}
 		
 		if (preg_match("/var title_color = '(\w*)'/", $code, $matches)) {
-			$this->set('color-title', $matches[1]);
+			$this->set_property('color-title', $matches[1]);
 			$code = str_replace("var title_color = '{$matches[1]}'", "var title_color = '{{color-title}}'", $code);
 		}
 		
 		if (preg_match("/var description_color = '(\w*)'/", $code, $matches)) {
-			$this->set('color-text', $matches[1]);
+			$this->set_property('color-text', $matches[1]);
 			$code = str_replace("var description_color = '{$matches[1]}'", "var description_color = '{{color-text}}'", $code);
 		}
 		
 		if (preg_match("/var link_color = '(\w*)'/", $code, $matches)) {
-			$this->set('color-url', $matches[1]);
+			$this->set_property('color-url', $matches[1]);
 			$code = str_replace("var link_color = '{$matches[1]}'", "var link_color = '{{color-link}}'", $code);
 		}
 		
 		if (preg_match("/var background_color = '(\w*)'/", $code, $matches)) {
-			$this->set('color-bg', $matches[1]);
+			$this->set_property('color-bg', $matches[1]);
 			$code = str_replace("var background_color = '{$matches[1]}'", "var background_color = '{{color-bg}}'", $code);
 		}
 		
 		if (preg_match("/var border_color = '(\w*)'/", $code, $matches)) {
-			$this->set('color-border', $matches[1]);
+			$this->set_property('color-border', $matches[1]);
 			$code = str_replace("var border_color = '{$matches[1]}'", "var border_color = '{{color-border}}'", $code);
 		}
 		
-		$this->set('code', $code);
+		$this->set_property('code', $code);
 	}
 
 	function _form_settings_help(){
 	?><tr><td><p>Further configuration and control over channel and slot setup can be achieved through <a href="http://www.adgridwork.com/u.php" target="_blank">AdGridWorks's online system</a>:</p>
 	<ul>
-	<li><a href="http://www.adgridwork.com/u.php?page=metrics&sid=<?php echo $this->get('slot'); ?>" target="_blank">Campaign Metrics</a><br />
+	<li><a href="http://www.adgridwork.com/u.php?page=metrics&sid=<?php echo $this->get_property('slot'); ?>" target="_blank">Campaign Metrics</a><br />
 			View hits, clicks, and other stats information.</li>
-	<li><a href="http://www.adgridwork.com/u.php?page=submitsite&sid=<?php echo $this->get('slot'); ?>" target="_blank">Edit Campaign</a><br />
+	<li><a href="http://www.adgridwork.com/u.php?page=submitsite&sid=<?php echo $this->get_property('slot'); ?>" target="_blank">Edit Campaign</a><br />
 			Change keywords, ad format and layout.</li>
 	</ul></td></tr>
 	<?php	

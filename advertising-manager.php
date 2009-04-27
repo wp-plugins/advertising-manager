@@ -18,6 +18,7 @@ load_plugin_textdomain('advman', false, 'advertising-manager/languages');
 // Load all require files that are needed for Advertising Manager
 advman_load_requires();
 // Load the Swifty Ad Engine
+global $advman_engine;
 $advman_engine = new OX_Swifty();
 // Load all of the plugins for Advertising Manager
 advman_load_plugins();
@@ -66,7 +67,7 @@ function advman_init()
 		$name = OX_Tools::sanitize($_REQUEST['advman-ad-name'], 'key');
 		$ad = $advman_engine->selectAd($name);
 		if (!empty($ad)) {
-			$ad->display();
+			echo $ad->display();
 		}
 		die(0);
 	}
@@ -74,9 +75,9 @@ function advman_init()
 	// An ad is being requested by its id
 	if (!empty($_REQUEST['advman-ad-id'])) {
 		$id = OX_Tools::sanitize($_REQUEST['advman-ad-id'], 'number');
-		$ad = $advman_engine->selectAd($id);
+		$ad = $advman_engine->getAd($id);
 		if (!empty($ad)) {
-			$ad->display();
+			echo $ad->display();
 		}
 		die(0);
 	}
@@ -115,7 +116,7 @@ function advman_widgets_init()
 	if (!empty($ads)) {
 		foreach ($ads as $id => $ad) {
 			$name = $ad->name;
-			$args = array('name' => $name, 'height' => $ad->get('height', true), 'width' => $ad->get('width', true));
+			$args = array('name' => $name, 'height' => $ad->get('height'), 'width' => $ad->get('width'));
 			if (function_exists('wp_register_sidebar_widget')) {
 				wp_register_sidebar_widget("advman-$name", "Ad#$name", 'advman_widget', $args, $name);
 			} elseif (function_exists('register_sidebar_module') ) {

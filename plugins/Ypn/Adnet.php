@@ -7,27 +7,16 @@ $_advman_networks['OX_Adnet_Ypn'] = array(
 */
 class OX_Adnet_Ypn extends OX_Adnet
 {
-	/**
-	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
-	 */
-	static $shortName = 'Ypn';
-	
-	/**
-	 * The URL for the home page of the ad network site
-	 */
-	static $url = 'http://ypn.yahoo.com';
-	
-	/**
-	 * The name of the network.  Used when displaying ads by network.
-	 */
-	static $networkName = 'Yahoo! Publisher Network';
+	var $mnemonic = 'Ypn';
+	var $network_name = 'Yahoo! Publisher Network';
+	var $url = 'http://ypn.yahoo.com';
 	
 	function OX_Adnet_Ypn()
 	{
 		$this->OX_Adnet();
 	}
 	
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'account-id' => '',
@@ -42,7 +31,7 @@ class OX_Adnet_Ypn extends OX_Adnet
 			'url' => '',
 			'width' => '250',
 		);
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function import_detect_network($code)
@@ -56,33 +45,33 @@ class OX_Adnet_Ypn extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match('/ctxt_ad_partner( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->set('account-id', $matches[3]);
+			$this->set_property('account-id', $matches[3]);
 			$code = str_replace("ctxt_ad_partner{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_partner{$matches[1]}={$matches[2]}\"{{account-id}}\"", $code);
 		}
 		
 		if (preg_match('/ctxt_ad_section( *)=( *)"(.*)"/', $code, $matches)){
-			$this->set('channel', $matches[3]);
+			$this->set_property('channel', $matches[3]);
 			$code = str_replace("ctxt_ad_section{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_section{$matches[1]}={$matches[2]}\"{{channel}}\"", $code);
 		}
 
 		if (preg_match('/ctxt_ad_bc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->set('color-border', $matches[3]);
+			$this->set_property('color-border', $matches[3]);
 			$code = str_replace("ctxt_ad_bc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_bc{$matches[1]}={$matches[2]}\"{{color-border}}\"", $code);
 		}
 		if (preg_match('/ctxt_ad_cc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->set('color-bg', $matches[3]);
+			$this->set_property('color-bg', $matches[3]);
 			$code = str_replace("ctxt_ad_cc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_cc{$matches[1]}={$matches[2]}\"{{color-bg}}\"", $code);
 		}
 		if (preg_match('/ctxt_ad_lc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->set('color-title', $matches[3]);
+			$this->set_property('color-title', $matches[3]);
 			$code = str_replace("ctxt_ad_lc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_lc{$matches[1]}={$matches[2]}\"{{color-title}}\"", $code);
 		}
 		if (preg_match('/ctxt_ad_tc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->set('color-text', $matches[3]);
+			$this->set_property('color-text', $matches[3]);
 			$code = str_replace("ctxt_ad_tc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_tc{$matches[1]}={$matches[2]}\"{{color-text}}\"", $code);
 		}
 		if (preg_match('/ctxt_ad_uc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->set('color-link', $matches[3]);
+			$this->set_property('color-link', $matches[3]);
 			$code = str_replace("ctxt_ad_uc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_uc{$matches[1]}={$matches[2]}\"{{color-link}}\"", $code);
 		}
 		
@@ -97,16 +86,16 @@ class OX_Adnet_Ypn extends OX_Adnet
 			$code = str_replace("ctxt_ad_height{$matches[1]}={$matches[2]}{$matches[3]}", "ctxt_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
 		}
 		if ($width != '') {
-			$this->set('width', $width);
+			$this->set_property('width', $width);
 		}
 		if ($height != '') {
-			$this->set('height', $height);
+			$this->set_property('height', $height);
 		}
 		if (($width != '') && ($height != '')) {
-			$this->set('adformat', $width . 'x' . $height); //Only set if both width and height present
+			$this->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 		
-		$this->set('code', $code);
+		$this->set_property('code', $code);
 	}
 }
 /*

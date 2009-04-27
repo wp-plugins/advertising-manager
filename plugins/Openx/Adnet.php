@@ -8,33 +8,21 @@ $_advman_networks['OX_Adnet_Openx'] = array(
 */
 class OX_Adnet_Openx extends OX_Adnet
 {
-	/**
-	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
-	 */
-	static $shortName = 'Openx';
-	
-	/**
-	 * The URL for the home page of the ad network site
-	 */
-	static $url = 'http://www.openx.org';
-	
-	/**
-	 * The name of the network.  Used when displaying ads by network.
-	 */
-	static $networkName = 'OpenX';
+	var $mnemonic = 'Openx';
+	var $network_name = 'OpenX';
+	var $url = 'http://www.openx.org';
 	
 	function OX_Adnet_Openx()
 	{
 		$this->OX_Adnet();
 	}
 
-				
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'slot' => '',
 		);
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function import_detect_network($code)
@@ -48,13 +36,13 @@ class OX_Adnet_Openx extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match("/zoneid=(\w*)/", $code, $matches) !=0) {
-			$this->set('slot', $matches[1]);
+			$this->set_property('slot', $matches[1]);
 			$code = str_replace('zoneid=' . $matches[1], 'zoneid={{slot}}', $code);
 		}
 		
 		$code = str_replace('INSERT_RANDOM_NUMBER_HERE', '{{random}}', $code);
 		
-		$this->set('code', $code);
+		$this->set_property('code', $code);
 	}
 
 	function customiseSection($mode, $section)

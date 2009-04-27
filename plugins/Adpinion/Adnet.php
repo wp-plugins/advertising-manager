@@ -15,27 +15,16 @@ $_advman_networks['OX_Adnet_Adpinion'] = array(
 
 class OX_Adnet_Adpinion extends OX_Adnet
 {
-	/**
-	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
-	 */
-	static $shortName = 'Adpinion';
-	
-	/**
-	 * The URL for the home page of the ad network site
-	 */
-	static $url = 'http://www.adpinion.com';
-	
-	/**
-	 * The name of the network.  Used when displaying ads by network.
-	 */
-	static $networkName = 'Adpinion';
+	var $mnemonic = 'Adpinion';
+	var $network_name = 'Adpinion';
+	var $url = 'http://www.adpinion.com';
 	
 	function OX_Adnet_Adpinion()
 	{
 		$this->OX_Adnet();
 	}
 	
-	function render_ad($search, $replace)
+	function display($search, $replace)
 	{
 		if($this->get('width', true) > $this->get('height', true)) {
 			$xwidth=18;
@@ -50,10 +39,10 @@ class OX_Adnet_Adpinion extends OX_Adnet
 		$replace[] = $this->get('width', true) + $xwidth;
 		$replace[] = $this->get('height', true) + $xheight;
 		
-		return parent::render_ad($search, $replace);
+		return parent::display($search, $replace);
 	}
 	
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'account-id' => '',
@@ -62,7 +51,7 @@ class OX_Adnet_Adpinion extends OX_Adnet
 			'width' => '728',
 		);
 		
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function import_detect_network($code)
@@ -78,7 +67,7 @@ class OX_Adnet_Adpinion extends OX_Adnet
 		$width = '';
 		$height = '';
 		if (preg_match("/website=(\w*)/", $code, $matches) != 0) {
-			$this->set('account-id', $matches[1]);
+			$this->set_property('account-id', $matches[1]);
 			$code = str_replace("website={$matches[1]}", "website={{account-id}}'", $code);
 		}
 		if (preg_match("/width=(\w*)/", $code, $matches) != 0) {
@@ -94,16 +83,16 @@ class OX_Adnet_Adpinion extends OX_Adnet
 		}
 		
 		if ($width != '') {
-			$this->set('width', $width);
+			$this->set_property('width', $width);
 		}
 		if ($height != '') {
-			$this->set('height', $height);
+			$this->set_property('height', $height);
 		}
 		if (($width != '') && ($height != '')) {
-			$this->set('adformat', $width . 'x' . $height);
+			$this->set_property('adformat', $width . 'x' . $height);
 		}
 		
-		$this->set('code', $code);
+		$this->set_property('code', $code);
 	}
 }
 /*

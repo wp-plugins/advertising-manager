@@ -11,27 +11,16 @@ $_advman_networks['OX_Adnet_Adsense'] = array(
 */
 class OX_Adnet_Adsense extends OX_Adnet
 {
-	/**
-	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
-	 */
-	static $shortName = 'Adsense';
-	
-	/**
-	 * The URL for the home page of the ad network site
-	 */
-	static $url = 'http://www.google.com/adsense';
-	
-	/**
-	 * The name of the network.  Used when displaying ads by network.
-	 */
-	static $networkName = 'Google Adsense';
+	var $mnemonic = 'Adsense';
+	var $network_name = 'Google Adsense';
+	var $url = 'http://www.google.com/adsense';
 	
 	function OX_Adnet_Adsense()
 	{
 		$this->OX_Adnet();
 	}
 	
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'account-id' => '',
@@ -49,7 +38,7 @@ class OX_Adnet_Adsense extends OX_Adnet
 			'slot' => '',
 			'width' => '90',
 		);
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function import_detect_network($code)
@@ -64,57 +53,57 @@ class OX_Adnet_Adsense extends OX_Adnet
 		
 		// Account ID
 		if (preg_match('/google_ad_client( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->set('account-id', $matches[3]);
+			$this->set_property('account-id', $matches[3]);
 			$code = str_replace("google_ad_client{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_client{$matches[1]}={$matches[2]}\"{{account-id}}\"", $code);
 		}
 		
 		// Channel
 		if (preg_match('/google_ad_channel( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->set('channel', $matches[3]);
+			$this->set_property('channel', $matches[3]);
 			$code = str_replace("google_ad_channel{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_channel{$matches[1]}={$matches[2]}\"{{channel}}\"", $code);
 		}
 		
 		// Partner ID
 		if (preg_match('/google_ad_host( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->set('partner', $matches[3]);
+			$this->set_property('partner', $matches[3]);
 			$code = str_replace("google_ad_host{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_host{$matches[1]}={$matches[2]}\"{{partner}}\"", $code);
 		}
 		
 		// Slot ID
 		$adtype = 'ad';
 		if (preg_match('/google_ad_slot( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->set('slot', $matches[3]);
+			$this->set_property('slot', $matches[3]);
 			$adtype = 'slot'; // 'Slot tag types'
 			$code = str_replace("google_ad_slot{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_slot{$matches[1]}={$matches[2]}\"{{slot}}\"", $code);
 		}
 		
 		// Color Border
 		if (preg_match('/google_color_border( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->set('color-border', $matches[3]);
+			$this->set_property('color-border', $matches[3]);
 			$code = str_replace("google_color_border{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_color_border{$matches[1]}={$matches[2]}\"{{color-border}}\"", $code);
 		}
 		
 		// Color Background
 		if (preg_match('/google_color_bg( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->set('color-bg', $matches[3]);
+			$this->set_property('color-bg', $matches[3]);
 			$code = str_replace("google_color_bg{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_color_bg{$matches[1]}={$matches[2]}\"{{color-bg}}\"", $code);
 		}
 		
 		// Color Title
 		if (preg_match('/google_color_link( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->set('color-title', $matches[3]);
+			$this->set_property('color-title', $matches[3]);
 			$code = str_replace("google_color_link{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_color_link{$matches[1]}={$matches[2]}\"{{color-title}}\"", $code);
 		}
 		
 		// Color Text
 		if (preg_match('/google_color_text( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->set('color-text', $matches[3]);
+			$this->set_property('color-text', $matches[3]);
 			$code = str_replace("google_color_text{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_color_text{$matches[1]}={$matches[2]}\"{{color-text}}\"", $code);
 		}
 
 		// Color URL
 		if (preg_match('/google_color_url( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$this->set('color-link', $matches[3]);
+			$this->set_property('color-link', $matches[3]);
 			$code = str_replace("google_color_url{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_color_url{$matches[1]}={$matches[2]}\"{{color-link}}\"", $code);
 		}
 
@@ -124,42 +113,42 @@ class OX_Adnet_Adsense extends OX_Adnet
 		if (preg_match('/google_ad_width( *)=( *)(\d*);/', $code, $matches) != 0) {
 			$width = $matches[3]; 
 			if ($width != '') {
-				$this->set('width', $width);
+				$this->set_property('width', $width);
 			}
 			$code = str_replace("google_ad_width{$matches[1]}={$matches[2]}{$width}", "google_ad_width{$matches[1]}={$matches[2]}{{width}}", $code);
 		}
 		if (preg_match('/google_ad_height( *)=( *)(\d*);/', $code, $matches) != 0) {
 			$height = $matches[3];
 			if ($height != '') {
-				$this->set('height', $height);
+				$this->set_property('height', $height);
 			}
 			$code = str_replace("google_ad_height{$matches[1]}={$matches[2]}{$height}", "google_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
 		}
 		if (($width != '') && ($height != '')) {
-			$this->set('adformat', $width . 'x' . $height);
+			$this->set_property('adformat', $width . 'x' . $height);
 		}
 		
-		$format = $this->get('adformat'); //passthru
+		$format = $this->get_property('adformat'); //passthru
 		if (preg_match('/google_cpa_choice = ""/', $code, $matches) != 0) {
 			//Referral unit
 			if (preg_match('/google_ad_output = "textlink";/', $code, $matches) != 0) {
-				$this->set('adtype', 'ref_text');
+				$this->set_property('adtype', 'ref_text');
 			} else {
-				$this->set('adtype', 'ref_image');
-				$this->set('referralformat', $format);
+				$this->set_property('adtype', 'ref_image');
+				$this->set_property('referralformat', $format);
 			}
 		} else {
 			$linkformats = array('728x15', '468x15', '200x90', '180x90', '160x90', '120x90');
 			
 			if (array_search($format, $linkformats) === false) {
-				$this->set('adtype', $adtype);
+				$this->set_property('adtype', $adtype);
 			} else {
-				$this->set('adtype', 'link');
-				$this->set('linkformat', OX_Tools::sanitize($_POST['advman-adformat'], 'format')); //passthru
+				$this->set_property('adtype', 'link');
+				$this->set_property('linkformat', OX_Tools::sanitize($_POST['advman-adformat'], 'format')); //passthru
 			}
 		}
 		
-		$this->set('code', $code);
+		$this->set_property('code', $code);
 	}
 	
 	function save_settings()
@@ -168,24 +157,24 @@ class OX_Adnet_Adsense extends OX_Adnet
 		parent::save_settings();
 		
 		//Override adformat saving already
-		switch($this->get('adtype')){
+		switch($this->get_property('adtype')){
 			case 'slot' :
 			case 'ad' :
-				$this->set('adformat', OX_Tools::sanitize($_POST['advman-adformat'], 'format'));
+				$this->set_property('adformat', OX_Tools::sanitize($_POST['advman-adformat'], 'format'));
 				break;
 			case 'link' :
-				$this->set('adformat', OX_Tools::sanitize($_POST['advman-linkformat'], 'format'));
+				$this->set_property('adformat', OX_Tools::sanitize($_POST['advman-linkformat'], 'format'));
 				break;
 			case 'ref_image' :
-				$this->set('adformat', OX_Tools::sanitize($_POST['advman-referralformat'], 'format'));
+				$this->set_property('adformat', OX_Tools::sanitize($_POST['advman-referralformat'], 'format'));
 				break;
 			default :
-				$this->set('adformat', '');
+				$this->set_property('adformat', '');
 		 }
 
-		 list($width, $height, $null) = split('[x]', $this->get('adformat'));
-		 $this->set('width', $width);
-		 $this->set('height', $height);
+		 list($width, $height, $null) = split('[x]', $this->get_property('adformat'));
+		 $this->set_property('width', $width);
+		 $this->set_property('height', $height);
 	}
 
 	function _form_settings_stats()

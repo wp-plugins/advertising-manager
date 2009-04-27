@@ -8,32 +8,21 @@ $_advman_networks['OX_Adnet_Widgetbucks']	= array(
 */
 class OX_Adnet_Widgetbucks extends OX_Adnet
 {
-	/**
-	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
-	 */
-	static $shortName = 'Widgetbucks';
-	
-	/**
-	 * The URL for the home page of the ad network site
-	 */
-	static $url = 'http://www.widgetbucks.com';
-	
-	/**
-	 * The name of the network.  Used when displaying ads by network.
-	 */
-	static $networkName = 'WidgetBucks';
+	var $mnemonic = 'Widgetbucks';
+	var $network_name = 'WidgetBucks';
+	var $url = 'http://www.widgetbucks.com';
 	
 	function OX_Adnet_Widgetbucks()
 	{
 		$this->OX_Adnet();
 	}
 	
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'slot' => '',
 		);
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function import_detect_network($code)
@@ -47,11 +36,11 @@ class OX_Adnet_Widgetbucks extends OX_Adnet
 		parent::import_settings($code);
 		
 		if (preg_match('/(\w*)\.widgetbucks.com\/script\/(\w*).js\?uid=(\w*)/', $code, $matches)!=0) { 
-			$this->set('slot', $matches[3]);
+			$this->set_property('slot', $matches[3]);
 			$code = str_replace("{$matches[1]}.widgetbucks.com/script/{$matches[2]}.js?uid={$matches[3]}", "{$matches[1]}.widgetbucks.com/script/{$matches[2]}.js?uid={{slot}}", $code);
 		}
 		
-		$this->set('code', $code);
+		$this->set_property('code', $code);
 	}
 
 	function _form_settings_help()
