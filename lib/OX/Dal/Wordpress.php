@@ -7,24 +7,15 @@ class OX_Dal_Wordpress extends OX_Swifty_Dal
 	
 	function OX_Dal_Wordpress()
 	{
-		$this->data = $this->getData();
-		$this->_verifyData();
+		$this->data = $this->_select_data();
+		$this->_verify_data();
 	}
-/*	
-	function getAd($id);
-	function setAd($id, $ad);
-	function linkAd($id, $zones)
-	function getZone($id);
-	function getZones();
-	function setZone($id, $zone);
-	function linkZone($id, $ads);
-*/	
-	function getData($key = 'plugin_adsensem')
+	function _get_data($key = 'plugin_adsensem')
 	{
 		return get_option($key);
 	}
 	
-	function setData($data = null, $key = 'plugin_adsensem')
+	function _update_data($data = null, $key = 'plugin_adsensem')
 	{
 		if (is_null($data)) {
 			$data = $this->data;
@@ -32,93 +23,7 @@ class OX_Dal_Wordpress extends OX_Swifty_Dal
 		update_option($key, $data);
 	}
 	
-	function getKey($key)
-	{
-		return $this->data[$key];
-	}
-	function setKey($key, $value)
-	{
-		$this->data[$key] = $value;
-	}
-	
-	function addAd($ad)
-	{
-		$id = $this->getKey('next_ad_id');
-		$this->setKey('next_ad_id', $id+1);
-		$ad->id = $id;
-		return $this->setAd($ad);
-	}
-	
-	function getAd($id)
-	{
-		$ads = $this->getAds();
-		return $ads[$id];
-	}
-	
-	function setAd($ad)
-	{
-		$id = $ad->id;
-		$this->data['ads'][$id] = $ad;
-		$this->setData();
-		return $id;
-	}
-	
-	function getAds()
-	{
-		return $this->getKey('ads');
-	}
-	
-	function getSetting($name)
-	{
-		$settings = $this->getKey('settings');
-		
-		if (isset($settings[$name])) {
-			return $settings[$name];
-		}
-		
-		switch ($name) {
-			case 'last-sync': return $this->getKey('last-sync');
-			case 'product-name': return 'advman';
-			case 'publisher-id': return $this->getKey('uuid');
-			case 'product-version': return ADVMAN_VERSION;
-			case 'host-version': global $wp_version; return $wp_version;
-			case 'admin-email': return get_option('admin_email');
-			case 'user-login':
-				global $user_login;
-				if (function_exists('get_currentuserinfo')) {
-					get_currentuserinfo();
-					return $user_login;
-				}
-				return '';
-			case 'website-url': return get_option('siteurl');
-		}
-		
-		return false;
-	}
-	
-	function setSetting($name, $value)
-	{
-		switch ($name) {
-			case 'last-sync':
-				$this->setKey('last-sync', $value);
-				break;
-			case 'product-name':
-			case 'publisher-id':
-			case 'product-version':
-			case 'host-version':
-			case 'admin-email':
-			case 'user-login':
-			case 'website-url':
-				return false; // all of these settings are read only
-			default:
-				$this->data['settings'][$name] = $value;
-				break;
-		}
-		
-		$this->setData();
-	}
-
-	function _verifyData()
+	function _verify_data()
 	{
 		$data = $this->data;
 		
@@ -139,22 +44,104 @@ class OX_Dal_Wordpress extends OX_Swifty_Dal
 				advman::add_notice('upgrade adsense-deluxe',__('<strong>Advertising Manager</strong> has detected a previous installation of <strong>Adsense Deluxe</strong>. Import settings?'),'yn');
 			}
 			
-			$this->setData($data);
+			$this->_update_data($data);
 		}
 		
 		if (version_compare($data['version'], ADVMAN_VERSION, '<')) {
 			include_once('WordpressUpgrade.php');
 			
 			//Backup cycle
-			$backup = $this->getData('plugin_adsensem_backup');
+			$backup = $this->_getData('plugin_adsensem_backup');
 			$version = OX_Tools::major_version($data['version']);
 			$backup[$version] = $data;
-			$this->setData($backup, 'plugin_adsensem_backup');
+			$this->_setData($backup, 'plugin_adsensem_backup');
 			
 			$upgrade = new OX_Dal_WordpressUpgrade();
 			$data = $upgrade->upgrade($data);
-			$this->setData($data);
+			$this->_setData($data);
 		}
 	}
+	function select_setting($key)
+	{
+		switch ($key) {
+			case 'last-sync':
+				return $this->data['last-sync'];
+			case 'product-name':
+				return 'advman';
+			case 'publisher-id':
+				return $this->data['uuid'];
+			case 'product-version':
+				return ADVMAN_VERSION;
+			case 'host-version':
+				global $wp_version;
+				return $wp_version;
+			case 'admin-email':
+				return get_option('admin_email');
+			case 'user-login':
+				global $user_login;
+				if (function_exists('get_currentuserinfo')) {
+					get_currentuserinfo();
+					return $user_login;
+				}
+				return '';
+			case 'website-url':
+				return get_option('siteurl');
+		}
+		return $this->data['settings'][$key];
+	}
+	function update_setting($key, $value)
+	{
+		switch ($key) {
+			case 'last-sync':
+				$this->data['last-sync'] = $value;
+				$this->_update_data();
+				return true;
+			case 'product-name':
+			case 'publisher-id':
+			case 'product-version':
+			case 'host-version':
+			case 'admin-email':
+			case 'user-login':
+			case 'website-url':
+				return false; // all of these settings are read only
+		}
+		$this->data['settings'][$key] = $value;
+		$this->_update_data();
+	}
+	
+	function insert_ad($ad)
+	{
+		$id = $this->data['next_ad_id'];
+		$this->data['next_ad_id'] = $id+1;
+		$ad->id = $id;
+		$this->data['ads'][$id] = $ad;
+		$this->_update_data();
+		return $id;
+	}
+	
+	function delete_ad($id)
+	{
+		unset($this->data['ads'][$id]);
+		$this->_update_data();
+	}
+	
+	function select_ad($id)
+	{
+		return $this->data['ads'][$id];
+	}
+	
+	function select_ads()
+	{
+		return $this->data['ads'];
+	}
+	
+	function update_ad($ad)
+	{
+		$id = $ad->id;
+		$this->data['ads'][$id] = $ad;
+		$this->_update_data();
+		return $id;
+	}
+	
 }
 ?>

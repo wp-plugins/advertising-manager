@@ -25,7 +25,7 @@ class Template_Settings
 <form action="" method="post" id="advman-form" enctype="multipart/form-data">
 <input type="hidden" name="advman-mode" id="advman-mode" value="settings" />
 <input type="hidden" name="advman-action" id="advman-action" value="save" />
-<input type="hidden" name="advman-action-target" id="advman-action-target" />
+<input type="hidden" name="advman-target" id="advman-target" />
 
 <table class="form-table">
 <tbody>

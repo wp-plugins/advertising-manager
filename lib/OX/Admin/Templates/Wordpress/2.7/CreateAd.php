@@ -21,7 +21,7 @@ class Template_CreateAd
 	<form action="admin.php?page=advman-manage" method="post" id="advman-form" enctype="multipart/form-data">
 	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
 	<input type="hidden" name="advman-action" id="advman-action">
-	<input type="hidden" name="advman-action-target" id="advman-action-target">
+	<input type="hidden" name="advman-target" id="advman-target">
 
 	<p><h3><?php _e('Step 1: Import Your Ad Code', 'advman'); ?></h3></p>
 	<p><?php _e('Simply <strong>paste your Ad Code below</strong> and Import!', 'advman'); ?></p>

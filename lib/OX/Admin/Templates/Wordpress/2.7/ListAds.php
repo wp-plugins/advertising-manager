@@ -5,18 +5,19 @@ class Template_ListAds
 {
 	function display($target = null, $filter = null)
 	{
-		// Get our options and see if we're handling a form submission.
-		global $_advman, $_advman_networks;
+		global $advman_engine;
+		$ads = $advman_engine->getAds();
+		
 		$adCount = 0;
 		$activeAdCount = 0;
 		$networks = array();
-		if (!empty($_advman['ads'])) {
-			$adCount = sizeof($_advman['ads']);
-			foreach ($_advman['ads'] as $ad) {
+		if (!empty($ads)) {
+			$adCount = sizeof($ads);
+			foreach ($ads as $ad) {
 				if ($ad->active) {
 					$activeAdCount++;
 				}
-				$networks[$ad->getNetwork()] = $ad->getNetworkName();
+				$networks[$ad->network] = $ad->network_name;
 			}
 		}
 		$filterActive = !empty($filter['active']) ? $filter['active'] : null;
@@ -40,7 +41,7 @@ function ADS_setAction(action, id, name, network)
 	
 	if (submit) {
 		document.getElementById('advman-action').value = action;
-		document.getElementById('advman-action-target').value = id;
+		document.getElementById('advman-target').value = id;
 		document.getElementById('advman-form').submit();
 	}
 }
@@ -50,7 +51,7 @@ function ADS_setAction(action, id, name, network)
 <form action="" method="post" id="advman-form" enctype="multipart/form-data">
 <input type="hidden" id="advman-mode" name="advman-mode" value="list_ads" />
 <input type="hidden" id="advman-action" name="advman-action" />
-<input type="hidden" id="advman-action-target" name="advman-action-target" />
+<input type="hidden" id="advman-target" name="advman-target" />
 
 <div class="tablenav">
 
@@ -111,21 +112,21 @@ function ADS_setAction(action, id, name, network)
 	</tfoot>
 
 	<tbody>
-<?php foreach ($_advman['ads'] as $id => $ad) : ?>
+<?php foreach ($ads as $ad) : ?>
 <?php if ( ($filterActive == 'active' && $ad->active) || ($filterActive == 'inactive' && !$ad->active) || empty($filterActive) ) : ?>
-<?php if ( ($filterNetwork == $ad->getNetwork()) || empty($filterNetwork) ) : ?>
+<?php if ( ($filterNetwork == $ad->network) || empty($filterNetwork) ) : ?>
 	<tr id='post-3' class='alternate author-self status-publish iedit' valign="top">
-		<th scope="row" class="check-column"><input type="checkbox" name="advman-action-targets[]" value="<?php echo $ad->id; ?>" /></th>
+		<th scope="row" class="check-column"><input type="checkbox" name="advman-targets[]" value="<?php echo $ad->id; ?>" /></th>
 		<td class="post-title column-title">
 			<strong><a class="row-title" href="javascript:ADS_setAction('edit','<?php echo $ad->id; ?>');" title="<?php printf(__('Edit the ad &quot;%s&quot;', 'advman'), $ad->name); ?>">[<?php echo $ad->id; ?>] <?php echo $ad->name; ?></a></strong>
 			<div class="row-actions">
 				<span class='edit'><a href="javascript:ADS_setAction('edit','<?php echo $ad->id; ?>');" title="<?php printf(__('Edit the ad &quot;%s&quot;', 'advman'), $ad->name); ?>"><?php _e('Edit', 'advman'); ?></a> | </span>
 				<span class='edit'><a class='submitdelete' title="<?php _e('Copy this ad', 'advman'); ?>" href="javascript:ADS_setAction('copy','<?php echo $ad->id; ?>');"><?php _e('Copy', 'advman'); ?></a> | </span>
-				<span class='edit'><a class='submitdelete' title="<?php _e('Delete this ad', 'advman'); ?>" href="javascript:ADS_setAction('delete','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>', '<?php echo $ad->getNetworkName(); ?>');" onclick=""><?php _e('Delete', 'advman'); ?></a> | </span>
+				<span class='edit'><a class='submitdelete' title="<?php _e('Delete this ad', 'advman'); ?>" href="javascript:ADS_setAction('delete','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>', '<?php echo $ad->network_name; ?>');" onclick=""><?php _e('Delete', 'advman'); ?></a> | </span>
 				<span class='edit'><a href="<?php echo $ad->get_preview_url(); ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview', 'advman'); ?></a></span>
 			</div>
 		</td>
-		<td class="author column-author"><a href="javascript:ADS_setAction('edit','<?php echo $ad->getNetwork(); ?>');" title="<?php printf(__('Edit the ad network &quot;%s&quot;', 'advman'), $ad->getNetworkName()); ?>"><?php echo $ad->getNetworkName(); ?></a></td>
+		<td class="author column-author"><a href="javascript:ADS_setAction('edit','<?php echo $ad->network; ?>');" title="<?php printf(__('Edit the ad network &quot;%s&quot;', 'advman'), $ad->network_name); ?>"><?php echo $ad->network_name; ?></a></td>
 		<td class="categories column-categories"> <?php echo $this->displayFormat($ad); ?></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('<?php echo ($ad->active) ? 'deactivate' : 'activate'; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $_advman['default-ad']) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
@@ -170,29 +171,29 @@ function ADS_setAction(action, id, name, network)
 	 */
 	function displayFormat($ad)
 	{
-		$format = $ad->get('adformat');
+		$format = $ad->get_property('adformat');
 		
 		// If format is custom, format it like:  Custom (468x60)
 		if ($format == 'custom') {
-			$format = __('Custom', 'advman') . ' (' . $ad->get('width') . 'x' . $ad->get('height') . ')';
+			$format = __('Custom', 'advman') . ' (' . $ad->get_property('width') . 'x' . $ad->get('height') . ')';
 		}
 		
 		// Find a default if the format is not filled in
 		if (empty($format)) {
-			$format = $ad->get_default('adformat');
+			$format = $ad->get_network_property('adformat');
 			if ($format == 'custom') {
-				$format = __('Custom', 'advman') . ' (' . $ad->get('width') . 'x' . $ad->get('height') . ')';
+				$format = __('Custom', 'advman') . ' (' . $ad->get_property('width') . 'x' . $ad->get('height') . ')';
 			}
 			if (!empty($format)) {
 				$format = "<span style='color:gray;'>" . $format . "</span>";
 			}
 		}
 		
-		$type = $ad->get('adtype');
+		$type = $ad->get_property('adtype');
 		
 		// If there is an ad type, prefix it on to the format
 		if (empty($type)) {
-			$type = $ad->get_default('adtype');
+			$type = $ad->get_network_property('adtype');
 			if (!empty($type)) {
 				$types = array(
 					'ad' => __('Ad Unit', 'advmgr'),

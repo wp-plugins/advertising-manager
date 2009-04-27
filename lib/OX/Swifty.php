@@ -25,14 +25,6 @@ class OX_Swifty
 		$this->sync();
 	}
 	
-	function getDal()
-	{
-		if (!is_object($this->dal)) {
-			$this->dal = new $this->dalClassName;
-		}
-		return $this->dal;
-	}
-	
 	function addAction($key, $value)
 	{
 		$actions = $this->actions[$key];
@@ -49,75 +41,61 @@ class OX_Swifty
 		return $this->actions[$key];
 	}
 	
-	function saveAdSettings($id)
+	function saveAdProperties($id)
 	{
-		$dal = $this->getDal();
-		$ad = $dal->getAd($id);
+		$ad = $this->dal->select_ad($id);
 		
 		if ($ad) {
-			$ad->saveSettings($properties);
-			return $dal->setAd($id, $ad);
+			$ad->saveProperties($properties);
+			return $this->dal->update_ad($id, $ad);
 		}
 		
 		return false;
 	}
 	
-	function saveNetworkSettings($id)
+	function saveNetworkProperties($id)
 	{
-		$dal = $this->getDal();
-		$network = $dal->getAdNetwork($id);
+		$network = $this->dal->select_network($id);
 		
 		if ($network) {
-			$network->saveSettings($properties);
-			return $dal->setAdNetwork($id, $network);
+			$network->saveProperties($properties);
+			return $this->dal->update_ad_network($id, $network);
 		}
 		
 		return false;
 	}
 	
-	function addAd($ad)
+	function insertAd($ad)
 	{
-		$dal = $this->getDal();
-		return $dal->addAd($ad);
+		return $this->dal->insert_ad($ad);
+	}
+	
+	function deleteAd($id)
+	{
+		return $this->dal->delete_ad($id);
 	}
 	
 	function getAds()
 	{
-		$dal = $this->getDal();
-		return $dal->getAds();
+		return $this->dal->select_ads();
 	}
 	
 	function getAd($id)
 	{
-		$dal = $this->getDal();
-		return $dal->getAd($id);
+		return $this->dal->select_ad($id);
 	}
 	
 	function setAd($ad)
 	{
-		$dal = $this->getDal();
-		return $dal->setAd($ad);
-	}
-	
-	function getKey($name)
-	{
-		$dal = $this->getDal();
-		return $dal->getKey($name);
-	}
-	
-	function setKey($name, $value)
-	{
-		$dal = $this->getDal();
-		return $dal->setKey($name, $value);
+		return $this->dal->update_ad($ad);
 	}
 	
 	function copyAd($id)
 	{
-		$dal = $this->getDal();
-		$ad = $dal->getAd($id);
-		
+		$ad = $this->dal->select_ad($id);
 		if ($ad) {
-			return $dal->insertAd($ad);
+			$ad = version_compare(phpversion(), '5.0') < 0 ? $ad : clone($ad); // Hack to deal with PHP 4/5 incompatiblity with cloning
+			return $this->dal->insert_ad($ad);
 		}
 		
 		return false;
@@ -133,7 +111,7 @@ class OX_Swifty
 			foreach ($networks as $network) {
 				if (call_user_func(array($network, 'import_detect_network'), $tag)) {
 					$ad = new $network;
-					$ad->import_settings($tag);
+					$ad->import($tag);
 					$imported = true;
 					break; //leave the foreach loop
 				}
@@ -146,23 +124,22 @@ class OX_Swifty
 			$ad->import_settings($tag);
 		}
 		
-		$id = $this->addAd($ad);
+		$id = $this->insertAd($ad);
 		
 		return $ad;
 	}
 	
 	function setAdActive($id, $active)
 	{
-		global $_advman;
-		
-		//Set selected advert as active
-		$id = advman_admin::validate_id($id);
-		
-		if ($_advman['ads'][$id]->active != $active) {
-			$_advman['ads'][$id]->active = $active;
-			$_advman['ads'][$id]->add_revision();
-			update_option('plugin_adsensem', $_advman);
+		$ad = $this->dal->select_ad($id);
+		if ($active != $ad->active) {
+			$ad->active = $active;
+			$ad->add_revision();
+			$this->dal->update_ad($ad);
+			return true;
 		}
+		
+		return false;
 	}
 		
 	// turn on/off optimisation across openx for all ads
@@ -172,7 +149,7 @@ class OX_Swifty
 		
 		$market = ($active) ? 'yes' : 'no';
 		foreach ($_advman['ads'] as $id => $ad) {
-			$_advman['ads'][$id]->set('openx-market', $market);
+			$_advman['ads'][$id]->set_property('openx-market', $market);
 		}
 		foreach ($_advman['defaults'] as $network => $settings) {
 			$_advman['defaults'][$network]['openx-market'] = $market;
@@ -190,7 +167,7 @@ class OX_Swifty
 		foreach ($_advman['ads'] as $id => $ad) {
 			if ( ($ad->name == $name) && ($ad->is_available()) ) {
 				$ads[] = $ad;
-				$totalWeight += $ad->get('weight', true);
+				$totalWeight += $ad->get('weight');
 			}
 		}
 		// Pick the ad
@@ -199,7 +176,7 @@ class OX_Swifty
 		// Loop through ads until the selected one is chosen
 		$wt = 0;
 		foreach ($ads as $ad) {
-			$wt += $ad->get('weight', true);
+			$wt += $ad->get('weight');
 			if ( ($wt / $totalWeight) > $rnd) {
 				// Display the ad
 				return $ad;
@@ -217,10 +194,10 @@ class OX_Swifty
 				$_advman_counter['id'][$ad->id]++;
 			}
 			
-			if (empty($_advman_counter['network'][$ad->getNetwork()])) {
-				$_advman_counter['network'][$ad->getNetwork()] = 1;
+			if (empty($_advman_counter['network'][$ad->network])) {
+				$_advman_counter['network'][$ad->network] = 1;
 			} else {
-				$_advman_counter['network'][$ad->getNetwork()]++;
+				$_advman_counter['network'][$ad->network]++;
 			}
 		}
 	}
@@ -231,20 +208,20 @@ class OX_Swifty
 	{
 		$sync = $this->dal->getSetting('openx-sync');
 		if ($sync) {
-			$timestamp = $this->dal->getSetting('last-sync');
+			$timestamp = $this->dal->select_setting('last-sync');
 //			$timestamp = 1235710700; //FOR TESTING
 			$now = mktime(0,0,0);
 			if (empty($timestamp) || ($now - $timestamp > 0) ) {
-				$this->dal->setSetting('last-sync', $now);
+				$this->dal->update_setting('last-sync', $now);
 				
 				$params = array(
-					'p' => $this->dal->getSetting('product-name'),
-					'i' => $this->dal->getSetting('publisher-id'),
-					'v' => $this->dal->getSetting('product-version'),
-					'w' => $this->dal->getSetting('host-version'),
-					'e' => $this->dal->getSetting('admin-email'),
-					'u' => $this->dal->getSetting('user-login'),
-					's' => $this->dal->getSetting('website-url'),
+					'p' => $this->dal->select_setting('product-name'),
+					'i' => $this->dal->select_setting('publisher-id'),
+					'v' => $this->dal->select_setting('product-version'),
+					'w' => $this->dal->select_setting('host-version'),
+					'e' => $this->dal->select_setting('admin-email'),
+					'u' => $this->dal->select_setting('user-login'),
+					's' => $this->dal->select_setting('website-url'),
 				);
 				
 				$id = base64_encode(serialize($params));

@@ -27,7 +27,6 @@ class OX_Tools
 		$className = null;
 		
 		if (is_object($class)) {
-			$shortName = $ad->shortName;
 			$template = OX_Admin_Wordpress::get_action('display_template_' . $name, get_class($class));
 			
 			if (file_exists($template[0])) {

@@ -12,7 +12,7 @@ class Template_CreateAd
 		<form action="admin.php?page=advman-manage" method="post" id="advman-form" enctype="multipart/form-data">
 			<input type="hidden" name="advman-mode" id="advman-mode" value="create_ad">	
 			<input type="hidden" name="advman-action" id="advman-action">
-			<input type="hidden" name="advman-action-target" id="advman-action-target">
+			<input type="hidden" name="advman-target" id="advman-target">
 			<h2><?php _e('Create Ad', 'advman'); ?></h2>
 			
 			<table>

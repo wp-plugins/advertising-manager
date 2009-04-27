@@ -3,14 +3,11 @@ class OX_Adnet
 {
 	var $name; //Name of this ad
 	var $id; // ID of the ad
-	var $p; //$p holds Ad properties (e.g. dimensions etc.) - acessible through $this->get(''); see $this->get_default('') for default merged
 	var $active; //whether this ad can display
-	
-	static $defaults;
-	static $revisions;
-	static $shortName = 'Ad';
-	static $url = '';
-	static $networkName = '';
+	var $network;
+
+	var $p; //$p holds Ad properties (e.g. dimensions etc.) - acessible through $this->get(''); see $this->get_network_property('') for default merged
+	static $np; //$np holds Network properties - defaults, network settings, etc.
 	
 	//Global start up functions for all network classes	
 	function OX_Adnet()
@@ -18,44 +15,45 @@ class OX_Adnet
 		global $advman_engine;
 		
 		$this->active = true;
-		$this->name = OX_Tools::generate_name(self::$shortName);
-	}
-	
-	function getNetworkName()
-	{
-		return self::$networkName;
-	}
-	
-	function getNetwork()
-	{
-		return get_class($this);
+		$this->network = get_class($this);
+		$this->name = OX_Tools::generate_name($this->mnemonic);
 	}
 	
 	/**
 	 * Returns a property setting
 	 * @param $key the property name
-	 * @param $default whether to return the default setting if the property is not set
 	 */
-	function get($key, $default = false)
+	function get($key)
 	{
-		// Return just the property
-		if (!$default) {
-			return isset($this->p[$key]) ? $this->p[$key] : '';
-		}
-		
-		// Return the default
-		if (!isset($this->p[$key]) || $this->p[$key] == '') {
-			return $this->get_default($key);
-		}
-		
-		// Return the property
-		return $this->p[$key];
+		$property = $this->get_property($key);
+		return $property == '' ? $this->get_network_property($key) : $property;
 	}
 	
-	function get_default($key)
+	function get_property($key)
 	{
-		$defaults = self::$defaults;
-		return isset($defaults[$key]) ? $defaults[$key] : '';
+		$properties = $this->get_properties();
+		return isset($properties[$key]) ? $properties[$key] : '';
+	}
+	
+	function get_network_property($key)
+	{
+		$properties = $this->get_network_properties();
+		return isset($properties[$key]) ? $properties[$key] : '';
+	}
+	
+	function get_properties()
+	{
+		return $this->p;
+	}
+	
+	function get_network_properties()
+	{
+		$properties = self::$np[get_class($this)];
+		if (empty($properties)) {
+			$properties = $this->get_network_property_defaults();
+			$this->set_network_properties($properties);
+		}
+		return $properties;
 	}
 	
 	/**
@@ -64,29 +62,48 @@ class OX_Adnet
 	 * @param $value the value to set the property to.  If the value is null, the property will be deleted.
 	 * @param $default if true, the default will be set.  Otherwise, the property will be set.
 	 */
-	function set($key, $value, $default = false)
+	function set_property($key, $value)
 	{
-		$properties = $default ? self::$defaults : $this->p;
-		
-		$v = isset($properties[$key]) ? $properties[$key] : null;
-		
+		$properties = $this->get_properties();
+		$this->_set($properties, $key, $value);
+		$this->set_properties($properties);
+	}
+	
+	function set_network_property($key, $value)
+	{
+		$properties = $this->get_network_properties();
+		$this->_set($properties, $key, $value);
+		$this->set_network_properties($properties);
+	}
+	
+	function _set(&$properties, $key, $value)
+	{
 		if (is_null($value)) {
 			unset($properties[$key]);
 		} else {
 			$properties[$key] = $value;
 		}
 		
-		if ($default) {
-			self::$defaults = $properties;
-		} else {
-			$this->p = $properties;
+		if ($key == 'adformat' && $value !== 'custom') {
+			if (empty($value)) {
+				$width = '';
+				$height = '';
+			} else {
+				list($width, $height) = split('[x]', $value);
+			}
+			$this->_set($properties, 'width', $width);
+			$this->_set($properties, 'height', $height);
 		}
-		
-		if ($key == 'adformat' && $key !== 'custom') {
-			list($width, $height, $null) = split('[x]', $value);
-			$this->set('width', $width, $default);
-			$this->set('height', $height, $default);
-		}
+	}
+	
+	function set_network_properties($properties)
+	{
+		self::$np[get_class($this)] = $properties;
+	}
+	
+	function set_properties($properties)
+	{
+		$this->p = $properties;
 	}
 	
 	/**
@@ -103,8 +120,8 @@ class OX_Adnet
 		}
 		
 		// Filter by counter
-		$counter = $this->get('counter', true);
-		if (!empty($counter) && ($advman_engine->counter['network'][$this->network] >= $counter)) {
+		$counter = $this->get('counter');
+		if (!empty($counter) && ($this->get_network_property('counter') >= $counter)) {
 			return false;
 		}
 		
@@ -143,27 +160,27 @@ class OX_Adnet
 		);
 	}
 	
-	function render_ad($search = array(), $replace = array())
+	function display($search = array(), $replace = array())
 	{
 		$search[] = '{{random}}';
 		$replace[] = mt_rand();
 		$search[] = '{{timestamp}}';
 		$replace[] = time();
 		
-		$properties = $this->get_default_properties();
-		foreach ($properties as $property => $default) {
+		$properties = $this->get_network_property_defaults();
+		foreach ($properties as $property => $value) {
 			$search[] = '{{' . $property . '}}';
-			$replace[] = $this->get($property, true);
+			$replace[] = $this->get($property);
 		}
-		$code  = $this->get('html-before', true);
+		$code  = $this->get('html-before');
 		$code .= $this->get('code');
-		$code .= $this->get('html-after', true);
+		$code .= $this->get('html-after');
 		
 		return str_replace($search, $replace, $code);
 //		return $this->get('code');
 	}
 	
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		return array (
 			'adformat' => '728x90',
@@ -193,7 +210,7 @@ class OX_Adnet
 	
 	function import_settings($code)
 	{
-		$this->set('code', $code);
+		$this->set_property('code', $code);
 	}
 	
 	function get_preview_url()
@@ -201,9 +218,9 @@ class OX_Adnet
 		return get_bloginfo('wpurl') . '/wp-admin/edit.php?page=advman-manage&advman-ad-id=' . $this->id;
 	}
 
-	function get_last_edit($default = false)
+	function get_last_edit($network = false)
 	{
-		$revisions = $default ? self::$revisions : $this->get('revisions');
+		$revisions = $network ? $this->get_network_property('revisions') : $this->get('revisions');
 		
 		$last_user = __('Unknown', 'advman');
 		$last_timestamp = 0;
@@ -219,13 +236,9 @@ class OX_Adnet
 		return array($last_user, $last_timestamp);
 	}
 	
-	function add_revision($default = false)
+	function add_revision($network = false)
 	{
-		if ($default) {
-			$revisions = self::$revisions;
-		} else {
-			$revisions = $this->get('revisions');
-		}
+		$revisions = $network ? $this->get_network_property('revisions') : $this->get('revisions');
 		
 		// Get the user login information
 		global $user_login;
@@ -253,10 +266,10 @@ class OX_Adnet
 		
 		krsort($r);
 		
-		if ($default) {
-			self::$revisions = $r;
+		if ($network) {
+			$this->set_network_property('revisions', $r);
 		} else {
-			$this->set('revisions', $r);
+			$this->set_property('revisions', $r);
 		}
 	}
 }

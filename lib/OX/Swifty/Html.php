@@ -7,26 +7,19 @@ $_advman_networks['OX_Adnet_Html']  = array(
 */
 class OX_Adnet_Html extends OX_Adnet
 {
-	/**
-	 * The short name for any ad of this type, used when generating a unique name for the ad, or creating class files
-	 */
-	static $shortName = 'Html';
-	
-	/**
-	 * The name of the network.  Used when displaying ads by network.
-	 */
-	static $networkName = 'HTML Code';
-	
 	function OX_Adnet_Html()
 	{
+		$this->set_network_property('mnemonic', 'Html');
+		$this->set_network_property('name', 'HTML Code');
+
 		$this->OX_Adnet();
 	}
 	
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 		);
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function import_settings($code)
@@ -44,13 +37,13 @@ class OX_Adnet_Html extends OX_Adnet
 			$height = $matches[1];
 		}
 		if ($width != '') {
-			$this->set('width', $width);
+			$this->set_property('width', $width);
 		}
 		if ($height != '') {
-			$this->set('height', $height);
+			$this->set_property('height', $height);
 		}
 		if (($width != '') && ($height != '')) {
-			$this->set('adformat', $width . 'x' . $height); //Only set if both width and height present
+			$this->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 	}
 }

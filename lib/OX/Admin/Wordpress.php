@@ -12,9 +12,7 @@ class OX_Admin_Wordpress
 	{
 		global $wp_version;
 		
-		add_action('admin_print_scripts', array('advman_admin', 'add_scripts'));
-//		add_action('admin_head', array('advman_admin','add_header_script'));
-//		add_action('admin_footer', array('advman_admin','admin_callback_editor'));
+		add_action('admin_print_scripts', array('OX_Admin_Wordpress', 'add_scripts'));
 		
 		if (version_compare($wp_version,"2.7-alpha", '>')) {
 			add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-manage', array('OX_Admin_Wordpress','process'));
@@ -106,12 +104,16 @@ class OX_Admin_Wordpress
 			}
 		}
 		
-		$properties = $ad->get_default_properties();
+		$properties = $ad->get_network_property_defaults();
 		if (!empty($properties)) {
 			foreach ($properties as $property => $d) {
 				if (isset($_POST["advman-{$property}"])) {
 					$value = OX_Tools::sanitize($_POST["advman-{$property}"]);
-					$ad->set($property, $value, $default);
+					if ($default) {
+						$ad->set_network_property($property, $value);
+					} else {
+						$ad->set_property($property, $value, $default);
+					}
 				}
 			}
 		}
@@ -233,7 +235,6 @@ class OX_Admin_Wordpress
 				} elseif ($mode == 'settings') {
 					OX_Admin_Wordpress::save_settings();
 				}
-				break;
 			
 				if ($action == 'save' && $mode != 'settings') {
 					$mode = 'list_ads';
