@@ -1,7 +1,7 @@
 <?php
 if(!ADVMAN_VERSION) {die();}
 
-class Template_CreateAd
+class Template_Create
 {
 	function display($target = null)
 	{
