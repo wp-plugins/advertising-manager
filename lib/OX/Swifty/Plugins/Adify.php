@@ -6,13 +6,13 @@ $_advman_networks['OX_Adnet_Adify'] = array(
 	'www-signup'	=>	'http://www.adify.com',
 );
 */
-class OX_Adnet_Adify extends OX_Adnet
+class OX_Swifty_Plugins_Adify extends OX_Adnet
 {
 	var $mnemonic = 'Adify';
 	var $network_name = 'Adify';
 	var $url = 'http://www.adify.com';
 	
-	function OX_Adnet_Adify()
+	function OX_Swifty_Plugins_Adify()
 	{
 		$this->OX_Adnet();
 	}

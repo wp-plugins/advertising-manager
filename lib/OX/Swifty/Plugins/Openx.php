@@ -6,13 +6,13 @@ $_advman_networks['OX_Adnet_Openx'] = array(
 		'www-signup' => 'http://www.openx.org/'
 		);
 */
-class OX_Adnet_Openx extends OX_Adnet
+class OX_Swifty_Plugins_Openx extends OX_Adnet
 {
 	var $mnemonic = 'Openx';
 	var $network_name = 'OpenX';
 	var $url = 'http://www.openx.org';
 	
-	function OX_Adnet_Openx()
+	function OX_Swifty_Plugins_Openx()
 	{
 		$this->OX_Adnet();
 	}

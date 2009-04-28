@@ -280,7 +280,7 @@ class Advman_Admin
 	 */
 	function create()
 	{
-		$template = OX_Tools::get_template('CreateAd');
+		$template = Advman_Tools::get_template('Create');
 		$template->display();
 	}
 	

@@ -1,5 +1,7 @@
 <?php
-class OX_Adnet
+require_once (OX_SWIFTY_PATH . '/Plugin.php');
+
+class OX_Swifty_Adnet extends OX_Swifty_Plugin
 {
 	var $name; //Name of this ad
 	var $id; // ID of the ad
@@ -17,6 +19,11 @@ class OX_Adnet
 		$this->active = true;
 		$this->network = get_class($this);
 		$this->name = OX_Tools::generate_name($this->mnemonic);
+	}
+	
+	function register_plugin($engine)
+	{
+		$engine->addAction('ad_network', get_class($this));
 	}
 	
 	/**

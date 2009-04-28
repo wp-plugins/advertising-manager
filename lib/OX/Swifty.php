@@ -21,6 +21,7 @@ class OX_Swifty
 		// Load all Swifty plugins
 		OX_Tools::require_directory(OX_SWIFTY_PATH . '/Plugins');
 		
+		// Load the data access layer
 		if (is_null($dalClass)) {
 			$this->dal = new OX_Swifty_Dal();
 		} else {

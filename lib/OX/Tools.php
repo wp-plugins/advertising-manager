@@ -19,36 +19,6 @@ class OX_Tools
 		}
 	}
 
-	/**
-	 * Get a template based on the class of an object
-	 */
-	function get_template($name, $class = null)
-	{
-		$className = null;
-		
-		if (is_object($class)) {
-			$template = Advman_Admin::get_action('display_template_' . $name, get_class($class));
-			
-			if (file_exists($template[0])) {
-				include_once($template[0]);
-				$className = $template[1];
-			}
-		}
-		if (empty($className)) {
-			include_once(OX_TEMPLATE_PATH . "/{$name}.php");
-			$className = "Template_{$name}";
-		}
-		
-		return new $className;
-	}
-	
-	function major_version($v)
-	{
-		$mv=explode('.', $v);
-		return $mv[0]; //Return major version
-	}
-		
-	
 	function sort($ads)
 	{
 		uasort($ads, array('OX_Tools', '_sort_by_class'));

@@ -6,13 +6,13 @@ $_advman_networks['OX_Adnet_Adroll'] = array(
 	'www-signup'		=>	'http://www.adroll.com/tag/wordpress?r=ZPERWFQF25BGNG5EDWYBUV',
 );
 */
-class OX_Adnet_Adroll extends OX_Adnet
+class OX_Swifty_Plugins_Adroll extends OX_Adnet
 {
 	var $mnemonic = 'Adroll';
 	var $network_name = 'AdRoll';
 	var $url = 'http://www.adroll.com';
 	
-	function OX_Adnet_Adroll()
+	function OX_Swifty_Plugins_Adroll()
 	{
 		$this->OX_Adnet();
 	}

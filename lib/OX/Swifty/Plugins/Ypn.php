@@ -5,13 +5,13 @@ $_advman_networks['OX_Adnet_Ypn'] = array(
 	'www-signup'	=>	'http://ypn.yahoo.com/',														 
 );
 */
-class OX_Adnet_Ypn extends OX_Adnet
+class OX_Swifty_Plugins_Ypn extends OX_Adnet
 {
 	var $mnemonic = 'Ypn';
 	var $network_name = 'Yahoo! Publisher Network';
 	var $url = 'http://ypn.yahoo.com';
 	
-	function OX_Adnet_Ypn()
+	function OX_Swifty_Plugins_Ypn()
 	{
 		$this->OX_Adnet();
 	}

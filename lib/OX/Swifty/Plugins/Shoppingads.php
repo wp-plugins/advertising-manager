@@ -6,13 +6,13 @@ $_advman_networks['OX_Adnet_Shoppingads'] = array(
 		'www-signup'	=>	'http://www.shoppingads.com/refer_1ebff04bf5805f6da1b4',
 		 );
 */
-class OX_Adnet_Shoppingads extends OX_Adnet
+class OX_Swifty_Plugins_Shoppingads extends OX_Adnet
 {
 	var $mnemonic = 'Shoppingads';
 	var $network_name = 'Shopping Ads';
 	var $url = 'http://www.shoppingads.com';
 	
-	function OX_Adnet_Shoppingads()
+	function OX_Swifty_Plugins_Shoppingads()
 	{
 		$this->OX_Adnet();
 	}

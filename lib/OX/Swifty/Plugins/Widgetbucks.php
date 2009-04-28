@@ -6,13 +6,13 @@ $_advman_networks['OX_Adnet_Widgetbucks']	= array(
 		'www-signup' => 'http://www.widgetbucks.com/home.page?referrer=468034'
 		);
 */
-class OX_Adnet_Widgetbucks extends OX_Adnet
+class OX_Swifty_Plugins_Widgetbucks extends OX_Adnet
 {
 	var $mnemonic = 'Widgetbucks';
 	var $network_name = 'WidgetBucks';
 	var $url = 'http://www.widgetbucks.com';
 	
-	function OX_Adnet_Widgetbucks()
+	function OX_Swifty_Plugins_Widgetbucks()
 	{
 		$this->OX_Adnet();
 	}

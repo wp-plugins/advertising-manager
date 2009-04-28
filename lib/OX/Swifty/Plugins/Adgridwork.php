@@ -6,20 +6,13 @@ $_advman_networks['OX_Adnet_Adgridwork'] = array(
 		'www-signup'	=>	'http://www.adgridwork.com/?r=18501',														 
 		 );
 */
-/*
-
-  INITIALISATION
-  All functions in here called at startup (after other plugins have loaded, in case
-  we need to wait for the widget-plugin).
-*/
-
-class OX_Adnet_Adgridwork extends OX_Adnet
+class OX_Swifty_Plugins_Adgridwork extends OX_Adnet
 {
 	var $mnemonic = 'Adgridwork';
 	var $network_name = 'AdGridWork';
 	var $url = 'http://www.adgridwork.com';
 	
-	function OX_Adnet_Adgridwork()
+	function OX_Swifty_Plugins_Adgridwork()
 	{
 		$this->OX_Adnet();
 	}

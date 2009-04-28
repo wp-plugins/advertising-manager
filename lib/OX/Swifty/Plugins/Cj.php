@@ -6,13 +6,13 @@ $_advman_networks['OX_Adnet_Cj'] = array(
 		'www-signup'		=>	'http://www.qksrv.net/click-2335597-7282777',
 	);
 */
-class OX_Adnet_Cj extends OX_Adnet
+class OX_Swifty_Plugins_Cj extends OX_Adnet
 {
 	var $mnemonic = 'Cj';
 	var $network_name = 'Commission Junction';
 	var $url = 'http://www.cj.com';
 	
-	function OX_Adnet_Cj()
+	function OX_Swifty_Plugins_Cj()
 	{
 		$this->OX_Adnet();
 	}

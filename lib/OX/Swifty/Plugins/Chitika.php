@@ -6,13 +6,13 @@ $_advman_networks['OX_Adnet_Chitika'] = array(
 	'www-signup'	=>	'http://chitika.com/publishers.php?refid=switzer',														 
  );
 */
-class OX_Adnet_Chitika extends OX_Adnet
+class OX_Swifty_Plugins_Chitika extends OX_Adnet
 {
 	var $mnemonic = 'Chitika';
 	var $network_name = 'Chitika';
 	var $url = 'http://www.chitika.com';
 	
-	function OX_Adnet_Chitika()
+	function OX_Swifty_Plugins_Chitika()
 	{
 		$this->OX_Adnet();
 	}

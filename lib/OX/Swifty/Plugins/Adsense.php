@@ -9,13 +9,13 @@ $_advman_networks['OX_Adnet_Adsense'] = array(
 		'limit-ads' => 9
 		);
 */
-class OX_Adnet_Adsense extends OX_Adnet
+class OX_Swifty_Plugins_Adsense extends OX_Adnet
 {
 	var $mnemonic = 'Adsense';
 	var $network_name = 'Google Adsense';
 	var $url = 'http://www.google.com/adsense';
 	
-	function OX_Adnet_Adsense()
+	function OX_Swifty_Plugins_Adsense()
 	{
 		$this->OX_Adnet();
 	}

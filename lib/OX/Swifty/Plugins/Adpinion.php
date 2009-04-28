@@ -6,20 +6,13 @@ $_advman_networks['OX_Adnet_Adpinion'] = array(
 	'www-signup'		=>	'http://www.adpinion.com/',
 );
 */
-/*
-
-  INITIALISATION
-  All functions in here called at startup (after other plugins have loaded, in case
-  we need to wait for the widget-plugin).
-*/
-
-class OX_Adnet_Adpinion extends OX_Adnet
+class OX_Swifty_Plugins_Adpinion extends OX_Adnet
 {
 	var $mnemonic = 'Adpinion';
 	var $network_name = 'Adpinion';
 	var $url = 'http://www.adpinion.com';
 	
-	function OX_Adnet_Adpinion()
+	function OX_Swifty_Plugins_Adpinion()
 	{
 		$this->OX_Adnet();
 	}

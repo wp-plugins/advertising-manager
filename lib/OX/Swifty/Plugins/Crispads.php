@@ -6,13 +6,13 @@ $_advman_networks['OX_Adnet_Crispads']	= array(
 		'www-signup' => 'http://www.crispads.com/'
 		);
 */
-class OX_Adnet_Crispads extends OX_Adnet
+class OX_Swifty_Plugins_Crispads extends OX_Adnet
 {
 	var $mnemonic = 'Crispads';
 	var $network_name = 'Crisp Ads';
 	var $url = 'http://www.crispads.com';
 	
-	function OX_Adnet_Crispads()
+	function OX_Swifty_Plugins_Crispads()
 	{
 		$this->OX_Adnet();
 	}

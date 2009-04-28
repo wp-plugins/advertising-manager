@@ -1,22 +1,22 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Adnet.php');	
+require_once(OX_SWIFTY_PATH . '/Adnet.php');
 /*
 $_advman_networks['OX_Adnet_Adbrite'] = array(
 	'www-create' => 'http://www.adbrite.com/zones/commerce/purchase.php?product_id_array=22',
 	'www-signup'	=>	'http://www.adbrite.com/mb/landing_both.php?spid=51549&afb=120x60-1-blue',														 
  );
 */
-class OX_Adnet_Adbrite extends OX_Adnet
+class OX_Swifty_Plugins_Adbrite extends OX_Adnet
 {
 	var $mnemonic = 'Adbrite';
 	var $network_name = 'AdBrite';
 	var $url = 'http://www.adbrite.com';
 	
-	function OX_Adnet_Adbrite()
+	function OX_Swifty_Plugins_Adbrite()
 	{
 		$this->OX_Adnet();
 	}
-		
+	
 	function get_network_property_defaults()
 	{
 		$properties = array(
