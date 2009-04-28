@@ -1,7 +1,8 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Adnet.php');	
+require_once(OX_SWIFTY_PATH . '/Ad.php');	
 /*
-$_advman_networks['OX_Adnet_Adsense'] = array(
+$_advman_networks['OX_Swifty_Ad
+_Adsense'] = array(
 		'ico'		=>	'http://www.google.com/favicon.ico',
 		'www-create' => 'https://www.google.com/adsense/adsense-products',
 		'www-signup'		=>	'https://www.google.com/adsense/',
@@ -9,7 +10,7 @@ $_advman_networks['OX_Adnet_Adsense'] = array(
 		'limit-ads' => 9
 		);
 */
-class OX_Swifty_Plugins_Adsense extends OX_Adnet
+class OX_Swifty_Plugins_Adsense extends OX_Swifty_Ad
 {
 	var $mnemonic = 'Adsense';
 	var $network_name = 'Google Adsense';
@@ -17,7 +18,7 @@ class OX_Swifty_Plugins_Adsense extends OX_Adnet
 	
 	function OX_Swifty_Plugins_Adsense()
 	{
-		$this->OX_Adnet();
+		$this->OX_Swifty_Ad();
 	}
 	
 	function get_network_property_defaults()

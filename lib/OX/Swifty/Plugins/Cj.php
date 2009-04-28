@@ -1,12 +1,13 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Adnet.php');	
+require_once(OX_SWIFTY_PATH . '/Ad.php');	
 /*
-$_advman_networks['OX_Adnet_Cj'] = array(
+$_advman_networks['OX_Swifty_Ad
+_Cj'] = array(
 		'www-create' => 'https://members.cj.com/member/publisher/accounts/listmyadvertisers.do?sortKey=active_start_date&sortOrder=DESC',
 		'www-signup'		=>	'http://www.qksrv.net/click-2335597-7282777',
 	);
 */
-class OX_Swifty_Plugins_Cj extends OX_Adnet
+class OX_Swifty_Plugins_Cj extends OX_Swifty_Ad
 {
 	var $mnemonic = 'Cj';
 	var $network_name = 'Commission Junction';
@@ -14,12 +15,13 @@ class OX_Swifty_Plugins_Cj extends OX_Adnet
 	
 	function OX_Swifty_Plugins_Cj()
 	{
-		$this->OX_Adnet();
+		$this->OX_Swifty_Ad();
 	}
 	
 	function display()
 	{
-		$xdomains = OX_Adnet_Cj::get_domains();
+		$xdomains = OX_Swifty_Ad
+_Cj::get_domains();
 		$search[] = '{{xdomain}}';
 		$replace[] = $xdomains[array_rand($xdomains)];
 		
@@ -61,7 +63,8 @@ class OX_Swifty_Plugins_Cj extends OX_Adnet
 	function import_detect_network($code)
 	{
 		$match = false;
-		$xdomains = OX_Adnet_Cj::get_domains();
+		$xdomains = OX_Swifty_Ad
+_Cj::get_domains();
 		foreach ($xdomains as $d) {
 			$match = $match || (strpos($code, ('href="http://' . $d)) !== false);
 		}

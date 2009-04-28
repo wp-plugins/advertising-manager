@@ -1,12 +1,13 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Adnet.php');	
+require_once(OX_SWIFTY_PATH . '/Ad.php');	
 /*
-$_advman_networks['OX_Adnet_Chitika'] = array(
+$_advman_networks['OX_Swifty_Ad
+_Chitika'] = array(
 	'www-create' => 'https://chitika.com/affiliate/plcode.php',
 	'www-signup'	=>	'http://chitika.com/publishers.php?refid=switzer',														 
  );
 */
-class OX_Swifty_Plugins_Chitika extends OX_Adnet
+class OX_Swifty_Plugins_Chitika extends OX_Swifty_Ad
 {
 	var $mnemonic = 'Chitika';
 	var $network_name = 'Chitika';
@@ -14,7 +15,7 @@ class OX_Swifty_Plugins_Chitika extends OX_Adnet
 	
 	function OX_Swifty_Plugins_Chitika()
 	{
-		$this->OX_Adnet();
+		$this->OX_Swifty_Ad();
 	}
 		
 	function get_network_property_defaults()

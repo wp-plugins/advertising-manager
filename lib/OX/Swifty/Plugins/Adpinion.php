@@ -1,12 +1,13 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Adnet.php');	
+require_once(OX_SWIFTY_PATH . '/Ad.php');	
 /*
-$_advman_networks['OX_Adnet_Adpinion'] = array(
+$_advman_networks['OX_Swifty_Ad
+_Adpinion'] = array(
 	'www-create'	=>	'http://www.adpinion.com/',
 	'www-signup'		=>	'http://www.adpinion.com/',
 );
 */
-class OX_Swifty_Plugins_Adpinion extends OX_Adnet
+class OX_Swifty_Plugins_Adpinion extends OX_Swifty_Ad
 {
 	var $mnemonic = 'Adpinion';
 	var $network_name = 'Adpinion';
@@ -14,7 +15,7 @@ class OX_Swifty_Plugins_Adpinion extends OX_Adnet
 	
 	function OX_Swifty_Plugins_Adpinion()
 	{
-		$this->OX_Adnet();
+		$this->OX_Swifty_Ad();
 	}
 	
 	function display($search, $replace)

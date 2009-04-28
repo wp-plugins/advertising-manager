@@ -1,12 +1,13 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Adnet.php');	
+require_once(OX_SWIFTY_PATH . '/Ad.php');	
 /*
-$_advman_networks['OX_Adnet_Adify'] = array(
+$_advman_networks['OX_Swifty_Ad
+_Adify'] = array(
 	'www-create' => 'http://www.adify.com',
 	'www-signup'	=>	'http://www.adify.com',
 );
 */
-class OX_Swifty_Plugins_Adify extends OX_Adnet
+class OX_Swifty_Plugins_Adify extends OX_Swifty_Ad
 {
 	var $mnemonic = 'Adify';
 	var $network_name = 'Adify';
@@ -14,7 +15,7 @@ class OX_Swifty_Plugins_Adify extends OX_Adnet
 	
 	function OX_Swifty_Plugins_Adify()
 	{
-		$this->OX_Adnet();
+		$this->OX_Swifty_Ad();
 	}
 		
 	function get_network_property_defaults()

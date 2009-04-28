@@ -1,12 +1,13 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Adnet.php');	
+require_once(OX_SWIFTY_PATH . '/Ad.php');	
 /*
-$_advman_networks['OX_Adnet_Widgetbucks']	= array(
+$_advman_networks['OX_Swifty_Ad
+_Widgetbucks']	= array(
 		'www-create' => 'http://www.widgetbucks.com/widget.page?action=call&widgetID=',
 		'www-signup' => 'http://www.widgetbucks.com/home.page?referrer=468034'
 		);
 */
-class OX_Swifty_Plugins_Widgetbucks extends OX_Adnet
+class OX_Swifty_Plugins_Widgetbucks extends OX_Swifty_Ad
 {
 	var $mnemonic = 'Widgetbucks';
 	var $network_name = 'WidgetBucks';
@@ -14,7 +15,7 @@ class OX_Swifty_Plugins_Widgetbucks extends OX_Adnet
 	
 	function OX_Swifty_Plugins_Widgetbucks()
 	{
-		$this->OX_Adnet();
+		$this->OX_Swifty_Ad();
 	}
 	
 	function get_network_property_defaults()

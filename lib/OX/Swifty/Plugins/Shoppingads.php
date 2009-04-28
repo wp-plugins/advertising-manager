@@ -1,12 +1,13 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Adnet.php');	
+require_once(OX_SWIFTY_PATH . '/Ad.php');	
 /*
-$_advman_networks['OX_Adnet_Shoppingads'] = array(
+$_advman_networks['OX_Swifty_Ad
+_Shoppingads'] = array(
 		'www-create'	=>	'http://shoppingads.com/getcode/',
 		'www-signup'	=>	'http://www.shoppingads.com/refer_1ebff04bf5805f6da1b4',
 		 );
 */
-class OX_Swifty_Plugins_Shoppingads extends OX_Adnet
+class OX_Swifty_Plugins_Shoppingads extends OX_Swifty_Ad
 {
 	var $mnemonic = 'Shoppingads';
 	var $network_name = 'Shopping Ads';
@@ -14,7 +15,7 @@ class OX_Swifty_Plugins_Shoppingads extends OX_Adnet
 	
 	function OX_Swifty_Plugins_Shoppingads()
 	{
-		$this->OX_Adnet();
+		$this->OX_Swifty_Ad();
 	}
 		
 	function get_network_property_defaults()

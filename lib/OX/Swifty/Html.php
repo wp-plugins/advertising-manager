@@ -1,18 +1,23 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Adnet.php');	
+require_once(OX_SWIFTY_PATH . '/Ad.php');	
 /*
-$_advman_networks['OX_Adnet_Html']  = array(
+$_advman_networks['OX_Swifty_Ad
+_Html']  = array(
 	'www-signup'		=>	'',
 );
 */
-class OX_Adnet_Html extends OX_Adnet
+class OX_Swifty_Ad
+_Html extends OX_Swifty_Ad
+
 {
-	function OX_Adnet_Html()
+	function OX_Swifty_Ad
+_Html()
 	{
 		$this->set_network_property('mnemonic', 'Html');
 		$this->set_network_property('name', 'HTML Code');
 
-		$this->OX_Adnet();
+		$this->OX_Swifty_Ad
+();
 	}
 	
 	function get_network_property_defaults()

@@ -1,7 +1,7 @@
 <?php
 
 @define('OX_SWIFTY_PATH', dirname(__FILE__) . '/Swifty');
-require_once(OX_SWIFTY_PATH . '/Adnet.php');
+require_once(OX_SWIFTY_PATH . '/Ad.php');
 require_once(OX_SWIFTY_PATH . '/Dal.php');
 
 class OX_Swifty
@@ -137,7 +137,8 @@ class OX_Swifty
 		
 		// Not a pre-defined network - we will make it HTML code...
 		if (!$imported) {
-			$ad=new OX_Adnet_Html();
+			$ad=new OX_Swifty_Ad
+_Html();
 			$ad->import_settings($tag);
 		}
 		

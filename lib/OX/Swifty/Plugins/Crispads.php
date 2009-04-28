@@ -1,12 +1,13 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Adnet.php');	
+require_once(OX_SWIFTY_PATH . '/Ad.php');	
 /*
-$_advman_networks['OX_Adnet_Crispads']	= array(
+$_advman_networks['OX_Swifty_Ad
+_Crispads']	= array(
 		'www-create' => 'http://www.crispads.com/spinner/www/admin/zone-edit.php',
 		'www-signup' => 'http://www.crispads.com/'
 		);
 */
-class OX_Swifty_Plugins_Crispads extends OX_Adnet
+class OX_Swifty_Plugins_Crispads extends OX_Swifty_Ad
 {
 	var $mnemonic = 'Crispads';
 	var $network_name = 'Crisp Ads';
@@ -14,7 +15,7 @@ class OX_Swifty_Plugins_Crispads extends OX_Adnet
 	
 	function OX_Swifty_Plugins_Crispads()
 	{
-		$this->OX_Adnet();
+		$this->OX_Swifty_Ad();
 	}
 
 	function get_network_property_defaults()

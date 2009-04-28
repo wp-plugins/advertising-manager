@@ -1,12 +1,13 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Adnet.php');	
+require_once(OX_SWIFTY_PATH . '/Ad.php');	
 /*
-$_advman_networks['OX_Adnet_Adgridwork'] = array(
+$_advman_networks['OX_Swifty_Ad
+_Adgridwork'] = array(
 		'www-create' => 'http://www.adgridwork.com/u.php?page=submitsite',
 		'www-signup'	=>	'http://www.adgridwork.com/?r=18501',														 
 		 );
 */
-class OX_Swifty_Plugins_Adgridwork extends OX_Adnet
+class OX_Swifty_Plugins_Adgridwork extends OX_Swifty_Ad
 {
 	var $mnemonic = 'Adgridwork';
 	var $network_name = 'AdGridWork';
@@ -14,7 +15,7 @@ class OX_Swifty_Plugins_Adgridwork extends OX_Adnet
 	
 	function OX_Swifty_Plugins_Adgridwork()
 	{
-		$this->OX_Adnet();
+		$this->OX_Swifty_Ad();
 	}
 		
 	function get_network_property_defaults()
