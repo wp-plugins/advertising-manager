@@ -1,20 +1,10 @@
 <?php
 if(!ADVMAN_VERSION) {die();}
 
-class Template_CreateAd
+class Advman_Template_Create
 {
-	function Template_CreateAd()
-	{
-		// Scripts
-		wp_enqueue_script('postbox');
-		wp_enqueue_script('jquery-ui-draggable');
-	}
-	
 	function display($target = null)
 	{
-		// Get our options and see if we're handling a form submission.
-		global $_advman;
-		
 ?><div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
 	<h2><?php _e('Create Ad', 'advman'); ?></h2>

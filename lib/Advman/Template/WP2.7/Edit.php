@@ -1,13 +1,9 @@
 <?php
-require_once(ADVMAN_LIB . '/Tools.php');
-require_once(ADVMAN_TEMPLATE_PATH . '/Metabox.php');
 
 class Advman_Template_Edit
 {
 	function display($ad)
 	{
-		list($last_user, $last_timestamp, $last_timestamp2) = Advman_Tools::get_last_edit($ad);
-		
 ?>
 <div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
@@ -15,7 +11,7 @@ class Advman_Template_Edit
 	<form action="" method="post" id="advman-form" enctype="multipart/form-data">
 	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
 	<input type="hidden" name="advman-action" id="advman-action">
-	<input type="hidden" name="advman-action-target" id="advman-action-target" value="<?php echo $ad->id; ?>">
+	<input type="hidden" name="advman-target" id="advman-target" value="<?php echo $ad->id; ?>">
 <?php  
 		wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );  
 		wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
