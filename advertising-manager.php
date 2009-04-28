@@ -27,7 +27,7 @@ function advman_init()
 	// Get the template path
 	global $wp_version;
 	$version = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP2.6' : 'WP2.7';
-	@define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . "/lib/Advman/Templates/{$version}");
+	@define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . "/lib/Advman/Template/{$version}");
 
 	// Load the language file
 	load_plugin_textdomain('advman', false, 'advertising-manager/languages');

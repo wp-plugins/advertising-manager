@@ -218,24 +218,6 @@ class OX_Adnet
 		return get_bloginfo('wpurl') . '/wp-admin/edit.php?page=advman-manage&advman-ad-id=' . $this->id;
 	}
 
-	function get_last_edit($network = false)
-	{
-		$revisions = $network ? $this->get_network_property('revisions') : $this->get('revisions');
-		
-		$last_user = __('Unknown', 'advman');
-		$last_timestamp = 0;
-		
-		if (!empty($revisions)) {
-			foreach($revisions as $t => $u) {
-				$last_user = $u;
-				$last_timestamp = $t;
-				break; // just get first one - the array is sorted by reverse date
-			}
-		}
-		
-		return array($last_user, $last_timestamp);
-	}
-	
 	function add_revision($network = false)
 	{
 		$revisions = $network ? $this->get_network_property('revisions') : $this->get('revisions');

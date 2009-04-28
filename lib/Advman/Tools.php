@@ -2,6 +2,32 @@
 class Advman_Tools
 {
 	/**
+	 * Get the last edit of this ad
+	 */
+	function get_last_edit($revisions)
+	{
+		$last_user = __('Unknown', 'advman');
+		$last_timestamp = 0;
+		
+		if (!empty($revisions)) {
+			foreach($revisions as $t => $u) {
+				$last_user = $u;
+				$last_timestamp = $t;
+				break; // just get first one - the array is sorted by reverse date
+			}
+		}
+		
+		if ((time() - $last_timestamp) < (30 * 24 * 60 * 60)) { // less than 30 days ago
+			$last_timestamp =  human_time_diff($t);
+			$last_timestamp2 = date('l, F jS, Y @ h:ia', $t);
+		} else {
+			$last_timestamp =  __('> 30 days', 'advman');
+			$last_timestamp2 = '';
+		}
+		return array($last_user, $last_timestamp, $last_timestamp2);
+	}
+	
+	/**
 	 * Get a template based on the class of an object
 	 */
 	function get_template($name)
