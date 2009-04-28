@@ -1,21 +1,21 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Ad.php');	
+require_once(OX_LIB . '/Ad.php');	
 /*
-$_advman_networks['OX_Swifty_Ad
+$_advman_networks['OX_Ad
 _Adify'] = array(
 	'www-create' => 'http://www.adify.com',
 	'www-signup'	=>	'http://www.adify.com',
 );
 */
-class OX_Swifty_Plugins_Adify extends OX_Swifty_Ad
+class OX_Plugins_Adify extends OX_Ad
 {
 	var $mnemonic = 'Adify';
 	var $network_name = 'Adify';
 	var $url = 'http://www.adify.com';
 	
-	function OX_Swifty_Plugins_Adify()
+	function OX_Plugins_Adify()
 	{
-		$this->OX_Swifty_Ad();
+		$this->OX_Ad();
 	}
 		
 	function get_network_property_defaults()

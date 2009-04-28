@@ -1,6 +1,6 @@
 <?php
 
-class OX_Swifty_Plugin
+class OX_Plugin
 {
     function register_plugin()
     {

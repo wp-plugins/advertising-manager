@@ -1,22 +1,22 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Ad.php');	
+require_once(OX_LIB . '/Ad.php');	
 /*
-$_advman_networks['OX_Swifty_Ad
+$_advman_networks['OX_Ad
 _Html']  = array(
 	'www-signup'		=>	'',
 );
 */
-class OX_Swifty_Ad
-_Html extends OX_Swifty_Ad
+class OX_Ad
+_Html extends OX_Ad
 
 {
-	function OX_Swifty_Ad
+	function OX_Ad
 _Html()
 	{
 		$this->set_network_property('mnemonic', 'Html');
 		$this->set_network_property('name', 'HTML Code');
 
-		$this->OX_Swifty_Ad
+		$this->OX_Ad
 ();
 	}
 	

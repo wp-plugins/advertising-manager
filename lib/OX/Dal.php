@@ -1,5 +1,5 @@
 <?php
-class OX_Swifty_Dal
+class OX_Dal
 {
 	function select_ad($id)
 	{

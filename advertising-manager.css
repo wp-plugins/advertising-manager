@@ -16,19 +16,19 @@ th {border-bottom:2px solid #000;font-size:smaller;}
 
 .network_header a {border-bottom:none;text-decoration:underline;}
 
-.ox_adnet_adbrite {padding-left: 25px; background: transparent url(http://files.adbrite.com/mb/images/favicon.ico) no-repeat center left; }
-.ox_adnet_adgridwork {padding-left: 25px; background: transparent url(http://www.adgridwork.com/favicon.ico) no-repeat center left; }
-.ox_adnet_adify {padding-left: 25px; background: transparent url(http://www.adify.com/favicon.ico) no-repeat center left; }
-.ox_adnet_adpinion {padding-left:25px;background:url(http://www.adpinion.com/static/images/logo_small.gif) left no-repeat;}
-.ox_adnet_adroll {padding-left:25px;background:url(http://www.adroll.com/i/favicon.ico) left no-repeat;}
-.ox_adnet_adsense {padding-left:25px;background:url(http://www.google.com/favicon.ico) left no-repeat;}
-.ox_adnet_chitika {padding-left: 25px; background: transparent url(http://chitika.com/favicon.ico) no-repeat center left; }
-.ox_adnet_cj {padding-left:25px;background:url(http://www.cj.com/favicon.ico) left no-repeat;}
-.ox_adnet_html {padding-left:25px;background:url(./images/code.png) left no-repeat;}
-.ox_adnet_crispads {padding-left:25px;background:url(http://www.crispads.com/favicon.ico) left no-repeat;}
-.ox_adnet_openx {padding-left:25px;background:url(http://www.openx.org/favicon.ico) left no-repeat;}
-.ox_adnet_widgetbucks {padding-left:25px;background:url(http://www.widgetbucks.com/favicon.ico) left no-repeat;}
-.ox_adnet_shoppingads {padding-left:25px;background:url(./images/shoppingads.png) left no-repeat;}
-.ox_adnet_ypn {padding-left:25px;background:url(http://www.yahoo.com/favicon.ico) left no-repeat;}
+.ox_ad_adbrite {padding-left: 25px; background: transparent url(http://files.adbrite.com/mb/images/favicon.ico) no-repeat center left; }
+.ox_ad_adgridwork {padding-left: 25px; background: transparent url(http://www.adgridwork.com/favicon.ico) no-repeat center left; }
+.ox_ad_adify {padding-left: 25px; background: transparent url(http://www.adify.com/favicon.ico) no-repeat center left; }
+.ox_ad_adpinion {padding-left:25px;background:url(http://www.adpinion.com/static/images/logo_small.gif) left no-repeat;}
+.ox_ad_adroll {padding-left:25px;background:url(http://www.adroll.com/i/favicon.ico) left no-repeat;}
+.ox_ad_adsense {padding-left:25px;background:url(http://www.google.com/favicon.ico) left no-repeat;}
+.ox_ad_chitika {padding-left: 25px; background: transparent url(http://chitika.com/favicon.ico) no-repeat center left; }
+.ox_ad_cj {padding-left:25px;background:url(http://www.cj.com/favicon.ico) left no-repeat;}
+.ox_ad_html {padding-left:25px;background:url(./images/code.png) left no-repeat;}
+.ox_ad_crispads {padding-left:25px;background:url(http://www.crispads.com/favicon.ico) left no-repeat;}
+.ox_ad_openx {padding-left:25px;background:url(http://www.openx.org/favicon.ico) left no-repeat;}
+.ox_ad_widgetbucks {padding-left:25px;background:url(http://www.widgetbucks.com/favicon.ico) left no-repeat;}
+.ox_ad_shoppingads {padding-left:25px;background:url(./images/shoppingads.png) left no-repeat;}
+.ox_ad_ypn {padding-left:25px;background:url(http://www.yahoo.com/favicon.ico) left no-repeat;}
 
 .default_note {padding-left:20px;background:url(./images/default.png) left no-repeat;width:16px;height:16px;}

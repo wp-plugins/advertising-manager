@@ -1,7 +1,7 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Ad.php');	
+require_once(OX_LIB . '/Ad.php');	
 /*
-$_advman_networks['OX_Swifty_Ad
+$_advman_networks['OX_Ad
 _Adsense'] = array(
 		'ico'		=>	'http://www.google.com/favicon.ico',
 		'www-create' => 'https://www.google.com/adsense/adsense-products',
@@ -10,15 +10,15 @@ _Adsense'] = array(
 		'limit-ads' => 9
 		);
 */
-class OX_Swifty_Plugins_Adsense extends OX_Swifty_Ad
+class OX_Plugins_Adsense extends OX_Ad
 {
 	var $mnemonic = 'Adsense';
 	var $network_name = 'Google Adsense';
 	var $url = 'http://www.google.com/adsense';
 	
-	function OX_Swifty_Plugins_Adsense()
+	function OX_Plugins_Adsense()
 	{
-		$this->OX_Swifty_Ad();
+		$this->OX_Ad();
 	}
 	
 	function get_network_property_defaults()

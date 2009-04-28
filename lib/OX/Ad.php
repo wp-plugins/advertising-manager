@@ -1,7 +1,7 @@
 <?php
-require_once (OX_SWIFTY_PATH . '/Plugin.php');
+require_once (OX_LIB . '/Plugin.php');
 
-class OX_Swifty_Ad extends OX_Swifty_Plugin
+class OX_Ad extends OX_Plugin
 {
 	var $name; //Name of this ad
 	var $id; // ID of the ad
@@ -12,7 +12,7 @@ class OX_Swifty_Ad extends OX_Swifty_Plugin
 	static $np; //$np holds Network properties - defaults, network settings, etc.
 	
 	//Global start up functions for all network classes	
-	function OX_Swifty_Ad()
+	function OX_Ad()
 	{
 		global $advman_engine;
 		

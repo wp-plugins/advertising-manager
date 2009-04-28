@@ -1,21 +1,21 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Ad.php');	
+require_once(OX_LIB . '/Ad.php');	
 /*
-$_advman_networks['OX_Swifty_Ad
+$_advman_networks['OX_Ad
 _Adroll'] = array(
 	'www-create'	=>	'http://www.adroll.com/home',
 	'www-signup'		=>	'http://www.adroll.com/tag/wordpress?r=ZPERWFQF25BGNG5EDWYBUV',
 );
 */
-class OX_Swifty_Plugins_Adroll extends OX_Swifty_Ad
+class OX_Plugins_Adroll extends OX_Ad
 {
 	var $mnemonic = 'Adroll';
 	var $network_name = 'AdRoll';
 	var $url = 'http://www.adroll.com';
 	
-	function OX_Swifty_Plugins_Adroll()
+	function OX_Plugins_Adroll()
 	{
-		$this->OX_Swifty_Ad();
+		$this->OX_Ad();
 	}
 	
 	function get_network_property_defaults()

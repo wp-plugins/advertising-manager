@@ -1,8 +1,8 @@
 <?php
 
-@define('OX_SWIFTY_PATH', dirname(__FILE__) . '/Swifty');
-require_once(OX_SWIFTY_PATH . '/Ad.php');
-require_once(OX_SWIFTY_PATH . '/Dal.php');
+@define('OX_LIB', dirname(__FILE__) . '/Swifty');
+require_once(OX_LIB . '/Ad.php');
+require_once(OX_LIB . '/Dal.php');
 
 class OX_Swifty
 {
@@ -19,11 +19,11 @@ class OX_Swifty
 		$this->actions = array();
 		
 		// Load all Swifty plugins
-		OX_Tools::require_directory(OX_SWIFTY_PATH . '/Plugins');
+		OX_Tools::require_directory(OX_LIB . '/Plugins');
 		
 		// Load the data access layer
 		if (is_null($dalClass)) {
-			$this->dal = new OX_Swifty_Dal();
+			$this->dal = new OX_Dal();
 		} else {
 			$this->dal = new $dalClass;
 		}
@@ -137,7 +137,7 @@ class OX_Swifty
 		
 		// Not a pre-defined network - we will make it HTML code...
 		if (!$imported) {
-			$ad=new OX_Swifty_Ad
+			$ad=new OX_Ad
 _Html();
 			$ad->import_settings($tag);
 		}

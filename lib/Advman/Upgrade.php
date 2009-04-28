@@ -68,7 +68,7 @@ class Advman_Upgrade
 		if (!empty($_advman['defaults'])) {
 			foreach ($_advman['defaults'] as $n => $default) {
 				$counter = '';
-				if ($n == 'OX_Swifty_Ad_Adsense') {
+				if ($n == 'OX_Ad_Adsense') {
 					$counter = '3';
 				}
 				$_advman['defaults'][$n]['counter'] = $counter;
@@ -88,33 +88,22 @@ class Advman_Upgrade
 		$old = $_advman;
 		// New / Old class structure mapping
 		$adnets = array(
-			'ad_adbrite' => 'OX_Swifty_Ad_Adbrite',
-			'ad_adgridwork' => 'OX_Swifty_Ad_Adgridwork',
-			'ad_adpinion' => 'OX_Swifty_Ad_Adpinion',
-			'ad_adroll' => 'OX_Swifty_Ad_Adroll',
-			'ad_adsense' => 'OX_Swifty_Ad_Adsense',
-			'ad_adsense_ad' => 'OX_Swifty_Ad
-_Adsense',
-			'ad_adsense_classic' => 'OX_Swifty_Ad
-_Adsense',
-			'ad_adsense_link' => 'OX_Swifty_Ad
-_Adsense',
-			'ad_adsense_referral' => 'OX_Swifty_Ad
-_Adsense',
-			'ad_cj' => 'OX_Swifty_Ad
-_Cj',
-			'ad_code' => 'OX_Swifty_Ad
-_Html',
-			'ad_crispads' => 'OX_Swifty_Ad
-_Crispads',
-			'ad_openx_adserver' => 'OX_Swifty_Ad
-_Openx',
-			'ad_shoppingads' => 'OX_Swifty_Ad
-_Shoppingads',
-			'ad_widgetbucks' => 'OX_Swifty_Ad
-_Widgetbucks',
-			'ad_ypn' => 'OX_Swifty_Ad
-_Ypn',
+			'ad_adbrite' => 'OX_Ad_Adbrite',
+			'ad_adgridwork' => 'OX_Ad_Adgridwork',
+			'ad_adpinion' => 'OX_Ad_Adpinion',
+			'ad_adroll' => 'OX_Ad_Adroll',
+			'ad_adsense' => 'OX_Ad_Adsense',
+			'ad_adsense_ad' => 'OX_Ad_Adsense',
+			'ad_adsense_classic' => 'OX_Ad_Adsense',
+			'ad_adsense_link' => 'OX_Ad_Adsense',
+			'ad_adsense_referral' => 'OX_Ad_Adsense',
+			'ad_cj' => 'OX_Ad_Cj',
+			'ad_code' => 'OX_Ad_Html',
+			'ad_crispads' => 'OX_Ad_Crispads',
+			'ad_openx_adserver' => 'OX_Ad_Openx',
+			'ad_shoppingads' => 'OX_Ad_Shoppingads',
+			'ad_widgetbucks' => 'OX_Ad_Widgetbucks',
+			'ad_ypn' => 'OX_Ad_Ypn',
 		);
 			
 		// Change defaults to new class structure
@@ -241,7 +230,7 @@ _Ypn',
 					$ad->set_property('color-url', null);
 				}
 				// Re-import code because it was not saved in previous versions
-				if ($ad->network != 'OX_Swifty_Ad
+				if ($ad->network != 'OX_Ad
 _Html') {
 					$code = call_user_func(array('advman_upgrade', '_render_' . $oldClass), $ad);
 					$ad->import_settings($code);

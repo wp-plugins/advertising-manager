@@ -1,21 +1,21 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Ad.php');	
+require_once(OX_LIB . '/Ad.php');	
 /*
-$_advman_networks['OX_Swifty_Ad
+$_advman_networks['OX_Ad
 _Widgetbucks']	= array(
 		'www-create' => 'http://www.widgetbucks.com/widget.page?action=call&widgetID=',
 		'www-signup' => 'http://www.widgetbucks.com/home.page?referrer=468034'
 		);
 */
-class OX_Swifty_Plugins_Widgetbucks extends OX_Swifty_Ad
+class OX_Plugins_Widgetbucks extends OX_Ad
 {
 	var $mnemonic = 'Widgetbucks';
 	var $network_name = 'WidgetBucks';
 	var $url = 'http://www.widgetbucks.com';
 	
-	function OX_Swifty_Plugins_Widgetbucks()
+	function OX_Plugins_Widgetbucks()
 	{
-		$this->OX_Swifty_Ad();
+		$this->OX_Ad();
 	}
 	
 	function get_network_property_defaults()

@@ -1,7 +1,7 @@
 <?php
 require_once OX_LIB . '/Swifty/Dal.php';
 
-class Advman_Dal extends OX_Swifty_Dal
+class Advman_Dal extends OX_Dal
 {
 	var $data;
 	

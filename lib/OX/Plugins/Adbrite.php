@@ -1,21 +1,21 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Ad.php');
+require_once(OX_LIB . '/Ad.php');
 /*
-$_advman_networks['OX_Swifty_Ad
+$_advman_networks['OX_Ad
 _Adbrite'] = array(
 	'www-create' => 'http://www.adbrite.com/zones/commerce/purchase.php?product_id_array=22',
 	'www-signup'	=>	'http://www.adbrite.com/mb/landing_both.php?spid=51549&afb=120x60-1-blue',														 
  );
 */
-class OX_Swifty_Plugins_Adbrite extends OX_Swifty_Ad
+class OX_Plugins_Adbrite extends OX_Ad
 {
 	var $mnemonic = 'Adbrite';
 	var $network_name = 'AdBrite';
 	var $url = 'http://www.adbrite.com';
 	
-	function OX_Swifty_Plugins_Adbrite()
+	function OX_Plugins_Adbrite()
 	{
-		$this->OX_Swifty_Ad();
+		$this->OX_Ad();
 	}
 	
 	function get_network_property_defaults()

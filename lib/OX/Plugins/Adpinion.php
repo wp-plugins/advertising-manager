@@ -1,21 +1,21 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Ad.php');	
+require_once(OX_LIB . '/Ad.php');	
 /*
-$_advman_networks['OX_Swifty_Ad
+$_advman_networks['OX_Ad
 _Adpinion'] = array(
 	'www-create'	=>	'http://www.adpinion.com/',
 	'www-signup'		=>	'http://www.adpinion.com/',
 );
 */
-class OX_Swifty_Plugins_Adpinion extends OX_Swifty_Ad
+class OX_Plugins_Adpinion extends OX_Ad
 {
 	var $mnemonic = 'Adpinion';
 	var $network_name = 'Adpinion';
 	var $url = 'http://www.adpinion.com';
 	
-	function OX_Swifty_Plugins_Adpinion()
+	function OX_Plugins_Adpinion()
 	{
-		$this->OX_Swifty_Ad();
+		$this->OX_Ad();
 	}
 	
 	function display($search, $replace)

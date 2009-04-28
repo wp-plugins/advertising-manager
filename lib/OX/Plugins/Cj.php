@@ -1,26 +1,26 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Ad.php');	
+require_once(OX_LIB . '/Ad.php');	
 /*
-$_advman_networks['OX_Swifty_Ad
+$_advman_networks['OX_Ad
 _Cj'] = array(
 		'www-create' => 'https://members.cj.com/member/publisher/accounts/listmyadvertisers.do?sortKey=active_start_date&sortOrder=DESC',
 		'www-signup'		=>	'http://www.qksrv.net/click-2335597-7282777',
 	);
 */
-class OX_Swifty_Plugins_Cj extends OX_Swifty_Ad
+class OX_Plugins_Cj extends OX_Ad
 {
 	var $mnemonic = 'Cj';
 	var $network_name = 'Commission Junction';
 	var $url = 'http://www.cj.com';
 	
-	function OX_Swifty_Plugins_Cj()
+	function OX_Plugins_Cj()
 	{
-		$this->OX_Swifty_Ad();
+		$this->OX_Ad();
 	}
 	
 	function display()
 	{
-		$xdomains = OX_Swifty_Ad
+		$xdomains = OX_Ad
 _Cj::get_domains();
 		$search[] = '{{xdomain}}';
 		$replace[] = $xdomains[array_rand($xdomains)];
@@ -63,7 +63,7 @@ _Cj::get_domains();
 	function import_detect_network($code)
 	{
 		$match = false;
-		$xdomains = OX_Swifty_Ad
+		$xdomains = OX_Ad
 _Cj::get_domains();
 		foreach ($xdomains as $d) {
 			$match = $match || (strpos($code, ('href="http://' . $d)) !== false);

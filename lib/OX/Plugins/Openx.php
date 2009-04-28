@@ -1,21 +1,21 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Ad.php');	
+require_once(OX_LIB . '/Ad.php');	
 /*
-$_advman_networks['OX_Swifty_Ad
+$_advman_networks['OX_Ad
 _Openx'] = array(
 		'www-create' => 'http://www.openx.org/',
 		'www-signup' => 'http://www.openx.org/'
 		);
 */
-class OX_Swifty_Plugins_Openx extends OX_Swifty_Ad
+class OX_Plugins_Openx extends OX_Ad
 {
 	var $mnemonic = 'Openx';
 	var $network_name = 'OpenX';
 	var $url = 'http://www.openx.org';
 	
-	function OX_Swifty_Plugins_Openx()
+	function OX_Plugins_Openx()
 	{
-		$this->OX_Swifty_Ad();
+		$this->OX_Ad();
 	}
 
 	function get_network_property_defaults()

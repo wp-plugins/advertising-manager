@@ -1,21 +1,21 @@
 <?php
-require_once(OX_SWIFTY_PATH . '/Ad.php');	
+require_once(OX_LIB . '/Ad.php');	
 /*
-$_advman_networks['OX_Swifty_Ad
+$_advman_networks['OX_Ad
 _Shoppingads'] = array(
 		'www-create'	=>	'http://shoppingads.com/getcode/',
 		'www-signup'	=>	'http://www.shoppingads.com/refer_1ebff04bf5805f6da1b4',
 		 );
 */
-class OX_Swifty_Plugins_Shoppingads extends OX_Swifty_Ad
+class OX_Plugins_Shoppingads extends OX_Ad
 {
 	var $mnemonic = 'Shoppingads';
 	var $network_name = 'Shopping Ads';
 	var $url = 'http://www.shoppingads.com';
 	
-	function OX_Swifty_Plugins_Shoppingads()
+	function OX_Plugins_Shoppingads()
 	{
-		$this->OX_Swifty_Ad();
+		$this->OX_Ad();
 	}
 		
 	function get_network_property_defaults()
