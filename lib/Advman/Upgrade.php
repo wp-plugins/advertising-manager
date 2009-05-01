@@ -63,29 +63,26 @@ class Advman_Upgrade
 	}
 	function v3_3_10()
 	{
-		global $_advman;
+		global $advman_engine;
 		
-		if (!empty($_advman['defaults'])) {
-			foreach ($_advman['defaults'] as $n => $default) {
-				$counter = '';
-				if ($n == 'OX_Ad_Adsense') {
-					$counter = '3';
-				}
-				$_advman['defaults'][$n]['counter'] = $counter;
-			}
+		$ads = $advman_engine->getAds();
+		foreach ($ads as $ad) {
+			$ad->set_network_property($ad->network == 'OX_Ad_Adsense' ? '3' : '');
 		}
 	}
 	
 	function v3_3_4_to_3_3_8()
 	{
-		global $_advman;
-		$_advman['settings']['openx-sync'] = true;
-		$_advman['uuid'] = $viewerId = md5(uniqid('', true));
+		global $advman_engine;
+		
+		$advman_engine->setSetting('openx-sync', true);
+		$advman_engine->setSetting('uuid', md5(uniqid('', true)));
 	}
 	function v3_0_to_3_3_4()
 	{
-		global $_advman;
-		$old = $_advman;
+		global $advman_engine;
+		$old = $advman_engine->getAds();
+		
 		// New / Old class structure mapping
 		$adnets = array(
 			'ad_adbrite' => 'OX_Ad_Adbrite',
@@ -107,13 +104,13 @@ class Advman_Upgrade
 		);
 			
 		// Change defaults to new class structure
-		if (!empty($_advman['defaults'])) {
+		$defaults = $advman_engine->getSetting('defaults');
+		if (!empty($defaults)) {
 			$new = array();
-			$defaults = $_advman['defaults'];
 			foreach ($defaults as $n => $default) {
 				if (!empty($adnets[$n])) {
 					// Set the new class structure
-					$new[$adnets[$n]] = $_advman['defaults'][$n];
+					$new[$adnets[$n]] = $default;
 					// Set OpenX Market participation
 					if (!isset($new[$adnets[$n]]['openx-market'])) {
 						$new[$adnets[$n]]['openx-market'] = 'no';
@@ -146,27 +143,28 @@ class Advman_Upgrade
 					}
 				}
 			}
-			$_advman['defaults'] = $new;
+			$advman_engine->setSetting('defaults', $new);
 		}
 		
 		// Change account IDs to new class structure
 		// We are going to change it to something later, but we need it this way for ad conversions...
-		if (!empty($_advman['account-ids'])) {
+		$accounts = $advman_engine->getSetting('account-ids');
+		if (!empty($accounts)) {
 			$new = array();
-			$accounts = $_advman['account-ids'];
 			foreach ($accounts as $n => $account) {
 				if (!empty($adnets[$n])) {
 					// Set the new class structure
-					$new[$adnets[$n]] = $_advman['account-ids'][$n];
+					$new[$adnets[$n]] = $account;
 				}
 			}
-			$_advman['account-ids'] = $new;
+			$advman_engine->setSetting('account-ids', $new);
 		}
 		
-		if (!empty($_advman['ads'])) {
+		Advman_Upgrade::convert_ad_classes_to_array();
+		$ads = $advman_engine->getAds();
+		if (!empty($ads)) {
 			$new = array();
 			$id = 1;
-			$ads = $_advman['ads'];
 			// Next, make sure that the classes and properties are ok.
 			foreach ($ads as $n => $ad) {
 				$oldClass = '';
@@ -291,6 +289,10 @@ _Html') {
 		}
 	}
 	
+	function convert_ad_classes_to_array()
+	{
+		global $advman_engine;
+	}
 	function v2_x_to_3_0(){
 		global $_advman;
 		

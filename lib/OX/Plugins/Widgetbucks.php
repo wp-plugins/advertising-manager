@@ -1,21 +1,23 @@
 <?php
 require_once(OX_LIB . '/Ad.php');	
-/*
-$_advman_networks['OX_Ad
-_Widgetbucks']	= array(
-		'www-create' => 'http://www.widgetbucks.com/widget.page?action=call&widgetID=',
-		'www-signup' => 'http://www.widgetbucks.com/home.page?referrer=468034'
-		);
-*/
-class OX_Plugins_Widgetbucks extends OX_Ad
+
+class OX_Plugin_Widgetbucks extends OX_Ad
 {
 	var $mnemonic = 'Widgetbucks';
 	var $network_name = 'WidgetBucks';
 	var $url = 'http://www.widgetbucks.com';
 	
-	function OX_Plugins_Widgetbucks()
+	function OX_Plugin_Widgetbucks()
 	{
 		$this->OX_Ad();
+	}
+	
+	/**
+	 * This function is called statically from the ad engine.  Use this function to put any hooks in the ad engine that you want to use.
+	 */
+	function register_plugin($engine)
+	{
+		$engine->addAction('ad_network', get_class());
 	}
 	
 	function get_network_property_defaults()
@@ -26,6 +28,11 @@ class OX_Plugins_Widgetbucks extends OX_Ad
 		return $properties + parent::get_network_property_defaults();
 	}
 	
+	function get_ad_colors()
+	{
+		return array('border', 'title', 'bg', 'text');
+	}
+	
 	function import_detect_network($code)
 	{
 		return (preg_match('/(\w*)\.widgetbucks.com\/script\/(\w*).js\?uid=(\w*)/', $code, $matches));
@@ -33,15 +40,12 @@ class OX_Plugins_Widgetbucks extends OX_Ad
 		
 	function import_settings($code)
 	{
-		// Import parent settings first!
-		parent::import_settings($code);
-		
 		if (preg_match('/(\w*)\.widgetbucks.com\/script\/(\w*).js\?uid=(\w*)/', $code, $matches)!=0) { 
 			$this->set_property('slot', $matches[3]);
 			$code = str_replace("{$matches[1]}.widgetbucks.com/script/{$matches[2]}.js?uid={$matches[3]}", "{$matches[1]}.widgetbucks.com/script/{$matches[2]}.js?uid={{slot}}", $code);
 		}
 		
-		$this->set_property('code', $code);
+		parent::import_settings($code);
 	}
 
 	function _form_settings_help()

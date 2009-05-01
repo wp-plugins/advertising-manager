@@ -11,11 +11,10 @@ class Advman_Template_Edit_Ad extends Advman_Template_Edit
 		if (!empty($formats)) {
 			add_meta_box('advman_format', __('Ad Format', 'advman'), array('Advman_Template_Metabox', 'display_format'), 'advman', 'main');
 		}
-		$colors = $ad->get_ad_colors();
-		if (!empty($colors)) {
+		$sections = Advman_Tools::organize_appearance($ad);
+		if (!empty($sections)) {
 			add_meta_box('advman_colors', __('Ad Appearance', 'advman'), array('Advman_Template_Metabox', 'display_colors'), 'advman', 'main');
 		}
-		add_meta_box('advman_format', __('Ad Format', 'advman'), array('Advman_Template_Metabox', 'display_format'), 'advman', 'main');
 		add_meta_box('advman_display_options', __('Website Display Options', 'advman'), array('Advman_Template_Metabox', 'display_options'), 'advman', 'main');
 		// Main pane - advanced options
 		add_meta_box('advman_optimisation', __('Optimization', 'advman'), array('Advman_Template_Metabox', 'display_optimisation'), 'advman', 'advanced');

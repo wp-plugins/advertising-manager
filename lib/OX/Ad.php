@@ -225,6 +225,14 @@ class OX_Ad extends OX_Plugin
 		return get_bloginfo('wpurl') . '/wp-admin/edit.php?page=advman-manage&advman-ad-id=' . $this->id;
 	}
 
+	function get_ad_formats()
+	{
+		return false;
+	}
+	function get_ad_colors()
+	{
+		return false;
+	}
 	function add_revision($network = false)
 	{
 		$revisions = $network ? $this->get_network_property('revisions') : $this->get('revisions');

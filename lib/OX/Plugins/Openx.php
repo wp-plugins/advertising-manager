@@ -1,29 +1,36 @@
 <?php
 require_once(OX_LIB . '/Ad.php');	
-/*
-$_advman_networks['OX_Ad
-_Openx'] = array(
-		'www-create' => 'http://www.openx.org/',
-		'www-signup' => 'http://www.openx.org/'
-		);
-*/
-class OX_Plugins_Openx extends OX_Ad
+
+class OX_Plugin_Openx extends OX_Ad
 {
 	var $mnemonic = 'Openx';
 	var $network_name = 'OpenX';
 	var $url = 'http://www.openx.org';
 	
-	function OX_Plugins_Openx()
+	function OX_Plugin_Openx()
 	{
 		$this->OX_Ad();
 	}
 
+	/**
+	 * This function is called statically from the ad engine.  Use this function to put any hooks in the ad engine that you want to use.
+	 */
+	function register_plugin($engine)
+	{
+		$engine->addAction('ad_network', get_class());
+	}
+	
 	function get_network_property_defaults()
 	{
 		$properties = array(
 			'slot' => '',
 		);
 		return $properties + parent::get_network_property_defaults();
+	}
+	
+	function get_ad_colors()
+	{
+		return array('border', 'title', 'bg', 'text');
 	}
 	
 	function import_detect_network($code)
@@ -33,9 +40,6 @@ class OX_Plugins_Openx extends OX_Ad
 		
 	function import_settings($code)
 	{
-		// Import parent settings first!
-		parent::import_settings($code);
-		
 		if (preg_match("/zoneid=(\w*)/", $code, $matches) !=0) {
 			$this->set_property('slot', $matches[1]);
 			$code = str_replace('zoneid=' . $matches[1], 'zoneid={{slot}}', $code);
@@ -43,7 +47,7 @@ class OX_Plugins_Openx extends OX_Ad
 		
 		$code = str_replace('INSERT_RANDOM_NUMBER_HERE', '{{random}}', $code);
 		
-		$this->set_property('code', $code);
+		parent::import_settings($code);
 	}
 
 	function customiseSection($mode, $section)

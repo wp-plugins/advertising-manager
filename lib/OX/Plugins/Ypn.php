@@ -1,20 +1,23 @@
 <?php
 require_once(OX_LIB . '/Ad.php');	
-/*
-$_advman_networks['OX_Ad
-_Ypn'] = array(
-	'www-signup'	=>	'http://ypn.yahoo.com/',														 
-);
-*/
-class OX_Plugins_Ypn extends OX_Ad
+
+class OX_Plugin_Ypn extends OX_Ad
 {
 	var $mnemonic = 'Ypn';
 	var $network_name = 'Yahoo! Publisher Network';
 	var $url = 'http://ypn.yahoo.com';
 	
-	function OX_Plugins_Ypn()
+	function OX_Plugin_Ypn()
 	{
 		$this->OX_Ad();
+	}
+	
+	/**
+	 * This function is called statically from the ad engine.  Use this function to put any hooks in the ad engine that you want to use.
+	 */
+	function register_plugin($engine)
+	{
+		$engine->addAction('ad_network', get_class());
 	}
 	
 	function get_network_property_defaults()
@@ -35,6 +38,11 @@ class OX_Plugins_Ypn extends OX_Ad
 		return $properties + parent::get_network_property_defaults();
 	}
 	
+	function get_ad_colors()
+	{
+		return array('border', 'title', 'bg', 'text');
+	}
+	
 	function import_detect_network($code)
 	{
 		return ( (strpos($code,'ypn-js.overture.com')!==false) );
@@ -42,9 +50,6 @@ class OX_Plugins_Ypn extends OX_Ad
 		
 	function import_settings($code)
 	{
-		// Import parent settings first!
-		parent::import_settings($code);
-		
 		if (preg_match('/ctxt_ad_partner( *)=( *)"(.*)"/', $code, $matches)) {
 			$this->set_property('account-id', $matches[3]);
 			$code = str_replace("ctxt_ad_partner{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_partner{$matches[1]}={$matches[2]}\"{{account-id}}\"", $code);
@@ -96,7 +101,7 @@ class OX_Plugins_Ypn extends OX_Ad
 			$this->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 		
-		$this->set_property('code', $code);
+		parent::import_settings($code);
 	}
 }
 /*

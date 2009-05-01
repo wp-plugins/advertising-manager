@@ -1,27 +1,28 @@
 <?php
 require_once(OX_LIB . '/Ad.php');	
-/*
-$_advman_networks['OX_Ad
-_Cj'] = array(
-		'www-create' => 'https://members.cj.com/member/publisher/accounts/listmyadvertisers.do?sortKey=active_start_date&sortOrder=DESC',
-		'www-signup'		=>	'http://www.qksrv.net/click-2335597-7282777',
-	);
-*/
-class OX_Plugins_Cj extends OX_Ad
+
+class OX_Plugin_Cj extends OX_Ad
 {
 	var $mnemonic = 'Cj';
 	var $network_name = 'Commission Junction';
 	var $url = 'http://www.cj.com';
 	
-	function OX_Plugins_Cj()
+	function OX_Plugin_Cj()
 	{
 		$this->OX_Ad();
 	}
 	
+	/**
+	 * This function is called statically from the ad engine.  Use this function to put any hooks in the ad engine that you want to use.
+	 */
+	function register_plugin($engine)
+	{
+		$engine->addAction('ad_network', get_class());
+	}
+	
 	function display()
 	{
-		$xdomains = OX_Ad
-_Cj::get_domains();
+		$xdomains = OX_Ad_Cj::get_domains();
 		$search[] = '{{xdomain}}';
 		$replace[] = $xdomains[array_rand($xdomains)];
 		
@@ -60,11 +61,20 @@ _Cj::get_domains();
 		return $properties + parent::get_network_property_defaults();
 	}
 	
+	function get_ad_formats()
+	{
+		return array('custom', '728x90', '468x60', '234x60', '150x50', '120x90', '120x60', '83x31', '120x600', '160x600', '240x400', '120x240', '336x280', '300x250', '250x250', '200x200', '180x150', '125x125');
+	}
+	
+	function get_ad_colors()
+	{
+		return array('border', 'title', 'bg', 'text');
+	}
+	
 	function import_detect_network($code)
 	{
 		$match = false;
-		$xdomains = OX_Ad
-_Cj::get_domains();
+		$xdomains = OX_Ad_Cj::get_domains();
 		foreach ($xdomains as $d) {
 			$match = $match || (strpos($code, ('href="http://' . $d)) !== false);
 		}
@@ -73,9 +83,6 @@ _Cj::get_domains();
 		
 	function import_settings($code)
 	{
-		// Import parent settings first!
-		parent::import_settings($code);
-		
 		if (preg_match('/http:\/\/([.\w]*)\/click-(\d*)-(\d*)/', $code, $matches) != 0) { 
 			$this->set_property('account-id', $matches[2]);
 			$this->set_property('slot', $matches[3]); 
@@ -123,7 +130,7 @@ _Cj::get_domains();
 			$this->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 		
-		$this->set_property('code', $code);
+		parent::import_settings($code);
 	}
 }
 /*

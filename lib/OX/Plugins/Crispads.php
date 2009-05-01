@@ -1,23 +1,25 @@
 <?php
 require_once(OX_LIB . '/Ad.php');	
-/*
-$_advman_networks['OX_Ad
-_Crispads']	= array(
-		'www-create' => 'http://www.crispads.com/spinner/www/admin/zone-edit.php',
-		'www-signup' => 'http://www.crispads.com/'
-		);
-*/
-class OX_Plugins_Crispads extends OX_Ad
+
+class OX_Plugin_Crispads extends OX_Ad
 {
 	var $mnemonic = 'Crispads';
 	var $network_name = 'Crisp Ads';
 	var $url = 'http://www.crispads.com';
 	
-	function OX_Plugins_Crispads()
+	function OX_Plugin_Crispads()
 	{
 		$this->OX_Ad();
 	}
 
+	/**
+	 * This function is called statically from the ad engine.  Use this function to put any hooks in the ad engine that you want to use.
+	 */
+	function register_plugin($engine)
+	{
+		$engine->addAction('ad_network', get_class());
+	}
+	
 	function get_network_property_defaults()
 	{
 		$properties = array(
@@ -27,6 +29,16 @@ class OX_Plugins_Crispads extends OX_Ad
 		return $properties + parent::get_network_property_defaults();
 	}
 	
+	function get_ad_formats()
+	{
+		return array('custom', '728x90', '468x60', '234x60', '150x50', '120x90', '120x60', '83x31', '120x600', '160x600', '240x400', '120x240', '336x280', '300x250', '250x250', '200x200', '180x150', '125x125');
+	}
+	
+	function get_ad_colors()
+	{
+		return array('border', 'title', 'bg', 'text');
+	}
+	
 	function import_detect_network($code)
 	{
 		return (	preg_match('/http:\/\/www.crispads.com\/spinner\//', $code, $matches) !==0);
@@ -34,9 +46,6 @@ class OX_Plugins_Crispads extends OX_Ad
 		
 	function import_settings($code)
 	{
-		// Import parent settings first!
-		parent::import_settings($code);
-		
 		if (preg_match("/zoneid=(\w*)/", $code, $matches) !=0) {
 			$this->set_property('slot', $matches[1]);
 			$code = str_replace("zoneid={$matches[1]}", "zoneid={{slot}}", $code);
@@ -69,7 +78,7 @@ class OX_Plugins_Crispads extends OX_Ad
 		
 		$code = str_replace('INSERT_RANDOM_NUMBER_HERE', '{{random}}', $code);
 		
-		$this->set_property('code', $code);
+		parent::import_settings($code);
 	}
 }
 /*

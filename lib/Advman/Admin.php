@@ -39,7 +39,7 @@ class Advman_Admin
 					$admin->remove_notice('upgrade adsense-deluxe');
 					break;	
 				case 'optimise':
-					advman_admin::_set_auto_optimise(!empty($yes));
+					Advman_Admin::set_auto_optimise(!empty($yes));
 					$admin->remove_notice('optimise');
 					break;
 				case 'activate advertising-manager':
@@ -49,6 +49,23 @@ class Advman_Admin
 		}
 	}
 	
+	function set_auto_optimise($active)
+	{
+		global $advman_engine;
+		
+		$market = ($active) ? 'yes' : 'no';
+		$ads = $advman_engine->getAds();
+		foreach ($ads as $id => $ad) {
+			$p = $ad->get_network_property('openx-market');
+			if ($p != $market) {
+				$ad->set_network_property('openx-market', $market);
+			}
+			$p = $ad->get_property('openx-market');
+			if (!empty($p) && $p != $market) {
+				$ad->set_property('openx-market', $market);
+			}
+		}
+	}
 	function add_notice($action,$text,$confirm=false)
 	{
 		global $advman_engine;
@@ -176,7 +193,8 @@ class Advman_Admin
 						$advman_engine->deleteAd($ad->id);
 					}
 				}
-				$mode = !empty($_advman['ads']) ? 'list_ads' : 'create_ad';
+				$ads = $advman_engine->getAds();
+				$mode = !empty($ads) ? 'list_ads' : 'create_ad';
 				break;
 			
 			case 'edit' :
@@ -249,8 +267,9 @@ class Advman_Admin
 				break;
 			
 			case 'edit_network' :
+				$ad = new $target;
 				$template = Advman_Tools::get_template('Edit_Network', $ad);
-				$template->display($target);
+				$template->display($ad);
 				break;
 			
 			case 'settings' :
@@ -303,14 +322,16 @@ class Advman_Admin
 
 	function add_scripts()
 	{
-		wp_enqueue_script('prototype'); //do we need this?
-		wp_enqueue_script('postbox'); //do we need this?
-		wp_enqueue_script('jquery');
-		wp_enqueue_script('jquery-swifty', ADVMAN_URL . '/scripts/jQuery.swifty.js', array('jquery'));
-		wp_enqueue_script('advman', ADVMAN_URL . '/scripts/advertising-manager.js');
-		$page = !empty($_GET['page']) ? $_GET['page'] : '';
-		if ($page == 'advman-manage') {
-			echo "<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/advertising-manager.css' />";
+		if (is_admin()) {
+			wp_enqueue_script('prototype');
+			wp_enqueue_script('postbox');
+//			wp_enqueue_script('jquery');
+//			wp_enqueue_script('jquery-swifty', ADVMAN_URL . '/scripts/jQuery.swifty.js', array('jquery'));
+			wp_enqueue_script('advman', ADVMAN_URL . '/scripts/advman.js');
+			$page = !empty($_GET['page']) ? $_GET['page'] : '';
+			if ($page == 'advman-manage') {
+				echo "<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.css' />";
+			}
 		}
 	}
 }

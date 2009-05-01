@@ -1,23 +1,25 @@
 <?php
 require_once(OX_LIB . '/Ad.php');	
-/*
-$_advman_networks['OX_Ad
-_Chitika'] = array(
-	'www-create' => 'https://chitika.com/affiliate/plcode.php',
-	'www-signup'	=>	'http://chitika.com/publishers.php?refid=switzer',														 
- );
-*/
-class OX_Plugins_Chitika extends OX_Ad
+
+class OX_Plugin_Chitika extends OX_Ad
 {
 	var $mnemonic = 'Chitika';
 	var $network_name = 'Chitika';
 	var $url = 'http://www.chitika.com';
 	
-	function OX_Plugins_Chitika()
+	function OX_Plugin_Chitika()
 	{
 		$this->OX_Ad();
 	}
 		
+	/**
+	 * This function is called statically from the ad engine.  Use this function to put any hooks in the ad engine that you want to use.
+	 */
+	function register_plugin($engine)
+	{
+		$engine->addAction('ad_network', get_class());
+	}
+	
 	function get_network_property_defaults()
 	{
 		$properties = array(
@@ -39,6 +41,11 @@ class OX_Plugins_Chitika extends OX_Ad
 		return $properties + parent::get_network_property_defaults();
 	}
 	
+	function get_ad_formats()
+	{
+		return array('728x90', '468x60', '468x90', '468x120', '468x180', '550x120', '550x90', '450x90', '430x90', '400x90', '120x600', '160x600', '180x300', '300x250', '300x150', '300x125', '300x70', '250x250', '200x200', '160x160', '336x280', '336x160', '334x100', '180x150');
+	}
+	
 	function import_detect_network($code)
 	{
 		
@@ -50,9 +57,6 @@ class OX_Plugins_Chitika extends OX_Ad
 		
 	function import_settings($code)
 	{
-		// Import parent settings first!
-		parent::import_settings($code);
-
 		$s = '([\s]*)'; // search for a space character
 		$q = "([\\'\\\"]{1})"; // search for a quote character
 		
@@ -124,7 +128,7 @@ class OX_Plugins_Chitika extends OX_Ad
 			$this->set_property('adformat', $width . 'x' . $height);
 		}
 
-		$this->set_property('code', $code);
+		parent::import_settings($code);
 	}
 	
 	function get_preview_url()

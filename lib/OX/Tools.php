@@ -1,7 +1,7 @@
 <?php
 class OX_Tools
 {
-	function require_directory($dir)
+	function load_plugins($dir, $obj)
 	{
 		if ($handle = opendir($dir)) {
 			while (false !== ($file = readdir($handle))) {
@@ -12,6 +12,9 @@ class OX_Tools
 					
 					if (file_exists($require_file)) {
 						require_once $require_file;
+						$fileName = split('[.]', $file);
+						$fileName = $fileName[0];
+						call_user_func(array('OX_Plugin_' . $fileName, 'register_plugin'), $obj);
 					}
 				}
 			}
@@ -21,13 +24,20 @@ class OX_Tools
 
 	function sort($ads)
 	{
-		uasort($ads, array('OX_Tools', '_sort_by_class'));
+		uasort($ads, array('OX_Tools', '_sort_ads'));
 		return $ads;
 	}
 	
-	function _sort_by_class($a,$b)
+	/**
+	 * Sort ads by network, then by ID
+	 */
+	function _sort_ads($ad1,$ad2)
 	{
-		return strcmp(get_class($a), get_class($b));
+		$cmp = strcmp(get_class($ad1), get_class($ad2));
+		if ($cmp == 0) {
+			$cmp = strcmp($ad1->id, $ad2->id);
+		}
+		return $cmp;
 	}
 	
 	function organize_colors($colors)

@@ -21,6 +21,8 @@ class Advman_Template_List
 		$filterActive = !empty($filter['active']) ? $filter['active'] : null;
 		$filterNetwork = !empty($filter['network']) ? $filter['network'] : null;
 		
+		$defaultAdName = $advman_engine->getSetting('default-ad');
+		
 ?><div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
 <h2><?php _e('Manage Your Advertising', 'advman'); ?></h2>
@@ -127,9 +129,9 @@ function ADS_setAction(action, id, name, network)
 		<td class="author column-author"><a href="javascript:ADS_setAction('edit','<?php echo $ad->network; ?>');" title="<?php printf(__('Edit the ad network &quot;%s&quot;', 'advman'), $ad->network_name); ?>"><?php echo $ad->network_name; ?></a></td>
 		<td class="categories column-categories"> <?php echo $this->displayFormat($ad); ?></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('<?php echo ($ad->active) ? 'deactivate' : 'activate'; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
-		<td class="categories column-tags"><a href="javascript:ADS_setAction('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $_advman['default-ad']) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
+		<td class="categories column-tags"><a href="javascript:ADS_setAction('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $defaultAdName) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
 <?php
-		list($last_user, $t) = $ad->get_last_edit();
+		list($last_user, $t) = Advman_Tools::get_last_edit($ad->get_property['revisions']);
 		$last_timestamp = (time() - $t) < (30 * 24 * 60 * 60) ? human_time_diff($t) : __('> 30 days', 'advman');
 		$last_timestamp2 = date('l, F jS, Y @ h:ia', $t);
 ?>		<td class="date column-date"><abbr title="<?php echo $last_timestamp2 ?>"><?php echo $last_timestamp . __(' ago', 'advman'); ?></abbr><br /> <?php echo __('by', 'advman') . ' ' . $last_user; ?></td>

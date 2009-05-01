@@ -1,29 +1,19 @@
 <?php
 require_once(OX_LIB . '/Ad.php');	
-/*
-$_advman_networks['OX_Ad
-_Html']  = array(
-	'www-signup'		=>	'',
-);
-*/
-class OX_Ad
-_Html extends OX_Ad
 
+class OX_Ad_Html extends OX_Ad
 {
-	function OX_Ad
-_Html()
+	function OX_Ad_Html()
 	{
 		$this->set_network_property('mnemonic', 'Html');
 		$this->set_network_property('name', 'HTML Code');
 
-		$this->OX_Ad
-();
+		$this->OX_Ad();
 	}
 	
 	function get_network_property_defaults()
 	{
-		$properties = array(
-		);
+		$properties = array();
 		return $properties + parent::get_network_property_defaults();
 	}
 	

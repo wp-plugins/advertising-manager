@@ -3,9 +3,16 @@ require_once(ADVMAN_LIB . '/Tools.php');
 
 class Advman_Template_Metabox
 {
-	function display_format($ad)
+	function display_network_format($ad)
 	{
-		$format = $ad->get_property('adformat');
+		return Advman_Template_Metabox::display_format($ad, true);
+	}
+	
+	function display_format($ad, $nw = false)
+	{
+		$format = ($nw) ? $ad->get_network_property('adformat') : $ad->get_property('adformat');
+		$width = ($nw) ? $ad->get_network_property('width') : $ad->get_property('width');
+		$height = ($nw) ? $ad->get_network_property('height') : $ad->get_property('height');
 		$formats = Advman_Tools::organize_formats($ad->get_ad_formats());
 		
 ?><table id="advman-settings-ad_format">
@@ -13,9 +20,11 @@ class Advman_Template_Metabox
 	<td class="advman_label"><label for="advman-adformat"><?php _e('Format:', 'advman'); ?></label></td>
 	<td>
 		<select name="advman-adformat" id="advman-adformat" onchange="advman_form_update(this);">
+<?php if (!$nw) : ?>
 			<optgroup id="advman-optgroup-default" label="Default">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 			</optgroup>
+<?php endif; ?>
 <?php foreach ($formats['sections'] as $sectionName => $sectionLabel) : ?>
 			<optgroup id="advman-optgroup-<?php echo $sectionName ?>" label="<? echo $sectionLabel ?>">
 <?php foreach ($formats['formats'][$sectionName] as $formatName => $formatLabel) : ?>
@@ -25,14 +34,16 @@ class Advman_Template_Metabox
 <?php endforeach; ?>
 		</select>
 	</td>
+<?php if (!$nw) : ?>
 	<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get('adformat', true); ?>"></td>
+<?php endif; ?>
 </tr>
 <?php if (!empty($formats['sections']['custom'])) : ?>
 <tr id="advman-settings-custom">
 	<td class="advman_label"><label for="advman-width"><?php _e('Dimensions:'); ?></label></td>
 	<td>
-		<input name="advman-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_property('width')); ?>" /> x
-		<input name="advman-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo ($ad->get_property('height')); ?>" /> px
+		<input name="advman-width" size="5" title="<?php _e('Custom width for this unit.', 'advman'); ?>" value="<?php echo $width; ?>" /> x
+		<input name="advman-height" size="5" title="<?php _e('Custom height for this unit.', 'advman'); ?>" value="<?php echo $height; ?>" /> px
 	</td>
 </tr>
 <?php endif; ?>
@@ -42,7 +53,11 @@ class Advman_Template_Metabox
 <?php
 	}
 	
-	function display_options($ad)
+	function display_network_options($ad)
+	{
+		return Advman_Template_Metabox::display_options($ad, true);
+	}
+	function display_options($ad, $nw = false)
 	{
 		// Query the users
 		$users = get_users_of_blog();
@@ -54,83 +69,42 @@ class Advman_Template_Metabox
 			$defaultAuthor = __('All Authors', 'advman');
 		}
 		
+		$options = array(
+				 'home' => __('On Homepage:', 'advman'),
+				 'post' => __('On Posts:', 'advman'),
+				 'page' => __('On Pages:', 'advman'),
+				 'archive' => __('On Archives:', 'advman'),
+				 'search' => __('On Search:', 'advman'),
+				 'author' => __('By Author:', 'advman'),
+		);
+		
+		$users = get_users_of_blog();
 ?><div style="text-align:right; width:250px; font-size:small;">
 	<table>
+<?php foreach ($options as $option => $label) : ?>
+<?php $value = $nw ? $ad->get_network_property('show-' . $option) : $ad->get_property('show-' . $option); ?>
 	<tr>
-		<td style="white-space:nowrap">
-			<label for="advman-show-home"><?php _e('On Homepage:', 'advman'); ?></label>
-			<select name="advman-show-home" id="advman-show-home">
+		<td style="white-space:nowrap"><label for="advman-show-<?php echo $option ?>"><?php echo $label; ?></label></td>
+		<td align="left">
+			<select name="advman-show-<?php echo $option ?>" id="advman-show-<?php echo $option ?>">
+<?php if (!$nw) : ?>
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->get('show-home') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->get('show-home') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
-			</select>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('show-home'); ?>">
-		</td>
-		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
-		<td style="white-space:nowrap">
-			<label for="advman-show-author"><?php _e('By Author:', 'advman'); ?></label>
-			<select name="advman-show-author" id="advman-show-author">
-				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->get('show-author') == 'all' ? " selected='selected'" : ''); ?> value="all"> <?php _e('All Authors', 'advman'); ?></option>
+<?php endif; ?>
+<?php if ($option == 'author'): ?>
 <?php foreach ($users as $user) : ?>
-				<option<?php echo ($ad->get('show-author') == $user->user_id ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
+				<option<?php echo ($value == $user->user_id ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
 <?php endforeach; ?>
+<?php else: ?>
+				<option<?php echo ($value == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
+				<option<?php echo ($value == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
+<?php endif; ?>
 			</select>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $defaultAuthor; ?>">
+<?php if (!$nw) : ?>
+			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('show-' . $option); ?>">
+<?php endif; ?>
 		</td>
 	</tr>
-	<tr>
-		<td style="white-space:nowrap">
-			<label for="advman-show-page"><?php _e('On Posts:', 'advman'); ?></label>
-			<select name="advman-show-post" id="advman-show-post">
-				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->get('show-post') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->get('show-post') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
-			</select>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('show-post'); ?>">
-		</td>
-		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td style="white-space:nowrap">
-			<label for="advman-show-page"><?php _e('On Pages:', 'advman'); ?></label>
-			<select name="advman-show-page" id="advman-show-page">
-				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->get('show-page') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->get('show-page') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
-			</select>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('show-page'); ?>">
-		</td>
-		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td style="white-space:nowrap">
-			<label for="advman-show-archive"><?php _e('On Archives:', 'advman'); ?></label>
-			<select name="advman-show-archive" id="advman-show-archive">
-				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->get('show-archive') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->get('show-archive') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
-			</select>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('show-archive'); ?>">
-		</td>
-		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td style="white-space:nowrap">
-			<label class="advman_label" for="advman-show-search"><?php _e('On Search:', 'advman'); ?></label>
-			<select name="advman-show-search" id="advman-show-search">
-				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-				<option<?php echo ($ad->get('show-search') == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($ad->get('show-search') == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
-			</select>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('show-search'); ?>">
-		</td>
-		<td style="white-space:nowrap">&nbsp;&nbsp;&nbsp;</td>
-		<td></td>
-	</tr>
+<?php endforeach; ?>
 	</table>
 </div>
 <br />
@@ -138,32 +112,41 @@ class Advman_Template_Metabox
 <?php
 	}
 	
-	function display_advanced($ad)
+	function display_network_optimisation($ad)
 	{
-?><h2><?php _e('Advanced Options', 'advman'); ?></h2>
-<?php		
+		return Advman_Template_Metabox::display_optimisation($ad, true);
 	}
 	
-	function display_optimisation($ad)
+	function display_optimisation($ad, $nw = false)
 	{
+		$weight = ($nw) ? $ad->get_network_property('weight') : $ad->get_property('weight');
+		$openxMarket = ($nw) ? $ad->get_network_property('openx-market') : $ad->get_property('openx-market');
+		$openxMarketCpm = ($nw) ? $ad->get_network_property('openx-market-cpm') : $ad->get_property('openx-market-cpm');
+		
 ?><div style="font-size:small;">
 <p>
 	<label for="advman-weight"><?php _e('Weight:'); ?></label>
-	<input type="text" name="advman-weight" style="width:50px" id="advman-weight" value="<?php echo $ad->get('weight'); ?>" />
+	<input type="text" name="advman-weight" style="width:50px" id="advman-weight" value="<?php echo $weight; ?>" />
+<?php if (!$nw): ?>
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('weight'); ?>">
+<?php endif; ?>
 </p>
 <br />
 <p>
 	<label for="advman-openx-market" class="selectit">
-		<input name="advman-openx-market" type="checkbox" id="advman-openx-market" value="yes"<?php echo ($ad->get('openx-market') == 'yes' ? ' checked="checked"' : ''); ?> onChange="document.getElementById('advman-openx-market-cpm').disabled = (!this.checked); document.getElementById('advman-openx-market-cpm').style.color = (this.checked ? 'black' : 'gray'); document.getElementById('advman-openx-market-cpm-label').style.color = (this.checked ? 'black' : 'lightgray');" />
+		<input name="advman-openx-market" type="checkbox" id="advman-openx-market" value="yes"<?php echo ($openxMarket == 'yes' ? ' checked="checked"' : ''); ?> onChange="document.getElementById('advman-openx-market-cpm').disabled = (!this.checked);" />
 		<?php _e('OpenX Market Enabled', 'advman'); ?>
 	</label>
+<?php if (!$nw): ?>
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('openx-market'); ?>">
+<?php endif; ?>
 </p>
 <p>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="advman-openx-market-cpm-label" for="advman-openx-market-cpm"><?php _e('Average eCPM:'); ?></label>
-	<input type="text" name="advman-openx-market-cpm" style="width:50px" id="advman-openx-market-cpm" value="<?php echo $ad->get('openx-market-cpm'); ?>"<?php echo ($ad->get('openx-market') != 'yes' ? ' disabled="disabled"' : ''); ?> />
+	<input type="text" name="advman-openx-market-cpm" style="width:50px" id="advman-openx-market-cpm" value="<?php echo $openxMarketCpm; ?>"<?php echo ($openxMarket != 'yes' ? ' disabled="disabled"' : ''); ?> />
+<?php if (!$nw): ?>
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('openx-market-cpm'); ?>">
+<?php endif; ?>
 </p>
 </div>
 <br />
@@ -171,24 +154,48 @@ class Advman_Template_Metabox
 <?php
 	}
 	
-	function display_code($ad)
+	function display_network_code($ad)
 	{
+		return Advman_Template_Metabox::display_code($ad, true);
+	}
+	
+	function display_code($ad, $nw = false)
+	{
+		$htmlBefore = ($nw) ? $ad->get_network_property('html-before') : $ad->get_property('html-before');
+		$htmlAfter = ($nw) ? $ad->get_network_property('html-after') : $ad->get_property('html-after');
+		
 ?><div style="font-size:small;">
 	<label for="html_before"><?php _e('HTML Code Before'); ?></label><br />
-	<textarea rows="1" cols="60" name="advman-html-before" id="advman-html-before" onfocus="this.select();"><?php echo $ad->get('html-before'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-before'); ?>"><br /><br />
+	<textarea rows="1" cols="60" name="advman-html-before" id="advman-html-before" onfocus="this.select();"><?php echo $htmlBefore; ?></textarea>
+<?php if (!$nw): ?>
+	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-before'); ?>">
+<?php endif; ?>
+	<br /><br />
+<?php if (!$nw): ?>
 	<label for="ad_code"><?php _e('Ad Code'); ?></label><br />
 	<textarea rows="6" cols="60" id="advman-code" style="background:#cccccc" onfocus="this.select();" onclick="this.select();" readonly="readonly"><?php echo $ad->display(); ?></textarea><br /><br />
+<?php endif; ?>
 	<label for="html_after"><?php _e('HTML Code After'); ?></label><br />
-	<textarea rows="1" cols="60" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $ad->get('html-after'); ?></textarea><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-after'); ?>"><br /><br />
+	<textarea rows="1" cols="60" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $htmlAfter; ?></textarea>
+<?php if (!$nw): ?>
+	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-after'); ?>">
+<?php endif; ?>
+	<br /><br />
 </div>
 <br />
-<span style="font-size:x-small;color:gray;"><?php _e('Place any HTML code you want to display before or after your tag in the appropriate section.  If you want to change your ad network tag, you need to import the new tag again.', 'advman'); ?></span>
+<span style="font-size:x-small;color:gray;"><?php _e('Place any HTML code you want to display before or after your tag in the appropriate section.'); ?> <?php _e('If you want to change your ad network tag, you need to import the new tag again.', 'advman'); ?></span>
 <?php
 	}
 	
-	function display_history($ad)
+	
+	function display_network_history($ad)
 	{
-		$revisions = $ad->get('revisions');
+		return Advman_Template_Metabox::display_history($ad, true);
+	}
+	
+	function display_history($ad, $nw = false)
+	{
+		$revisions = ($nw) ? $ad->get_network_property('revisions') : $ad->get_property('revisions');
 		
 ?><ul class='post-revisions'>
 <?php
@@ -211,38 +218,81 @@ class Advman_Template_Metabox
 <?php
 	}
 	
-	function display_colors($ad)
+	function display_network_colors($ad)
 	{
-		$colors = Advman_Tools::organize_colors($ad->get_ad_colors());
+		return Advman_Template_Metabox::display_colors($ad, true);
+	}
+	
+	function display_colors($ad, $nw = false)
+	{
+		$settings = Advman_Tools::organize_appearance($ad);
 ?><table id="advman-settings-colors" width="100%">
 <tr>
 	<td>
 		<table>
-<?php foreach ($colors as $section => $label) : ?>
+<?php foreach ($settings['color'] as $section => $label) : ?>
+<?php 	$color = ($nw) ? $ad->get_network_property('color-' . $section) : $ad->get_property('color-' . $section); ?>
 		<tr>
 			<td class="advman_label"><label for="advman-color-<?php echo $section ?>"><?php echo $label; ?></label></td>
-			<td>#<input name="advman-color-<?php echo $section ?>" onChange="advman_update_ad(this,'ad-color-<?php echo $section ?>','<?php echo $section ?>');" size="6" value="<?php echo $ad->get('color-' . $section); ?>" /></td>
+			<td>#<input name="advman-color-<?php echo $section ?>" onChange="advman_update_ad(this,'ad-color-<?php echo $section ?>','<?php echo $section ?>');" size="6" value="<?php echo $color; ?>" /></td>
+<?php if (!$nw): ?>
 			<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('color-' . $section); ?>"></td>
+<?php endif; ?>
+		</tr>
+<?php endforeach; ?>
+<?php foreach ($settings['font'] as $section => $label) : ?>
+<?php 	$font = ($nw) ? $ad->get_network_property('font-' . $section) : $ad->get_property('font-' . $section); ?>
+		<tr>
+			<td class="advman_label"><label for="advman-font-title"><?php _e('Title Font:'); ?></label></td>
+			<td>
+				<br />
+				<select name="advman-font-<?php echo $section ?>" id="advman-font-<?php echo $section ?>" onChange="advman_update_ad(this,'ad-color-<?php echo $section ?>','font-<?php echo $section ?>');">
+					<option<?php echo ($font == 'Arial' ? ' selected="selected"' : ''); ?> value="Arial"> <?php _e('Arial', 'advman'); ?></option>
+					<option<?php echo ($font == 'Comic Sans MS' ? ' selected="selected"' : ''); ?> value="Comic Sans MS"> <?php _e('Comic Sans MS', 'advman'); ?></option>
+					<option<?php echo ($font == 'Courier' ? ' selected="selected"' : ''); ?> value="Courier"> <?php _e('Courier', 'advman'); ?></option>
+					<option<?php echo ($font == 'Georgia' ? ' selected="selected"' : ''); ?> value="Georgia"> <?php _e('Georgia', 'advman'); ?></option>
+					<option<?php echo ($font == 'Tahoma' ? ' selected="selected"' : ''); ?> value="Tahoma"> <?php _e('Tahoma', 'advman'); ?></option>
+					<option<?php echo ($font == 'Times' ? ' selected="selected"' : ''); ?> value="Times"> <?php _e('Times', 'advman'); ?></option>
+					<option<?php echo ($font == 'Verdana' ? ' selected="selected"' : ''); ?> value="Verdana"> <?php _e('Verdana', 'advman'); ?></option>
+				</select>
+			</td>
 		</tr>
 <?php endforeach; ?>
 		</table>
 	</td>
 	<td>
-<?php if (!empty($colors['bg'])) : ?>
-		<div id="ad-color-bg" style="margin-top:1em;width:200px;background: #<?php echo htmlspecialchars($ad->get('color-bg', true), ENT_QUOTES); ?>;">
+<?php if (!empty($settings['color']['bg'])) : ?>
+<?php 	$color = ($nw) ? $ad->get_network_property('color-bg') : $ad->get('color-bg'); ?>
+<?php 	$color = empty($color) ? 'FFFFFF' : $color; ?>
+		<div id="ad-color-bg" style="width:220px; background: #<?php echo htmlspecialchars($color, ENT_QUOTES); ?>;">
 <?php endif; ?>
-<?php if (!empty($colors['border'])) : ?>
-		<div id="ad-color-border" style="font: 10px arial, sans-serif; border: 1px solid #<?php echo htmlspecialchars($ad->get('color-border', true), ENT_QUOTES); ?>" class="linkunit-wrapper">
+<?php if (!empty($settings['color']['border'])) : ?>
+<?php 	$color = ($nw) ? $ad->get_network_property('color-border') : $ad->get('color-border'); ?>
+<?php 	$color = empty($color) ? 'EEEEEE' : $color; ?>
+		<div id="ad-color-border" style="padding:4px; border: 1px solid #<?php echo htmlspecialchars($color, ENT_QUOTES); ?>">
 <?php endif; ?>
-<?php if (!empty($colors['title'])) : ?>
-		<div id="ad-color-title" style="color: #<?php echo htmlspecialchars($ad->get_property('color-title', true), ENT_QUOTES); ?>; font: 11px verdana, arial, sans-serif; padding: 2px;"><b><u><?php _e('Linked Title', 'advman'); ?></u></b><br /></div>
+<?php if (!empty($settings['color']['title'])) : ?>
+<?php 	$font = ($nw) ? $ad->get_network_property('font-title') : $ad->get('font-title'); ?>
+<?php	$font = empty($font) ? 'verdana, arial, sans-serif' : $font; ?>
+<?php 	$color = ($nw) ? $ad->get_network_property('color-title') : $ad->get('color-title'); ?>
+<?php 	$color = empty($color) ? 'EEEEEE' : $color; ?>
+		<div id="ad-color-title" style="font: 12px <?php echo $font ?>; padding: 2px; color: #<?php echo htmlspecialchars($color, ENT_QUOTES); ?>;"><b><u><?php _e('Linked Title', 'advman'); ?></u></b><br /></div>
 <?php endif; ?>
-<?php if (!empty($colors['text'])) : ?>
-		<div id="ad-color-text" style="color: #<?php echo htmlspecialchars($ad->get_property('color-text', true), ENT_QUOTES); ?>; padding: 2px;" class="text"><?php _e('Advertiser\'s ad text here', 'advman'); ?><br /></div>
+<?php if (!empty($settings['color']['text'])) : ?>
+<?php 	$font = ($nw) ? $ad->get_network_property('font-text') : $ad->get('font-text'); ?>
+<?php	$font = empty($font) ? 'verdana, arial, sans-serif' : $font; ?>
+<?php 	$color = ($nw) ? $ad->get_network_property('color-text') : $ad->get('color-text'); ?>
+<?php 	$color = empty($color) ? 'EEEEEE' : $color; ?>
+		<div id="ad-color-text" style="font: 11px <?php echo $font ?>; padding: 2px; color: #<?php echo htmlspecialchars($color, ENT_QUOTES); ?>;"><?php _e('Advertiser\'s ad text here', 'advman'); ?><br /></div>
 <?php endif; ?>
-		<div style="color: #000; padding: 2px;" class="rtl-safe-align-right">
-			&nbsp;<u><?php printf(__('Ads by %s', 'advman'), $ad->network_name); ?></u></div>
-		</div>
+<?php if (!empty($settings['color']['link'])) : ?>
+<?php 	$font = ($nw) ? $ad->get_network_property('font-link') : $ad->get('font-link'); ?>
+<?php	$font = empty($font) ? 'verdana, arial, sans-serif' : $font; ?>
+<?php 	$color = ($nw) ? $ad->get_network_property('color-link') : $ad->get('color-link'); ?>
+<?php 	$color = empty($color) ? 'EEEEEE' : $color; ?>
+		<div id="ad-color-link" style="font: 11px <?php echo $font ?>; padding: 2px; color: #<?php echo htmlspecialchars($color, ENT_QUOTES); ?>;"><?php _e('www.advertiser-url.com', 'advman'); ?><br /></div>
+<?php endif; ?>
+		<div style="color: #000000; font: 10px verdana, arial, sans-serif; text-align:center"><u><?php printf(__('Ads by %s', 'advman'), $ad->network_name); ?></u></div>
 	</td>
 </tr>
 </table>
@@ -265,7 +315,11 @@ class Advman_Template_Metabox
 <textarea id="advman_notes" rows="8" cols="28" name="advman-notes"><?php echo $ad->get('notes'); ?></textarea><br />
 <?php
 	}
-	function display_save_settings($ad)
+	function display_network_save_settings($ad)
+	{
+		Advman_Template_Metabox::display_save_settings($ad, true);
+	}
+	function display_save_settings($ad, $nw = false)
 	{
 		list($last_user, $last_timestamp, $last_timestamp2) = Advman_Tools::get_last_edit($ad->get_property('revisions'));
 ?>
@@ -276,17 +330,21 @@ class Advman_Template_Metabox
 		<div id="save-action">
 			<input id="save-post" class="button button-highlighted" type="submit" tabindex="4" value="<?php _e('Apply', 'advman'); ?>" onclick="document.getElementById('advman-action').value='apply';" />
 		</div>
+<?php if (!$nw) : ?>
 		<div id="preview-action">
 			<a class="preview button" href="<?php echo $ad->get_preview_url(); ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview Ad', 'advman'); ?></a>
 			<input type="hidden" name="wp-preview" id="wp-preview" value="" />
 		</div><!-- preview-action -->
+<?php endif; ?>
 		<div class="clear"></div>
 	</div><!-- minor-publishing-actions -->
 	<div id="misc-publishing-actions">
+<?php if (!$nw) : ?>
 	<div class="misc-pub-section">
 		<label for="post_status"><?php _e('Status:', 'advman'); ?></label>
 		<b><a href="javascript:submit();" class="edit-post-status hide-if-no-js" onclick="document.getElementById('advman-action').value='<?php echo $ad->active ? 'deactivate' : 'activate'; ?>'; document.getElementById('advman-form').submit();"><?php echo ($ad->active) ? __('Active', 'advman') : __('Paused', 'advman'); ?></a></b>
 	</div><!-- misc-pub-section -->
+<?php endif; ?>
 	<div class="misc-pub-section curtime misc-pub-section-last">
 		<span id="timestamp"><?php echo __('Last edited', 'advman') . ' <abbr title="' . $last_timestamp2 . '"><b>' . $last_timestamp . __(' ago', 'advman') . '</b></abbr> ' . __('by', 'advman') . ' ' . $last_user; ?></span>
 	</div><!-- misc-pub-section curtime misc-pub-section-last -->

@@ -1,6 +1,4 @@
 <?php
-
-@define('OX_LIB', dirname(__FILE__) . '/Swifty');
 require_once(OX_LIB . '/Ad.php');
 require_once(OX_LIB . '/Dal.php');
 
@@ -19,7 +17,7 @@ class OX_Swifty
 		$this->actions = array();
 		
 		// Load all Swifty plugins
-		OX_Tools::require_directory(OX_LIB . '/Plugins');
+		OX_Tools::load_plugins(OX_LIB . '/Plugins', $this);
 		
 		// Load the data access layer
 		if (is_null($dalClass)) {
@@ -124,11 +122,11 @@ class OX_Swifty
 		
 		$imported = false;
 		if (!empty($tag)) {
-			$networks = $this->getAction('register_ad_network');
+			$networks = $this->getAction('ad_network');
 			foreach ($networks as $network) {
 				if (call_user_func(array($network, 'import_detect_network'), $tag)) {
 					$ad = new $network;
-					$ad->import($tag);
+					$ad->import_settings($tag);
 					$imported = true;
 					break; //leave the foreach loop
 				}
@@ -137,12 +135,11 @@ class OX_Swifty
 		
 		// Not a pre-defined network - we will make it HTML code...
 		if (!$imported) {
-			$ad=new OX_Ad
-_Html();
+			$ad=new OX_Ad_Html();
 			$ad->import_settings($tag);
 		}
 		
-		$id = $this->insertAd($ad);
+		$ad = $this->insertAd($ad);
 		
 		return $ad;
 	}
@@ -160,62 +157,52 @@ _Html();
 		return false;
 	}
 		
-	// turn on/off optimisation across openx for all ads
-	function _set_auto_optimise($active)
+	function selectAd($name = null)
 	{
-		global $_advman;
+		global $advman_engine;
 		
-		$market = ($active) ? 'yes' : 'no';
-		foreach ($_advman['ads'] as $id => $ad) {
-			$_advman['ads'][$id]->set_property('openx-market', $market);
+		if (empty($name)) {
+			$name = $this->getSetting('default-ad');
 		}
-		foreach ($_advman['defaults'] as $network => $settings) {
-			$_advman['defaults'][$network]['openx-market'] = $market;
-		}
-		update_option('plugin_adsensem', $_advman);
-	}
-		
-	function selectAd($name)
-	{
-		global $_advman;
-		
-		// Find the ads which match the name
-		$ads = array();
-		$totalWeight = 0;
-		foreach ($_advman['ads'] as $id => $ad) {
-			if ( ($ad->name == $name) && ($ad->is_available()) ) {
-				$ads[] = $ad;
-				$totalWeight += $ad->get('weight');
+		if (!empty($name)) {
+			// Find the ads which match the name
+			$ads = $advman_engine->getAds();
+			$totalWeight = 0;
+			$validAds = array();
+			foreach ($ads as $id => $ad) {
+				if ( ($ad->name == $name) && ($ad->is_available()) ) {
+					$validAds[] = $ad;
+					$totalWeight += $ad->get('weight');
+				}
 			}
-		}
-		// Pick the ad
-		// Generate a number between 0 and 1
-		$rnd = (mt_rand(0, PHP_INT_MAX) / PHP_INT_MAX);
-		// Loop through ads until the selected one is chosen
-		$wt = 0;
-		foreach ($ads as $ad) {
-			$wt += $ad->get('weight');
-			if ( ($wt / $totalWeight) > $rnd) {
-				// Display the ad
-				return $ad;
+			// Pick the ad
+			// Generate a number between 0 and 1
+			$rnd = (mt_rand(0, PHP_INT_MAX) / PHP_INT_MAX);
+			// Loop through ads until the selected one is chosen
+			$wt = 0;
+			foreach ($validAds as $ad) {
+				$wt += $ad->get('weight');
+				if ( ($wt / $totalWeight) > $rnd) {
+					// Display the ad
+					return $ad;
+				}
 			}
 		}
 	}
+	
 	function update_counters($ad)
 	{
-		global $_advman_counter;
-		
 		if (!empty($ad)) {
-			if (empty($_advman_counter['id'][$ad->id])) {
-				$_advman_counter['id'][$ad->id] = 1;
+			if (empty($this->counter['id'][$ad->id])) {
+				$this->counter['id'][$ad->id] = 1;
 			} else {
-				$_advman_counter['id'][$ad->id]++;
+				$this->counter['id'][$ad->id]++;
 			}
 			
-			if (empty($_advman_counter['network'][$ad->network])) {
-				$_advman_counter['network'][$ad->network] = 1;
+			if (empty($this->counter['network'][$ad->network])) {
+				$this->counter['network'][$ad->network] = 1;
 			} else {
-				$_advman_counter['network'][$ad->network]++;
+				$this->counter['network'][$ad->network]++;
 			}
 		}
 	}

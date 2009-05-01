@@ -1,5 +1,5 @@
 <?php
-require_once OX_LIB . '/Swifty/Dal.php';
+require_once OX_LIB . '/Dal.php';
 
 class Advman_Dal extends OX_Dal
 {
@@ -52,8 +52,7 @@ class Advman_Dal extends OX_Dal
 			
 			//Backup cycle
 			$backup = $this->_getData('plugin_adsensem_backup');
-			$version = explode('.', $data['version']);
-			$backup[$version[0]] = $data;
+			$backup[$data['version']] = $data;
 			$this->_setData($backup, 'plugin_adsensem_backup');
 			
 			$upgrade = new Advman_Upgrade();
@@ -65,19 +64,22 @@ class Advman_Dal extends OX_Dal
 	function select_setting($key)
 	{
 		switch ($key) {
-			case 'last-sync':
-				return $this->data['last-sync'];
-			case 'product-name':
-				return 'advman';
-			case 'publisher-id':
-				return $this->data['uuid'];
-			case 'product-version':
-				return ADVMAN_VERSION;
+			case 'account-ids' :
+			case 'default-ad' :
+			case 'defaults' :
+			case 'last-sync' :
+			case 'notices' :
+			case 'publisher-id' :
+				return $this->data[$key];
+			case 'admin-email':
+				return get_option('admin_email');
 			case 'host-version':
 				global $wp_version;
 				return $wp_version;
-			case 'admin-email':
-				return get_option('admin_email');
+			case 'product-name':
+				return 'advman';
+			case 'product-version':
+				return ADVMAN_VERSION;
 			case 'user-login':
 				global $user_login;
 				if (function_exists('get_currentuserinfo')) {
@@ -87,20 +89,18 @@ class Advman_Dal extends OX_Dal
 				return '';
 			case 'website-url':
 				return get_option('siteurl');
-			case 'notices':
-				return $this->data['notices'];
 		}
 		return $this->data['settings'][$key];
 	}
+	
 	function update_setting($key, $value)
 	{
 		switch ($key) {
+			case 'account-ids':
+			case 'defualts':
 			case 'last-sync':
-				$this->data['last-sync'] = $value;
-				$this->_update_data();
-				return true;
 			case 'notices' :
-				$this->data['notices'] = $value;
+				$this->data[$key] = $value;
 				$this->_update_data();
 				return true;
 			case 'product-name':
@@ -122,8 +122,9 @@ class Advman_Dal extends OX_Dal
 		$this->data['next_ad_id'] = $id+1;
 		$ad->id = $id;
 		$this->data['ads'][$id] = $ad;
+		OX_Tools::sort($this->data['ads']);
 		$this->_update_data();
-		return $id;
+		return $ad;
 	}
 	
 	function delete_ad($id)

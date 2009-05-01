@@ -2,16 +2,22 @@
 
 class Advman_Template_Edit
 {
-	function display($ad)
+	function display($ad, $nw = false)
 	{
+		$target = $nw ? get_class($ad) : $ad->id;
+		$mode = $nw ? 'edit_network' : 'edit_ad';
 ?>
 <div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
+<?php if ($nw): ?>
+	<h2><?php printf(__('Edit %s Network Settings', 'advman'), "<span class='" . strtolower($ad->network) . "'>" . $ad->network_name . "</span>"); ?></h2>
+<?php else: ?>
 	<h2><?php printf(__('Edit Settings for %s Ad:', 'advman'), $ad->network_name); ?> <span class="<?php echo strtolower($ad->network); ?>"><?php echo "[{$ad->id}] " . $ad->name; ?></span></h2>
+<?php endif; ?>		
 	<form action="" method="post" id="advman-form" enctype="multipart/form-data">
-	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
+	<input type="hidden" name="advman-mode" id="advman-mode" value="<?php echo $mode; ?>">
 	<input type="hidden" name="advman-action" id="advman-action">
-	<input type="hidden" name="advman-target" id="advman-target" value="<?php echo $ad->id; ?>">
+	<input type="hidden" name="advman-target" id="advman-target" value="<?php echo $target; ?>">
 <?php  
 		wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );  
 		wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
@@ -26,7 +32,7 @@ class Advman_Template_Edit
 	<div id="post-body-content" class="has-sidebar-content">
 <?php
 		// Title
-		$this->display_title($ad);
+		$this->display_title($ad, $nw);
 		// Show normal boxes
 		do_meta_boxes('advman','main',$ad);
 		// Show advanced screen
@@ -42,9 +48,10 @@ class Advman_Template_Edit
 <?php
 	}
 	
-	function display_title($ad)
+	function display_title($ad, $nw = false)
 	{
-?><div id="titlediv">
+if (!$nw): ?>
+<div id="titlediv">
 <div id="titlewrap">
 	<input type="text" name="advman-name" size="30" value="<?php echo $ad->name; ?>" id="title" autocomplete="off" />
 </div><!-- titlewrap -->
@@ -52,7 +59,7 @@ class Advman_Template_Edit
 	<span style="font-size:x-small;color:gray;"><?php _e('Enter the name for this ad.', 'advman'); ?> <?php _e('Ads with the same name will rotate according to their relative weights.', 'advman'); ?></span>
 </div><!-- inside -->
 </div><!-- titlediv -->
-<?php
+<?php endif;
 	}
 	
 	function display_advanced($ad)

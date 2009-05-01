@@ -1,23 +1,25 @@
 <?php
 require_once(OX_LIB . '/Ad.php');	
-/*
-$_advman_networks['OX_Ad
-_Adgridwork'] = array(
-		'www-create' => 'http://www.adgridwork.com/u.php?page=submitsite',
-		'www-signup'	=>	'http://www.adgridwork.com/?r=18501',														 
-		 );
-*/
-class OX_Plugins_Adgridwork extends OX_Ad
+
+class OX_Plugin_Adgridwork extends OX_Ad
 {
 	var $mnemonic = 'Adgridwork';
 	var $network_name = 'AdGridWork';
 	var $url = 'http://www.adgridwork.com';
 	
-	function OX_Plugins_Adgridwork()
+	function OX_Plugin_Adgridwork()
 	{
 		$this->OX_Ad();
 	}
 		
+	/**
+	 * This function is called statically from the ad engine.  Use this function to put any hooks in the ad engine that you want to use.
+	 */
+	function register_plugin($engine)
+	{
+		$engine->addAction('ad_network', get_class());
+	}
+	
 	function get_network_property_defaults()
 	{
 		$properties = array(
@@ -33,6 +35,11 @@ class OX_Plugins_Adgridwork extends OX_Ad
 		return $properties + parent::get_network_property_defaults();
 	}
 	
+	function get_ad_formats()
+	{
+		return array('800x90', '728x90', '600x90', '468x60', '400x90', '234x60', '200x90', '120x600', '160x600', '200x360', '200x270', '336x280', '300x250', '250x250', '200x180', '180x150');
+	}
+	
 	function import_detect_network($code)
 	{
 		
@@ -45,9 +52,6 @@ class OX_Plugins_Adgridwork extends OX_Ad
 		
 	function import_settings($code)
 	{
-		// Import parent settings first!
-		parent::import_settings($code);
-		
 		if (preg_match("/www\.adgridwork\.com\/\?r=(\d*)/", $code, $matches)) {
 			$this->set_property('account-id', $matches[1]);
 			$code = str_replace("www.adgridwork.com/?r={$matches[1]}", "www.adgridwork.com/?r={{account-id}}", $code);
@@ -88,7 +92,7 @@ class OX_Plugins_Adgridwork extends OX_Ad
 			$code = str_replace("var border_color = '{$matches[1]}'", "var border_color = '{{color-border}}'", $code);
 		}
 		
-		$this->set_property('code', $code);
+		parent::import_settings($code);
 	}
 
 	function _form_settings_help(){

@@ -1,21 +1,23 @@
 <?php
 require_once(OX_LIB . '/Ad.php');	
-/*
-$_advman_networks['OX_Ad
-_Adpinion'] = array(
-	'www-create'	=>	'http://www.adpinion.com/',
-	'www-signup'		=>	'http://www.adpinion.com/',
-);
-*/
-class OX_Plugins_Adpinion extends OX_Ad
+
+class OX_Plugin_Adpinion extends OX_Ad
 {
 	var $mnemonic = 'Adpinion';
 	var $network_name = 'Adpinion';
 	var $url = 'http://www.adpinion.com';
 	
-	function OX_Plugins_Adpinion()
+	function OX_Plugin_Adpinion()
 	{
 		$this->OX_Ad();
+	}
+	
+	/**
+	 * This function is called statically from the ad engine.  Use this function to put any hooks in the ad engine that you want to use.
+	 */
+	function register_plugin($engine)
+	{
+		$engine->addAction('ad_network', get_class());
 	}
 	
 	function display($search, $replace)
@@ -48,6 +50,11 @@ class OX_Plugins_Adpinion extends OX_Ad
 		return $properties + parent::get_network_property_defaults();
 	}
 	
+	function get_ad_formats()
+	{
+		return array('728x90', '468x60', '120x600', '160x600', '300x250');
+	}
+	
 	function import_detect_network($code)
 	{
 		return ( preg_match('/src="http:\/\/www.adpinion.com\/app\//', $code, $matches) !==0);
@@ -55,9 +62,6 @@ class OX_Plugins_Adpinion extends OX_Ad
 		
 	function import_settings($code)
 	{
-		// Import parent settings first!
-		parent::import_settings($code);
-		
 		$width = '';
 		$height = '';
 		if (preg_match("/website=(\w*)/", $code, $matches) != 0) {
@@ -86,7 +90,7 @@ class OX_Plugins_Adpinion extends OX_Ad
 			$this->set_property('adformat', $width . 'x' . $height);
 		}
 		
-		$this->set_property('code', $code);
+		parent::import_settings($code);
 	}
 }
 /*

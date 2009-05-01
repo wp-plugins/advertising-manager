@@ -1,23 +1,25 @@
 <?php
 require_once(OX_LIB . '/Ad.php');	
-/*
-$_advman_networks['OX_Ad
-_Shoppingads'] = array(
-		'www-create'	=>	'http://shoppingads.com/getcode/',
-		'www-signup'	=>	'http://www.shoppingads.com/refer_1ebff04bf5805f6da1b4',
-		 );
-*/
-class OX_Plugins_Shoppingads extends OX_Ad
+
+class OX_Plugin_Shoppingads extends OX_Ad
 {
 	var $mnemonic = 'Shoppingads';
 	var $network_name = 'Shopping Ads';
 	var $url = 'http://www.shoppingads.com';
 	
-	function OX_Plugins_Shoppingads()
+	function OX_Plugin_Shoppingads()
 	{
 		$this->OX_Ad();
 	}
 		
+	/**
+	 * This function is called statically from the ad engine.  Use this function to put any hooks in the ad engine that you want to use.
+	 */
+	function register_plugin($engine)
+	{
+		$engine->addAction('ad_network', get_class());
+	}
+	
 	function get_network_property_defaults()
 	{
 		$properties = array(
@@ -38,6 +40,16 @@ class OX_Plugins_Shoppingads extends OX_Ad
 		return $properties + parent::get_network_property_defaults();
 	}
 	
+	function get_ad_formats()
+	{
+		return array('728x90', '468x60', '234x60', '120x600', '160x600', '120x240', '336x280', '300x250', '250x250', '180x150', '125x125');
+	}
+	
+	function get_ad_colors()
+	{
+		return array('border', 'title', 'bg', 'text');
+	}
+	
 	function import_detect_network($code)
 	{
 		return ( strpos($code,'shoppingads_ad_client')!==false );
@@ -45,9 +57,6 @@ class OX_Plugins_Shoppingads extends OX_Ad
 		
 	function import_settings($code)
 	{
-		// Import parent settings first!
-		parent::import_settings($code);
-		
 		if (preg_match("/shoppingads_ad_client(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
 			$this->set_property('account-id', $matches[4]);
 			$code = str_replace("shoppingads_ad_client{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_ad_client{$matches[1]}={$matches[2]}{$matches[3]}{{account-id}}{$matches[5]}", $code);
@@ -119,7 +128,7 @@ class OX_Plugins_Shoppingads extends OX_Ad
 			$code = str_replace("shoppingads_options{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_options{$matches[1]}={$matches[2]}{$matches[3]}{{new-window}}{$matches[5]}", $code);
 		}
 		
-		$this->set_property('code', $code);
+		parent::import_settings($code);
 	}
 }
 /*

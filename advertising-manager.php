@@ -69,19 +69,6 @@ function advman_run()
 		die(0);
 	}
 
-	/* REVERT TO PREVIOUS BACKUP OF AD DATABASE */
-	if (!empty($_REQUEST['advman-revert-db'])) {
-		$version = OX_Tools::sanitize($_REQUEST['advman-revert-db'], 'number');
-		$backup = get_option('plugin_adsensem_backup');
-		if (!empty($backup[$version])) {
-			$_advman = $backup[$version];
-			update_option('plugin_adsensem',$_advman);
-			if (!empty($_REQUEST['advman-block-upgrade'])) {
-				die();
-			}
-		}
-	}
-
 	// Add a filter for displaying an ad in the content
 	add_filter('the_content', 'advman_filter_content');
 	// Widgets are initialised
