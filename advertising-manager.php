@@ -4,8 +4,8 @@ Plugin Name: Advertising Manager
 PLugin URI: http://code.openx.org/projects/show/advertising-manager
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer, Martin Fitzpatrick
-Version: 3.3.11
-Author URI: http://www.mutube.com/
+Version: 3.3.12
+Author URI: http://www.switzer.org/
 */
 
 // Show notices (DEBUGGING ONLY)
@@ -15,7 +15,7 @@ Author URI: http://www.mutube.com/
 load_plugin_textdomain('advman', false, 'advertising-manager/languages');
 
 // DEFINITIONS
-@define("ADVMAN_VERSION", "3.3.11");
+@define("ADVMAN_VERSION", "3.3.12");
 @define('ADVMAN_PATH', dirname(__FILE__));
 @define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
 
@@ -90,18 +90,31 @@ class advman
 		
 		if (OX_Tools::is_data_valid()) {
 			if (!empty($_advman['ads'])) {
-				foreach ($_advman['ads'] as $id => $ad) {
-					$name = $ad->name;
-					$args = array('name' => $name, 'height' => $ad->get('height', true), 'width' => $ad->get('width', true));
-					if (function_exists('wp_register_sidebar_widget')) {
-						//$id, $name, $output_callback, $options = array()
-						wp_register_sidebar_widget("advman-$name", "Ad#$name", array('advman','widget'), $args, $name);
-	//					wp_register_widget_control("advman-$name", "Ad#$name", array('advman','widget_control'), $args, $name); 
-					} elseif (function_exists('register_sidebar_module') ) {
-						register_sidebar_module("Ad #$name", 'advman_sbm_widget', "advman-$name", $args );
-	//					register_sidebar_module_control("Ad #$name", array('advman','widget_control'), "advman-$name");
-					}			
+			    $widgets = array();
+			    foreach ($_advman['ads'] as $id => $ad) {
+				if (!empty($ad->name)) {
+				    $widgets[$ad->name] = $ad;
 				}
+			    }
+			    foreach ($widgets as $name => $ad)
+			    {
+				$n = __('Ad: ', 'advman') . $ad->name;
+				$description = __('An ad from the Advertising Manager plugin');
+				$args = array(
+				    'name' => $n,
+				    'description' => $description,
+				    'width' => $ad->get('width', true),
+				    'height' => $ad->get('height', true),
+				);
+				if (function_exists('wp_register_sidebar_widget')) {
+					//$id, $name, $output_callback, $options = array()
+					wp_register_sidebar_widget("advman-$name", "Ad#$name", array('advman','widget'), $args, $name);
+//					wp_register_widget_control("advman-$name", "Ad#$name", array('advman','widget_control'), $args, $name); 
+				} elseif (function_exists('register_sidebar_module') ) {
+					register_sidebar_module("Ad #$name", 'advman_sbm_widget', "advman-$name", $args );
+//					register_sidebar_module_control("Ad #$name", array('advman','widget_control'), "advman-$name");
+				}			
+			    }
 			}
 		}
 	}
@@ -137,13 +150,13 @@ class advman
 			$n = substr($args['widget_id'],9);   //Chop off beginning advman- bit
 		}
 		
-		if ($n !== 'default-ad') {
-			$ad = $_advman['ads'][$n];
-		} else {
-			$ad = $_advman['ads'][$_advman['default-ad']];
+		if ($n == 'default-ad') {
+		    $n = $_advman['default-ad'];
 		}
 		
-		if ($ad->is_available()) {
+		$ad = advman::select_ad($n);
+		
+		if (!empty($ad) && $ad->is_available()) {
 			echo $before_widget;
 
 			if($ad->title != '') {
