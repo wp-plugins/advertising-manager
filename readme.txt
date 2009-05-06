@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=martin%2
 Tags: ad, adbrite, adgridwork, adify, admin, adpinion, adroll, ads, adsense, adserver, advertisement, advertising, affiliate, banner, banners, chitika, cj, commercial, commission, crispads, google, income, junction, link, manager, media, money, openx, plugin, random, referral, revenue, rotator, seo, server, shoppingads, sidebar, widget, widgetbucks, yahoo, ypn
 Requires at least: 2.5
 Tested up to: 2.7
-Stable tag: 4.0.1
+Stable tag: 4.0.0
 
 This plugin will manage and rotate your Google Adsense and other ads on your Wordpress blog.
 
@@ -35,7 +35,7 @@ Related Links:
 
 More detailed installation instructions can be found [here](http://code.openx.org/wiki/advertising-manager/Installation_Instructions).
 
-If you are upgrading from Adsense Manager, Adsense Deluxe, or a previous version of Advertising Manager, upgrade instructions can be found [here](http://code.openx.org/wiki/advertising-manager/Upgrading_Instructions).
+If you are upgrading from Adsense Manager or a previous version of Advertising Manager, upgrade instructions can be found [here](http://code.openx.org/wiki/advertising-manager/Upgrading_Instructions).
 
 
 == Screenshots ==
@@ -56,7 +56,7 @@ If you are upgrading from Adsense Manager, Adsense Deluxe, or a previous version
 Advertising Manager will automatically import your settings from Adsense Manager.  There is no modification necessary.  In addition, Advertising Manager will accept the Adsense Manager ad calls ('<?php adsensem_ad() ?>') as well.
 
 = I previously used Adsense Deluxe plugin for Wordpress.  Do I need to reconfigure my ads?
-Advertising Manager will automatically import your settings from Adsense Deluxe.  There is no modification necessary.  In addition, Advertising Manager will accept the Adsense Manager ad calls ('<!--adsense#name-->') as well.
+Advertising Manager no longer supports a direct upgrade from Adsense Deluxe.  You can upgrade to Adsense Manager first, then upgrade to Advertising Manager if you wish.
 
 = Does Advertising Manager support Wordpress MU (multi-user)? =
 Yes.

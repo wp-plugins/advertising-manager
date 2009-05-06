@@ -20,11 +20,7 @@ class OX_Swifty
 		OX_Tools::load_plugins(OX_LIB . '/Plugins', $this);
 		
 		// Load the data access layer
-		if (is_null($dalClass)) {
-			$this->dal = new OX_Dal();
-		} else {
-			$this->dal = new $dalClass;
-		}
+		$this->dal = is_null($dalClass) ? new OX_Dal() : new $dalClass();
 		
 		// Sync with OpenX
 		$this->sync();
@@ -54,30 +50,6 @@ class OX_Swifty
 	function setSetting($key)
 	{
 		return $this->dal->update_setting($key);
-	}
-	
-	function saveAdProperties($id)
-	{
-		$ad = $this->dal->select_ad($id);
-		
-		if ($ad) {
-			$ad->saveProperties($properties);
-			return $this->dal->update_ad($id, $ad);
-		}
-		
-		return false;
-	}
-	
-	function saveNetworkProperties($id)
-	{
-		$network = $this->dal->select_network($id);
-		
-		if ($network) {
-			$network->saveProperties($properties);
-			return $this->dal->update_ad_network($id, $network);
-		}
-		
-		return false;
 	}
 	
 	function insertAd($ad)
@@ -114,6 +86,11 @@ class OX_Swifty
 		}
 		
 		return false;
+	}
+	
+	function setAdNetwork($ad)
+	{
+		return $this->dal->update_ad_network($ad);
 	}
 	
 	function importAdTag($tag)

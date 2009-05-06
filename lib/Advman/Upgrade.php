@@ -1,89 +1,75 @@
 <?php
 
+include_once (ADVMAN_LIB . '/Admin.php');
+
 class Advman_Upgrade
 {
-	function upgrade()
+	// Upgrade the underlying data structure to the latest version
+	function upgrade_advman(&$data)
 	{
-		global $advman_engine;
-	
-		$upgraded = false;
-		$optimiseMsg = false;
-		$dbVersion = $advman_engine->getVersion();
-		
-		// Bug where version was = a string for a while...
-		if ($dbVersion == 'ADVMAN_VERSION') {
-			$dbVersion = '3.3.4';
-			$upgraded = true;
-		}
-		
-		/* List of possible upgrade paths here: Ensure that versions automagically stack on top of one another
-				e.g. v1.x to v3.x should be possilbe v1.x > v2.x > v3.x */
-		
-		if (version_compare($dbVersion, '3.0', '<')) {
-			Advman_Upgrade::v2_x_to_3_0();
-			$upgraded = true;
-		}
-		
-		if (version_compare($dbVersion, '3.3.4', '<')) {
-			Advman_Upgrade::v3_0_to_3_3_4();
-			$optimiseMsg = true;
-			$upgraded = true;
-		}
-	
-		if (version_compare($dbVersion, '3.3.8', '<')) {
-			Advman_Upgrade::v3_3_4_to_3_3_8();
-			$upgraded = true;
-		}
-	
-		if (version_compare($dbVersion, '3.3.10', '<')) {
-			Advman_Upgrade::v3_3_10();
-			$upgraded = true;
-		}
-		
-		if (version_compare($dbVersion, '3.3.11', '<')) {
-			Advman_Upgrade::v3_3_11();
-			$upgraded = true;
-		}
-	
-		if ($upgraded) {
-			//Write notice, ONLY IF UPGRADE HAS OCCURRED
-			if ($optimiseMsg) {
-				$notice = __('<strong>Advertising Manager</strong> has been upgraded from <strong>Adsense Manager</strong>.', 'advman');
-				$question = __('Enable <a>auto optimisation</a>? (RECOMMENDED)', 'advman');
-				$question = str_replace('<a>', '<a href="http://code.openx.org/wiki/advertising-manager/Auto_Optimization" target="_new">', $question);
-				Advman_Admin::add_notice('optimise', "$notice $question", 'yn');
+		$version = Advman_Upgrade::_get_version($data);
+		Advman_Upgrade::_backup($data, $version);
+		$versions = array('4.0');
+		foreach ($versions as $v) {
+			if (version_compare($version, $v, '<')) {
+				call_user_func(array('Advman_Upgrade', 'advman_' . str_replace('.','_',$v)), $data);
 			}
-			$advman_engine->setVersion(ADVMAN_VERSION);
-		}
-	}
-
-	function v3_3_11()
-	{
-		return;
-	}
-	function v3_3_10()
-	{
-		global $advman_engine;
-		
-		$ads = $advman_engine->getAds();
-		foreach ($ads as $ad) {
-			$ad->set_network_property($ad->network == 'OX_Ad_Adsense' ? '3' : '');
 		}
 	}
 	
-	function v3_3_4_to_3_3_8()
+	function upgrade_adsensem(&$data)
 	{
-		global $advman_engine;
-		
-		$advman_engine->setSetting('openx-sync', true);
-		$advman_engine->setSetting('uuid', md5(uniqid('', true)));
+		$version = Advman_Upgrade::_get_version($data);
+		Advman_Upgrade::adsensem_upgrade_ad_classes($data);
+		Advman_Upgrade::adsensem_upgrade_ad_ids($data);
+		Advman_Upgrade::adsensem_upgrade_ad_settings($data);
+		Advman_Upgrade::adsensem_upgrade_network_classes($data);
+		Advman_Upgrade::adsensem_upgrade_network_settings($data);
+		Advman_Upgrade::adsensem_upgrade_settings($data);
+		$notice = __('<strong>Advertising Manager</strong> has been upgraded from your <strong>Adsense Manager</strong> settings.', 'advman');
+//		$question = __('Enable <a>auto optimisation</a>? (RECOMMENDED)', 'advman');
+//		$question = str_replace('<a>', '<a href="http://code.openx.org/wiki/advertising-manager/Auto_Optimization" target="_new">', $question);
+		Advman_Admin::add_notice('optimise', $notice, 'ok');
+
+		// Set the new version
+		$data['settings']['version'] = '3.3.11';
+
+		return Advman_Upgrade::upgrade_advman($data);
 	}
-	function v3_0_to_3_3_4()
+	
+	function _get_version(&$data)
 	{
-		global $advman_engine;
-		$old = $advman_engine->getAds();
+		$version = $data['settings']['version'];
+		if (empty($version)) {
+			$version = $data['version'];
+			if ($version == 'ADVMAN_VERSION') {
+				$version = '3.3.4';
+			}
+			unset ($data['version']);
+			$data['settings']['version'] = $version;
+		}
+		return $version;
+	}
+	
+	function _backup($data, $version)
+	{
+		$backup = get_option('plugin_advman_backup');
+		if (empty($backup)) {
+			$backup = get_option('plugin_adsensem_backup');
+			delete_option('plugin_adsensem_backup');
+		}
 		
-		// New / Old class structure mapping
+		$backup[$version] = $data;
+		update_option('plugin_advman_backup', $backup);
+	}
+		
+	function advman_4_0(&$data)
+	{
+		$data['networks'] = $data['defaults'];
+		$data['settings']['publisher_id'] = $data['uuid'];
+	}
+	function adsensem_upgrade_ad_classes(&$data)
+	{
 		$adnets = array(
 			'ad_adbrite' => 'OX_Ad_Adbrite',
 			'ad_adgridwork' => 'OX_Ad_Adgridwork',
@@ -101,331 +87,305 @@ class Advman_Upgrade
 			'ad_shoppingads' => 'OX_Ad_Shoppingads',
 			'ad_widgetbucks' => 'OX_Ad_Widgetbucks',
 			'ad_ypn' => 'OX_Ad_Ypn',
+			'ox_adnet_adbrite' => 'OX_Ad_Adbrite',
+			'ox_adnet_adgridwork' => 'OX_Ad_Adgridwork',
+			'ox_adnet_adify' => 'OX_Ad_Adify',
+			'ox_adnet_adpinion' => 'OX_Ad_Adpinion',
+			'ox_adnet_adroll' => 'OX_Ad_Adroll',
+			'ox_adnet_adsense' => 'OX_Ad_Adsense',
+			'ox_adnet_chitika' => 'OX_Ad_Chitika',
+			'ox_adnet_cj' => 'OX_Ad_Cj',
+			'ox_adnet_crispads' => 'OX_Ad_Crispads',
+			'ox_adnet_openx' => 'OX_Ad_Openx',
+			'ox_adnet_shoppingads' => 'OX_Ad_Shoppingads',
+			'ox_adnet_widgetbucks' => 'OX_Ad_Widgetbucks',
+			'ox_adnet_ypn' => 'OX_Ad_Ypn',
 		);
-			
-		// Change defaults to new class structure
-		$defaults = $advman_engine->getSetting('defaults');
-		if (!empty($defaults)) {
-			$new = array();
-			foreach ($defaults as $n => $default) {
-				if (!empty($adnets[$n])) {
-					// Set the new class structure
-					$new[$adnets[$n]] = $default;
-					// Set OpenX Market participation
-					if (!isset($new[$adnets[$n]]['openx-market'])) {
-						$new[$adnets[$n]]['openx-market'] = 'no';
-					}
-					// Set OpenX Market eCPM
-					if (!isset($new[$adnets[$n]]['openx-market-cpm'])) {
-						$new[$adnets[$n]]['openx-market-cpm'] = '0.20';
-					}
-					// Set Weight
-					if (!isset($new[$adnets[$n]]['weight'])) {
-						$new[$adnets[$n]]['weight'] = '1';
-					}
-					// Show only to an Author
-					if (!isset($new[$adnets[$n]]['show-author'])) {
-						$new[$adnets[$n]]['show-author'] = 'all';
-					}
-					// Show only for a Category
-					if (!isset($new[$adnets[$n]]['show-category'])) {
-						$new[$adnets[$n]]['show-category'] = 'all';
-					}
-					// Set height and width for an ad format
-					if (!empty($new[$adnets[$n]]['adformat']) && ($new[$adnets[$n]]['adformat'] != 'custom')) {
-						list($width, $height) = split('[x]', $new[$adnets[$n]]['adformat']);
-						if (is_numeric($width)) {
-							$new[$adnets[$n]]['width'] = $width;
-						}
-						if (is_numeric($height)) {
-							$new[$adnets[$n]]['height'] = $height;
-						}
-					}
-				}
-			}
-			$advman_engine->setSetting('defaults', $new);
-		}
 		
-		// Change account IDs to new class structure
-		// We are going to change it to something later, but we need it this way for ad conversions...
-		$accounts = $advman_engine->getSetting('account-ids');
-		if (!empty($accounts)) {
-			$new = array();
-			foreach ($accounts as $n => $account) {
-				if (!empty($adnets[$n])) {
-					// Set the new class structure
-					$new[$adnets[$n]] = $account;
-				}
+		$aAds = array();
+		foreach ($data['ads'] as $n => $ad) {
+			$aAd = array();
+			if (get_class($ad) != '__PHP_Incomplete_Class') {
+				$aAd['network'] = get_class($ad);
 			}
-			$advman_engine->setSetting('account-ids', $new);
-		}
-		
-		Advman_Upgrade::convert_ad_classes_to_array();
-		$ads = $advman_engine->getAds();
-		if (!empty($ads)) {
-			$new = array();
-			$id = 1;
-			// Next, make sure that the classes and properties are ok.
-			foreach ($ads as $n => $ad) {
-				$oldClass = '';
-				if (get_class($ad) == '__PHP_Incomplete_Class') {
-					$a = null;
-					// Ugly hack - for some reason I cannot call $ad->__PHP_Incomplete_Class_Name directly
-					foreach ($ad as $key => $value) {
-						if ($key == '__PHP_Incomplete_Class_Name') {
-							$class = strtolower($value);
-							$oldClass = $class;
-							if (!empty($adnets[$class])) {
-								$a = new $adnets[$class];
-								break;
-							}
-						}
-					}
-					if ($a) {
-						foreach ($ad as $key => $value) {
-							switch ($key) {
-								case 'id' :
-									$a->id = $value;
-									break;
-								case 'name' :
-									$a->name = $value;
-									break;
-								case 'p' :
-									$a->p = $value;
-									break;
-								case 'title' :
-									$a->title = $value;
-									break;
-							}
-						}
-						$ad = $a;
-					}
-				}
-				if (empty($ad->id)) {
-					$ad->id = $id;
+			foreach ($ad as $key => $value) {
+				if ($key == '__PHP_Incomplete_Class_Name') {
+					$aAd['network'] = $adnets[strtolower($value)];
 				} else {
-					$id = ($ad->id > $id ? $ad->id : $id);
+					$aAd[$key] = $value;
 				}
-				if (empty($ad->name)) {
-					$ad->name = $n;
+			}
+			$aAds[$n] = $aAd;
+		}
+		
+		$data['ads'] = $aAds;
+	}
+	
+	function adsensem_upgrade_network_classes(&$data)
+	{
+		$adnets = array(
+			'ad_adbrite' => 'adbrite',
+			'ad_adgridwork' => 'adgridwork',
+			'ad_adpinion' => 'adpinion',
+			'ad_adroll' => 'adroll',
+			'ad_adsense' => 'adsense',
+			'ad_adsense_ad' => 'adsense',
+			'ad_adsense_classic' => 'adsense',
+			'ad_adsense_link' => 'adsense',
+			'ad_adsense_referral' => 'adsense',
+			'ad_cj' => 'cj',
+			'ad_code' => 'html',
+			'ad_crispads' => 'crispads',
+			'ad_openx_adserver' => 'openx',
+			'ad_shoppingads' => 'shoppingads',
+			'ad_widgetbucks' => 'widgetbucks',
+			'ad_ypn' => 'ypn',
+			'ox_adnet_adbrite' => 'adbrite',
+			'ox_adnet_adgridwork' => 'adgridwork',
+			'ox_adnet_adify' => 'adify',
+			'ox_adnet_adpinion' => 'adpinion',
+			'ox_adnet_adroll' => 'adroll',
+			'ox_adnet_adsense' => 'adsense',
+			'ox_adnet_chitika' => 'chitika',
+			'ox_adnet_cj' => 'cj',
+			'ox_adnet_crispads' => 'crispads',
+			'ox_adnet_openx' => 'openx',
+			'ox_adnet_shoppingads' => 'shoppingads',
+			'ox_adnet_widgetbucks' => 'widgetbucks',
+			'ox_adnet_ypn' => 'ypn',
+			'ox_ad_adbrite' => 'adbrite',
+			'ox_ad_adgridwork' => 'adgridwork',
+			'ox_ad_adify' => 'adify',
+			'ox_ad_adpinion' => 'adpinion',
+			'ox_ad_adroll' => 'adroll',
+			'ox_ad_adsense' => 'adsense',
+			'ox_ad_chitika' => 'chitika',
+			'ox_ad_cj' => 'cj',
+			'ox_ad_crispads' => 'crispads',
+			'ox_ad_openx' => 'openx',
+			'ox_ad_shoppingads' => 'shoppingads',
+			'ox_ad_widgetbucks' => 'widgetbucks',
+			'ox_ad_ypn' => 'ypn',
+		);
+
+		$aNws = array();
+		foreach ($data['defaults'] as $c => $network) {
+			$newclass = in_array($c, $adnets) ? $c : $adnets[strtolower($c)];
+			$aNws[$newclass] = $network;
+		}
+		$data['defaults'] = $aNws;
+		
+		foreach ($data['account-ids'] as $c => $accountId) {
+			$newclass = in_array($c, $adnets) ? $c : $adnets[strtolower($c)];
+			foreach ($data['ads'] as $id => $ad) {
+				if ($ad['network'] = 'adsense' && empty($ad['account-id'])) {
+					$data['ads'][$id]['account-id'] = $accountId;
 				}
-				// Make sure width and height is set correctly
-				$width = $ad->get_property('width');
-				$height = $ad->get_property('height');
-				if (empty($width) || empty($height)) {
-					$format = $ad->get_property('adformat');
-					if ( !empty($format) && ($format != 'custom')) {
-						list($width, $height, $null) = split('[x]', $format);
-						$this->set_property('width', $width);
-						$this->set_property('height', $height);
-					}
+			}
+		}
+		unset($data['account-ids']);
+		
+		if (isset($data['adsense-account'])) {
+			$accountId = $data['adsense-account'];
+			foreach ($data['ads'] as $id => $ad) {
+				if ($ad['network'] = strtolower($newclass) && empty($ad['account-id'])) {
+					$data['ads'][$id]['account-id'] = $accountId;
 				}
-				// Make sure that any settings under 'color-url' are now under 'color-link'
-				$colorUrl = $ad->get_property('color-url');
-				$colorLink = $ad->get_property('color-link');
-				if (!empty($colorUrl) && empty($colorLink)) {
-					$ad->set_property('color-link', $colorUrl);
-					$ad->set_property('color-url', null);
+			}
+		}
+		unset($data['adsense-account']);
+	}
+	function adsensem_upgrade_ad_ids(&$data)
+	{
+		$ads = array();
+		$nextId = 1;
+		foreach ($data['ads'] as $n => $ad) {
+			if (is_numeric($n) && $nextId <= $n) {
+				$nextId = $n + 1;
+			}
+		}
+		foreach ($data['ads'] as $n => $ad) {
+			if (is_numeric($n)) {
+				$ads[$n] = $ad;
+			} else {
+				$ad['name'] = $n;
+				$ads[$nextId++] = $ad;
+			}
+		}
+		
+		$data['ads'] = $ads;
+		$data['settings']['next_ad_id'] = $nextId;
+		unset($data['next_ad_id']);  // old way of storing next ad id
+	}
+	
+			
+			
+			
+	function adsensem_upgrade_ad_settings(&$data)
+	{
+		$ads = array();
+		foreach ($data['ads'] as $id => $ad) {
+			$ad['id'] = $id;
+			// set the properties
+			if (isset($ad['p'])) {
+				foreach ($ad['p'] as $n => $v) {
+					$ad[$n] = $v;
 				}
-				// Re-import code because it was not saved in previous versions
-				if ($ad->network != 'OX_Ad
-_Html') {
-					$code = call_user_func(array('advman_upgrade', '_render_' . $oldClass), $ad);
-					$ad->import_settings($code);
-				}
-				// Set the new active field
-				$ad->active = true;  // Need to set this ad as active in order for this ad to display
-				// Set market optimisation
-				$ad->set_property('openx-market', false);
-				$ad->set_property('openx-market-cpm', '0.20');
-				$ad->set_property('weight', '1');
-				
-				// Changed the 'hide link url' field to 'status' (for cj ads)
-				$hideLinkUrl = $ad->get_property('hide-link-url');
-				if (!empty($hideLinkUrl)) {
-					$ad->set_property('status', $hideLinkUrl);
-					$ad->set_property('hide-link-url', null);
-				}
-				
-				// Got rid of the 'Code Method' field in Crisp Ads
-				$ad->set_property('codemethod', null);
-				
-				// Get rid of the 'default_ad' field (should be 'default-ad')
-				$ad->set_property('default_ad', null);
-				
-				$new[$ad->id] = $ad;
-				$id++;
+				unset($ad['p']);
+			}
+			if (!isset($ad['name'])) {
+				$ad['name'] = OX_Tools::generate_name('ad');
+			}
+			// remove title
+			if (isset($ad['title'])) {
+				unset($ad['title']);
+			}
+			// Make sure that any settings under 'color-url' are now under 'color-link'
+			if (!empty($ad['color-url']) && empty($ad['color-link'])) {
+				$ad['color-link'] = $ad['color-url'];
+				unset($ad['color-url']);
+			}
+			// Set the OpenX Market
+			if (!isset($ad['openx-market'])) {
+				$ad['openx-market'] = false;
+			}
+			// Set the OpenX Market CPM
+			if (!isset($ad['openx-market-cpm'])) {
+				$ad['openx-market-cpm'] = '0.20';
+			}
+			// Set the Weight
+			if (!isset($ad['weight'])) {
+				$ad['weight'] = '1';
+			}
+			// Changed the 'hide link url' field to 'status' (for cj ads)
+			if (isset($ad['hide-link-url'])) {
+				$ad['status'] = $ad['hide-link-url'];
+				unset($ad['hide-link-url']);
+			}
+			// remove codemethod
+			if (isset($ad['codemethod'])) {
+				unset($ad['codemethod']);
 			}
 			
-			$_advman['ads'] = $new;
-			$_advman['next_ad_id'] = $id;
-		}
-		
-		// Move account IDs inside the ad array
-		if (!empty($_advman['account-ids'])) {
-			foreach ($_advman['account-ids'] as $class => $accountId) {
-				foreach ($_advman['ads'] as $id => $ad) {
-					if ($class == get_class($ad)) {
-						$exitingAccountId = $ad->get_property('account-id');
-						if (empty($exitingAccountId)) {
-							$_advman['ads'][$id]->set_property('account-id', $accountId);
-						}
-					}
+			// Get rid of the 'default_ad' field (should be 'default-ad')
+			if (isset($ad['default_ad'])) {
+				unset($ad['default_ad']);
+			}
+			
+			if (!isset($ad['openx-sync'])) {
+				$ad['opnex-sync'] = true;
+			}
+			if (!isset($ad['uuid'])) {
+				$ad['uid'] = md5(uniqid('', true));
+			}
+			// Make sure width and height are correct
+			if (empty($ad['width']) || empty($ad['height'])) {
+				$format = $ad['adformat'];
+				if ( !empty($format) && ($format != 'custom')) {
+					list($width, $height, $null) = split('[x]', $format);
+					$ad['width'] = $width;
+					$ad['height'] = $height;
 				}
 			}
+			
+			$ads[$id] = $ad;
 		}
 		
+		$data['ads'] = $ads;
+	}
+	
+	function adsensem_upgrade_network_settings(&$data)
+	{
+		foreach ($data['defaults'] as $c => $network) {
+			if (!isset($network['counter'])) {
+				$data['defaults'][$c]['counter'] = ($c == 'OX_Ad_Adsense') ? '3' : '';
+			}
+			if (!isset($network['openx-market'])) {
+				$data['defaults'][$c]['openx-market'] = 'no';
+			}
+			// Set OpenX Market eCPM
+			if (!isset($network['openx-market-cpm'])) {
+				$data['defaults'][$c]['openx-market-cpm'] = '0.20';
+			}
+			// Set Weight
+			if (!isset($network['weight'])) {
+				$data['defaults'][$c]['weight'] = '1';
+			}
+			// Show only to an Author
+			if (!isset($network['show-author'])) {
+				$data['defaults'][$c]['show-author'] = 'all';
+			}
+			if (!isset($network['color-border']) && isset($network['colors']['border'])) {
+				$data['defaults'][$c]['color-border'] = $network['colors']['border'];
+			}
+			if (!isset($network['color-title']) && isset($network['colors']['title'])) {
+				$data['defaults'][$c]['color-title'] = $network['colors']['title'];
+			}
+			if (!isset($network['color-bg']) && isset($network['colors']['bg'])) {
+				$data['defaults'][$c]['color-bg'] = $network['colors']['bg'];
+			}
+			if (!isset($network['color-text']) && isset($network['colors']['text'])) {
+				$data['defaults'][$c]['color-text'] = $network['colors']['text'];
+			}
+			if (!isset($network['color-link']) && isset($network['colors']['url'])) {
+				$data['defaults'][$c]['color-link'] = $network['colors']['url'];
+			}
+			
+			if (!isset($network['show-page']) && isset($network['show-post'])) {
+				$data['defaults'][$c]['show-page'] = $network['show-post'];
+			}
+			if (!isset($network['adformat']) && isset($network['linkformat'])) {
+				$data['defaults'][$c]['adformat'] = $network['linkformat'];
+			}
+			if (!isset($network['adformat']) && isset($network['referralformat'])) {
+				$data['defaults'][$c]['adformat'] = $network['referralformat'];
+			}
+			// Set height and width for an ad format
+			if (!empty($network['adformat']) && ($network['adformat'] != 'custom')) {
+				list($width, $height) = split('[x]', $network['adformat']);
+				if (is_numeric($width)) {
+					$data['defaults'][$c]['width'] = $width;
+				}
+				if (is_numeric($height)) {
+					$data['defaults'][$c]['height'] = $height;
+				}
+			}
+			
+			
+			unset($data['defaults'][$c]['colors']);
+			unset($data['defaults'][$c]['product']);
+		}
+	}
+	function adsensem_upgrade_settings(&$data)
+	{
 		// Be nice does not exist anymore
-		if (!empty($_advman['be-nice'])) {
-			unset($_advman['be-nice']);
+		if (isset($data['be-nice'])) {
+			unset($data['be-nice']);
 		}
-		if (!empty($_advman['benice'])) {
-			unset($_advman['benice']);
+		if (isset($data['benice'])) {
+			unset($data['benice']);
 		}
-		
-		// Remove the networks node
-		if (!empty($_advman['networks'])) {
-			unset($_advman['networks']);
-		}
-	}
-	
-	function convert_ad_classes_to_array()
-	{
-		global $advman_engine;
-	}
-	function v2_x_to_3_0(){
-		global $_advman;
-		
-		$old=$_advman;
-		
-				/*  VERSION 3.x  */
-				$_advman['ads'] = array();
-				
-				$_advman['be-nice'] = $old['benice'];
-				$_advman['default-ad'] = $old['defaults']['ad'];
-				
-				$_advman['defaults']=array();
-				$_advman['defaults']['ad_adsense_classic']=advman_upgrade::_process_v2_x_to_3_0($old['defaults']);
-				$_advman['defaults']['ad_adsense']=$_advman['defaults']['ad_adsense_classic'];
-				
-				/* Copy AdSense account-id to both class/new settings */
-				$_advman['account-ids']['ad_adsense']=$old['adsense-account'];
-				
-				/* Now all that remains is to convert the ads. In 2.x ads were stored as simply arrays containing the options.
-					To upgrade create new objects using product/slot/etc. info, or for code units run an import cycle. */
-				
-				if(is_array($old['ads'])){
-				foreach($old['ads'] as $oname=>$oad){
-					
-					if($oad['slot']!=''){$type='slot';}
-					else {$type=$oad['product'];}
-					
-					$name=advman_admin::generate_name($oname);
-					
-					switch($type){
-						
-						/* HTML Code Ads */
-						case 'code':
-							$ad=advman_admin::import_ad($oad['code']);
-							$_advman['ads'][$name]=$ad;
-							$_advman['ads'][$name]->name=$name;
-						break;
-						
-						/* AdSense Slot Ads */
-						case 'slot':
-							$ad=new Ad_AdSense();
-							$_advman['ads'][$name]=$ad;
-							$_advman['ads'][$name]->name=$name;
-							$_advman['ads'][$name]->p=advman_upgrade::_process_v2_x_to_3_0($oad);
-						break;
-						/* AdSense Ad */
-						case 'ad':
-							$ad=new Ad_AdSense_Ad();
-							$_advman['ads'][$name]=$ad;
-							$_advman['ads'][$name]->name=$name;
-							$_advman['ads'][$name]->p=advman_upgrade::_process_v2_x_to_3_0($oad);
-						break;
-						case 'link':
-							$ad=new Ad_AdSense_Link();
-							$_advman['ads'][$name]=$ad;
-							$_advman['ads'][$name]->name=$name;
-							$_advman['ads'][$name]->p=advman_upgrade::_process_v2_x_to_3_0($oad);
-						break;
-							
-						case 'referral':
-						case 'referral-image':
-						case 'referral-text':
-							$ad=new Ad_AdSense_Referral();
-							$_advman['ads'][$name]=$ad;
-							$_advman['ads'][$name]->name=$name;
-							$_advman['ads'][$name]->p=advman_upgrade::_process_v2_x_to_3_0($oad);
-						break;	
-					}
-					
-				} 
-				}
-			
-		OX_Tools::sort($_advman['ads']);
-		}
-		
-	
-	function _process_v2_x_to_3_0($old){
-		$new=$old;
-				
-		/* Additional conversaion required for rearrangement of colors system */
-		$new['color-border']=$old['colors']['border'];								
-		$new['color-title']=$old['colors']['link'];								
-		$new['color-bg']=$old['colors']['bg'];								
-		$new['color-text']=$old['colors']['text'];
-		$new['color-url']=$old['colors']['url'];	
-		/* End color rearrangement */
-		$new['show-page']=$old['show-post'];
-		
-		/* Adformat codes etc. need to be moved */
-		switch($old['product']){
-		case 'ad':
-			if($old['alternate-url']){ $new['alternate-ad']='url'; } else if($old['alternate-color']) { $new['alternate-ad']='color'; } else { $new['alternate-ad']='benice'; }
-		break;
-		case 'link':
-			$new['adformat']=$old['linkformat'];
-			$new['adtype']=$old['linktype'];
-		break;
-		case 'referral':
-		case 'referral-text':
-			$new['adformat']=$old['referralformat'];
-		break;
-		}
-		
-		list($new['width'],$new['height'],$null)=split('[x]',$new['adformat']);  //Split to fill width/height information
-		
-		return $new;
-	}
-	
-	
-	function adsense_deluxe_to_3_0()
-	{
-		global $_advman;
-		$deluxe = get_option('acmetech_adsensedeluxe');
-		
-		foreach ($deluxe['ads'] as $key => $vals) {
-			$ad = advman_admin::import_ad($vals['code']);
-			$name = advman_admin::generate_name($vals['name']);
-			
-			$ad->name = $name;
-			
-			$ad->set_property('show-home', ($deluxe['enabled_for']['home'] == 1) ? 'yes' : 'no');
-			$ad->set_property('show-post', ($deluxe['enabled_for']['posts'] == 1) ? 'yes' : 'no');
-			$ad->set_property('show-archive', ($deluxe['enabled_for']['archives'] == 1) ? 'yes' : 'no');
-			$ad->set_property('show-page', ($deluxe['enabled_for']['page'] == 1) ? 'yes' : 'no');
-			$_advman['ads'][$name] = $ad;
-			
-			if ($vals['make_default'] == 1) {
-				$_advman['default-ad'] = $name;
+		// Reset ad ids just in case
+		$nextId = 1;
+		foreach ($data['ads'] as $id => $ad) {
+			if ($id > $nextId) {
+				$nextId = $id;
 			}
 		}
+		$data['settings']['next_ad_id'] = $nextId + 1;
 		
-		OX_Tools::sort($_advman['ads']);
+		if (isset($data['defaults']['ad'])) {
+			if (!isset($data['default-ad'])) {
+				$data['default-ad'] = $data['defaults']['ad'];
+			}
+			unset($data['defaults']['ad']);
+		}
+		if (isset($data['default-ad'])) {
+			$data['settings']['default-ad'] = $data['default-ad'];
+			unset($data['default-ad']);
+		}
 	}
+	
 	
 	function _display_adsense($ad)
 	{

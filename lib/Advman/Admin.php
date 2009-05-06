@@ -25,25 +25,17 @@ class Advman_Admin
 		}
 		add_action('admin_notices', array('Advman_Admin','display_notices'), 1 );
 		
-		/* PRE-OUTPUT PROCESSING - e.g. NOTICEs (upgrade-adsense-deluxe) */
 		$mode = OX_Tools::sanitize($_POST['advman-mode'], 'key');
 		if ($mode == 'notice') {
 			$action = OX_Tools::sanitize($_POST['advman-action'], 'key');
 			$yes = OX_Tools::sanitize($_POST['advman-notice-confirm-yes'], 'key');
 			switch ($action) {
-				case 'upgrade adsense-deluxe':
-					if ($yes) {
-						require_once(ADVMAN_LIB . '/Upgrade/Wordpress.php');
-						Advman_Upgrade::adsense_deluxe_to_3_0();
-					}
-					$admin->remove_notice('upgrade adsense-deluxe');
-					break;	
 				case 'optimise':
 					Advman_Admin::set_auto_optimise(!empty($yes));
-					$admin->remove_notice('optimise');
+					Advman_Admin::remove_notice('optimise');
 					break;
 				case 'activate advertising-manager':
-					$admin->remove_notice('activate advertising-manager');
+					Advman_Admin::remove_notice('activate advertising-manager');
 					break;
 			}
 		}
@@ -64,26 +56,6 @@ class Advman_Admin
 			if (!empty($p) && $p != $market) {
 				$ad->set_property('openx-market', $market);
 			}
-		}
-	}
-	function add_notice($action,$text,$confirm=false)
-	{
-		global $advman_engine;
-		
-		$notices = $advman_engine->getSetting('notices');
-		$notices[$action]['text'] = $text;
-		$notices[$action]['confirm'] = $confirm;
-		$advman_engine->setSetting('notices', $notices);
-	}
-	
-	function remove_notice($action)
-	{
-		global $advman_engine;
-
-		$notices = $advman_engine->getSetting('notices');
-		if (!empty($notices[$action])) {
-			unset($notices[$action]);
-			$advman_engine->setSetting('notices', $notices);
 		}
 	}
 	
@@ -110,7 +82,7 @@ class Advman_Admin
 					if ($default) {
 						$ad->set_network_property($property, $value);
 					} else {
-						$ad->set_property($property, $value, $default);
+						$ad->set_property($property, $value);
 					}
 				}
 			}
@@ -284,9 +256,7 @@ class Advman_Admin
 	 */
 	function display_notices()
 	{
-		global $advman_engine;
-		
-		$notices = $advman_engine->getSetting('notices');
+		$notices = Advman_Admin::get_notices();
 		if (!empty($notices)) {
 			$template = OX_Tools::get_template('Notice');
 			$template->display($notices);
@@ -333,6 +303,29 @@ class Advman_Admin
 				echo "<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.css' />";
 			}
 		}
+	}
+	function get_notices()
+	{
+		return get_option('advman_ui_notices');
+	}
+	function set_notices($notices)
+	{
+		return update_option('advman_ui_notices', $notices);
+	}
+	function add_notice($action,$text,$confirm=false)
+	{
+		$notices = Advman_Admin::get_notices();
+		$notices[$action]['text'] = $text;
+		$notices[$action]['confirm'] = $confirm;
+		Advman_Admin::set_notices($notices);
+	}
+	function remove_notice($action)
+	{
+		$notices = Advman_Admin::get_notices();
+		if (!empty($notices[$action])) {
+			unset($notices[$action]);
+		}
+		Advman_Admin::set_notices($notices);
 	}
 }
 ?>

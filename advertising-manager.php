@@ -4,7 +4,7 @@ Plugin Name: Advertising Manager
 PLugin URI: http://code.openx.org/projects/show/advertising-manager
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer, Martin Fitzpatrick
-Version: 3.3.10
+Version: 4.0.0
 Author URI: http://www.mutube.com/
 */
 
@@ -18,7 +18,7 @@ add_action('plugins_loaded', 'advman_run', 1);
 
 function advman_init()
 {
-	@define('ADVMAN_VERSION', '3.3.10');
+	@define('ADVMAN_VERSION', '4.0.0');
 	@define('ADVMAN_PATH', dirname(__FILE__));
 	@define('ADVMAN_LIB', ADVMAN_PATH . '/lib/Advman');
 	@define('OX_LIB', ADVMAN_PATH . '/lib/OX');
@@ -86,12 +86,26 @@ function advman_widgets_init()
 	global $advman_engine;
 	
 	$ads = $advman_engine->getAds();
-	
+		
 	if (!empty($ads)) {
+		$widgets = array();
 		foreach ($ads as $id => $ad) {
-			$name = $ad->name;
-			$args = array('name' => $name, 'height' => $ad->get('height'), 'width' => $ad->get('width'));
+			if (!empty($ad->name)) {
+				$widgets[$ad->name] = $ad;
+			}
+		}
+		
+		foreach ($widgets as $name => $ad) {
+			$n = __('Ad: ', 'advman') . $ad->name;
+			$description = __('An ad from the Advertising Manager plugin');
+			$args = array(
+				'name' => $n,
+				'description' => $description,
+				'width' => $ad->get('width', true),
+				'height' => $ad->get('height', true),
+			);
 			if (function_exists('wp_register_sidebar_widget')) {
+				//$id, $name, $output_callback, $options = array()
 				wp_register_sidebar_widget("advman-$name", "Ad#$name", 'advman_widget', $args, $name);
 			} elseif (function_exists('register_sidebar_module') ) {
 				register_sidebar_module("Ad #$name", 'advman_sbm_widget', "advman-$name", $args );

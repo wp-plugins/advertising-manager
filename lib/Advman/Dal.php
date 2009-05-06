@@ -5,60 +5,101 @@ class Advman_Dal extends OX_Dal
 {
 	var $data;
 	
-	function Advman_Dal()
+	function Advman_Dal($engine)
 	{
-		$this->data = $this->_select_data();
-		$this->_verify_data();
-	}
-	function _select_data($key = 'plugin_adsensem')
-	{
-		return get_option($key);
+		$this->data = $this->_load_data($engine);
 	}
 	
+	function _load_data()
+	{
+		$save = false;
+		$data = get_option('plugin_advman');
+		if (!empty($data)) {
+			if (version_compare($data['version'], ADVMAN_VERSION, '<')) {
+				include_once(ADVMAN_LIB . '/Upgrade.php');
+				Advman_Upgrade::upgrade_advman($data);
+				$save = true;
+			}
+		} else {
+			$data = get_option('plugin_adsensem');
+			if (!empty($data)) {
+				include_once(ADVMAN_LIB . '/Upgrade.php');
+				Advman_Upgrade::upgrade_adsensem($data);
+				$save = true;
+			}
+		}
+		if (empty($data)) {
+			$data['ads'] = array();
+			$data['networks'] = array();
+			$data['settings'] = array();
+			$data['settings']['next_ad_id'] = 1;
+			$data['settings']['default-ad'] = '';
+			$data['settings']['version'] = ADVMAN_VERSION;
+			$data['settings']['openx-sync'] = true;
+			$data['settings']['pub-id'] = md5(uniqid('', true));
+			$save = true;
+		}
+		
+		if ($save) {
+			update_option('plugin_advman', $data);
+		}
+		
+		_map_objects($data);
+		return $data;
+	}
+	
+	function _map_arrays(&$data)
+	{
+		$aAds = array();
+		foreach ($data['ads'] as $id => $oAd) {
+			$aAds[$id][$n] = $oAd->p;
+		}
+		$data['ads'] = $aAds;
+	}
+	function _map_objects(&$data)
+	{
+		$oAds = array();
+		foreach ($data['ads'] as $id => $aAd) {
+			$class = $aAd['class'];
+			$oAds[$id] = new $class($aAd);
+		}
+		$oNetworks = array();
+		foreach ($data['networks'] as $key => $aNetwork) {
+			$class = $aNetwork['class'];
+			$oNetworks[$key] = new $class($aNetwork);
+		}
+		$data['ads'] = $oAds;
+		$data['networks'] = $oNetworks;
+	}
 	function _update_data($data = null, $key = 'plugin_adsensem')
 	{
 		if (is_null($data)) {
 			$data = $this->data;
 		}
-		update_option($key, $data);
-	}
+		
+		// Move the ad classes into arrays for storage.
+		$aAds = array();
+		foreach ($data['ads'] as $id => $ad) {
+			$aAd = $ad->p;
+			$aAd['id'] = $ad->id;
+			$aAd['name'] = $ad->name;
+			$aAd['active'] = $ad->active;
+			$aAd['network'] = $ad->network;
+			$aAds[$id] = $aAd;
+		}
+		
+		// Move the network classes into arrays for storage
+		$aNws = array();
+		foreach ($data['networks'] as $id => $nw) {
+			$aNw = $nw->p;
+			$aNw['id'] = $ad->id;
+			$aNw['name'] = $ad->name;
+			$aNws[$id] = $aAd;
+		}
+		
+		$newData = array('ads' => $aAds, 'networks' => $aNws, 'settings' => $data['settings']);
 	
-	function _verify_data()
-	{
-		$data = $this->data;
-		
-		// If there is no data (or no readable data), create an initial array
-		if (empty($data['version']) || !is_array($data['ads'])) {
-			// Build an initial array
-			$data = array();
-			$data['ads'] = array();
-			$data['next_ad_id'] = 1;
-			$data['default-ad'] = '';
-			$data['version'] = ADVMAN_VERSION;
-			$data['settings']['openx-sync'] = true;
-			$data['uuid'] = $viewerId = md5(uniqid('', true));
-			
-			// If there is no Advertising Manager data, check to see if we can import from Adsense Deluxe
-			$deluxe = get_option('acmetech_adsensedeluxe');
-			if (is_array($deluxe)) {
-				advman::add_notice('upgrade adsense-deluxe',__('<strong>Advertising Manager</strong> has detected a previous installation of <strong>Adsense Deluxe</strong>. Import settings?'),'yn');
-			}
-			
-			$this->_update_data($data);
-		}
-		
-		if (version_compare($data['version'], ADVMAN_VERSION, '<')) {
-			include_once('WordpressUpgrade.php');
-			
-			//Backup cycle
-			$backup = $this->_getData('plugin_adsensem_backup');
-			$backup[$data['version']] = $data;
-			$this->_setData($backup, 'plugin_adsensem_backup');
-			
-			$upgrade = new Advman_Upgrade();
-			$data = $upgrade->upgrade($data);
-			$this->_setData($data);
-		}
+		update_option($key, $newData);
 	}
 	
 	function select_setting($key)
@@ -149,6 +190,12 @@ class Advman_Dal extends OX_Dal
 		$this->data['ads'][$id] = $ad;
 		$this->_update_data();
 		return $id;
+	}
+	
+	function update_ad_network($ad)
+	{
+		$this->data['defaults'][get_class($ad)] = $ad->get_network_properties();
+		$this->_update_data();
 	}
 }
 ?>

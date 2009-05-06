@@ -1,6 +1,9 @@
 <?php
 class OX_Dal
 {
+	function OX_Dal($engine)
+	{
+	}
 	function select_ad($id)
 	{
 	}
@@ -23,6 +26,9 @@ class OX_Dal
 	{
 	}
 	function delete_ads($ids)
+	{
+	}
+	function update_ad_network($ad)
 	{
 	}
 	function select_setting($key)
