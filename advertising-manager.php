@@ -4,7 +4,7 @@ Plugin Name: Advertising Manager
 PLugin URI: http://code.openx.org/projects/show/advertising-manager
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer, Martin Fitzpatrick
-Version: 3.3.13
+Version: 3.3.15
 Author URI: http://www.switzer.org/
 */
 
@@ -15,7 +15,7 @@ Author URI: http://www.switzer.org/
 load_plugin_textdomain('advman', false, 'advertising-manager/languages');
 
 // DEFINITIONS
-@define("ADVMAN_VERSION", "3.3.13");
+@define("ADVMAN_VERSION", "3.3.15");
 @define('ADVMAN_PATH', dirname(__FILE__));
 @define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
 
@@ -162,7 +162,7 @@ class advman
 			if($ad->title != '') {
 				echo $before_title . $ad->title . $after_title;
 			}
-
+			advman::update_counters($ad);
 			echo $ad->get_ad(); //Output the selected ad
 
 			echo $after_widget;
@@ -363,6 +363,10 @@ function advman_sbm_widget($args)
 	advman::widget($args,$k2sbm_current_module->options['name']);
 }
 /* SIDEBAR MODULES COMPATIBILITY FUNCTION */
-
-add_action('plugins_loaded', array('advman','init'), 1);
+if (class_exists('adsensem')) {
+    advman::add_notice('disable adsensem', __('Please disable Adsense Manager before using Advertising Manager'), 'ok');
+    update_option('plugin_adsensem', $_advman);
+} else {
+    add_action('plugins_loaded', array('advman','init'), 1);
+}
 ?>
