@@ -199,7 +199,7 @@ class OX_Swifty
 				$params = array(
 					'p' => $this->dal->select_setting('product-name'),
 					'i' => $this->dal->select_setting('publisher-id'),
-					'v' => $this->dal->select_setting('product-version'),
+					'v' => $this->dal->select_setting('version'),
 					'w' => $this->dal->select_setting('host-version'),
 					'e' => $this->dal->select_setting('admin-email'),
 					'u' => $this->dal->select_setting('user-login'),

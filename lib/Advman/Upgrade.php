@@ -15,6 +15,8 @@ class Advman_Upgrade
 				call_user_func(array('Advman_Upgrade', 'advman_' . str_replace('.','_',$v)), $data);
 			}
 		}
+		
+		$data['settings']['version'] = ADVMAN_VERSION;
 	}
 	
 	function upgrade_adsensem(&$data)
@@ -66,7 +68,11 @@ class Advman_Upgrade
 	function advman_4_0(&$data)
 	{
 		$data['networks'] = $data['defaults'];
-		$data['settings']['publisher_id'] = $data['uuid'];
+		unset($data['defaults']);
+		$data['settings']['publisher-id'] = $data['uuid'];
+		unset($data['uuid']);
+		$data['settings']['last-sync'] = $data['last-sync'];
+		unset($data['last-sync']);
 	}
 	function adsensem_upgrade_ad_classes(&$data)
 	{
@@ -218,9 +224,6 @@ class Advman_Upgrade
 		unset($data['next_ad_id']);  // old way of storing next ad id
 	}
 	
-			
-			
-			
 	function adsensem_upgrade_ad_settings(&$data)
 	{
 		$ads = array();

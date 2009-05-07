@@ -147,5 +147,23 @@ google_color_url = "000000";
 <script type="text/javascript"
   src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
+
+
+a:6:{s:3:"ads";a:1:{s:7:"adsense";O:19:"Ad_AdSense_Referral":3:{s:5:"title";s:0:"";s:1:"p";a:23:{s:11:"html-before";s:0:"";s:10:"html-after";s:0:"";s:9:"show-home";s:0:"";s:9:"show-post";s:0:"";s:9:"show-page";s:0:"";s:12:"show-archive";s:0:"";s:11:"show-search";s:0:"";s:8:"adformat";s:0:"";s:4:"code";N;s:5:"notes";s:0:"";s:6:"height";N;s:5:"width";s:0:"";s:7:"channel";s:7:"CHANNEL";s:6:"adtype";s:0:"";s:12:"color-border";s:0:"";s:11:"color-title";s:0:"";s:8:"color-bg";s:0:"";s:10:"color-text";s:0:"";s:10:"color-link";s:0:"";s:7:"uistyle";s:0:"";s:7:"product";s:0:"";s:8:"referral";s:0:"";s:4:"slot";s:8:"Referral";}s:4:"name";s:7:"adsense";}}s:8:"defaults";a:1:{s:18:"ad_adsense_classic";a:19:{s:9:"show-home";s:3:"yes";s:9:"show-post";s:3:"yes";s:9:"show-page";s:3:"yes";s:12:"show-archive";s:3:"yes";s:11:"show-search";s:3:"yes";s:11:"html-before";s:0:"";s:10:"html-after";s:0:"";s:12:"color-border";s:6:"FFFFFF";s:11:"color-title";s:6:"0000FF";s:8:"color-bg";s:6:"FFFFFF";s:10:"color-text";s:6:"000000";s:10:"color-link";s:6:"008000";s:7:"channel";s:0:"";s:7:"uistyle";s:0:"";s:4:"slot";s:0:"";s:8:"adformat";s:7:"250x250";s:6:"adtype";s:10:"text_image";s:10:"linkformat";s:6:"120x90";s:8:"linktype";s:10:"_0ads_al_s";}}s:11:"account-ids";a:1:{s:10:"ad_adsense";s:16:"4156398908232320";}s:7:"be-nice";i:3;s:7:"version";s:6:"3.2.13";s:10:"default-ad";s:7:"adsense";}
+
+a:6:{s:3:"ads";a:1:{s:4:"ad-1";O:10:"Ad_AdSense":3:{s:5:"title";s:0:"";s:1:"p";a:14:{s:11:"html-before";s:0:"";s:10:"html-after";s:0:"";s:9:"show-home";N;s:9:"show-post";N;s:9:"show-page";N;s:12:"show-archive";N;s:11:"show-search";N;s:8:"adformat";s:6:"728x90";s:4:"code";s:357:"<script type=\"text/javascript\"><!--
+google_ad_client = \"pub-8134107512753547\";
+google_ad_host = \"pub-1599271086004685\";
+// Leaderboard
+google_ad_slot = \"3141793269\";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script 
+src=\"http://pagead2.googlesyndication.com/pagead/show_ads.js\" type=\"text/javascript\">
+</script>
+";s:5:"notes";N;s:6:"height";s:2:"90";s:5:"width";s:3:"728";s:4:"slot";s:10:"3141793269";s:6:"adtype";s:2:"ad";}s:4:"name";s:4:"ad-1";}}s:8:"defaults";a:1:{s:10:"ad_adsense";a:8:{s:9:"show-home";s:3:"yes";s:9:"show-post";s:3:"yes";s:9:"show-page";s:3:"yes";s:12:"show-archive";s:3:"yes";s:11:"show-search";s:3:"yes";s:11:"html-before";s:0:"";s:10:"html-after";s:0:"";s:4:"slot";s:0:"";}}s:11:"account-ids";a:1:{s:10:"ad_adsense";s:16:"8134107512753547";}s:7:"be-nice";i:3;s:7:"version";s:6:"3.2.13";s:10:"default-ad";s:4:"ad-1";}
+
 */
 ?>
