@@ -161,6 +161,16 @@ class OX_Tools
 			update_option('plugin_adsensem', $_advman);
 		}
 		
+		// Remove any notices that Adsense Manager may have put in the mix
+		if (!empty($_advman['notices'])) {
+			foreach ($_advman['notices'] as $action => $notice) {
+				if ( ($action !== 'upgrade adsense-deluxe') && ($action !== 'optimise') && ($action !== 'activate advertising-manager') ) {
+					unset($_advman['notices'][$action]);
+				}
+			}
+			update_option('plugin_adsensem', $_advman);
+		}
+		
 		return true;
 	}
 	
