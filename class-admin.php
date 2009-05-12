@@ -467,47 +467,49 @@ class advman_admin
 	{
 		global $_advman;
 
-			//Editor page, so we need to output this editor button code
-			if (strpos($_SERVER['REQUEST_URI'], 'post.php') ||
-				strpos($_SERVER['REQUEST_URI'], 'post-new.php') ||
-				strpos($_SERVER['REQUEST_URI'], 'page.php') ||
-				strpos($_SERVER['REQUEST_URI'], 'page-new.php') ||
-				strpos($_SERVER['REQUEST_URI'], 'bookmarklet.php')) {
+		//Editor page, so we need to output this editor button code
+		$url = $_SERVER['REQUEST_URI'];
+		if (strpos($url, 'post.php') || strpos($url, 'post-new.php') || strpos($url, 'page.php') || strpos($url, 'page-new.php') || strpos($url, 'bookmarklet.php')) {
 ?>			<script language="JavaScript" type="text/javascript">
 			<!--
 				var ed_advman = document.createElement("select");
-				ed_advman.setAttribute("onchange", "add_advman(this)");
+				ed_advman.setAttribute("onchange", "advman_add_post_ad(this)");
 				ed_advman.setAttribute("class", "ed_button");
-				ed_advman.setAttribute("title", "Select Google Adsense to Add to Content");
+				ed_advman.setAttribute("title", "<?php _e('Insert an ad from Advertising Manager to my content', 'advman'); ?>");
 				ed_advman.setAttribute("id", "ed_advman");					
 				adh = document.createElement("option");
 				adh.value='';
-				adh.innerHTML='Google Adsense...';
+				adh.innerHTML='<?php _e('Insert Ad...', 'advman'); ?>';
 				adh.style.fontWeight='bold';
 				ed_advman.appendChild(adh);
 
 				def = document.createElement("option");
 				def.value='';
-				def.innerHTML='Default Ad';
+				def.innerHTML='<?php _e('Default Ad', 'advman'); ?>';
 
 				ed_advman.appendChild(def);
 <?php
-		if (sizeof($_advman['ads']) != 0) {
-			foreach($_advman['ads'] as $name => $ad) {
+			if (sizeof($_advman['ads']) != 0) {
+				$names = array();
+				foreach($_advman['ads'] as $ad) {
+					$name = $ad->name;
+					if (!in_array($name, $names)) {
+						$names[] = $name;
 ?>				var opt = document.createElement("option");
 				opt.value='<?php echo $name; ?>';
 				opt.innerHTML='#<?php echo $name; ?>';
 				ed_advman.appendChild(opt);
 <?php
+					}
+				}
 			}
-		}
 ?>				document.getElementById("ed_toolbar").insertBefore(ed_advman, document.getElementById("ed_spell"));
 				/* Below is a Kludge for IE, which causes it to re-read the state of onChange etc. set above. Tut tut tut */
 				if (navigator.appName == 'Microsoft Internet Explorer') {
 					document.getElementById("ed_toolbar").innerHTML=document.getElementById("ed_toolbar").innerHTML; 
 				}
 				
-			    function add_advman(element)
+			    function advman_add_post_ad(element)
 			    {
 					if(element.selectedIndex!=0){
 	
@@ -538,7 +540,7 @@ class advman_admin
 			// -->
 			</script>
 <?php
-			}
 		}
 	}
+}
 ?>
