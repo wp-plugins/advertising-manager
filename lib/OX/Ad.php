@@ -6,19 +6,30 @@ class OX_Ad extends OX_Plugin
 	var $name; //Name of this ad
 	var $id; // ID of the ad
 	var $active; //whether this ad can display
+	
 	var $network;
 
 	var $p; //$p holds Ad properties (e.g. dimensions etc.) - acessible through $this->get(''); see $this->get_network_property('') for default merged
 	static $np; //$np holds Network properties - defaults, network settings, etc.
 	
 	//Global start up functions for all network classes	
-	function OX_Ad()
+	function OX_Ad($aAd = null)
 	{
-		global $advman_engine;
-		
-		$this->active = true;
-		$this->network = get_class($this);
-		$this->name = OX_Tools::generate_name($this->mnemonic);
+		if (is_null($aAd)) {
+			$this->active = true;
+			$this->name = OX_Tools::generate_name($this->network);
+		} else {
+			$this->name = $aAd['name'];
+			$this->id = $aAd['id'];
+			$this->active = $aAd['active'];
+			
+			$properties = $this->get_network_properties();
+			foreach ($properties as $property => $default) {
+				if (isset($aAd[$property])) {
+					$this->set_property($property, $aAd[$property]);
+				}
+			}
+		}
 	}
 	
 	function register_plugin($engine)
@@ -38,7 +49,7 @@ class OX_Ad extends OX_Plugin
 	
 	function get_property($key)
 	{
-		$properties = $this->get_properties();
+		$properties = $this->p;
 		return isset($properties[$key]) ? $properties[$key] : '';
 	}
 	
@@ -48,14 +59,9 @@ class OX_Ad extends OX_Plugin
 		return isset($properties[$key]) ? $properties[$key] : '';
 	}
 	
-	function get_properties()
-	{
-		return $this->p;
-	}
-	
 	function get_network_properties()
 	{
-		$properties = self::$np[get_class($this)];
+		$properties = self::$np[$this->network];
 		if (empty($properties)) {
 			$properties = $this->get_network_property_defaults();
 			$this->set_network_properties($properties);
@@ -71,7 +77,7 @@ class OX_Ad extends OX_Plugin
 	 */
 	function set_property($key, $value)
 	{
-		$properties = $this->get_properties();
+		$properties = $this->p;
 		$this->_set($properties, $key, $value);
 		$this->set_properties($properties);
 	}
@@ -210,29 +216,6 @@ class OX_Ad extends OX_Plugin
 //		return $this->get('code');
 	}
 	
-	function get_network_property_defaults()
-	{
-		return array (
-			'adformat' => '728x90',
-			'code' => '',
-			'counter' => '',
-			'height' => '90',
-			'html-after' => '',
-			'html-before' => '',
-			'notes' => '',
-			'openx-market' => 'yes',
-			'openx-market-cpm' => '0.20',
-			'show-archive' => 'yes',
-			'show-author' => 'all',
-			'show-home' => 'yes',
-			'show-page' => 'yes',
-			'show-post' => 'yes',
-			'show-search' => 'yes',
-			'weight' => '1',
-			'width' => '728',
-		);
-	}
-	
 	function import_detect_network($code)
 	{
 		return false;
@@ -291,6 +274,16 @@ class OX_Ad extends OX_Plugin
 		} else {
 			$this->set_property('revisions', $r);
 		}
+	}
+	
+	function to_array()
+	{
+		$aAd = $this->p;
+		$aAd['name'] = $this->name;
+		$aAd['id'] = $this->id;
+		$aAd['active'] = $this->active;
+		
+		return $aAd;
 	}
 }
 

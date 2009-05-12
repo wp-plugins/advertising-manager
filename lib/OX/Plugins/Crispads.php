@@ -3,13 +3,13 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Crispads extends OX_Ad
 {
-	var $mnemonic = 'Crispads';
+	var $network = 'crispads';
 	var $network_name = 'Crisp Ads';
 	var $url = 'http://www.crispads.com';
 	
-	function OX_Plugin_Crispads()
+	function OX_Plugin_Crispads($aAd = null)
 	{
-		$this->OX_Ad();
+		$this->OX_Ad($aAd);
 	}
 
 	/**

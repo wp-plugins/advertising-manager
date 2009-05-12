@@ -5,7 +5,7 @@ PLugin URI: http://code.openx.org/projects/show/advertising-manager
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer, Martin Fitzpatrick
 Version: 4.0.0
-Author URI: http://www.mutube.com/
+Author URI: http://www.switzer.org
 */
 
 // Show notices (DEBUGGING ONLY)

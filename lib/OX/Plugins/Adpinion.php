@@ -3,13 +3,13 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Adpinion extends OX_Ad
 {
-	var $mnemonic = 'Adpinion';
+	var $network = 'adpinion';
 	var $network_name = 'Adpinion';
 	var $url = 'http://www.adpinion.com';
 	
-	function OX_Plugin_Adpinion()
+	function OX_Plugin_Adpinion($aAd = null)
 	{
-		$this->OX_Ad();
+		$this->OX_Ad($aAd);
 	}
 	
 	/**

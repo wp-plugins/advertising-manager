@@ -3,13 +3,13 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Shoppingads extends OX_Ad
 {
-	var $mnemonic = 'Shoppingads';
+	var $network = 'shoppingads';
 	var $network_name = 'Shopping Ads';
 	var $url = 'http://www.shoppingads.com';
 	
-	function OX_Plugin_Shoppingads()
+	function OX_Plugin_Shoppingads($aAd = null)
 	{
-		$this->OX_Ad();
+		$this->OX_Ad($aAd);
 	}
 		
 	/**

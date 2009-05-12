@@ -3,13 +3,13 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Widgetbucks extends OX_Ad
 {
-	var $mnemonic = 'Widgetbucks';
+	var $network = 'widgetbucks';
 	var $network_name = 'WidgetBucks';
 	var $url = 'http://www.widgetbucks.com';
 	
-	function OX_Plugin_Widgetbucks()
+	function OX_Plugin_Widgetbucks($aAd = null)
 	{
-		$this->OX_Ad();
+		$this->OX_Ad($aAd);
 	}
 	
 	/**

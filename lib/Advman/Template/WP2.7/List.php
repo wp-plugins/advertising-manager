@@ -131,9 +131,7 @@ function ADS_setAction(action, id, name, network)
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('<?php echo ($ad->active) ? 'deactivate' : 'activate'; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $defaultAdName) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
 <?php
-		list($last_user, $t) = Advman_Tools::get_last_edit($ad->get_property['revisions']);
-		$last_timestamp = (time() - $t) < (30 * 24 * 60 * 60) ? human_time_diff($t) : __('> 30 days', 'advman');
-		$last_timestamp2 = date('l, F jS, Y @ h:ia', $t);
+		list($last_user, $last_timestamp, $last_timestamp2) = Advman_Tools::get_last_edit($ad->get_property('revisions'));
 ?>		<td class="date column-date"><abbr title="<?php echo $last_timestamp2 ?>"><?php echo $last_timestamp . __(' ago', 'advman'); ?></abbr><br /> <?php echo __('by', 'advman') . ' ' . $last_user; ?></td>
 	</tr>
 <?php endif; ?>

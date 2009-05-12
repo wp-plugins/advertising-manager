@@ -3,13 +3,13 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Openx extends OX_Ad
 {
-	var $mnemonic = 'Openx';
+	var $network = 'openx';
 	var $network_name = 'OpenX';
 	var $url = 'http://www.openx.org';
 	
-	function OX_Plugin_Openx()
+	function OX_Plugin_Openx($aAd = null)
 	{
-		$this->OX_Ad();
+		$this->OX_Ad($aAd);
 	}
 
 	/**

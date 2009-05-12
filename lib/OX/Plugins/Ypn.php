@@ -3,13 +3,13 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Ypn extends OX_Ad
 {
-	var $mnemonic = 'Ypn';
+	var $network = 'ypn';
 	var $network_name = 'Yahoo! Publisher Network';
 	var $url = 'http://ypn.yahoo.com';
 	
-	function OX_Plugin_Ypn()
+	function OX_Plugin_Ypn($aAd = null)
 	{
-		$this->OX_Ad();
+		$this->OX_Ad($aAd);
 	}
 	
 	/**

@@ -3,13 +3,13 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Adsense extends OX_Ad
 {
-	var $mnemonic = 'Adsense';
+	var $network = 'adsense';
 	var $network_name = 'Google Adsense';
 	var $url = 'http://www.google.com/adsense';
 	
-	function OX_Plugin_Adsense()
+	function OX_Plugin_Adsense($aAd = null)
 	{
-		$this->OX_Ad();
+		$this->OX_Ad($aAd);
 	}
 	
 	/**

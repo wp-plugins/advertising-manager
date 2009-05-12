@@ -3,13 +3,13 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Adgridwork extends OX_Ad
 {
-	var $mnemonic = 'Adgridwork';
+	var $network = 'adgridwork';
 	var $network_name = 'AdGridWork';
 	var $url = 'http://www.adgridwork.com';
 	
-	function OX_Plugin_Adgridwork()
+	function OX_Plugin_Adgridwork($aAd = null)
 	{
-		$this->OX_Ad();
+		$this->OX_Ad($aAd);
 	}
 		
 	/**

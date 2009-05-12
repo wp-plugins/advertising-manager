@@ -1,14 +1,14 @@
 <?php
-require_once(OX_LIB . '/Ad.php');	
+require_once(OX_LIB . '/Ad.php');
 
 class OX_Ad_Html extends OX_Ad
 {
-	function OX_Ad_Html()
+	var $network = 'html';
+	var $network_name = 'HTML';
+	
+	function OX_Ad_Html($aAd = null)
 	{
-		$this->set_network_property('mnemonic', 'Html');
-		$this->set_network_property('name', 'HTML Code');
-
-		$this->OX_Ad();
+		$this->OX_Ad($aAd);
 	}
 	
 	function get_network_property_defaults()

@@ -3,13 +3,13 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Cj extends OX_Ad
 {
-	var $mnemonic = 'Cj';
+	var $network = 'cj';
 	var $network_name = 'Commission Junction';
 	var $url = 'http://www.cj.com';
 	
-	function OX_Plugin_Cj()
+	function OX_Plugin_Cj($aAd = null)
 	{
-		$this->OX_Ad();
+		$this->OX_Ad($aAd);
 	}
 	
 	/**
@@ -22,7 +22,7 @@ class OX_Plugin_Cj extends OX_Ad
 	
 	function display()
 	{
-		$xdomains = OX_Ad_Cj::get_domains();
+		$xdomains = OX_Plugin_Cj::get_domains();
 		$search[] = '{{xdomain}}';
 		$replace[] = $xdomains[array_rand($xdomains)];
 		
@@ -74,7 +74,7 @@ class OX_Plugin_Cj extends OX_Ad
 	function import_detect_network($code)
 	{
 		$match = false;
-		$xdomains = OX_Ad_Cj::get_domains();
+		$xdomains = OX_Plugin_Cj::get_domains();
 		foreach ($xdomains as $d) {
 			$match = $match || (strpos($code, ('href="http://' . $d)) !== false);
 		}

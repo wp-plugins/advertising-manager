@@ -5,9 +5,9 @@ class Advman_Dal extends OX_Dal
 {
 	var $data;
 	
-	function Advman_Dal($engine)
+	function Advman_Dal()
 	{
-		$this->data = $this->_load_data($engine);
+		$this->data = $this->_load_data();
 	}
 	
 	function _load_data()
@@ -52,7 +52,8 @@ class Advman_Dal extends OX_Dal
 	{
 		$aAds = array();
 		foreach ($data['ads'] as $id => $oAd) {
-			$aAds[$id][$n] = $oAd->p;
+			$aAds[$id] = $oAd->to_array();
+			$aAds[$id]['class'] = get_class($oAd);
 		}
 		$data['ads'] = $aAds;
 	}
@@ -65,35 +66,15 @@ class Advman_Dal extends OX_Dal
 		}
 		$data['ads'] = $oAds;
 	}
-	function _update_data($data = null, $key = 'plugin_adsensem')
+	function _update_data($data = null, $key = 'plugin_advman')
 	{
 		if (is_null($data)) {
 			$data = $this->data;
 		}
 		
-		// Move the ad classes into arrays for storage.
-		$aAds = array();
-		foreach ($data['ads'] as $id => $ad) {
-			$aAd = $ad->p;
-			$aAd['id'] = $ad->id;
-			$aAd['name'] = $ad->name;
-			$aAd['active'] = $ad->active;
-			$aAd['network'] = $ad->network;
-			$aAds[$id] = $aAd;
-		}
-		
-		// Move the network classes into arrays for storage
-		$aNws = array();
-		foreach ($data['networks'] as $id => $nw) {
-			$aNw = $nw->p;
-			$aNw['id'] = $ad->id;
-			$aNw['name'] = $ad->name;
-			$aNws[$id] = $aAd;
-		}
-		
-		$newData = array('ads' => $aAds, 'networks' => $aNws, 'settings' => $data['settings']);
+		$this->_map_arrays($data);
 	
-		update_option($key, $newData);
+		update_option($key, $data);
 	}
 	
 	function select_setting($key)

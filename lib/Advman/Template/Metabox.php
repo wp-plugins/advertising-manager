@@ -3,9 +3,14 @@ require_once(ADVMAN_LIB . '/Tools.php');
 
 class Advman_Template_Metabox
 {
-	function display_network_format($ad)
+	function display_format_network($ad)
 	{
 		return Advman_Template_Metabox::display_format($ad, true);
+	}
+	
+	function display_format_ad($ad)
+	{
+		return Advman_Template_Metabox::display_format($ad, false);
 	}
 	
 	function display_format($ad, $nw = false)
@@ -53,9 +58,13 @@ class Advman_Template_Metabox
 <?php
 	}
 	
-	function display_network_options($ad)
+	function display_options_network($ad)
 	{
 		return Advman_Template_Metabox::display_options($ad, true);
+	}
+	function display_options_ad($ad)
+	{
+		return Advman_Template_Metabox::display_options($ad, false);
 	}
 	function display_options($ad, $nw = false)
 	{
@@ -112,11 +121,14 @@ class Advman_Template_Metabox
 <?php
 	}
 	
-	function display_network_optimisation($ad)
+	function display_optimisation_network($ad)
 	{
 		return Advman_Template_Metabox::display_optimisation($ad, true);
 	}
-	
+	function display_optimisation_ad($ad)
+	{
+		return Advman_Template_Metabox::display_optimisation($ad, false);
+	}
 	function display_optimisation($ad, $nw = false)
 	{
 		$weight = ($nw) ? $ad->get_network_property('weight') : $ad->get_property('weight');
@@ -154,13 +166,17 @@ class Advman_Template_Metabox
 <?php
 	}
 	
-	function display_network_code($ad)
+	function display_code_network($ad)
 	{
 		return Advman_Template_Metabox::display_code($ad, true);
 	}
-	
+	function display_code_ad($ad)
+	{
+		return Advman_Template_Metabox::display_code($ad, false);
+	}
 	function display_code($ad, $nw = false)
 	{
+		$edit = $ad->network == 'html';
 		$htmlBefore = ($nw) ? $ad->get_network_property('html-before') : $ad->get_property('html-before');
 		$htmlAfter = ($nw) ? $ad->get_network_property('html-after') : $ad->get_property('html-after');
 		
@@ -173,7 +189,7 @@ class Advman_Template_Metabox
 	<br /><br />
 <?php if (!$nw): ?>
 	<label for="ad_code"><?php _e('Ad Code'); ?></label><br />
-	<textarea rows="6" cols="60" id="advman-code" style="background:#cccccc" onfocus="this.select();" onclick="this.select();" readonly="readonly"><?php echo $ad->display(); ?></textarea><br /><br />
+	<textarea rows="6" cols="60" id="advman-code"<?php if (!$edit) echo " style='background:#cccccc'"; ?> onfocus="this.select();" onclick="this.select();"<?php if (!$edit) echo " readonly='readonly'"; ?>><?php echo $ad->display(); ?></textarea><br /><br />
 <?php endif; ?>
 	<label for="html_after"><?php _e('HTML Code After'); ?></label><br />
 	<textarea rows="1" cols="60" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $htmlAfter; ?></textarea>
@@ -188,11 +204,14 @@ class Advman_Template_Metabox
 	}
 	
 	
-	function display_network_history($ad)
+	function display_history_network($ad)
 	{
 		return Advman_Template_Metabox::display_history($ad, true);
 	}
-	
+	function display_history_ad($ad)
+	{
+		return Advman_Template_Metabox::display_history($ad, false);
+	}
 	function display_history($ad, $nw = false)
 	{
 		$revisions = ($nw) ? $ad->get_network_property('revisions') : $ad->get_property('revisions');
@@ -218,11 +237,14 @@ class Advman_Template_Metabox
 <?php
 	}
 	
-	function display_network_colors($ad)
+	function display_colors_network($ad)
 	{
 		return Advman_Template_Metabox::display_colors($ad, true);
 	}
-	
+	function display_colors_ad($ad)
+	{
+		return Advman_Template_Metabox::display_colors($ad, false);
+	}
 	function display_colors($ad, $nw = false)
 	{
 		$settings = Advman_Tools::organize_appearance($ad);
@@ -319,9 +341,13 @@ class Advman_Template_Metabox
 <textarea id="advman_notes" rows="8" cols="28" name="advman-notes"><?php echo $ad->get('notes'); ?></textarea><br />
 <?php
 	}
-	function display_network_save_settings($ad)
+	function display_save_settings_network($ad)
 	{
 		Advman_Template_Metabox::display_save_settings($ad, true);
+	}
+	function display_save_settings_ad($ad)
+	{
+		Advman_Template_Metabox::display_save_settings($ad, false);
 	}
 	function display_save_settings($ad, $nw = false)
 	{

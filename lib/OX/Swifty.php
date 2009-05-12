@@ -1,6 +1,7 @@
 <?php
 require_once(OX_LIB . '/Ad.php');
 require_once(OX_LIB . '/Dal.php');
+require_once(OX_LIB . '/Html.php');
 
 class OX_Swifty
 {
@@ -148,8 +149,11 @@ class OX_Swifty
 			$validAds = array();
 			foreach ($ads as $id => $ad) {
 				if ( ($ad->name == $name) && ($ad->is_available()) ) {
-					$validAds[] = $ad;
-					$totalWeight += $ad->get('weight');
+					$weight = $ad->get('weight');
+					if ($weight > 0) {
+						$validAds[] = $ad;
+						$totalWeight += $weight;
+					}
 				}
 			}
 			// Pick the ad

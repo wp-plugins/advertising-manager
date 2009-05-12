@@ -3,13 +3,13 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Chitika extends OX_Ad
 {
-	var $mnemonic = 'Chitika';
+	var $network = 'chitika';
 	var $network_name = 'Chitika';
 	var $url = 'http://www.chitika.com';
 	
-	function OX_Plugin_Chitika()
+	function OX_Plugin_Chitika($aAd = null)
 	{
-		$this->OX_Ad();
+		$this->OX_Ad($aAd);
 	}
 		
 	/**

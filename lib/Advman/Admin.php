@@ -10,7 +10,6 @@ class Advman_Admin
 	{
 		global $wp_version;
 		
-		add_action('admin_print_scripts', array('Advman_Admin', 'add_scripts'));
 		
 		if (version_compare($wp_version,"2.7-alpha", '>')) {
 			add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
@@ -23,7 +22,10 @@ class Advman_Admin
 			add_submenu_page('advman-manage', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-create', array('Advman_Admin','create'));
 			add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 		}
+		
+		add_action('admin_print_scripts', array('Advman_Admin', 'add_scripts'));
 		add_action('admin_notices', array('Advman_Admin','display_notices'), 1 );
+		add_action('admin_footer', array('Advman_Admin','display_editor'));
 		
 		$mode = OX_Tools::sanitize($_POST['advman-mode'], 'key');
 		if ($mode == 'notice') {
@@ -263,6 +265,17 @@ class Advman_Admin
 		}
 		
 	}
+	function display_editor()
+	{
+		global $advman_engine;
+		
+		$url = $_SERVER['REQUEST_URI'];
+		if (strpos($url, 'post.php') || strpos($url, 'post-new.php') || strpos($url, 'page.php') || strpos($url, 'page-new.php') || strpos($url, 'bookmarklet.php')) {
+			$ads = $advman_engine->getAds();
+			$template = Advman_Tools::get_template('Editor');
+			$template->display($ads);
+		}
+	}
 	
 	/**
 	 * This function is called from the Wordpress Ads menu
@@ -306,11 +319,11 @@ class Advman_Admin
 	}
 	function get_notices()
 	{
-		return get_option('advman_ui_notices');
+		return get_option('plugin_advman_ui_notices');
 	}
 	function set_notices($notices)
 	{
-		return update_option('advman_ui_notices', $notices);
+		return update_option('plugin_advman_ui_notices', $notices);
 	}
 	function add_notice($action,$text,$confirm=false)
 	{

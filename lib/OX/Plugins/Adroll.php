@@ -3,13 +3,13 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Adroll extends OX_Ad
 {
-	var $mnemonic = 'Adroll';
+	var $network = 'adroll';
 	var $network_name = 'AdRoll';
 	var $url = 'http://www.adroll.com';
 	
-	function OX_Plugin_Adroll()
+	function OX_Plugin_Adroll($aAd = null)
 	{
-		$this->OX_Ad();
+		$this->OX_Ad($aAd);
 	}
 	
 	/**

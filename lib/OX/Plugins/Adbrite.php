@@ -3,13 +3,13 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Adbrite extends OX_Ad
 {
-	var $mnemonic = 'Adbrite';
+	var $network = 'adbrite';
 	var $network_name = 'AdBrite';
 	var $url = 'http://www.adbrite.com';
 	
-	function OX_Plugin_Adbrite()
+	function OX_Plugin_Adbrite($aAd = null)
 	{
-		$this->OX_Ad();
+		$this->OX_Ad($aAd);
 //		$this->set_network_property('click-url', 'http://www.adbrite.com/mb/landing_publisher.php?spid=118090');
 //		$this->set_network_property('url', 'http://www.adbrite.com');
 	}
