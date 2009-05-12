@@ -230,10 +230,13 @@ class advman
 		$ads = array();
 		$totalWeight = 0;
 		foreach ($_advman['ads'] as $id => $ad) {
-			if ( ($ad->name == $name) && ($ad->is_available()) ) {
-				$ads[] = $ad;
-				$totalWeight += $ad->get('weight', true);
+		    if ( ($ad->name == $name) && ($ad->is_available()) ) {
+			$weight = $ad->get('weight', true);
+			if ($weight > 0) {
+			    $ads[] = $ad;
+			    $totalWeight += $weight;
 			}
+		    }
 		}
 		// Pick the ad
 		// Generate a number between 0 and 1
@@ -241,11 +244,11 @@ class advman
 		// Loop through ads until the selected one is chosen
 		$wt = 0;
 		foreach ($ads as $ad) {
-			$wt += $ad->get('weight', true);
-			if ( ($wt / $totalWeight) > $rnd) {
-				// Display the ad
-				return $ad;
-			}
+		    $wt += $ad->get('weight', true);
+		    if ( ($wt / $totalWeight) > $rnd) {
+			    // Display the ad
+			    return $ad;
+		    }
 		}
 	}
 
