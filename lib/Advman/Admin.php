@@ -258,7 +258,7 @@ class Advman_Admin
 	{
 		$notices = Advman_Admin::get_notices();
 		if (!empty($notices)) {
-			$template = OX_Tools::get_template('Notice');
+			$template = Advman_Tools::get_template('Notice');
 			$template->display($notices);
 		}
 		

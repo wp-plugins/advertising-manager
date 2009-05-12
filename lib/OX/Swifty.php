@@ -160,6 +160,8 @@ class OX_Swifty
 			foreach ($validAds as $ad) {
 				$wt += $ad->get('weight');
 				if ( ($wt / $totalWeight) > $rnd) {
+					// Update the counters for this ad
+					$this->update_counters($ad);
 					// Display the ad
 					return $ad;
 				}

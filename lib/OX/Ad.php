@@ -113,6 +113,29 @@ class OX_Ad extends OX_Plugin
 		$this->p = $properties;
 	}
 	
+	function get_network_property_defaults()
+	{
+		return array (
+			'adformat' => '728x90',
+			'code' => '',
+			'counter' => '',
+			'height' => '90',
+			'html-after' => '',
+			'html-before' => '',
+			'notes' => '',
+			'openx-market' => 'yes',
+			'openx-market-cpm' => '0.20',
+			'show-archive' => 'yes',
+			'show-author' => 'all',
+			'show-home' => 'yes',
+			'show-page' => 'yes',
+			'show-post' => 'yes',
+			'show-search' => 'yes',
+			'weight' => '1',
+			'width' => '728',
+		);
+	}
+	
 	/**
 	 * Is this ad able to be displayed given the context, user, etc.?
 	 */

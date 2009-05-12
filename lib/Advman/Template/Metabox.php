@@ -230,8 +230,9 @@ class Advman_Template_Metabox
 <tr>
 	<td>
 		<table>
+<?php if (!empty($settings['color'])) : ?>
 <?php foreach ($settings['color'] as $section => $label) : ?>
-<?php 	$color = ($nw) ? $ad->get_network_property('color-' . $section) : $ad->get_property('color-' . $section); ?>
+<?php $color = ($nw) ? $ad->get_network_property('color-' . $section) : $ad->get_property('color-' . $section); ?>
 		<tr>
 			<td class="advman_label"><label for="advman-color-<?php echo $section ?>"><?php echo $label; ?></label></td>
 			<td>#<input name="advman-color-<?php echo $section ?>" onChange="advman_update_ad(this,'ad-color-<?php echo $section ?>','<?php echo $section ?>');" size="6" value="<?php echo $color; ?>" /></td>
@@ -240,8 +241,10 @@ class Advman_Template_Metabox
 <?php endif; ?>
 		</tr>
 <?php endforeach; ?>
+<?php endif; ?>
+<?php if (!empty($settings['font'])) : ?>
 <?php foreach ($settings['font'] as $section => $label) : ?>
-<?php 	$font = ($nw) ? $ad->get_network_property('font-' . $section) : $ad->get_property('font-' . $section); ?>
+<?php $font = ($nw) ? $ad->get_network_property('font-' . $section) : $ad->get_property('font-' . $section); ?>
 		<tr>
 			<td class="advman_label"><label for="advman-font-title"><?php _e('Title Font:'); ?></label></td>
 			<td>
@@ -258,6 +261,7 @@ class Advman_Template_Metabox
 			</td>
 		</tr>
 <?php endforeach; ?>
+<?php endif; ?>
 		</table>
 	</td>
 	<td>
