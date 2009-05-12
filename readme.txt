@@ -112,6 +112,7 @@ By popular demand, below are the changes for versions listed. Use this to determ
 
 As a general rule the version X.Y.Z increments Z with bugfixes, Y with additional features, and X with major overhaul.
 
+* **3.3.16** Added functionality around reverting to older versions of adsensem
 * **3.3.15** Fixed small bug in upgrade script, added counter support to widgets
 * **3.3.14** Only enable Advertising Manager when Adsense Manager is disabled
 * **3.3.13** Fixed a notice error in WP 2.6, added a small script which removes a notice set by adsense manager
