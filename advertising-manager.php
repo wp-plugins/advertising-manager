@@ -4,7 +4,7 @@ Plugin Name: Advertising Manager
 PLugin URI: http://code.openx.org/projects/show/advertising-manager
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer, Martin Fitzpatrick
-Version: 3.3.13
+Version: 3.3.16
 Author URI: http://www.switzer.org/
 */
 
@@ -15,7 +15,7 @@ Author URI: http://www.switzer.org/
 load_plugin_textdomain('advman', false, 'advertising-manager/languages');
 
 // DEFINITIONS
-@define("ADVMAN_VERSION", "3.3.13");
+@define("ADVMAN_VERSION", "3.3.16");
 @define('ADVMAN_PATH', dirname(__FILE__));
 @define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
 
@@ -133,7 +133,33 @@ class advman
 			unset($_advman['notices'][$action]); //=false;
 		}
 	}
-
+	function revert_db()
+	{
+	    global $_advman;
+	    
+	    $version = OX_Tools::sanitize_number($_REQUEST['advman-revert-db']);
+	    $backup = get_option('plugin_adsensem_backup');
+	    if (!empty($backup[$version])) {
+		$_advman = $backup[$version];
+		update_option('plugin_adsensem',$_advman);
+		if (!empty($_REQUEST['advman-block-upgrade'])) {
+		    die();
+		}
+	    } else {
+		echo __('It looks like you are trying to load a backup of Advertising Manager.  The available versions are:') . '<br />';
+		foreach (array_keys($backup) as $key) {
+		    echo $key . '<br />';
+		}
+		echo '<br /><br /><br />';
+		echo __('Here is a printout of each version:') . '<br />';
+		foreach ($backup as $key => $data) {
+		    echo "ADVMAN VERSION $key:<br /><pre>";
+		    print_r($data);
+		    echo '</pre><br /><br /><br />';
+		}
+		die();
+	    }
+	}
 	
 	// This is the function that outputs advman widget.
 	function widget($args,$n='')
@@ -162,7 +188,7 @@ class advman
 			if($ad->title != '') {
 				echo $before_title . $ad->title . $after_title;
 			}
-
+			advman::update_counters($ad);
 			echo $ad->get_ad(); //Output the selected ad
 
 			echo $after_widget;
@@ -204,10 +230,13 @@ class advman
 		$ads = array();
 		$totalWeight = 0;
 		foreach ($_advman['ads'] as $id => $ad) {
-			if ( ($ad->name == $name) && ($ad->is_available()) ) {
-				$ads[] = $ad;
-				$totalWeight += $ad->get('weight', true);
+		    if ( ($ad->name == $name) && ($ad->is_available()) ) {
+			$weight = $ad->get('weight', true);
+			if ($weight > 0) {
+			    $ads[] = $ad;
+			    $totalWeight += $weight;
 			}
+		    }
 		}
 		// Pick the ad
 		// Generate a number between 0 and 1
@@ -215,14 +244,13 @@ class advman
 		// Loop through ads until the selected one is chosen
 		$wt = 0;
 		foreach ($ads as $ad) {
-			$wt += $ad->get('weight', true);
-			if ( ($wt / $totalWeight) > $rnd) {
-				// Display the ad
-				return $ad;
-			}
+		    $wt += $ad->get('weight', true);
+		    if ( ($wt / $totalWeight) > $rnd) {
+			    // Display the ad
+			    return $ad;
+		    }
 		}
 	}
-		
 
 	/* This filter parses post content and replaces markup with the correct ad,
 	<!--adsense#name--> for named ad or <!--adsense--> for default */
@@ -303,20 +331,10 @@ if (!empty($_REQUEST['advman-ad-id'])) {
 if (is_admin()) {
 	require_once(ADVMAN_PATH . '/class-admin.php');
 
-	/* REVERT TO PREVIOUS BACKUP OF AD DATABASE */
-	if (!empty($_REQUEST['advman-revert-db'])) {
-		$advman_version = OX_Tools::sanitize_number($_REQUEST['advman-revert-db']);
-		$advman_backup = get_option('plugin_adsensem_backup');
-		if (!empty($advman_backup[$advman_version])) {
-			$_advman = $advman_backup[$advman_version];
-			update_option('plugin_adsensem',$_advman);
-			if (!empty($_REQUEST['advman-block-upgrade'])) {
-				die();
-			}
-		}
+	// Revert to a previous version of database
+	if (isset($_REQUEST['advman-revert-db'])) {
+	    advman::revert_db();
 	}
-	/* END REVERT TO PREVIOUS BACKUP OF AD DATABASE */
-	
 	
 	/* PRE-OUTPUT PROCESSING - e.g. NOTICEs (upgrade-adsense-deluxe) */
 	if (!empty($_POST['advman-mode'])) {
@@ -363,6 +381,10 @@ function advman_sbm_widget($args)
 	advman::widget($args,$k2sbm_current_module->options['name']);
 }
 /* SIDEBAR MODULES COMPATIBILITY FUNCTION */
-
-add_action('plugins_loaded', array('advman','init'), 1);
+if (class_exists('adsensem')) {
+    advman::add_notice('disable adsensem', __('Please disable Adsense Manager before using Advertising Manager'), 'ok');
+    update_option('plugin_adsensem', $_advman);
+} else {
+    add_action('plugins_loaded', array('advman','init'), 1);
+}
 ?>

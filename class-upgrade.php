@@ -206,8 +206,8 @@ class advman_upgrade {
 					$format = $ad->get('adformat');
 					if ( !empty($format) && ($format != 'custom')) {
 						list($width, $height, $null) = split('[x]', $format);
-						$this->set('width', $width);
-						$this->set('height', $height);
+						$ad->set('width', $width);
+						$ad->set('height', $height);
 					}
 				}
 				// Make sure that any settings under 'color-url' are now under 'color-link'
