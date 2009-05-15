@@ -109,10 +109,10 @@ class advman
 				if (function_exists('wp_register_sidebar_widget')) {
 					//$id, $name, $output_callback, $options = array()
 					wp_register_sidebar_widget("advman-$name", "Ad#$name", array('advman','widget'), $args, $name);
-//					wp_register_widget_control("advman-$name", "Ad#$name", array('advman','widget_control'), $args, $name); 
+					wp_register_widget_control("advman-$name", "Ad#$name", array('advman','widget_control'), null, null, $name); 
 				} elseif (function_exists('register_sidebar_module') ) {
 					register_sidebar_module("Ad #$name", 'advman_sbm_widget', "advman-$name", $args );
-//					register_sidebar_module_control("Ad #$name", array('advman','widget_control'), "advman-$name");
+					register_sidebar_module_control("Ad #$name", array('advman','widget_control'), "advman-$name");
 				}			
 			    }
 			}
@@ -184,15 +184,52 @@ class advman
 		
 		if (!empty($ad) && $ad->is_available()) {
 			echo $before_widget;
-
-			if($ad->title != '') {
-				echo $before_title . $ad->title . $after_title;
+			
+			if(!empty($_advman['settings']['widgets'][$ad->name]['title'])) {
+				echo $before_title . $_advman['settings']['widgets'][$ad->name]['title'] . $after_title;
 			}
 			advman::update_counters($ad);
 			echo $ad->get_ad(); //Output the selected ad
 
 			echo $after_widget;
 		}
+	}
+	
+	function widget_control($args, $name)
+	{
+	    global $_advman;
+	    
+	    $widgets = $_advman['settings']['widgets'];
+	    
+	    // Save data if it is posted from the widget control
+	    if ( $_POST["advman-$name-submit"] ) {
+		$title = strip_tags(stripslashes($_POST["advman-$name-title"]));
+		$widgets[$name]['title'] = $title;
+		$_advman['settings']['widgets'] = $widgets;
+		update_option('plugin_adsensem', $_advman);
+	    }
+	    
+	    // Clean up any data from the widgets (e.g. if ads have been renamed)
+	    foreach ($widgets as $name => $widget) {
+		$found = false;
+		foreach ($_advman['ads'] as $ad) {
+		    if ($ad->name == $name) {
+			$found = true;
+			break;
+		    }
+		}
+		if (!$found) {
+		    unset($_advman['settings']['widgets'][$name]);
+		    update_option('plugin_adsensem', $_advman);
+		}
+	    }
+	    
+	    // Display the widget options
+	    $title = $widgets[$name]['title'];
+?>
+<p><label for="advman-<?php echo $name; ?>-title"><?php _e('Title:', 'advman'); ?><input id="advman-<?php echo $name; ?>-title" name="advman-<?php echo $name; ?>-title" type="text" class="widefat" value="<?php echo htmlspecialchars($title, ENT_QUOTES);?>" /></label></p>
+<input type="hidden" name="advman-<?php echo $name; ?>-submit" value="1">
+<?php
 	}
   
 	/**
@@ -203,7 +240,6 @@ class advman
 ?>		<!-- Advertising Manager v<?php echo ADVMAN_VERSION;?> (<?php timer_stop(1); ?> seconds.) -->
 <?php
 	}
-
 
 	function filter_ad_callback($matches)
 	{
