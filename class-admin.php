@@ -22,11 +22,9 @@ class advman_admin
 		global $_advman;
 		global $wp_version;
 		
-		add_action('admin_head', array('advman_admin','add_header_script'));
+		add_action('admin_print_scripts', array('advman_admin', 'admin_print_scripts'));
+		add_action('admin_head', array('advman_admin','admin_head'));
 		add_action('admin_footer', array('advman_admin','admin_callback_editor'));
-		
-		wp_enqueue_script('prototype');
-		wp_enqueue_script('postbox');
 		
 		if (version_compare($wp_version,"2.7-alpha", '>')) {
 			add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-manage', array('advman_admin','manage'));
@@ -452,7 +450,15 @@ class advman_admin
 		STARTUP SCRIPTS
 		Initialised at startup to provide functions to the plugin etc.
 */
-	function add_header_script()
+	function admin_print_scripts()
+	{
+		$page = !empty($_GET['page']) ? $_GET['page'] : '';
+		if ($page == 'advman-manage') {
+			wp_enqueue_script('prototype');
+			wp_enqueue_script('postbox');
+		}
+	}
+	function admin_head()
 	{
 		$page = !empty($_GET['page']) ? $_GET['page'] : '';
 		if ($page == 'advman-manage') {

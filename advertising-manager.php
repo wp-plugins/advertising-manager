@@ -4,18 +4,17 @@ Plugin Name: Advertising Manager
 PLugin URI: http://code.openx.org/projects/show/advertising-manager
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer, Martin Fitzpatrick
-Version: 3.3.16
+Version: 3.3.17
 Author URI: http://www.switzer.org/
 */
 
 // Show notices (DEBUGGING ONLY)
 //error_reporting(E_ALL);
-
 // Load Localisation Plug-in
 load_plugin_textdomain('advman', false, 'advertising-manager/languages');
 
 // DEFINITIONS
-@define("ADVMAN_VERSION", "3.3.16");
+@define("ADVMAN_VERSION", "3.3.17");
 @define('ADVMAN_PATH', dirname(__FILE__));
 @define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
 
@@ -93,26 +92,27 @@ class advman
 			    $widgets = array();
 			    foreach ($_advman['ads'] as $id => $ad) {
 				if (!empty($ad->name)) {
-				    $widgets[$ad->name] = $ad;
+				    $id = substr(md5($ad->name), 0, 10);
+				    $widgets[$id] = $ad;
 				}
 			    }
-			    foreach ($widgets as $name => $ad)
+			    foreach ($widgets as $id => $ad)
 			    {
 				$n = __('Ad: ', 'advman') . $ad->name;
 				$description = __('An ad from the Advertising Manager plugin');
 				$args = array(
 				    'name' => $n,
 				    'description' => $description,
-				    'width' => $ad->get('width', true),
-				    'height' => $ad->get('height', true),
+				    //'width' => $ad->get('width', true),
+				    //'height' => $ad->get('height', true),
 				);
 				if (function_exists('wp_register_sidebar_widget')) {
 					//$id, $name, $output_callback, $options = array()
-					wp_register_sidebar_widget("advman-$name", "Ad#$name", array('advman','widget'), $args, $name);
-					wp_register_widget_control("advman-$name", "Ad#$name", array('advman','widget_control'), null, null, $name); 
+					wp_register_sidebar_widget("advman-$id", $n, array('advman','widget'), $args, $ad->name);
+					wp_register_widget_control("advman-$id", $n, array('advman','widget_control'), null, null, $ad->name); 
 				} elseif (function_exists('register_sidebar_module') ) {
-					register_sidebar_module("Ad #$name", 'advman_sbm_widget', "advman-$name", $args );
-					register_sidebar_module_control("Ad #$name", array('advman','widget_control'), "advman-$name");
+					register_sidebar_module($n, 'advman_sbm_widget', "advman-$id", $args );
+					register_sidebar_module_control($n, array('advman','widget_control'), "advman-$id");
 				}			
 			    }
 			}
@@ -173,7 +173,8 @@ class advman
       
 		//If name not passed in (Sidebar Modules), extract from the widget-id (WordPress Widgets)
 		if ($n=='') {
-			$n = substr($args['widget_id'],9);   //Chop off beginning advman- bit
+		    $l = length(__('Ad: '));
+		    $n = substr($args['widget_name'],$l);   //Chop off beginning advman- bit
 		}
 		
 		if ($n == 'default-ad') {
@@ -185,8 +186,9 @@ class advman
 		if (!empty($ad) && $ad->is_available()) {
 			echo $before_widget;
 			
-			if(!empty($_advman['settings']['widgets'][$ad->name]['title'])) {
-				echo $before_title . $_advman['settings']['widgets'][$ad->name]['title'] . $after_title;
+			$id = substr(md5($ad->name), 0, 10);
+			if(!empty($_advman['settings']['widgets'][$id]['title'])) {
+				echo $before_title . $_advman['settings']['widgets'][$id]['title'] . $after_title;
 			}
 			advman::update_counters($ad);
 			echo $ad->get_ad(); //Output the selected ad
@@ -200,35 +202,39 @@ class advman
 	    global $_advman;
 	    
 	    $widgets = $_advman['settings']['widgets'];
+	    $id = substr(md5($name),0,10);
 	    
 	    // Save data if it is posted from the widget control
-	    if ( $_POST["advman-$name-submit"] ) {
-		$title = strip_tags(stripslashes($_POST["advman-$name-title"]));
-		$widgets[$name]['title'] = $title;
+	    if ( $_POST["advman-$id-submit"] ) {
+		$title = strip_tags(stripslashes($_POST["advman-$id-title"]));
+		$widgets[$id]['title'] = $title;
 		$_advman['settings']['widgets'] = $widgets;
 		update_option('plugin_adsensem', $_advman);
 	    }
 	    
 	    // Clean up any data from the widgets (e.g. if ads have been renamed)
-	    foreach ($widgets as $name => $widget) {
-		$found = false;
-		foreach ($_advman['ads'] as $ad) {
-		    if ($ad->name == $name) {
-			$found = true;
-			break;
+	    if (!empty($widgets)) {
+		foreach ($widgets as $i => $w) {
+		    $found = false;
+		    foreach ($_advman['ads'] as $ad) {
+			$ai = substr(md5($ad->name), 0, 10);
+			if ($ai == $i) {
+			    $found = true;
+			    break;
+			}
 		    }
-		}
-		if (!$found) {
-		    unset($_advman['settings']['widgets'][$name]);
-		    update_option('plugin_adsensem', $_advman);
+		    if (!$found) {
+			unset($_advman['settings']['widgets'][$i]);
+			update_option('plugin_adsensem', $_advman);
+		    }
 		}
 	    }
 	    
 	    // Display the widget options
-	    $title = $widgets[$name]['title'];
+	    $title = isset($widgets[$id]['title']) ? $widgets[$id]['title'] : '';
 ?>
-<p><label for="advman-<?php echo $name; ?>-title"><?php _e('Title:', 'advman'); ?><input id="advman-<?php echo $name; ?>-title" name="advman-<?php echo $name; ?>-title" type="text" class="widefat" value="<?php echo htmlspecialchars($title, ENT_QUOTES);?>" /></label></p>
-<input type="hidden" name="advman-<?php echo $name; ?>-submit" value="1">
+<p><label for="advman-<?php echo $id; ?>-title"><?php _e('Title:', 'advman'); ?><input id="advman-<?php echo $id; ?>-title" name="advman-<?php echo $id; ?>-title" type="text" class="widefat" value="<?php echo htmlspecialchars($title, ENT_QUOTES);?>" /></label></p>
+<input type="hidden" name="advman-<?php echo $id; ?>-submit" value="1">
 <?php
 	}
   

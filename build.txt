@@ -31,6 +31,7 @@ curl http://translate.openx.org/id/advman/advman.mo -o advman-id_ID.mo
 curl http://translate.openx.org/ja/advman/advman.mo -o advman-ja.mo
 curl http://translate.openx.org/ko/advman/advman.mo -o advman-ko_KR.mo
 curl http://translate.openx.org/pt_PT/advman/advman.mo -o advman-pt_PT.mo
+curl http://translate.openx.org/ru/advman/advman.mo -o advman-ru_RU.mo
 curl http://translate.openx.org/tr/advman/advman.mo -o advman-tr.mo
 svn add *.mo
 svn ci -m "Updated languages from translation server"
@@ -38,6 +39,9 @@ svn ci -m "Updated languages from translation server"
 New language names follow the ISO format used in Wordpress:
 http://codex.wordpress.org/WordPress_Localization
 
+New language:
+Add the 'nobody' account permission:  Compile PO Files
+ex:  http://translate.openx.org/ru/advman/admin.html
 
 8.  Increase the version:
 - in the comments at the top of advertising-manager.php
