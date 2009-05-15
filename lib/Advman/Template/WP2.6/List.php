@@ -80,7 +80,7 @@ class Advman_Template_List
 		global $_advman;
 		
 ?>				<tr class="network_header" id="default-options">
-					<td style="width:180px;"><a class="<?php echo strtolower($ad->network); ?>" href="javascript:document.getElementById('advman-form').submit();" onclick="javascript:document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo $ad->network; ?>';"><?php echo $ad->network_name; ?></a></td>
+					<td style="width:180px;"><a class="<?php echo strtolower(get_class($ad)); ?>" href="javascript:document.getElementById('advman-form').submit();" onclick="javascript:document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo get_class($ad); ?>';"><?php echo $ad->network_name; ?></a></td>
 					<td></td>
 					<td></td>
 					<td></td>

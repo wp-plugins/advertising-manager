@@ -112,7 +112,7 @@ class Advman_Upgrade
 		foreach ($data['ads'] as $n => $ad) {
 			$aAd = array();
 			if (get_class($ad) != '__PHP_Incomplete_Class') {
-				$aAd['network'] = get_class($ad);
+				$aAd['network'] = $ad->network;
 			}
 			foreach ($ad as $key => $value) {
 				if ($key == '__PHP_Incomplete_Class_Name') {

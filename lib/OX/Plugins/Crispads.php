@@ -3,7 +3,6 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Crispads extends OX_Ad
 {
-	var $network = 'crispads';
 	var $network_name = 'Crisp Ads';
 	var $url = 'http://www.crispads.com';
 	

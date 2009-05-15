@@ -43,18 +43,24 @@ class OX_Swifty
 		return $this->actions[$key];
 	}
 	
+	function factory($class)
+	{
+		return $this->dal->factory($class);
+	}
+	
 	function getSetting($key)
 	{
 		return $this->dal->select_setting($key);
 	}
 	
-	function setSetting($key)
+	function setSetting($key, $value)
 	{
-		return $this->dal->update_setting($key);
+		return $this->dal->update_setting($key, $value);
 	}
 	
 	function insertAd($ad)
 	{
+		$ad->add_revision();
 		return $this->dal->insert_ad($ad);
 	}
 	
@@ -75,6 +81,7 @@ class OX_Swifty
 	
 	function setAd($ad)
 	{
+		$ad->add_revision();
 		return $this->dal->update_ad($ad);
 	}
 	
@@ -83,6 +90,7 @@ class OX_Swifty
 		$ad = $this->dal->select_ad($id);
 		if ($ad) {
 			$ad = version_compare(phpversion(), '5.0') < 0 ? $ad : clone($ad); // Hack to deal with PHP 4/5 incompatiblity with cloning
+			$ad->add_revision();
 			return $this->dal->insert_ad($ad);
 		}
 		
@@ -91,6 +99,7 @@ class OX_Swifty
 	
 	function setAdNetwork($ad)
 	{
+		$ad->add_revision(true);
 		return $this->dal->update_ad_network($ad);
 	}
 	
@@ -127,9 +136,7 @@ class OX_Swifty
 		$ad = $this->dal->select_ad($id);
 		if ($active != $ad->active) {
 			$ad->active = $active;
-			$ad->add_revision();
-			$this->dal->update_ad($ad);
-			return true;
+			return $this->setAd($ad);
 		}
 		
 		return false;
@@ -182,10 +189,10 @@ class OX_Swifty
 				$this->counter['id'][$ad->id]++;
 			}
 			
-			if (empty($this->counter['network'][$ad->network])) {
-				$this->counter['network'][$ad->network] = 1;
+			if (empty($this->counter['network'][get_class($ad)])) {
+				$this->counter['network'][get_class($ad)] = 1;
 			} else {
-				$this->counter['network'][$ad->network]++;
+				$this->counter['network'][get_class($ad)]++;
 			}
 		}
 	}

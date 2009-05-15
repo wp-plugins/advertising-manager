@@ -3,7 +3,6 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Openx extends OX_Ad
 {
-	var $network = 'openx';
 	var $network_name = 'OpenX';
 	var $url = 'http://www.openx.org';
 	
@@ -48,27 +47,6 @@ class OX_Plugin_Openx extends OX_Ad
 		$code = str_replace('INSERT_RANDOM_NUMBER_HERE', '{{random}}', $code);
 		
 		parent::import_settings($code);
-	}
-
-	function customiseSection($mode, $section)
-	{
-		if ($section == 'adformat') {
-			return true;
-		}
-		
-		return false;
-	}
-	
-	function displaySection($mode, $section)
-	{
-		return;
-	}
-	
-	function displayBeforeSection($mode, $section)
-	{
-		if ($section == 'code') {
-			$this->_displaySectionSlot();
-		}
 	}
 }
 /*

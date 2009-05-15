@@ -1,9 +1,8 @@
 <?php
-require_once(OX_LIB . '/Ad.php');	
+require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Ypn extends OX_Ad
 {
-	var $network = 'ypn';
 	var $network_name = 'Yahoo! Publisher Network';
 	var $url = 'http://ypn.yahoo.com';
 	

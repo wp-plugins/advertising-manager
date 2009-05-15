@@ -3,7 +3,6 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Cj extends OX_Ad
 {
-	var $network = 'cj';
 	var $network_name = 'Commission Junction';
 	var $url = 'http://www.cj.com';
 	
@@ -20,13 +19,13 @@ class OX_Plugin_Cj extends OX_Ad
 		$engine->addAction('ad_network', get_class());
 	}
 	
-	function display()
+	function display($codeonly = false, $search = array(), $replace = array())
 	{
 		$xdomains = OX_Plugin_Cj::get_domains();
 		$search[] = '{{xdomain}}';
 		$replace[] = $xdomains[array_rand($xdomains)];
 		
-		return parent::display($search, $replace);
+		return parent::display($codeonly, $search, $replace);
 	}
 	
 	/**

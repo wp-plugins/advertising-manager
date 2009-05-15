@@ -3,7 +3,6 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Widgetbucks extends OX_Ad
 {
-	var $network = 'widgetbucks';
 	var $network_name = 'WidgetBucks';
 	var $url = 'http://www.widgetbucks.com';
 	

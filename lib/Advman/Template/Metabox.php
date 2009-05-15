@@ -176,23 +176,23 @@ class Advman_Template_Metabox
 	}
 	function display_code($ad, $nw = false)
 	{
-		$edit = $ad->network == 'html';
+		$edit = get_class($ad) == 'OX_Ad_Html';
 		$htmlBefore = ($nw) ? $ad->get_network_property('html-before') : $ad->get_property('html-before');
 		$htmlAfter = ($nw) ? $ad->get_network_property('html-after') : $ad->get_property('html-after');
 		
 ?><div style="font-size:small;">
 	<label for="html_before"><?php _e('HTML Code Before'); ?></label><br />
-	<textarea rows="1" cols="60" name="advman-html-before" id="advman-html-before" onfocus="this.select();"><?php echo $htmlBefore; ?></textarea>
+	<textarea rows="1" cols="57" name="advman-html-before" id="advman-html-before" onfocus="this.select();"><?php echo $htmlBefore; ?></textarea>
 <?php if (!$nw): ?>
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-before'); ?>">
 <?php endif; ?>
 	<br /><br />
 <?php if (!$nw): ?>
 	<label for="ad_code"><?php _e('Ad Code'); ?></label><br />
-	<textarea rows="6" cols="60" id="advman-code"<?php if (!$edit) echo " style='background:#cccccc'"; ?> onfocus="this.select();" onclick="this.select();"<?php if (!$edit) echo " readonly='readonly'"; ?>><?php echo $ad->display(); ?></textarea><br /><br />
+	<textarea rows="6" cols="60" id="advman-code"<?php if (!$edit) echo " style='background:#cccccc'"; ?> onfocus="this.select();" onclick="this.select();"<?php if (!$edit) echo " readonly='readonly'"; ?>><?php echo $ad->display(true); ?></textarea><br /><br />
 <?php endif; ?>
 	<label for="html_after"><?php _e('HTML Code After'); ?></label><br />
-	<textarea rows="1" cols="60" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $htmlAfter; ?></textarea>
+	<textarea rows="1" cols="57" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $htmlAfter; ?></textarea>
 <?php if (!$nw): ?>
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-after'); ?>">
 <?php endif; ?>
@@ -332,7 +332,7 @@ class Advman_Template_Metabox
 <p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
 <p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to copy the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to do nothing, OK to copy)', 'advman'); ?>')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Copy this ad', 'advman'); ?></a></p>
 <p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></p>
-<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo $ad->network ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo get_class($ad); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
 <?php
 	}
 	function display_notes($ad)
@@ -351,7 +351,8 @@ class Advman_Template_Metabox
 	}
 	function display_save_settings($ad, $nw = false)
 	{
-		list($last_user, $last_timestamp, $last_timestamp2) = Advman_Tools::get_last_edit($ad->get_property('revisions'));
+		$revisions = ($nw) ? $ad->get_network_property('revisions') : $ad->get_property('revisions');
+		list($last_user, $last_timestamp, $last_timestamp2) = Advman_Tools::get_last_edit($revisions);
 ?>
 <div id="advman-submitad" class="submitbox">
 	<div id="minor-publishing">

@@ -77,6 +77,37 @@ class Advman_Dal extends OX_Dal
 		update_option($key, $data);
 	}
 	
+	function factory($class, $aAd = null)
+	{
+		$ad = new $class();
+		if (is_null($aAd)) {
+			$ad->active = true;
+			$ad->name = OX_Tools::generate_name($ad->network_name);
+		} else {
+			$ad->name = $aAd['name'];
+			$ad->id = $aAd['id'];
+			$ad->active = $aAd['active'];
+		}
+		$properties = $ad->get_network_properties();
+		foreach ($properties as $property => $default) {
+			if (isset($aAd[$property])) {
+				$this->set_property($property, $aAd[$property]);
+			}
+			if (isset($this->data['networks'][$class][$property])) {
+				$ad->set_network_property($property, $this->data['networks'][$class][$property]);
+			}
+		}
+		
+		$this->set_property('revisions', $aAd['revisions']);
+		
+		if (is_null($aNetwork)) {
+			$this->set_network_properties($this->get_network_property_defaults());
+		} else {
+			$this->set_network_properties($aNetwork);
+		}
+		
+		
+	}
 	function select_setting($key)
 	{
 		switch ($key) {
@@ -152,7 +183,7 @@ class Advman_Dal extends OX_Dal
 	
 	function update_ad_network($ad)
 	{
-		$this->data['defaults'][get_class($ad)] = $ad->get_network_properties();
+		$this->data['networks'][get_class($ad)] = $ad->get_network_properties();
 		$this->_update_data();
 	}
 }

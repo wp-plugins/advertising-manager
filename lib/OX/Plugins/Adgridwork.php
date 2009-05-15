@@ -3,7 +3,6 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Adgridwork extends OX_Ad
 {
-	var $network = 'adgridwork';
 	var $network_name = 'AdGridWork';
 	var $url = 'http://www.adgridwork.com';
 	

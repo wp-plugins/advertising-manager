@@ -89,8 +89,6 @@ class Advman_Admin
 				}
 			}
 		}
-		
-		$ad->add_revision($default);
 	}
 	
 	
@@ -155,7 +153,7 @@ class Advman_Admin
 				break;
 			
 			case 'default' :
-				$advman_engine->setKey('default-ad', $ad->name);
+				$advman_engine->setSetting('default-ad', $ad->name);
 				break;
 			
 			case 'delete' :
@@ -204,7 +202,7 @@ class Advman_Admin
 				} elseif ($mode == 'edit_network') {
 					$ad = new $target;
 					Advman_Admin::save_properties($ad, true);
-					$advman_engine->setAd($ad);
+					$advman_engine->setAdNetwork($ad);
 				} elseif ($mode == 'settings') {
 					Advman_Admin::save_settings();
 				}

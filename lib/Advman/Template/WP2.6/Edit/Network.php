@@ -47,7 +47,7 @@ class Advman_Template_Edit_Network
 	wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );  
 	wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );  
 ?><div class="wrap">
-	<h2><?php printf(__('Edit %s Network Settings', 'advman'), "<span class='" . strtolower($ad->network) . "'>" . $ad->network_name . "</span>"); ?></h2>
+	<h2><?php printf(__('Edit %s Network Settings', 'advman'), "<span class='" . strtolower(get_class($ad)) . "'>" . $ad->network_name . "</span>"); ?></h2>
 <div id="poststuff">
 <div class="submitbox" id="submitpost">
 <div id="previewview">

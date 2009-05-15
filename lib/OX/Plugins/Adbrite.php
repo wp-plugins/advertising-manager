@@ -3,7 +3,6 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Adbrite extends OX_Ad
 {
-	var $network = 'adbrite';
 	var $network_name = 'AdBrite';
 	var $url = 'http://www.adbrite.com';
 	

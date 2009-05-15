@@ -3,7 +3,6 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Shoppingads extends OX_Ad
 {
-	var $network = 'shoppingads';
 	var $network_name = 'Shopping Ads';
 	var $url = 'http://www.shoppingads.com';
 	

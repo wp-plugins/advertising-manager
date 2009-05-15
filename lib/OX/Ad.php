@@ -13,28 +13,13 @@ class OX_Ad extends OX_Plugin
 	static $np; //$np holds Network properties - defaults, network settings, etc.
 	
 	//Global start up functions for all network classes	
-	function OX_Ad($aAd = null)
+	function OX_Ad()
 	{
-		if (is_null($aAd)) {
-			$this->active = true;
-			$this->name = OX_Tools::generate_name($this->network);
-		} else {
-			$this->name = $aAd['name'];
-			$this->id = $aAd['id'];
-			$this->active = $aAd['active'];
-			
-			$properties = $this->get_network_properties();
-			foreach ($properties as $property => $default) {
-				if (isset($aAd[$property])) {
-					$this->set_property($property, $aAd[$property]);
-				}
-			}
-		}
 	}
 	
 	function register_plugin($engine)
 	{
-		$engine->addAction('ad_network', get_class($this));
+		$engine->addAction('ad_network', get_class());
 	}
 	
 	/**
@@ -61,12 +46,7 @@ class OX_Ad extends OX_Plugin
 	
 	function get_network_properties()
 	{
-		$properties = self::$np[$this->network];
-		if (empty($properties)) {
-			$properties = $this->get_network_property_defaults();
-			$this->set_network_properties($properties);
-		}
-		return $properties;
+		return self::$np[$this->network];
 	}
 	
 	/**
@@ -111,7 +91,7 @@ class OX_Ad extends OX_Plugin
 	
 	function set_network_properties($properties)
 	{
-		self::$np[get_class($this)] = $properties;
+		self::$np[$this->network] = $properties;
 	}
 	
 	function set_properties($properties)
@@ -196,7 +176,7 @@ class OX_Ad extends OX_Plugin
 		);
 	}
 	
-	function display($search = array(), $replace = array())
+	function display($codeonly = false, $search = array(), $replace = array())
 	{
 		$search[] = '{{random}}';
 		$replace[] = mt_rand();
@@ -208,9 +188,8 @@ class OX_Ad extends OX_Plugin
 			$search[] = '{{' . $property . '}}';
 			$replace[] = $this->get($property);
 		}
-		$code  = $this->get('html-before');
-		$code .= $this->get('code');
-		$code .= $this->get('html-after');
+		
+		$code = $codeonly ? $this->get('code') : ($this->get('html-before') . $this->get('code') . $this->get('html-after'));
 		
 		return str_replace($search, $replace, $code);
 //		return $this->get('code');
@@ -241,7 +220,7 @@ class OX_Ad extends OX_Plugin
 	}
 	function add_revision($network = false)
 	{
-		$revisions = $network ? $this->get_network_property('revisions') : $this->get('revisions');
+		$revisions = $network ? $this->get_network_property('revisions') : $this->get_property('revisions');
 		
 		// Get the user login information
 		global $user_login;

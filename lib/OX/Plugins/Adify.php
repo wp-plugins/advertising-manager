@@ -3,7 +3,6 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Adify extends OX_Ad
 {
-	var $network = 'adify';
 	var $network_name = 'Adify';
 	var $url = 'http://www.adify.com';
 	

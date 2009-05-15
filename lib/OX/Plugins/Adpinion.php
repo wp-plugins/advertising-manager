@@ -3,7 +3,6 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Adpinion extends OX_Ad
 {
-	var $network = 'adpinion';
 	var $network_name = 'Adpinion';
 	var $url = 'http://www.adpinion.com';
 	
@@ -20,7 +19,7 @@ class OX_Plugin_Adpinion extends OX_Ad
 		$engine->addAction('ad_network', get_class());
 	}
 	
-	function display($search, $replace)
+	function display($codeonly = false, $search = array(), $replace = array())
 	{
 		if($this->get('width', true) > $this->get('height', true)) {
 			$xwidth=18;
@@ -35,7 +34,7 @@ class OX_Plugin_Adpinion extends OX_Ad
 		$replace[] = $this->get('width', true) + $xwidth;
 		$replace[] = $this->get('height', true) + $xheight;
 		
-		return parent::display($search, $replace);
+		return parent::display($codeonly, $search, $replace);
 	}
 	
 	function get_network_property_defaults()
