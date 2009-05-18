@@ -200,7 +200,7 @@ class Advman_Admin
 					Advman_Admin::save_properties($ad);
 					$advman_engine->setAd($ad);
 				} elseif ($mode == 'edit_network') {
-					$ad = new $target;
+					$advman_engine->factory($target);
 					Advman_Admin::save_properties($ad, true);
 					$advman_engine->setAdNetwork($ad);
 				} elseif ($mode == 'settings') {
@@ -239,7 +239,7 @@ class Advman_Admin
 				break;
 			
 			case 'edit_network' :
-				$ad = new $target;
+				$advman_engine->factory($target);
 				$template = Advman_Tools::get_template('Edit_Network', $ad);
 				$template->display($ad);
 				break;

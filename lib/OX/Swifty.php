@@ -112,7 +112,7 @@ class OX_Swifty
 			$networks = $this->getAction('ad_network');
 			foreach ($networks as $network) {
 				if (call_user_func(array($network, 'import_detect_network'), $tag)) {
-					$ad = new $network;
+					$ad = $advman_engine->factory($network);
 					$ad->import_settings($tag);
 					$imported = true;
 					break; //leave the foreach loop
@@ -122,7 +122,7 @@ class OX_Swifty
 		
 		// Not a pre-defined network - we will make it HTML code...
 		if (!$imported) {
-			$ad=new OX_Ad_Html();
+			$ad = $advman_engine->factory('OX_Ad_Html');
 			$ad->import_settings($tag);
 		}
 		

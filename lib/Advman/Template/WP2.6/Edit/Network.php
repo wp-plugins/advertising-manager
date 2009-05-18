@@ -19,13 +19,12 @@ class Advman_Template_Edit_Network
 		add_meta_box('advman_history', __('History', 'advman'), array(get_class($this), 'displaySectionHistory'), 'advman', 'advanced', 'low');
 	}
 	
-	function display($target = null)
+	function display($ad)
 	{
 		// Get our options and see if we're handling a form submission.
 		global $_advman;
 		global $_advman_networks;
 		
-		$ad = new $target;
 		$revisions = $ad->get_network_property('revisions');
 		if (!empty($revisions)) {
 			foreach($revisions as $t => $u) {

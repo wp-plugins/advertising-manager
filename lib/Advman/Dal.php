@@ -62,7 +62,7 @@ class Advman_Dal extends OX_Dal
 		$oAds = array();
 		foreach ($data['ads'] as $id => $aAd) {
 			$class = $aAd['class'];
-			$oAds[$id] = new $class($aAd);
+			$oAds[$id] = $this->factory($class, $aAd);
 		}
 		$data['ads'] = $oAds;
 	}
@@ -87,27 +87,18 @@ class Advman_Dal extends OX_Dal
 			$ad->name = $aAd['name'];
 			$ad->id = $aAd['id'];
 			$ad->active = $aAd['active'];
-		}
-		$properties = $ad->get_network_properties();
-		foreach ($properties as $property => $default) {
-			if (isset($aAd[$property])) {
-				$this->set_property($property, $aAd[$property]);
-			}
-			if (isset($this->data['networks'][$class][$property])) {
-				$ad->set_network_property($property, $this->data['networks'][$class][$property]);
-			}
+			$ad->set_properties($aAd);
 		}
 		
-		$this->set_property('revisions', $aAd['revisions']);
-		
-		if (is_null($aNetwork)) {
-			$this->set_network_properties($this->get_network_property_defaults());
+		if (empty($this->data['networks'][$class])) {
+			$ad->set_network_properties($ad->get_network_property_defaults());
 		} else {
-			$this->set_network_properties($aNetwork);
+			$ad->set_network_properties($this->data['networks'][$class]);
 		}
 		
-		
+		return $ad;
 	}
+	
 	function select_setting($key)
 	{
 		switch ($key) {

@@ -21,6 +21,17 @@ class OX_Tools
 			closedir($handle);
 		}
 	}
+	
+	function get_int_max()
+	{
+		$max=0x7fff;
+		$probe = 0x7fffffff;
+		while ($max == ($probe>>16)) {
+			$max = $probe;
+			$probe = ($probe << 16) + 0xffff;
+		}
+		return $max;
+	}
 
 	function sort($ads)
 	{

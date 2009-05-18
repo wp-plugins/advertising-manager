@@ -36,6 +36,13 @@ function advman_init()
 	require_once(OX_LIB . '/Tools.php');
 	require_once(OX_LIB . '/Swifty.php');
 	require_once(ADVMAN_LIB . '/Dal.php');
+	require_once(ADVMAN_LIB . '/Widget.php');
+
+	// Define PHP_INT_MAX for versions of PHP < 4.4.0
+	if (!defined('PHP_INT_MAX')) {
+	    define ('PHP_INT_MAX', OX_Tools::get_int_max());
+	}
+	
 	// First, get an instance of the ad engine
 	global $advman_engine;
 	$advman_engine = new OX_Swifty('Advman_Dal');
@@ -72,7 +79,7 @@ function advman_run()
 	// Add a filter for displaying an ad in the content
 	add_filter('the_content', 'advman_filter_content');
 	// Widgets are initialised
-	add_action('widgets_init',  'advman_widgets_init', 1);
+	add_action('widgets_init',  array('Advman_Widget', 'init'), 1);
 	// Add an action when the wordpress footer displays
 	add_action('wp_footer', 'advman_footer');
 	// If admin, initialise the Admin functionality	
@@ -81,85 +88,8 @@ function advman_run()
 	}
 }
 
-function advman_widgets_init()
-{
-	global $advman_engine;
-	
-	$ads = $advman_engine->getAds();
-		
-	if (!empty($ads)) {
-		$widgets = array();
-		foreach ($ads as $id => $ad) {
-			if (!empty($ad->name)) {
-				$widgets[$ad->name] = $ad;
-			}
-		}
-		
-		foreach ($widgets as $name => $ad) {
-			$n = __('Ad: ', 'advman') . $ad->name;
-			$description = __('An ad from the Advertising Manager plugin');
-			$args = array(
-				'name' => $n,
-				'description' => $description,
-				'width' => $ad->get('width', true),
-				'height' => $ad->get('height', true),
-			);
-			if (function_exists('wp_register_sidebar_widget')) {
-				//$id, $name, $output_callback, $options = array()
-				wp_register_sidebar_widget("advman-$name", "Ad#$name", 'advman_widget', $args, $name);
-			} elseif (function_exists('register_sidebar_module') ) {
-				register_sidebar_module("Ad #$name", 'advman_sbm_widget', "advman-$name", $args );
-			}
-		}
-	}
-}
 
 
-// This is the function that outputs advman widget.
-function advman_widget($args,$n='')
-{
-	global $advman_engine;
-	
-	$ads = $advman_engine->getAds();
-
-	// $args is an array of strings that help widgets to conform to
-	// the active theme: before_widget, before_title, after_widget,
-	// and after_title are the array keys. Default tags: li and h2.
-	extract($args); //nb. $name comes out of this, hence the use of $n
-	
-	//If name not passed in (Sidebar Modules), extract from the widget-id (WordPress Widgets)
-	if ($n=='') {
-		$n = substr($args['widget_id'],9);   //Chop off beginning advman- bit
-	}
-	
-	if ($n !== 'default-ad') {
-		$ad = $advman_engine->selectAd($n);
-	} else {
-		$ad = $advman_engine->selectAd();  // select the default
-	}
-	
-	if (!empty($ad)) {
-		echo $before_widget;
-
-		if($ad->title != '') {
-			echo $before_title . $ad->title . $after_title;
-		}
-
-		echo $ad->display(); //Output the selected ad
-
-		echo $after_widget;
-	}
-}
-
-/**
- * Sidebar module compatibility function
- */
-function advman_sbm_widget($args)
-{
-	global $k2sbm_current_module;
-	advman_widget($args,$k2sbm_current_module->options['name']);
-}
-  
 /* This filter parses post content and replaces markup with the correct ad,
 <!--adsense#name--> for named ad or <!--adsense--> for default */
 function advman_filter_content($content)
