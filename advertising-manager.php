@@ -4,7 +4,7 @@ Plugin Name: Advertising Manager
 PLugin URI: http://code.openx.org/projects/show/advertising-manager
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer, Martin Fitzpatrick
-Version: 3.3.17
+Version: 3.3.18
 Author URI: http://www.switzer.org/
 */
 
@@ -14,7 +14,7 @@ Author URI: http://www.switzer.org/
 load_plugin_textdomain('advman', false, 'advertising-manager/languages');
 
 // DEFINITIONS
-@define("ADVMAN_VERSION", "3.3.17");
+@define("ADVMAN_VERSION", "3.3.18");
 @define('ADVMAN_PATH', dirname(__FILE__));
 @define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
 
@@ -33,6 +33,11 @@ if ($advman_handle = opendir(ADVMAN_PATH . '/OX/Adnet/')) {
     closedir($advman_handle);
 }
 require_once(ADVMAN_PATH . '/OX/Tools.php');
+
+// Define PHP_INT_MAX for versions of PHP < 4.4.0
+if (!defined('PHP_INT_MAX')) {
+    define ('PHP_INT_MAX', OX_Tools::get_int_max());
+}
 
 // DATA
 global $_advman, $_advman_notices, $_advman_counter;
@@ -184,16 +189,19 @@ class advman
 		$ad = advman::select_ad($n);
 		
 		if (!empty($ad) && $ad->is_available()) {
-			echo $before_widget;
-			
 			$id = substr(md5($ad->name), 0, 10);
+			$suppress = !empty($_advman['settings']['widgets'][$id]['suppress']);
+			$ad_widget = '';
+			$ad_widget .= $suppress ? '' : $before_widget;
 			if(!empty($_advman['settings']['widgets'][$id]['title'])) {
-				echo $before_title . $_advman['settings']['widgets'][$id]['title'] . $after_title;
+			    $ad_widget .= $suppress ? '' : $before_title;
+			    $ad_widget .= $_advman['settings']['widgets'][$id]['title'];
+			    $ad_widget .= $suppress ? '' : $after_title;
 			}
 			advman::update_counters($ad);
-			echo $ad->get_ad(); //Output the selected ad
-
-			echo $after_widget;
+			$ad_widget .= $ad->get_ad(); //Output the selected ad
+			$ad_widget .= $suppress ? '' : $after_widget;
+			echo $ad_widget;
 		}
 	}
 	
@@ -208,6 +216,8 @@ class advman
 	    if ( $_POST["advman-$id-submit"] ) {
 		$title = strip_tags(stripslashes($_POST["advman-$id-title"]));
 		$widgets[$id]['title'] = $title;
+		$suppress = !empty($_POST["advman-$id-suppress"]);
+		$widgets[$id]['suppress'] = $suppress;
 		$_advman['settings']['widgets'] = $widgets;
 		update_option('plugin_adsensem', $_advman);
 	    }
@@ -232,9 +242,14 @@ class advman
 	    
 	    // Display the widget options
 	    $title = isset($widgets[$id]['title']) ? $widgets[$id]['title'] : '';
+	    $checked = !empty($widgets[$id]['suppress']) ? 'checked="checked"' : '';
 ?>
-<p><label for="advman-<?php echo $id; ?>-title"><?php _e('Title:', 'advman'); ?><input id="advman-<?php echo $id; ?>-title" name="advman-<?php echo $id; ?>-title" type="text" class="widefat" value="<?php echo htmlspecialchars($title, ENT_QUOTES);?>" /></label></p>
-<input type="hidden" name="advman-<?php echo $id; ?>-submit" value="1">
+<p><label for="advman-<?php echo $id; ?>-title"><?php _e('Title:'); ?> <input class="widefat" id="advman-<?php echo $id; ?>-title" name="advman-<?php echo $id; ?>-title" type="text" value="<?php echo htmlspecialchars($title, ENT_QUOTES); ?>" /></label></p>
+<p>
+    <label for="advman-<?php echo $id; ?>-suppress"><input class="checkbox" type="checkbox" <?php echo $checked; ?> id="advman-<?php echo $id; ?>-suppress" name="advman-<?php echo $id; ?>-suppress" /> <?php _e('Hide widget formatting'); ?></label>
+</p>
+<input type="hidden" id="advman-<?php echo $id; ?>-submit" name="advman-<?php echo $id; ?>-submit" value="1" />
+
 <?php
 	}
   

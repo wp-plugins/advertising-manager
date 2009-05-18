@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=martin%2
 Tags: ad, adbrite, adgridwork, adify, admin, adpinion, adroll, ads, adsense, adserver, advertisement, advertising, affiliate, banner, banners, chitika, cj, commercial, commission, crispads, google, income, junction, link, manager, media, money, openx, plugin, random, referral, revenue, rotator, seo, server, shoppingads, widget, widgetbucks, yahoo, ypn
 Requires at least: 2.5
 Tested up to: 2.7.1
-Stable tag: 3.3.17
+Stable tag: 3.3.18
 
 This plugin will manage and rotate your Google Adsense and other ads on your Wordpress blog.
 
@@ -112,6 +112,7 @@ By popular demand, below are the changes for versions listed. Use this to determ
 
 As a general rule the version X.Y.Z increments Z with bugfixes, Y with additional features, and X with major overhaul.
 
+* **3.3.18** Added ability to suppress widget formatting on ads, fixed issue with PHP_INT_MAX on versions of PHP before 4.4.
 * **3.3.17** Fixed a bug with widget display, updated all language files, fixed a bug with Ozh plugin
 * **3.3.16** Added functionality around reverting to older versions of adsensem, fixed a bug with 0 weight ads, fixed a bug displaying ID rather than name for post ads
 * **3.3.15** Fixed small bug in upgrade script, added counter support to widgets
