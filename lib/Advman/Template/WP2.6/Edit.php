@@ -27,10 +27,13 @@ class Advman_Template_Edit
 <div id="poststuff">
 <div class="submitbox" id="submitpost">
 <div id="previewview">
+<?php if (!$nw): ?>
 	<a id='advman-ad-preview' href="<?php echo $ad->get_preview_url(); ?>" target="wp_preview"><?php _e('Preview this Ad', 'advman'); ?></a>	
+<?php endif; ?>		
 </div><!-- previewview -->
 
 <div class="inside">
+<?php if (!$nw): ?>
 	<p><strong><label for='post_status'><?php _e('Ad Status'); ?></label></strong></p>
 	<p>
 		<select name='advman-active' id='post_status'>
@@ -38,6 +41,7 @@ class Advman_Template_Edit
 			<option<?php echo ($ad->active ? "" : " selected='selected'"); ?> value='no'><?php _e('Paused', 'advman'); ?></option>
 		</select>
 	</p>
+<?php endif; ?>		
 	<p class="curtime"><?php echo __('Last edited', 'advman') . ' <abbr title="' . $last_timestamp2 . '"><b>' . $last_timestamp . ' ' . __('ago', 'advman') . '</b></abbr> ' . __('by', 'advman') . ' ' . $last_user; ?></p>
 </div><!-- inside -->
 

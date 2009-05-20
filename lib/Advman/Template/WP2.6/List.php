@@ -6,7 +6,9 @@ class Advman_Template_List
 	function display($target = null, $filter = null)
 	{
 		// Get our options and see if we're handling a form submission.
-		global $_advman, $_advman_networks;
+		global $advman_engine;
+		$ads = $advman_engine->getAds();
+		
 ?>		<div class="wrap">
 			<form action="" method="post" id="advman-form" enctype="multipart/form-data">
 				<input type="hidden" id="advman-mode" name="advman-mode" value="list_ads" />
@@ -27,8 +29,8 @@ class Advman_Template_List
 				</thead>
 <?php
 		$previous_network='';
-		if (is_array($_advman['ads'])) {
-			foreach ($_advman['ads'] as $id => $ad) {
+		if (is_array($ads)) {
+			foreach ($ads as $id => $ad) {
 				if ($ad->network_name !== $previous_network) {
 					Advman_Template_List::_display_network_row($ad);
 					$previous_network = $ad->network_name;
@@ -41,7 +43,7 @@ class Advman_Template_List
 					<td>
 						<input class="button" type="submit" value="<?php _e('Copy', 'advman'); ?>" onClick="document.getElementById('advman-action').value='copy'; document.getElementById('advman-target').value='<?php echo $id; ?>';">
 <?php
-				if ( ($id != $_advman['default-ad']) || (count($_advman['ads']) == 1) ) {
+				if ( ($ad->name != $advman_engine->getSetting('default-ad')) || (count($ads) == 1) ) {
 ?>						<input class="button" type="submit" value="<?php _e('Delete', 'advman'); ?>" onClick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-target').value='<?php echo $id; ?>';} else {return false;}">
 					</td>
 <?php
@@ -62,13 +64,13 @@ class Advman_Template_List
 <?php
 //				<p>Earn even more with <a href="http://www.text-link-ads.com/?ref=55499" target="_blank">Text Link Ads</a> and <a href="http://www.inlinks.com/?ref=211569" target="_blank">InLinks!</a></p>
 ?>
-				<p>By editing the <strong>Network Defaults</strong> you can update all ads from a network at once.<br />
-					<strong>Default Ad</strong> indicates which ad will be displayed in a space on your site where no specific ID is used.<br />
-					Ads with the <strong>same name</strong> rotate according to their relative weights.
+				<p><?php _e('By editing the <strong>Network Defaults</strong> you can update all ads from a network at once.', 'advman'); ?><br />
+					<?php _e('<strong>Default Ad</strong> indicates which ad will be displayed in a space on your site where no specific ID is used.', 'advman'); ?><br />
+					<?php _e('Ads with the <strong>same name</strong> rotate according to their relative weights.', 'advman'); ?>
 				</p>
-				<p>Ads can be included in <strong>templates</strong> using <code>&lt;?php adsensem_ad('name'); ?&gt;</code> or <code>&lt;?php adsensem_ad(); ?&gt;</code> for the default Ad.<br />
-					Ads can be inserted into <strong>posts / pages</strong> using <code>[ad#name]</code> or <code>[ad]</code> for the default Ad. <br/>
-					Note that the old <code>&lt;!--adsense#name--&gt;</code> style still works if you prefer it.
+				<p><?php printf(__('Ads can be included in <strong>templates</strong> using %1$s or %2$s for the default ad.', 'advman'), "<code>&lt;?php adsensem_ad('name'); ?&gt;</code>", "<code>&lt;?php adsensem_ad(); ?&gt;</code>"); ?><br />
+					<?php printf(__('Ads can be inserted into <strong>posts / pages</strong> using %1$s or %2$s for the default Ad.', 'advman'), "<code>[ad#name]</code>", "<code>[ad]</code>"); ?><br/>
+					<?php printf(__('Note that the old %s style still works if you prefer it.', 'advman'), "<code>&lt;!--adsense#name--&gt;</code>"); ?>
 				</p>
 			</form>
 		</div>
