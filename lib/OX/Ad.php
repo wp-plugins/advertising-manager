@@ -10,16 +10,16 @@ class OX_Ad extends OX_Plugin
 	var $network;
 
 	var $p; //$p holds Ad properties (e.g. dimensions etc.) - acessible through $this->get(''); see $this->get_network_property('') for default merged
-	static $np; //$np holds Network properties - defaults, network settings, etc.
+	var $np; //$np holds Network properties - defaults, network settings, etc.
 	
 	//Global start up functions for all network classes	
 	function OX_Ad()
 	{
 	}
 	
-	function register_plugin($engine)
+	function register_plugin(&$engine)
 	{
-		$engine->addAction('ad_network', get_class());
+		$engine->addAction('ad_network', get_class($this));
 	}
 	
 	/**
@@ -40,13 +40,8 @@ class OX_Ad extends OX_Plugin
 	
 	function get_network_property($key)
 	{
-		$properties = $this->get_network_properties();
+		$properties = $this->np;
 		return isset($properties[$key]) ? $properties[$key] : '';
-	}
-	
-	function get_network_properties()
-	{
-		return self::$np[$this->network];
 	}
 	
 	/**
@@ -59,14 +54,14 @@ class OX_Ad extends OX_Plugin
 	{
 		$properties = $this->p;
 		$this->_set($properties, $key, $value);
-		$this->set_properties($properties);
+		$this->p = $properties;
 	}
 	
 	function set_network_property($key, $value)
 	{
-		$properties = $this->get_network_properties();
+		$properties = $this->np;
 		$this->_set($properties, $key, $value);
-		$this->set_network_properties($properties);
+		$this->np = $properties;
 	}
 	
 	function _set(&$properties, $key, $value)
@@ -89,14 +84,9 @@ class OX_Ad extends OX_Plugin
 		}
 	}
 	
-	function set_network_properties($properties)
+	function reset_network_properties()
 	{
-		self::$np[$this->network] = $properties;
-	}
-	
-	function set_properties($properties)
-	{
-		$this->p = $properties;
+		$this->np = $this->get_network_property_defaults();
 	}
 	
 	function get_network_property_defaults()

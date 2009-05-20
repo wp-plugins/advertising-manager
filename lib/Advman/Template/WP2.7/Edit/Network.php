@@ -24,8 +24,8 @@ class Advman_Template_Edit_Network extends Advman_Template_Edit
 		add_meta_box('advman_history', __('History', 'advman'), array('Advman_Template_Metabox', 'display_history_network'), 'advman', 'advanced');
 		// Sidebar - default options
 		add_meta_box('advman_submit', __('Save Settings', 'advman'), array('Advman_Template_Metabox', 'display_save_settings_network'), 'advman', 'side');
-		add_meta_box('advman_shortcuts', __('Shortcuts', 'advman'), array('Advman_Template_Metabox', 'display_shortcuts'), 'advman', 'side');
-		add_meta_box('advman_notes', __('Notes', 'advman'), array('Advman_Template_Metabox', 'display_notes'), 'advman', 'side');
+		add_meta_box('advman_shortcuts', __('Shortcuts', 'advman'), array('Advman_Template_Metabox', 'display_shortcuts_network'), 'advman', 'side');
+		add_meta_box('advman_notes', __('Notes', 'advman'), array('Advman_Template_Metabox', 'display_notes_network'), 'advman', 'side');
 		
 		parent::display($ad, true);
 	}

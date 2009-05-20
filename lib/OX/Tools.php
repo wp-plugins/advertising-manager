@@ -1,7 +1,7 @@
 <?php
 class OX_Tools
 {
-	function load_plugins($dir, $obj)
+	function load_plugins($dir, &$obj)
 	{
 		if ($handle = opendir($dir)) {
 			while (false !== ($file = readdir($handle))) {
@@ -13,8 +13,9 @@ class OX_Tools
 					if (file_exists($require_file)) {
 						require_once $require_file;
 						$fileName = split('[.]', $file);
-						$fileName = $fileName[0];
-						call_user_func(array('OX_Plugin_' . $fileName, 'register_plugin'), $obj);
+						$class = 'OX_Plugin_' . $fileName[0];
+						$plugin = new $class();
+						$plugin->register_plugin($obj);
 					}
 				}
 			}

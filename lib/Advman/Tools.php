@@ -71,6 +71,7 @@ class Advman_Tools
 		$fmt['horizontal']['800x90'] = __('800 x 90 Large Leaderboard', 'advman');
 		$fmt['horizontal']['728x90'] = __('728 x 90 Leaderboard', 'advman');
 		$fmt['horizontal']['600x90'] = __('600 x 90 Small Leaderboard', 'advman');
+		$fmt['horizontal']['550x250'] = __('550 x 250 Mega Unit', 'advman');
 		$fmt['horizontal']['550x120'] = __('550 x 120 Small Leaderboard', 'advman');
 		$fmt['horizontal']['550x90'] = __('550 x 90 Small Leaderboard', 'advman');
 		$fmt['horizontal']['468x180'] = __('468 x 180 Tall Banner', 'advman');

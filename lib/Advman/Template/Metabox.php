@@ -326,7 +326,7 @@ class Advman_Template_Metabox
 <span style="font-size:x-small;color:gray;"><?php _e('Choose how you want your ad to appear.  Enter the RGB value of the color in the appropriate box.  The sample ad to the right will show you what your color scheme looks like.', 'advman'); ?></span>
 <?php
 	}
-	function display_shortcuts($ad)
+	function display_shortcuts_ad($ad)
 	{
 ?>
 <p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
@@ -335,8 +335,31 @@ class Advman_Template_Metabox
 <p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo get_class($ad); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
 <?php
 	}
-	function display_notes($ad)
+	function display_shortcuts_network($ad)
 	{
+?>
+<p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
+<?php if (!empty($ad->url)) : ?>
+<p class="hide-if-no-js"><a href="<?php echo $ad->url; ?>"><?php printf(__('%s home page', 'advman'), $ad->network_name); ?></a></p>
+<?php endif; ?>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='reset'; document.getElementById('advman-target').value='<?php echo get_class($ad); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Reset %s settings to defaults', 'advman'), $ad->network_name); ?></a></p>
+<?php
+	}
+	
+	function display_notes_network($ad)
+	{
+		return $this->display_notes($ad, true);
+	}
+	
+	function display_notes_ad($ad)
+	{
+		return $this->display_notes($ad, false);
+	}
+	
+	function display_notes($ad, $nw = false)
+	{
+		$notes = $nw ? $ad->get_network_property('notes') : $ad->get_property('notes');
+		
 ?><label for="advman_notes"><?php _e('Display any notes about this ad here:', 'advman'); ?></label><br /><br />
 <textarea id="advman_notes" rows="8" cols="28" name="advman-notes"><?php echo $ad->get('notes'); ?></textarea><br />
 <?php

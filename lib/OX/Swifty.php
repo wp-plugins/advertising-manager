@@ -58,7 +58,7 @@ class OX_Swifty
 		return $this->dal->update_setting($key, $value);
 	}
 	
-	function insertAd($ad)
+	function insertAd(&$ad)
 	{
 		$ad->add_revision();
 		return $this->dal->insert_ad($ad);
@@ -79,7 +79,7 @@ class OX_Swifty
 		return $this->dal->select_ad($id);
 	}
 	
-	function setAd($ad)
+	function setAd(&$ad)
 	{
 		$ad->add_revision();
 		return $this->dal->update_ad($ad);
@@ -97,7 +97,7 @@ class OX_Swifty
 		return false;
 	}
 	
-	function setAdNetwork($ad)
+	function setAdNetwork(&$ad)
 	{
 		$ad->add_revision(true);
 		return $this->dal->update_ad_network($ad);

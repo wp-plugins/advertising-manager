@@ -14,9 +14,9 @@ class OX_Plugin_Chitika extends OX_Ad
 	/**
 	 * This function is called statically from the ad engine.  Use this function to put any hooks in the ad engine that you want to use.
 	 */
-	function register_plugin($engine)
+	function register_plugin(&$engine)
 	{
-		$engine->addAction('ad_network', get_class());
+		$engine->addAction('ad_network', get_class($this));
 	}
 	
 	function get_network_property_defaults()
@@ -26,13 +26,13 @@ class OX_Plugin_Chitika extends OX_Ad
 			'adformat' => '728x90',
 			'alt-url' => '',
 			'channel' => '',
-			'color-bg' => '',
-			'color-border'=> '',
-			'color-link'=> '',
-			'color-text' => '',
-			'color-title' => '',
-			'font-text'	=> '',
-			'font-title' => '',
+			'color-bg' => 'FFFFFF',
+			'color-border'=> 'FFFFFF',
+			'color-link'=> '008000',
+			'color-text' => '000000',
+			'color-title' => '0000CC',
+			'font-text'	=> 'Arial',
+			'font-title' => 'Arial',
 			'height' => '90',
 			'width' => '728',
 		);
@@ -42,7 +42,7 @@ class OX_Plugin_Chitika extends OX_Ad
 	
 	function get_ad_formats()
 	{
-		return array('728x90', '468x60', '468x90', '468x120', '468x180', '550x120', '550x90', '450x90', '430x90', '400x90', '120x600', '160x600', '180x300', '300x250', '300x150', '300x125', '300x70', '250x250', '200x200', '160x160', '336x280', '336x160', '334x100', '180x150');
+		return array('728x90', '468x60', '468x90', '468x120', '468x180', '550x250', '550x120', '550x90', '450x90', '430x90', '400x90', '120x600', '160x600', '180x300', '300x250', '300x150', '300x125', '300x70', '250x250', '200x200', '160x160', '336x280', '336x160', '334x100', '180x150');
 	}
 	
 	function import_detect_network($code)

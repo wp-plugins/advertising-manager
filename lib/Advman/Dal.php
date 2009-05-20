@@ -87,13 +87,13 @@ class Advman_Dal extends OX_Dal
 			$ad->name = $aAd['name'];
 			$ad->id = $aAd['id'];
 			$ad->active = $aAd['active'];
-			$ad->set_properties($aAd);
+			$ad->p = $aAd;
 		}
 		
 		if (empty($this->data['networks'][$class])) {
-			$ad->set_network_properties($ad->get_network_property_defaults());
+			$ad->np = $ad->get_network_property_defaults();
 		} else {
-			$ad->set_network_properties($this->data['networks'][$class]);
+			$ad->np = $this->data['networks'][$class];
 		}
 		
 		return $ad;
@@ -174,7 +174,7 @@ class Advman_Dal extends OX_Dal
 	
 	function update_ad_network($ad)
 	{
-		$this->data['networks'][get_class($ad)] = $ad->get_network_properties();
+		$this->data['networks'][get_class($ad)] = $ad->np;
 		$this->_update_data();
 	}
 }

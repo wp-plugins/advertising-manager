@@ -194,13 +194,20 @@ class Advman_Admin
 				$mode = 'list_ads';
 				break;
 			
+			case 'reset' :
+				$mode = 'edit_network';
+				$ad = $advman_engine->factory($target);
+				$ad->reset_network_properties();
+				$advman_engine->setAdNetwork($ad);
+				break;
+			
 			case 'apply' :
 			case 'save' :
 				if ($mode == 'edit_ad') {
 					Advman_Admin::save_properties($ad);
 					$advman_engine->setAd($ad);
 				} elseif ($mode == 'edit_network') {
-					$advman_engine->factory($target);
+					$ad = $advman_engine->factory($target);
 					Advman_Admin::save_properties($ad, true);
 					$advman_engine->setAdNetwork($ad);
 				} elseif ($mode == 'settings') {
@@ -239,7 +246,7 @@ class Advman_Admin
 				break;
 			
 			case 'edit_network' :
-				$advman_engine->factory($target);
+				$ad = $advman_engine->factory($target);
 				$template = Advman_Tools::get_template('Edit_Network', $ad);
 				$template->display($ad);
 				break;

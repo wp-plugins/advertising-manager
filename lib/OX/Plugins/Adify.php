@@ -14,9 +14,9 @@ class OX_Plugin_Adify extends OX_Ad
 	/**
 	 * This function is called statically from the ad engine.  Use this function to put any hooks in the ad engine that you want to use.
 	 */
-	function register_plugin($engine)
+	function register_plugin(&$engine)
 	{
-		$engine->addAction('ad_network', get_class());
+		$engine->addAction('ad_network', get_class($this));
 	}
 	
 	function get_network_property_defaults()

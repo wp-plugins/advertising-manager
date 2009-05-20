@@ -1,7 +1,7 @@
 <?php
 if(!ADVMAN_VERSION) {die();}
 
-class Template_Create
+class Advman_Template_Create
 {
 	function display($target = null)
 	{
@@ -32,7 +32,7 @@ class Template_Create
 				<td style="width:10%";>&nbsp;</td>
 				<td style="width:40%";>
 					<p><?php _e('Advertising Manager supports most Ad networks.', 'advman'); ?></p>
-					<p><?php _e('Any networks not supported directly will be managed as HTML Code units.', 'advman'); ?></p>
+					<p><?php _e('Any networks not supported directly can still be managed as HTML Code units.', 'advman'); ?></p>
 				</td>
 			</tr>
 			</table>
