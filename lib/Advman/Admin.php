@@ -68,7 +68,7 @@ class Advman_Admin
 		// Set the ad properties (if not setting default properties)
 		if (!$default) {
 			if (isset($_POST['advman-name'])) {
-				$ad->name = OX_Tools::sanitize($_POST['advman-name'], 'key');
+				$ad->name = OX_Tools::sanitize($_POST['advman-name']);
 			}
 			
 			if (isset($_POST['advman-active'])) {

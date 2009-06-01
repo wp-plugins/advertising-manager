@@ -20,7 +20,7 @@ class Advman_Template_Metabox
 		$height = ($nw) ? $ad->get_network_property('height') : $ad->get_property('height');
 		$formats = Advman_Tools::organize_formats($ad->get_ad_formats());
 		
-?><table id="advman-settings-ad_format">
+?><table class="form-table" id="advman-settings-ad_format">
 <tr id="advman-form-adformat">
 	<td class="advman_label"><label for="advman-adformat"><?php _e('Format:', 'advman'); ?></label></td>
 	<td>
@@ -89,7 +89,7 @@ class Advman_Template_Metabox
 		
 		$users = get_users_of_blog();
 ?><div style="text-align:right; width:250px; font-size:small;">
-	<table>
+	<table class="form-table">
 <?php foreach ($options as $option => $label) : ?>
 <?php $value = $nw ? $ad->get_network_property('show-' . $option) : $ad->get_property('show-' . $option); ?>
 	<tr>
@@ -100,6 +100,7 @@ class Advman_Template_Metabox
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 <?php endif; ?>
 <?php if ($option == 'author'): ?>
+				<option<?php echo ($value == 'all' ? " selected='selected'" : ''); ?> value="all"> <?php _e('All Authors', 'advman'); ?></option>
 <?php foreach ($users as $user) : ?>
 				<option<?php echo ($value == $user->user_id ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
 <?php endforeach; ?>
@@ -176,34 +177,89 @@ class Advman_Template_Metabox
 	}
 	function display_code($ad, $nw = false)
 	{
-		$edit = get_class($ad) == 'OX_Ad_Html';
+		$class = get_class($ad);
+		$edit = strtolower(get_class($ad)) == 'ox_ad_html';
 		$htmlBefore = ($nw) ? $ad->get_network_property('html-before') : $ad->get_property('html-before');
 		$htmlAfter = ($nw) ? $ad->get_network_property('html-after') : $ad->get_property('html-after');
 		
 ?><div style="font-size:small;">
+<table class="form-table">
+<tr>
+	<td>
 	<label for="html_before"><?php _e('HTML Code Before'); ?></label><br />
 	<textarea rows="1" cols="57" name="advman-html-before" id="advman-html-before" onfocus="this.select();"><?php echo $htmlBefore; ?></textarea>
 <?php if (!$nw): ?>
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-before'); ?>">
 <?php endif; ?>
-	<br /><br />
+	</td>
+</tr>
 <?php if (!$nw): ?>
+<tr>
+	<td>
 	<label for="ad_code"><?php _e('Ad Code'); ?></label><br />
-	<textarea rows="6" cols="60" id="advman-code"<?php if (!$edit) echo " style='background:#cccccc'"; ?> onfocus="this.select();" onclick="this.select();"<?php if (!$edit) echo " readonly='readonly'"; ?>><?php echo $ad->display(true); ?></textarea><br /><br />
+	<textarea rows="6" cols="60" id="advman-code"<?php echo $edit ? ' name="advman-code"' : " style='background:#cccccc'"; ?> onfocus="this.select();" onclick="this.select();"<?php if (!$edit) echo " readonly='readonly'"; ?>><?php echo $ad->display(true); ?></textarea>
+	</td>
+</tr>
 <?php endif; ?>
+<tr>
+	<td>
 	<label for="html_after"><?php _e('HTML Code After'); ?></label><br />
 	<textarea rows="1" cols="57" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $htmlAfter; ?></textarea>
 <?php if (!$nw): ?>
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-after'); ?>">
 <?php endif; ?>
-	<br /><br />
+	</td>
+</tr>
+</table>
 </div>
 <br />
 <span style="font-size:x-small;color:gray;"><?php _e('Place any HTML code you want to display before or after your tag in the appropriate section.'); ?> <?php _e('If you want to change your ad network tag, you need to import the new tag again.', 'advman'); ?></span>
 <?php
 	}
 	
-	
+	function display_account_ad($ad)
+	{
+		return Advman_Template_Metabox::display_account($ad, false);
+	}
+	function display_account_network($ad)
+	{
+		return Advman_Template_Metabox::display_account($ad, true);
+	}
+	function display_account($ad)
+	{
+		$properties = $ad->get_network_property_defaults();
+		$available_props = array(
+			'account-id' => __('Account ID:', 'advman'),
+			'username' => __('Username:', 'advman'),
+			'password' => __('Password:', 'advman'),
+			'partner' => __('Partner ID:', 'advman'),
+			'slot' => __('Slot ID:', 'advman'),
+			'channel' => __('Channel', 'advman'),
+		);
+		$msg = __('Enter the information specific to your %s account.');
+		if (isset($properties['partner'])) {
+			$msg .= ' ' . __('The Partner ID is the ID for a partner revenue sharing account, usually your blog hosting provider.  Note that a Partner ID does not necessarily mean that your partner is sharing revenues.  %s will notify you if this is the case.', 'advman');
+		}
+		if (isset($properties['channel'])) {
+			$msg .= ' ' . __('The Channel is the name for the specific inventory segment set up in your %s account.');
+		}
+?><div style="font-size:small;">
+<table class="form-table">
+<?php foreach ($available_props as $key => $text) : ?>
+<?php if (isset($properties[$key])) : ?>
+<?php $value = $nw ? $ad->get_network_property($key) : $ad->get_property($key); ?>
+<tr>
+	<td><label for="advman-<?php echo $key; ?>"><?php echo $text; ?></label></td>
+	<td><input type="<?php echo ($key == 'password') ? 'password' : 'text'; ?>" name="advman-<?php echo $key; ?>" style="width:200px" id="advman-<?php echo $key; ?>" value="<?php echo $value; ?>" /></td>
+</tr>
+<?php endif; ?>
+<?php endforeach; ?>
+</table>
+</div>
+<br />
+<span style="font-size:x-small; color:gray;"><?php echo $msg; ?></span>
+<?php
+	}
 	function display_history_network($ad)
 	{
 		return Advman_Template_Metabox::display_history($ad, true);
@@ -251,7 +307,7 @@ class Advman_Template_Metabox
 ?><table id="advman-settings-colors" width="100%">
 <tr>
 	<td>
-		<table>
+		<table class="form-table">
 <?php if (!empty($settings['color'])) : ?>
 <?php foreach ($settings['color'] as $section => $label) : ?>
 <?php $color = ($nw) ? $ad->get_network_property('color-' . $section) : $ad->get_property('color-' . $section); ?>
@@ -348,12 +404,12 @@ class Advman_Template_Metabox
 	
 	function display_notes_network($ad)
 	{
-		return $this->display_notes($ad, true);
+		return Advman_Template_Metabox::display_notes($ad, true);
 	}
 	
 	function display_notes_ad($ad)
 	{
-		return $this->display_notes($ad, false);
+		return Advman_Template_Metabox::display_notes($ad, false);
 	}
 	
 	function display_notes($ad, $nw = false)

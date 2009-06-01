@@ -133,5 +133,18 @@ class Advman_Tools
 		
 		return array('sections' => $sct, 'formats' => $fmt);
 	}
+	
+	function get_properties_from_array($aAd)
+	{
+		$aProperties = array();
+		$aOmit = array('name', 'id', 'active', 'class');
+		foreach ($aAd as $n => $v) {
+			if (!in_array($n, $aOmit)) {
+				$aProperties[$n] = $v;
+			}
+		}
+		
+		return $aProperties;
+	}
 }
 ?>

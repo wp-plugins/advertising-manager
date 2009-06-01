@@ -13,16 +13,15 @@ class Advman_Template_Create
 	<input type="hidden" name="advman-action" id="advman-action">
 	<input type="hidden" name="advman-target" id="advman-target">
 
-	<p><h3><?php _e('Step 1: Import Your Ad Code', 'advman'); ?></h3></p>
-	<p><?php _e('Simply <strong>paste your Ad Code below</strong> and Import!', 'advman'); ?></p>
-
-<!--	
 	<div id="side-info-column" class="inner-sidebar">
-		Ad networks you may want to try:
+		<p><h3>Or, select an ad network below:</p></h3>
 	</div>
--->
 	<div id="post-body" class="has-sidebar">
 		<div id="post-body-content" class="has-sidebar-content" style="width:520px">
+			
+		<p><h3><?php _e('Step 1: Import Your Ad Code', 'advman'); ?></h3></p>
+		<p><?php _e('Simply <strong>paste your Ad Code below</strong> and Import!', 'advman'); ?></p>
+
 		<label class="hidden" for="excerpt"><?php _e('Code'); ?></label>
 		<textarea rows="8" cols="60" name="advman-code" tabindex="6"></textarea>
 		<p><span style="font-size:x-small;color:gray;"><?php _e('Advertising Manager will automatically detect many ad network tags.', 'advman'); ?> <?php _e('You can paste your existing ads or ad networks, or sign up to new ad networks to try them out!', 'advman'); ?></span></p>

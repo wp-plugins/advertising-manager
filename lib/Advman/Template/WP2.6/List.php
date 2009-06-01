@@ -30,6 +30,7 @@ class Advman_Template_List
 <?php
 		$previous_network='';
 		if (is_array($ads)) {
+			$default = $advman_engine->getSetting('default-ad');
 			foreach ($ads as $id => $ad) {
 				if ($ad->network_name !== $previous_network) {
 					Advman_Template_List::_display_network_row($ad);
@@ -53,7 +54,7 @@ class Advman_Template_List
 						<input class="button" onClick="document.getElementById('advman-action').value=(this.checked ? 'activate' : 'deactivate'); document.getElementById('advman-target').value='<?php echo $id; ?>'; this.form.submit();" type="checkbox"<?php echo ($ad->active) ? " checked='checked'" : '' ?>>
 					</td>
 					<td style="text-align:center;">
-						<input class="button" onClick="document.getElementById('advman-action').value='default'; document.getElementById('advman-target').value='<?php echo $id; ?>'; this.form.submit();" type="checkbox"<?php echo ($ad->name == $_advman['default-ad']) ? " checked='checked'" : '' ?>>
+						<input class="button" onClick="document.getElementById('advman-action').value='default'; document.getElementById('advman-target').value='<?php echo $id; ?>'; this.form.submit();" type="checkbox"<?php echo ($ad->name == $default) ? " checked='checked'" : '' ?>>
 					</td>
 					<td><?php echo htmlspecialchars($ad->get_property('notes'), ENT_QUOTES); ?></td>
 				</tr>

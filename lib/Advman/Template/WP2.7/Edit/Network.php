@@ -6,8 +6,8 @@ class Advman_Template_Edit_Network extends Advman_Template_Edit
 {
 	function display($ad)
 	{
-		$this->is_network = true;
 		// Main pane - default options
+		add_meta_box('advman_account', __('Account Details', 'advman'), array('Advman_Template_Metabox', 'display_account_network'), 'advman', 'main');
 		$formats = $ad->get_ad_formats();
 		if (!empty($formats)) {
 			add_meta_box('advman_format', __('Default Ad Format', 'advman'), array('Advman_Template_Metabox', 'display_format_network'), 'advman', 'main');

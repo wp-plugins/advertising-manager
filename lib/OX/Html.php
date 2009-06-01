@@ -3,7 +3,6 @@ require_once(OX_LIB . '/Ad.php');
 
 class OX_Ad_Html extends OX_Ad
 {
-	var $network = 'html';
 	var $network_name = 'HTML';
 	
 	function OX_Ad_Html($aAd = null)

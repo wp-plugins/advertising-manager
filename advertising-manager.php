@@ -139,7 +139,7 @@ function advman_ad($name = false)
 /**
  * Called when the Wordpress footer displays, and adds a comment in the HTML for debugging purposes
  */
-function footer()
+function advman_footer()
 {
 ?>		<!-- Advertising Manager v<?php echo ADVMAN_VERSION;?> (<?php timer_stop(1); ?> seconds.) -->
 <?php

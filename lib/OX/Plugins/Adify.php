@@ -93,5 +93,6 @@ class OX_Plugin_Adify extends OX_Ad
 </script>
 <script type="text/javascript" src="http://ad.afy11.net/srad.js?azId=6471907">
 </script>
-<!-- End Adify tag for "Sidebar" Ad Space (160x160) ID #6471907 -->*/
+<!-- End Adify tag for "Sidebar" Ad Space (160x160) ID #6471907 -->
+*/
 ?>

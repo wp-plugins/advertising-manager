@@ -1,7 +1,7 @@
 <?php
 if(!ADVMAN_VERSION) {die();}
 
-class Template_Notice
+class Advman_Template_Notice
 {
 	function display($notices = null)
 	{

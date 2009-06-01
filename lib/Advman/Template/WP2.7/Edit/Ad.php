@@ -7,6 +7,7 @@ class Advman_Template_Edit_Ad extends Advman_Template_Edit
 	function display($ad)
 	{
 		// Main pane - default options
+		add_meta_box('advman_account', __('Account Details', 'advman'), array('Advman_Template_Metabox', 'display_account_ad'), 'advman', 'main');
 		$formats = $ad->get_ad_formats();
 		if (!empty($formats)) {
 			add_meta_box('advman_format', __('Ad Format', 'advman'), array('Advman_Template_Metabox', 'display_format_ad'), 'advman', 'main');

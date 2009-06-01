@@ -7,8 +7,6 @@ class OX_Ad extends OX_Plugin
 	var $id; // ID of the ad
 	var $active; //whether this ad can display
 	
-	var $network;
-
 	var $p; //$p holds Ad properties (e.g. dimensions etc.) - acessible through $this->get(''); see $this->get_network_property('') for default merged
 	var $np; //$np holds Network properties - defaults, network settings, etc.
 	

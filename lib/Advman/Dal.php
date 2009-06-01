@@ -1,4 +1,5 @@
 <?php
+require_once ADVMAN_LIB . '/Tools.php';
 require_once OX_LIB . '/Dal.php';
 
 class Advman_Dal extends OX_Dal
@@ -87,7 +88,8 @@ class Advman_Dal extends OX_Dal
 			$ad->name = $aAd['name'];
 			$ad->id = $aAd['id'];
 			$ad->active = $aAd['active'];
-			$ad->p = $aAd;
+			$aProperties = Advman_Tools::get_properties_from_array($aAd);
+			$ad->p = $aProperties;
 		}
 		
 		if (empty($this->data['networks'][$class])) {
@@ -108,7 +110,8 @@ class Advman_Dal extends OX_Dal
 				global $wp_version;
 				return $wp_version;
 			case 'product-name':
-				return 'advman';
+				global $wpmu_version;
+				return !empty($wpmu_version) ? 'Wordpress MU' : 'Wordpress'; 
 			case 'user-login':
 				global $user_login;
 				if (function_exists('get_currentuserinfo')) {
