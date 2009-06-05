@@ -215,7 +215,6 @@ class OX_Swifty
 					'v' => $this->dal->select_setting('version'),
 					'w' => $this->dal->select_setting('host-version'),
 					'e' => $this->dal->select_setting('admin-email'),
-					'u' => $this->dal->select_setting('user-login'),
 					's' => $this->dal->select_setting('website-url'),
 				);
 				
