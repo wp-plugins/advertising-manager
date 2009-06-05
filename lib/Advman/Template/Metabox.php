@@ -267,7 +267,7 @@ class Advman_Template_Metabox
 			'slot' => __('Slot ID:', 'advman'),
 			'channel' => __('Channel:', 'advman'),
 			'campaign' => __('Campaign:', 'advman'),
-			'alt-url' => __('Alternative URL:', 'advman'),
+			'alt-url' => __('Alternate URL:', 'advman'),
 			'identifier' => __('Identifier:', 'advman'),
 		);
 		$msg = __('Enter the information specific to your %s account.');
