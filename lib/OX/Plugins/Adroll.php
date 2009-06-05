@@ -31,7 +31,7 @@ class OX_Plugin_Adroll extends OX_Ad
 	
 	function get_ad_formats()
 	{
-		return array('728x90', '468x60', '234x60', '120x600', '160x600', '120x240', '336x280', '300x250', '250x250', '200x200', '180x150', '125x125');
+		return array('all' => array('728x90', '468x60', '234x60', '120x600', '160x600', '120x240', '336x280', '300x250', '250x250', '200x200', '180x150', '125x125'));
 	}
 	
 	function import_detect_network($code){

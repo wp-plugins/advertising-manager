@@ -1,16 +1,16 @@
 === Advertising Manager ===
 Contributors: switzer, mutube
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=martin%2efitzpatrick%40gmail%2ecom&item_name=Donation%20to%20mutube%2ecom&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
-Tags: ad, adbrite, adgridwork, adify, admin, adpinion, adroll, ads, adsense, adserver, advertisement, advertising, affiliate, banner, banners, chitika, cj, commercial, commission, crispads, google, income, junction, link, manager, media, money, openx, plugin, random, referral, revenue, rotator, seo, server, shoppingads, sidebar, widget, widgetbucks, yahoo, ypn
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40switzer%2eorg&item_name=Do%20you%20like%20Advertising%20Manager%20for%20Wordpress%3F%20%20Please%20help%20development%20by%20donating%21&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
+Tags: ad, adbrite, adgridwork, adify, admin, adpinion, adroll, ads, adsense, adserver, advertisement, advertising, affiliate, banner, banners, chitika, cj, commercial, commission, crispads, google, income, junction, link, manager, media, money, openx, plugin, random, referral, revenue, rotator, seo, server, shoppingads, widget, widgetbucks, yahoo, ypn
 Requires at least: 2.5
-Tested up to: 2.7
-Stable tag: 4.0.0
+Tested up to: 2.7.1
+Stable tag: 3.3.18
 
 This plugin will manage and rotate your Google Adsense and other ads on your Wordpress blog.
 
 == Description ==
 
-This plugin will manage and rotate your Google Adsense and other ads on your Wordpress blog.  It automatically recognises many ad networks including [Google Adsense](http://www.google.com/adsense), [AdBrite](http://www.adbrite.com/mb/landing_publisher.php?spid=118090), [Adify](http://www.adify.com), [AdGridWork](http://www.adgridwork.com/?r=18501), [Adpinion](http://www.adpinion.com/), [Adroll](http://re.adroll.com/a/D44UNLTJPNH5ZDXTTXII7V/7L73RCFU5VCG7FRNNIGH7O/d6ca1e265e654df2010a2153d5c42ed4.re), [Chitika](http://chitika.com/publishers.php?refid=switzer), [Commission Junction](http://www.cj.com/), [CrispAds](http://www.crispads.com/), [OpenX](http://www.openx.org/), [ShoppingAds](http://www.shoppingads.com/refer_1ebff04bf5805f6da1b4), [Yahoo!PN](http://ypn.yahoo.com/), and [WidgetBucks](http://www.widgetbucks.com/home.page?referrer=468034).  Unsupported ad networks can be used as well.
+This plugin will manage and rotate your Google Adsense and other ads on your Wordpress blog.  It automatically recognises many ad networks including [Google Adsense](http://www.google.com/adsense), [AdBrite](http://www.adbrite.com/mb/landing_both.php?spid=51549&afb=120x60-1-blue), [Adify](http://www.adify.com), [AdGridWork](http://www.adgridwork.com/?r=18501), [Adpinion](http://www.adpinion.com/), [Adroll](http://re.adroll.com/a/D44UNLTJPNH5ZDXTTXII7V/7L73RCFU5VCG7FRNNIGH7O/d6ca1e265e654df2010a2153d5c42ed4.re), [Chitika](http://chitika.com/publishers.php?refid=switzer), [Commission Junction](http://www.cj.com/), [CrispAds](http://www.crispads.com/), [OpenX](http://www.openx.org/), [ShoppingAds](http://www.shoppingads.com/refer_1ebff04bf5805f6da1b4), [Yahoo!PN](http://ypn.yahoo.com/), and [WidgetBucks](http://www.widgetbucks.com/home.page?referrer=468034).  Unsupported ad networks can be used as well.
 
 Features:
 
@@ -35,7 +35,7 @@ Related Links:
 
 More detailed installation instructions can be found [here](http://code.openx.org/wiki/advertising-manager/Installation_Instructions).
 
-If you are upgrading from Adsense Manager or a previous version of Advertising Manager, upgrade instructions can be found [here](http://code.openx.org/wiki/advertising-manager/Upgrading_Instructions).
+If you are upgrading from Adsense Manager, Adsense Deluxe, or a previous version of Advertising Manager, upgrade instructions can be found [here](http://code.openx.org/wiki/advertising-manager/Upgrading_Instructions).
 
 
 == Screenshots ==
@@ -56,7 +56,7 @@ If you are upgrading from Adsense Manager or a previous version of Advertising M
 Advertising Manager will automatically import your settings from Adsense Manager.  There is no modification necessary.  In addition, Advertising Manager will accept the Adsense Manager ad calls ('<?php adsensem_ad() ?>') as well.
 
 = I previously used Adsense Deluxe plugin for Wordpress.  Do I need to reconfigure my ads?
-Advertising Manager no longer supports a direct upgrade from Adsense Deluxe.  You can upgrade to Adsense Manager first, then upgrade to Advertising Manager if you wish.
+Advertising Manager will automatically import your settings from Adsense Deluxe.  There is no modification necessary.  In addition, Advertising Manager will accept the Adsense Manager ad calls ('<!--adsense#name-->') as well.
 
 = Does Advertising Manager support Wordpress MU (multi-user)? =
 Yes.
@@ -112,6 +112,15 @@ By popular demand, below are the changes for versions listed. Use this to determ
 
 As a general rule the version X.Y.Z increments Z with bugfixes, Y with additional features, and X with major overhaul.
 
+* **3.4** New architecture - less space, more efficient code.  Tons of ad network bug fixes.  Added plugin design, and new ad serving engine.
+* **3.3.18** Added ability to suppress widget formatting on ads, fixed issue with PHP_INT_MAX on versions of PHP before 4.4.
+* **3.3.17** Fixed a bug with widget display, updated all language files, fixed a bug with Ozh plugin
+* **3.3.16** Added functionality around reverting to older versions of adsensem, fixed a bug with 0 weight ads, fixed a bug displaying ID rather than name for post ads
+* **3.3.15** Fixed small bug in upgrade script, added counter support to widgets
+* **3.3.14** Only enable Advertising Manager when Adsense Manager is disabled
+* **3.3.13** Fixed a notice error in WP 2.6, added a small script which removes a notice set by adsense manager
+* **3.3.12** Fixed error when using Advertising Manager as a widget
+* **3.3.11** Added 'advman' to all variables which reside in the wordpress scope, to ensure that they do not stomp on other plugins
 * **3.3.10** Added Chitika support, added counter support, fixed regex for ad in posts
 * **3.3.9** Public beta - rotating ads, Adify support, much bug fixing and code restructuring
 * **3.3.4** First alpha version that is separate from Adsense Manager

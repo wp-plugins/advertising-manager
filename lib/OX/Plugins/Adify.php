@@ -22,7 +22,6 @@ class OX_Plugin_Adify extends OX_Ad
 	function get_network_property_defaults()
 	{
 		$properties = array(
-			'account-id' => '',
 			'adformat' => '250x250',
 			'color-bg' 	=> 'FFFFFF',
 			'color-border'=> 'FFFFFF',
@@ -38,7 +37,7 @@ class OX_Plugin_Adify extends OX_Ad
 	
 	function get_ad_formats()
 	{
-		return array('728x90', '468x60', '120x600', '160x600', '300x250');
+		return array('all' => array('custom','728x90', '468x60', '120x600', '160x600', '300x250', '160x160'));
 	}
 	
 	function import_detect_network($code)
@@ -51,12 +50,12 @@ class OX_Plugin_Adify extends OX_Ad
 		// Import parent settings first!
 		parent::import_settings($code);
 		
-		// Account ID
-		if (preg_match('/sr_adspace_id( *)=( *)(.\d)/', $code, $matches) != 0) {
-			$this->set_property('account-id', $matches[3]);
-			$code = str_replace("sr_adspace_id{$matches[1]}={$matches[2]}{$matches[3]}", "sr_adspace_id{$matches[1]}={$matches[2]}{{account-id}}", $code);
-			$code = str_replace("azId={$matches[3]}", "azId={{account-id}}", $code);
-			$code = str_replace("ID #{$matches[3]}", "ID #{{account-id}}", $code);
+		// Slot ID
+		if (preg_match('/sr_adspace_id( *)=( *)(\d*);/', $code, $matches) != 0) {
+			$this->set_property('slot', $matches[3]);
+			$code = str_replace("sr_adspace_id{$matches[1]}={$matches[2]}{$matches[3]}", "sr_adspace_id{$matches[1]}={$matches[2]}{{slot}}", $code);
+			$code = str_replace("azId={$matches[3]}", "azId={{slot}}", $code);
+			$code = str_replace("ID #{$matches[3]}", "ID #{{slot}}", $code);
 		}
 		
 		// Width / Height
@@ -69,7 +68,7 @@ class OX_Plugin_Adify extends OX_Ad
 			}
 			$code = str_replace("sr_adspace_width{$matches[1]}={$matches[2]}{$width}", "sr_adspace_width{$matches[1]}={$matches[2]}{{width}}", $code);
 		}
-		if (preg_match('/google_ad_height( *)=( *)(\d*);/', $code, $matches) != 0) {
+		if (preg_match('/sr_adspace_height( *)=( *)(\d*);/', $code, $matches) != 0) {
 			$height = $matches[3];
 			if ($height != '') {
 				$this->set_property('height', $height);
@@ -77,7 +76,9 @@ class OX_Plugin_Adify extends OX_Ad
 			$code = str_replace("sr_adspace_height{$matches[1]}={$matches[2]}{$height}", "sr_adspace_height{$matches[1]}={$matches[2]}{{height}}", $code);
 		}
 		if (($width != '') && ($height != '')) {
-			$this->set_property('adformat', $width . 'x' . $height);
+			$adformats = $this->get_ad_formats();
+			$adformat = in_array("{$width}x{$height}", $adformats['all']) ? "{$width}x{$height}" : 'custom';
+			$this->set_property('adformat', $adformat);
 		}
 	}
 }

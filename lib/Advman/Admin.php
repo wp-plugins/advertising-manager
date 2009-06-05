@@ -86,6 +86,18 @@ class Advman_Admin
 					} else {
 						$ad->set_property($property, $value);
 					}
+					
+					// deal with adtype
+					if ($property == 'adtype') {
+						if (isset($_POST["advman-adformat-{$value}"])) {
+							$v = OX_Tools::sanitize($_POST["advman-adformat-{$value}"]);
+							if ($default) {
+								$ad->set_network_property('adformat', $v);
+							} else {
+								$ad->set_property('adformat', $v);
+							}
+						}
+					}
 				}
 			}
 		}

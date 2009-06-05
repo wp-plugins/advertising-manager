@@ -34,15 +34,16 @@ class OX_Plugin_Cj extends OX_Ad
 	function get_domains()
 	{
 		return array(
-		'www.commission-junction.com',
-		'www.cj.com',
-		'www.qksrv.net',
-		'www.kqzyfj.com',
-		'www.tkqlhce.com',
-		'www.jdoqocy.com',
-		'www.dpbolvw.net',
-		'www.lduhtrp.net',
-		'www.anrdoezrs.net');
+			'www.commission-junction.com',
+			'www.cj.com',
+			'www.qksrv.net',
+			'www.kqzyfj.com',
+			'www.tkqlhce.com',
+			'www.jdoqocy.com',
+			'www.dpbolvw.net',
+			'www.lduhtrp.net',
+			'www.anrdoezrs.net',
+		);
 	}
 	
 	function get_network_property_defaults()
@@ -62,7 +63,7 @@ class OX_Plugin_Cj extends OX_Ad
 	
 	function get_ad_formats()
 	{
-		return array('custom', '728x90', '468x60', '234x60', '150x50', '120x90', '120x60', '83x31', '120x600', '160x600', '240x400', '120x240', '336x280', '300x250', '250x250', '200x200', '180x150', '125x125');
+		return array('all' => array('custom', '728x90', '468x60', '234x60', '150x50', '120x90', '120x60', '83x31', '120x600', '160x600', '240x400', '120x240', '336x280', '300x250', '250x250', '200x200', '180x150', '125x125'));
 	}
 	
 	function get_ad_colors()
@@ -75,8 +76,12 @@ class OX_Plugin_Cj extends OX_Ad
 		$match = false;
 		$xdomains = OX_Plugin_Cj::get_domains();
 		foreach ($xdomains as $d) {
-			$match = $match || (strpos($code, ('href="http://' . $d)) !== false);
+			if (strpos($code, ('"http://' . $d)) !== false) {
+				$match = true;
+				break;
+			}
 		}
+		
 		return $match;
 	}
 		

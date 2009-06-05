@@ -15,25 +15,56 @@ class Advman_Template_Metabox
 	
 	function display_format($ad, $nw = false)
 	{
-		$format = ($nw) ? $ad->get_network_property('adformat') : $ad->get_property('adformat');
+		$properties = $ad->get_network_property_defaults();
+		if (isset($properties['adtype'])) {
+			$adtype = ($nw) ? $ad->get_network_property('adtype') : $ad->get_property('adtype');
+		} else {
+			$adtype = null;
+		}
+		
+		$adformat = ($nw) ? $ad->get_network_property('adformat') : $ad->get_property('adformat');
 		$width = ($nw) ? $ad->get_network_property('width') : $ad->get_property('width');
 		$height = ($nw) ? $ad->get_network_property('height') : $ad->get_property('height');
 		$formats = Advman_Tools::organize_formats($ad->get_ad_formats());
 		
 ?><table class="form-table" id="advman-settings-ad_format">
-<tr id="advman-form-adformat">
+<?php if (!is_null($adtype)) : ?>
+<?php if (sizeof($formats['data']) == 1) : ?>
+<?php foreach ($formats['data'] as $t => $sectionFormat) : ?>
+?><input type="hidden" name="advman-adtype" value="<?php echo $t; ?>">
+<?php endforeach; ?>
+<?php else : ?>
+<tr id="advman-form-adtype">
+	<td class="advman_label"><label for="advman-adtype"><?php _e('Ad Type:'); ?></label></td>
+	<td>
+		<select name="advman-adtype" id="advman-adtype" onchange="advman_form_update(this);">
+			<option value=""> <?php _e('Use Default', 'advman'); ?></option>
+<?php foreach ($formats['data'] as $t => $sectionFormat) : ?>
+			<option<?php echo ($adtype == $t ? ' selected="selected"' : ''); ?> value="<?php echo $t; ?>"> <?php echo $formats['types'][$t]; ?></option>
+<?php endforeach; ?>
+		</select>
+	</td>
+	<td>
+		<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('adtype'); ?>">
+	</td>
+</tr>
+<?php endif; ?>
+<?php endif; ?>
+<?php foreach ($formats['data'] as $t => $sectionFormats) : ?>
+<tr id="advman-form-adformat-<?php echo $t; ?>"<?php echo $t == $adtype || is_null($adtype) ? '' : ' style="display:none"'; ?>>
 	<td class="advman_label"><label for="advman-adformat"><?php _e('Format:', 'advman'); ?></label></td>
 	<td>
-		<select name="advman-adformat" id="advman-adformat" onchange="advman_form_update(this);">
+		<select name="advman-adformat<?php echo is_null($adtype) ? '' : ('-' . $t); ?>" id="advman-adformat" onchange="advman_form_update(this);">
 <?php if (!$nw) : ?>
-			<optgroup id="advman-optgroup-default" label="Default">
+			<optgroup id="advman-optgroup-default" label="<?php _e('Default', 'advman'); ?>">
 				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
 			</optgroup>
 <?php endif; ?>
-<?php foreach ($formats['sections'] as $sectionName => $sectionLabel) : ?>
-			<optgroup id="advman-optgroup-<?php echo $sectionName ?>" label="<? echo $sectionLabel ?>">
-<?php foreach ($formats['formats'][$sectionName] as $formatName => $formatLabel) : ?>
-				<option<?php echo ($format == $formatName ? ' selected="selected"' : ''); ?> value="<?php echo $formatName; ?>"> <?php echo $formatLabel; ?></option>
+<?php foreach ($sectionFormats as $section => $sformats) : ?>
+			<optgroup id="advman-optgroup-<?php echo $section ?>" label="<? echo $formats['sections'][$section]; ?>">
+<?php foreach ($sformats as $sformat) : ?>
+<?php list($w, $h, $l) = OX_Tools::explode_format($sformat); ?>
+				<option<?php echo ($adformat == $sformat ? ' selected="selected"' : ''); ?> value="<?php echo $sformat; ?>"> <?php printf($formats['formats'][$sformat], $w, $h, $l); ?></option>
 <?php endforeach; ?>
 			</optgroup>
 <?php endforeach; ?>
@@ -43,6 +74,7 @@ class Advman_Template_Metabox
 	<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get('adformat', true); ?>"></td>
 <?php endif; ?>
 </tr>
+<?php endforeach; ?>
 <?php if (!empty($formats['sections']['custom'])) : ?>
 <tr id="advman-settings-custom">
 	<td class="advman_label"><label for="advman-width"><?php _e('Dimensions:'); ?></label></td>
@@ -177,7 +209,6 @@ class Advman_Template_Metabox
 	}
 	function display_code($ad, $nw = false)
 	{
-		$class = get_class($ad);
 		$edit = strtolower(get_class($ad)) == 'ox_ad_html';
 		$htmlBefore = ($nw) ? $ad->get_network_property('html-before') : $ad->get_property('html-before');
 		$htmlAfter = ($nw) ? $ad->get_network_property('html-after') : $ad->get_property('html-after');
@@ -225,7 +256,7 @@ class Advman_Template_Metabox
 	{
 		return Advman_Template_Metabox::display_account($ad, true);
 	}
-	function display_account($ad)
+	function display_account($ad, $nw = false)
 	{
 		$properties = $ad->get_network_property_defaults();
 		$available_props = array(
@@ -234,7 +265,10 @@ class Advman_Template_Metabox
 			'password' => __('Password:', 'advman'),
 			'partner' => __('Partner ID:', 'advman'),
 			'slot' => __('Slot ID:', 'advman'),
-			'channel' => __('Channel', 'advman'),
+			'channel' => __('Channel:', 'advman'),
+			'campaign' => __('Campaign:', 'advman'),
+			'alt-url' => __('Alternative URL:', 'advman'),
+			'identifier' => __('Identifier:', 'advman'),
 		);
 		$msg = __('Enter the information specific to your %s account.');
 		if (isset($properties['partner'])) {
@@ -257,7 +291,7 @@ class Advman_Template_Metabox
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php echo $msg; ?></span>
+<span style="font-size:x-small; color:gray;"><?php printf($msg, $ad->network_name); ?></span>
 <?php
 	}
 	function display_history_network($ad)
@@ -324,7 +358,7 @@ class Advman_Template_Metabox
 <?php foreach ($settings['font'] as $section => $label) : ?>
 <?php $font = ($nw) ? $ad->get_network_property('font-' . $section) : $ad->get_property('font-' . $section); ?>
 		<tr>
-			<td class="advman_label"><label for="advman-font-title"><?php _e('Title Font:'); ?></label></td>
+			<td class="advman_label"><label for="advman-font-title"><?php echo $label; ?></label></td>
 			<td>
 				<br />
 				<select name="advman-font-<?php echo $section ?>" id="advman-font-<?php echo $section ?>" onChange="advman_update_ad(this,'ad-color-<?php echo $section ?>','font-<?php echo $section ?>');">
@@ -388,7 +422,7 @@ class Advman_Template_Metabox
 <p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
 <p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to copy the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to do nothing, OK to copy)', 'advman'); ?>')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Copy this ad', 'advman'); ?></a></p>
 <p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></p>
-<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo get_class($ad); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
 <?php
 	}
 	function display_shortcuts_network($ad)
@@ -398,7 +432,7 @@ class Advman_Template_Metabox
 <?php if (!empty($ad->url)) : ?>
 <p class="hide-if-no-js"><a href="<?php echo $ad->url; ?>"><?php printf(__('%s home page', 'advman'), $ad->network_name); ?></a></p>
 <?php endif; ?>
-<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='reset'; document.getElementById('advman-target').value='<?php echo get_class($ad); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Reset %s settings to defaults', 'advman'), $ad->network_name); ?></a></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='reset'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Reset %s settings to defaults', 'advman'), $ad->network_name); ?></a></p>
 <?php
 	}
 	

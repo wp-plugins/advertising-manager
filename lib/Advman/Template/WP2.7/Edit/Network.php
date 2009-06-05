@@ -7,11 +7,19 @@ class Advman_Template_Edit_Network extends Advman_Template_Edit
 	function display($ad)
 	{
 		// Main pane - default options
-		add_meta_box('advman_account', __('Account Details', 'advman'), array('Advman_Template_Metabox', 'display_account_network'), 'advman', 'main');
-		$formats = $ad->get_ad_formats();
-		if (!empty($formats)) {
-			add_meta_box('advman_format', __('Default Ad Format', 'advman'), array('Advman_Template_Metabox', 'display_format_network'), 'advman', 'main');
+		$properties = $ad->get_network_property_defaults();
+		
+		// Account information
+		if (isset($properties['account-id']) || isset($properties['slot'])) {
+			add_meta_box('advman_account', __('Account Details', 'advman'), array('Advman_Template_Metabox', 'display_account_network'), 'advman', 'main');
 		}
+		
+		// Format information
+		if (isset($properties['adformat'])) {
+			add_meta_box('advman_format', __('Ad Format', 'advman'), array('Advman_Template_Metabox', 'display_format_network'), 'advman', 'main');
+		}
+		
+		// Appearance information
 		$sections = Advman_Tools::organize_appearance($ad);
 		if (!empty($sections)) {
 			add_meta_box('advman_colors', __('Default Ad Appearance', 'advman'), array('Advman_Template_Metabox', 'display_colors_network'), 'advman', 'main');

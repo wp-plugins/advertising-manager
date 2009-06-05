@@ -123,10 +123,19 @@ class OX_Ad extends OX_Plugin
 			return false;
 		}
 		
-		// Filter by counter
-		$counter = $this->get('counter');
-		if (!empty($counter) && ($this->get_network_property('counter') >= $counter)) {
-			return false;
+		// Filter by network counter
+		$counter = $this->get_network_property('counter');
+		if (!empty($counter)) {
+			if ($advman_engine->counter['network'][get_class($this)] >= $counter) {
+				return false;
+			}
+		}
+		// Filter by ad counter
+		$counter = $this->get_property('counter');
+		if (!empty($counter)) {
+			if ($advman_engine->counter['id'][$this->id] >= $counter) {
+				return false;
+			}
 		}
 		
 		// Filter by author
@@ -200,7 +209,7 @@ class OX_Ad extends OX_Plugin
 
 	function get_ad_formats()
 	{
-		return false;
+		return array('all' => array('custom', '728x90', '468x60', '120x600', '160x600', '300x250', '125x125'));
 	}
 	function get_ad_colors()
 	{

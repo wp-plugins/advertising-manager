@@ -34,7 +34,7 @@
 			n = s.length;
 			for (i=0; i<n; i++) {
 				v = s.options[i].value;
-				r = document.getElementById('advman-form-'+v+'-format');
+				r = document.getElementById('advman-form-adformat-'+v);
 				if (r) {
 					r.style.display = s.options[i].selected ? '' : 'none';
 				}

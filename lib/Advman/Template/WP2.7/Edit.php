@@ -4,7 +4,7 @@ class Advman_Template_Edit
 {
 	function display($ad, $nw = false)
 	{
-		$target = $nw ? get_class($ad) : $ad->id;
+		$target = $nw ? strtolower(get_class($ad)) : $ad->id;
 		$mode = $nw ? 'edit_network' : 'edit_ad';
 ?>
 <div class="wrap">

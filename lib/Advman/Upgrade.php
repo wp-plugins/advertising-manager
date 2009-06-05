@@ -9,14 +9,38 @@ class Advman_Upgrade
 	{
 		$version = Advman_Upgrade::_get_version($data);
 		Advman_Upgrade::_backup($data, $version);
-		$versions = array('4.0');
+		$versions = array('3.4');
 		foreach ($versions as $v) {
 			if (version_compare($version, $v, '<')) {
-				call_user_func(array('Advman_Upgrade', 'advman_' . str_replace('.','_',$v)), $data);
+				call_user_func(array('Advman_Upgrade', 'advman_' . str_replace('.','_',$v)), &$data);  //wrap var in array to pass by reference
 			}
 		}
 		
 		$data['settings']['version'] = ADVMAN_VERSION;
+	}
+	
+	function advman_3_4(&$data)
+	{
+		// Move the where last-sync is stored
+		if (isset($data['last-sync'])) {
+			$data['settings']['last-sync'] = $data['last-sync'];
+			unset($data['last-sync']);
+		}
+		// Move the 'slot' and 'ad' adtypes to 'all'
+		foreach ($data['ads'] as $id => $ad) {
+			if (isset($ad['adtype'])) {
+				$v = $ad['adtype'];
+				if ($v == 'slot' || $v == 'ad') {
+					$data['ads'][$id]['adtype'] = 'all';
+				}
+			}
+		}
+		// Make sure the class name key is lower case (php4 is case insensitive)
+		$nw = array();
+		foreach ($data['networks'] as $k => $v) {
+			$nw[strtolower($k)] = $v;
+		}
+		$data['networks'] = $nw;
 	}
 	
 	function upgrade_adsensem(&$data)
@@ -34,7 +58,7 @@ class Advman_Upgrade
 		Advman_Admin::add_notice('optimise', $notice, 'ok');
 
 		// Set the new version
-		$data['settings']['version'] = '4.0';
+		$data['settings']['version'] = '3.3.19';
 
 		return Advman_Upgrade::upgrade_advman($data);
 	}
@@ -65,15 +89,6 @@ class Advman_Upgrade
 		update_option('plugin_advman_backup', $backup);
 	}
 		
-	function advman_4_0(&$data)
-	{
-		$data['networks'] = $data['defaults'];
-		unset($data['defaults']);
-		$data['settings']['publisher-id'] = $data['uuid'];
-		unset($data['uuid']);
-		$data['settings']['last-sync'] = $data['last-sync'];
-		unset($data['last-sync']);
-	}
 	function adsensem_get_classmap()
 	{
 		return array(
@@ -102,6 +117,7 @@ class Advman_Upgrade
 			'ox_adnet_chitika' => 'OX_Plugin_Chitika',
 			'ox_adnet_cj' => 'OX_Plugin_Cj',
 			'ox_adnet_crispads' => 'OX_Plugin_Crispads',
+			'ox_adnet_html' => 'OX_Ad_Html',
 			'ox_adnet_openx' => 'OX_Plugin_Openx',
 			'ox_adnet_shoppingads' => 'OX_Plugin_Shoppingads',
 			'ox_adnet_widgetbucks' => 'OX_Plugin_Widgetbucks',

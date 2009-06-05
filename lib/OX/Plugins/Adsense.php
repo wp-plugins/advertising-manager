@@ -1,5 +1,5 @@
 <?php
-require_once(OX_LIB . '/Ad.php');	
+require_once(OX_LIB . '/Ad.php');
 
 class OX_Plugin_Adsense extends OX_Ad
 {
@@ -24,15 +24,26 @@ class OX_Plugin_Adsense extends OX_Ad
 		$properties = array(
 			'account-id' => '',
 			'adformat' => '728x90',
+			'adtype' => 'all',
 			'counter' => '3',
 			'height' => '728',
 			'partner' => '',
-			'password' => '',
+//			'password' => '',
 			'slot' => '',
-			'username' => '',
+//			'username' => '',
 			'width' => '90',
 		);
 		return $properties + parent::get_network_property_defaults();
+	}
+	
+	function get_ad_formats()
+	{
+		$text = array('728x90', '468x60', '234x60', '125x125', '120x600', '160x600', '180x150', '120x240', '200x200', '250x250', '300x250', '336x280');
+		$image = array('728x90', '468x60', '120x600', '160x600', '200x200', '250x250', '300x250', '336x280');
+		$video = array('728x90', '120x600', '160x600', '200x200', '250x250', '300x250', '336x280');
+		$link = array('120x90#4', '120x90#5', '160x90#4', '160x90#5', '180x90#4', '180x90#5', '200x90#4', '200x90#5', '468x15#4', '468x15#5');
+		
+		return array('all' => $text + $image + $video, 'text' => $text, 'image' => $image, 'video' => $video, 'link' => $link);
 	}
 	
 	function import_detect_network($code)
@@ -57,6 +68,7 @@ class OX_Plugin_Adsense extends OX_Ad
 		// Slot ID
 		if (preg_match('/google_ad_slot( *)=( *)"(.*)"/', $code, $matches) != 0) {
 			$this->set_property('slot', $matches[3]);
+			$this->set_property('adtype', 'all');
 			$code = str_replace("google_ad_slot{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_slot{$matches[1]}={$matches[2]}\"{{slot}}\"", $code);
 		}
 		
@@ -115,6 +127,7 @@ class OX_Plugin_Adsense extends OX_Ad
 ?><tr><td><p><a href="https://www.google.com/adsense/report/overview">Statistics and earnings</a></p></td></tr><?php
 	}
 }
+
 /*
  // SLOT SYSTEM AD 
 <script type="text/javascript"><!--
@@ -128,6 +141,18 @@ google_ad_height = 90;
 </script>
 <script 
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript">
+</script>
+
+// REFERRAL
+<script type="text/javascript"><!--
+google_ad_client = "pub-8424176087324892";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_cpa_choice = "CAEaCGcn-3m_pqJvUBRQDlAIUEJQL1AFUEdQDVAEUBI";
+//-->
+</script>
+<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
 
 // OLD AD FORMAT

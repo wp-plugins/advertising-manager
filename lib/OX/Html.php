@@ -16,11 +16,6 @@ class OX_Ad_Html extends OX_Ad
 		return $properties + parent::get_network_property_defaults();
 	}
 	
-	function get_ad_formats()
-	{
-		return array('custom', '728x90', '468x60', '120x600', '160x600', '300x250', '250x250', '200x200', '125x125');
-	}
-	
 	function import_settings($code)
 	{
 		// Import parent settings first!

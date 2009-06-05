@@ -189,10 +189,10 @@ class OX_Swifty
 				$this->counter['id'][$ad->id]++;
 			}
 			
-			if (empty($this->counter['network'][get_class($ad)])) {
-				$this->counter['network'][get_class($ad)] = 1;
+			if (empty($this->counter['network'][strtolower(get_class($ad))])) {
+				$this->counter['network'][strtolower(get_class($ad))] = 1;
 			} else {
-				$this->counter['network'][get_class($ad)]++;
+				$this->counter['network'][strtolower(get_class($ad))]++;
 			}
 		}
 	}

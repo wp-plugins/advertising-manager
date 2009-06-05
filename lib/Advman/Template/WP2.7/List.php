@@ -15,7 +15,7 @@ class Advman_Template_List
 				if ($ad->active) {
 					$activeAdCount++;
 				}
-				$networks[get_class($ad)] = $ad->network_name;
+				$networks[strtolower(get_class($ad))] = $ad->network_name;
 			}
 		}
 		$filterActive = !empty($filter['active']) ? $filter['active'] : null;
@@ -114,7 +114,7 @@ function ADS_setAction(action, id, name, network)
 	<tbody>
 <?php foreach ($ads as $ad) : ?>
 <?php if ( ($filterActive == 'active' && $ad->active) || ($filterActive == 'inactive' && !$ad->active) || empty($filterActive) ) : ?>
-<?php if ( ($filterNetwork == get_class($ad)) || empty($filterNetwork) ) : ?>
+<?php if ( ($filterNetwork == strtolower(get_class($ad))) || empty($filterNetwork) ) : ?>
 	<tr id='post-3' class='alternate author-self status-publish iedit' valign="top">
 		<th scope="row" class="check-column"><input type="checkbox" name="advman-targets[]" value="<?php echo $ad->id; ?>" /></th>
 		<td class="post-title column-title">
@@ -126,7 +126,7 @@ function ADS_setAction(action, id, name, network)
 				<span class='edit'><a href="<?php echo $ad->get_preview_url(); ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview', 'advman'); ?></a></span>
 			</div>
 		</td>
-		<td class="author column-author"><a href="javascript:ADS_setAction('edit','<?php echo get_class($ad); ?>');" title="<?php printf(__('Edit the ad network &quot;%s&quot;', 'advman'), $ad->network_name); ?>"><?php echo $ad->network_name; ?></a></td>
+		<td class="author column-author"><a href="javascript:ADS_setAction('edit','<?php echo strtolower(get_class($ad)); ?>');" title="<?php printf(__('Edit the ad network &quot;%s&quot;', 'advman'), $ad->network_name); ?>"><?php echo $ad->network_name; ?></a></td>
 		<td class="categories column-categories"> <?php echo $this->displayFormat($ad); ?></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('<?php echo ($ad->active) ? 'deactivate' : 'activate'; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
 		<td class="categories column-tags"><a href="javascript:ADS_setAction('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $defaultAdName) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>

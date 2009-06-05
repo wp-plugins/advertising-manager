@@ -30,7 +30,7 @@ class OX_Plugin_Crispads extends OX_Ad
 	
 	function get_ad_formats()
 	{
-		return array('custom', '728x90', '468x60', '234x60', '150x50', '120x90', '120x60', '83x31', '120x600', '160x600', '240x400', '120x240', '336x280', '300x250', '250x250', '200x200', '180x150', '125x125');
+		return array('all' => array('custom', '728x90', '468x60', '234x60', '150x50', '120x90', '120x60', '83x31', '120x600', '160x600', '240x400', '120x240', '336x280', '300x250', '250x250', '200x200', '180x150', '125x125'));
 	}
 	
 	function get_ad_colors()

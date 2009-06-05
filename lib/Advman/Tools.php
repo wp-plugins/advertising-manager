@@ -1,4 +1,6 @@
 <?php
+require_once(OX_LIB . '/Tools.php');
+
 class Advman_Tools
 {
 	/**
@@ -65,73 +67,120 @@ class Advman_Tools
 		return $app;
 	}
 	
-	function organize_formats($formats)
+	function organize_formats($tfs)
 	{
-		$fmt = array();
-		$fmt['horizontal']['800x90'] = __('800 x 90 Large Leaderboard', 'advman');
-		$fmt['horizontal']['728x90'] = __('728 x 90 Leaderboard', 'advman');
-		$fmt['horizontal']['600x90'] = __('600 x 90 Small Leaderboard', 'advman');
-		$fmt['horizontal']['550x250'] = __('550 x 250 Mega Unit', 'advman');
-		$fmt['horizontal']['550x120'] = __('550 x 120 Small Leaderboard', 'advman');
-		$fmt['horizontal']['550x90'] = __('550 x 90 Small Leaderboard', 'advman');
-		$fmt['horizontal']['468x180'] = __('468 x 180 Tall Banner', 'advman');
-		$fmt['horizontal']['468x120'] = __('468 x 120 Tall Banner', 'advman');
-		$fmt['horizontal']['468x90'] = __('468 x 90 Tall Banner', 'advman');
-		$fmt['horizontal']['468x60'] = __('468 x 60 Banner', 'advman');
-		$fmt['horizontal']['450x90'] = __('450 x 90 Tall Banner', 'advman');
-		$fmt['horizontal']['430x90'] = __('430 x 90 Tall Banner', 'advman');
-		$fmt['horizontal']['400x90'] = __('400 x 90 Tall Banner', 'advman');
-		$fmt['horizontal']['234x60'] = __('234 x 60 Half Banner', 'advman');
-		$fmt['horizontal']['200x90'] = __('200 x 90 Tall Half Banner', 'advman');
-		$fmt['horizontal']['150x50'] = __('150 x 50 Half Banner', 'advman');
-		$fmt['horizontal']['120x90'] = __('120 x 90 Button', 'advman');
-		$fmt['horizontal']['120x60'] = __('120 x 60 Button', 'advman');
-		$fmt['horizontal']['83x31'] = __('83 x 31 Micro Bar', 'advman');
-		$fmt['vertical']['160x600'] = __('160 x 600 Wide Skyscraper', 'advman');
-		$fmt['vertical']['120x600'] = __('120 x 600 Skyscraper', 'advman');
-		$fmt['vertical']['200x360'] = __('200 x 360 Wide Half Banner', 'advman');
-		$fmt['vertical']['240x400'] = __('240 x 400 Vertical Rectangle', 'advman');
-		$fmt['vertical']['180x300'] = __('180 x 300 Tall Rectangle', 'advman');
-		$fmt['vertical']['200x270'] = __('200 x 270 Tall Rectangle', 'advman');
-		$fmt['vertical']['120x240'] = __('120 x 240 Vertical Banner', 'advman');
-		$fmt['square']['336x280'] = __('336 x 280 Large Rectangle', 'advman');
-		$fmt['square']['336x160'] = __('336 x 160 Wide Rectangle', 'advman');
-		$fmt['square']['334x100'] = __('334 x 100 Wide Rectangle', 'advman');
-		$fmt['square']['300x250'] = __('300 x 250 Medium Rectangle', 'advman');
-		$fmt['square']['300x150'] = __('300 x 150 Small Wide Rectangle', 'advman');
-		$fmt['square']['300x125'] = __('300 x 125 Small Wide Rectangle', 'advman');
-		$fmt['square']['300x70'] = __('300 x 70 Mini Wide Rectangle', 'advman');
-		$fmt['square']['250x250'] = __('250 x 250 Square', 'advman');
-		$fmt['square']['200x200'] = __('200 x 200 Small Square', 'advman');
-		$fmt['square']['200x180'] = __('200 x 180 Small Rectangle', 'advman');
-		$fmt['square']['180x150'] = __('180 x 150 Small Rectangle', 'advman');
-		$fmt['square']['160x160'] = __('160 x 160 Small Square', 'advman');
-		$fmt['square']['125x125'] = __('125 x 125 Button', 'advman');
-		$fmt['custom']['custom'] = __('Custom width and height', 'advman');
-
-		foreach ($fmt as $section => $fmt1) {
-			foreach ($fmt1 as $name => $label) {
-				if (!in_array($name, $formats)) {
-					unset($fmt[$section][$name]);
-					if (empty($fmt[$section])) {
-						unset($fmt[$section]);
+		$types = array(
+			'text' => __('Text ads', 'advman'),
+			'image' => __('Image ads', 'advman'),
+			'ref_text' => __('Text referrals', 'advman'),
+			'ref_image' => __('Image referrals', 'advman'),
+			'textimage' => __('Text and image ads', 'advman'),
+			'link' => __('Ad links', 'advman'),
+			'video' => __('Video ads', 'advman'),
+			'all' => __('All ad types', 'advman'),
+		);
+		
+		$sections = array(
+			'horizontal' => __('Horizontal', 'advman'),
+			'vertical' => __('Vertical', 'advman'),
+			'square' => __('Square', 'advman'),
+			'other' => __('Other ad formats', 'advman'),
+			'custom' => __('Custom width and height', 'advman'),
+		);
+		
+		$formats_horizontal = array(
+			'800x90' => __('%1$s x %2$s Large Leaderboard', 'advman'),
+			'728x90' => __('%1$s x %2$s Leaderboard', 'advman'),
+			'600x90' => __('%1$s x %2$s Small Leaderboard', 'advman'),
+			'550x250' => __('%1$s x %2$s Mega Unit', 'advman'),
+			'550x120' => __('%1$s x %2$s Small Leaderboard', 'advman'),
+			'550x90' => __('%1$s x %2$s Small Leaderboard', 'advman'),
+			'468x180' => __('%1$s x %2$s Tall Banner', 'advman'),
+			'468x120' => __('%1$s x %2$s Tall Banner', 'advman'),
+			'468x90' => __('%1$s x %2$s Tall Banner', 'advman'),
+			'468x60' => __('%1$s x %2$s Banner', 'advman'),
+			'450x90' => __('%1$s x %2$s Tall Banner', 'advman'),
+			'430x90' => __('%1$s x %2$s Tall Banner', 'advman'),
+			'400x90' => __('%1$s x %2$s Tall Banner', 'advman'),
+			'234x60' => __('%1$s x %2$s Half Banner', 'advman'),
+			'200x90' => __('%1$s x %2$s Tall Half Banner', 'advman'),
+			'150x50' => __('%1$s x %2$s Half Banner', 'advman'),
+			'120x90' => __('%1$s x %2$s Button', 'advman'),
+			'120x60' => __('%1$s x %2$s Button', 'advman'),
+			'83x31' => __('%1$s x %2$s Micro Bar', 'advman'),
+			'728x15#4' => __('%1$s x %2$s Thin Banner, %3$s Links', 'advman'),
+			'728x15#5' => __('%1$s x %2$s Thin Banner, %3$s Links', 'advman'),
+			'468x15#4' => __('%1$s x %2$s Thin Banner, %3$s Links', 'advman'),
+			'468x15#5' => __('%1$s x %2$s Thin Banner, %3$s Links', 'advman'),
+		);
+		
+		$formats_vertical = array(
+			'160x600' => __('%1$s x %2$s Wide Skyscraper', 'advman'),
+			'120x600' => __('%1$s x %2$s Skyscraper', 'advman'),
+			'200x360' => __('%1$s x %2$s Wide Half Banner', 'advman'),
+			'240x400' => __('%1$s x %2$s Vertical Rectangle', 'advman'),
+			'180x300' => __('%1$s x %2$s Tall Rectangle', 'advman'),
+			'200x270' => __('%1$s x %2$s Tall Rectangle', 'advman'),
+			'120x240' => __('%1$s x %2$s Vertical Banner', 'advman'),
+		);
+		
+		$formats_square = array(
+			'336x280' => __('%1$s x %2$s Large Rectangle', 'advman'),
+			'336x160' => __('%1$s x %2$s Wide Rectangle', 'advman'),
+			'334x100' => __('%1$s x %2$s Wide Rectangle', 'advman'),
+			'300x250' => __('%1$s x %2$s Medium Rectangle', 'advman'),
+			'300x150' => __('%1$s x %2$s Small Wide Rectangle', 'advman'),
+			'300x125' => __('%1$s x %2$s Small Wide Rectangle', 'advman'),
+			'300x70' => __('%1$s x %2$s Mini Wide Rectangle', 'advman'),
+			'250x250' => __('%1$s x %2$s Square', 'advman'),
+			'200x200' => __('%1$s x %2$s Small Square', 'advman'),
+			'200x180' => __('%1$s x %2$s Small Rectangle', 'advman'),
+			'180x150' => __('%1$s x %2$s Small Rectangle', 'advman'),
+			'160x160' => __('%1$s x %2$s Small Square', 'advman'),
+			'125x125' => __('%1$s x %2$s Button', 'advman'),
+			'200x90#4' => __('%1$s x %2$s Tall Half Banner, %3$s Links', 'advman'),
+			'200x90#5' => __('%1$s x %2$s Tall Half Banner, %3$s Links', 'advman'),
+			'180x90#4' => __('%1$s x %2$s Half Banner, %3$s Links', 'advman'),
+			'180x90#5' => __('%1$s x %2$s Half Banner, %3$s Links', 'advman'),
+			'160x90#4' => __('%1$s x %2$s Tall Button, %3$s Links', 'advman'),
+			'160x90#5' => __('%1$s x %2$s Tall Button, %3$s Links', 'advman'),
+			'120x90#4' => __('%1$s x %2$s Button, %3$s Links', 'advman'),
+			'120x90#5' => __('%1$s x %2$s Button, %3$s Links', 'advman'),
+		);
+		
+		$sectforms = array(
+			'horizontal' => $formats_horizontal,
+			'vertical' => $formats_vertical,
+			'square' => $formats_square,
+		);
+		
+		$data = array();
+		foreach ($tfs as $t => $fs) {
+			foreach ($sectforms as $sect => $forms) {
+				foreach ($forms as $form => $label) {
+					$k = array_search($form, $fs);
+					if ($k !== false) {
+						$data[$t][$sect][] = $form;
+						$formats[$form] = $label;
+						unset($fs[$k]);
+					}
+				}
+			}
+			
+			if (!empty($fs)) {
+				foreach ($fs as $k => $f) {
+					if ($f == 'custom') {
+						$data[$t]['custom'][] = $f;
+						$formats[$f] = __('Custom width and height', 'advman');
+					} else {
+						$data[$t]['other'][] = $f;
+						$formats[$f] = (strpos($f, '#') === false) ? __('%1$s x %2$s Banner', 'advman') : __('%1$s x %2$s Banner, %3$s Links', 'advman');
 					}
 				}
 			}
 		}
 		
-		$sct['horizontal'] = __('Horizontal', 'advman');
-		$sct['vertical'] = __('Vertical', 'advman');
-		$sct['square'] = __('Square', 'advman');
-		$sct['custom'] = __('Custom', 'advman');
-		
-		foreach ($sct as $section => $name) {
-			if (!isset($fmt[$section])) {
-				unset($sct[$section]);
-			}
-		}
-		
-		return array('sections' => $sct, 'formats' => $fmt);
+		return array('data' => $data, 'types' => $types, 'sections' => $sections, 'formats' => $formats);
 	}
 	
 	function get_properties_from_array($aAd)
