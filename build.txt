@@ -63,6 +63,3 @@ mv trunk advertising-manager
 zip -r advertising-manager-3.3.10.zip advertising-manager/
 
 http://code.openx.org/projects/list_files/advertising-manager
-
-
-
