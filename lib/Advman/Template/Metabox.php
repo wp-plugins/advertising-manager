@@ -291,7 +291,7 @@ class Advman_Template_Metabox
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php printf($msg, $ad->network_name); ?></span>
+<span style="font-size:x-small; color:gray;"><?php printf($msg, $ad->network_name, $ad->network_name); ?></span>
 <?php
 	}
 	function display_history_network($ad)

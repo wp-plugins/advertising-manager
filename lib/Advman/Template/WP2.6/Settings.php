@@ -1,18 +1,25 @@
 <?php
-if(!ADVMAN_VERSION) {die();}
-
-class Template_Settings
+require_once(OX_LIB . '/Tools.php');
+class Advman_Template_Settings
 {
 	function display($target = null)
 	{
-		// Get our options and see if we're handling a form submission.
-		global $_advman;
-		global $_advman_networks;
+		global $advman_engine;
+
+		$action = isset($_POST['advman-action']) ? OX_Tools::sanitize($_POST['advman-action'], 'key') : '';
 		
-		$action = isset($_POST['advman-action']) ? $_POST['advman-action'] : '';
-		$oxUpdates = !empty($_advman['settings']['openx-sync']) ? $_advman['settings']['openx-sync'] : false;
-		$oxMarket = !empty($_advman['settings']['openx-market']) ? $_advman['settings']['openx-market'] : false;
-		$openxCpm = !empty($_advman['settings']['openx-market-cpm']) ? $_advman['settings']['openx-market-cpm'] : '0.20';
+		$oxMarket = $advman_engine->getSetting('openx-market');
+		if (is_null($oxMarket)) {
+			$oxMarket = false;
+		}
+		$oxUpdates = $advman_engine->getSetting('openx-sync');
+		if (is_null($oxUpdates)) {
+			$oxUpdates = false;
+		}
+		$oxCpm = $advman_engine->getSetting('openx-market-cpm');
+		if (is_null($oxCpm)) {
+			$oxCpm = '0.20';
+		}
 		
 ?><?php if ($action == 'save') : ?>
 <div id="message" class="updated fade"><p><strong><?php _e('Settings saved.') ?></strong></p></div>

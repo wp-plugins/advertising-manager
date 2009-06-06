@@ -56,10 +56,10 @@ http://wordpress.org/extend/plugins/about/validator/
 10. Add a zipped file to the repository:
 Follow the build process below:
 
-mkdir build
+mkdir ~/build
 cd build
 svn export http://svn.wp-plugins.org/advertising-manager/trunk
 mv trunk advertising-manager
-zip -r advertising-manager-3.3.10.zip advertising-manager/
+zip -r advertising-manager-3.4.zip advertising-manager/
 
 http://code.openx.org/projects/list_files/advertising-manager

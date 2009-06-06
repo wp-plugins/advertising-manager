@@ -1,5 +1,4 @@
 <?php
-
 class Advman_Template_Edit
 {
 	function display($ad, $nw = false)

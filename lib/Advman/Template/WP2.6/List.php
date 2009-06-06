@@ -1,6 +1,4 @@
 <?php
-if(!ADVMAN_VERSION) {die();}
-
 class Advman_Template_List
 {
 	function display($target = null, $filter = null)

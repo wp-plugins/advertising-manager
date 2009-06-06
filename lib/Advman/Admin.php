@@ -313,8 +313,11 @@ class Advman_Admin
 		$action = OX_Tools::sanitize($_POST['advman-action'], 'key');
 		if ($action == 'save') {
 			global $advman_engine;
-			$advman_engine->saveSettings($settings);
-//			advman_admin::_save_settings();
+			$settings = array('openx-market', 'openx-market-cpm', 'openx-sync');
+			foreach ($settings as $setting) {
+				$value = isset($_POST["advman-{$setting}"]) ? OX_Tools::sanitize($_POST["advman-{$setting}"]) : false;
+				$advman_engine->setSetting($setting, $value);
+			}
 		}
 		$template = Advman_Tools::get_template('Settings');
 		$template->display();

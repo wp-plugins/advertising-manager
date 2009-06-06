@@ -112,6 +112,7 @@ By popular demand, below are the changes for versions listed. Use this to determ
 
 As a general rule the version X.Y.Z increments Z with bugfixes, Y with additional features, and X with major overhaul.
 
+* **3.4.1** Fixed settings screen, and random bug with printf
 * **3.4** New architecture - less space, more efficient code.  Tons of ad network bug fixes.  Added plugin design, and new ad serving engine.
 * **3.3.18** Added ability to suppress widget formatting on ads, fixed issue with PHP_INT_MAX on versions of PHP before 4.4.
 * **3.3.17** Fixed a bug with widget display, updated all language files, fixed a bug with Ozh plugin

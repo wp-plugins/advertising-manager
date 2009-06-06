@@ -1,6 +1,4 @@
 <?php
-if(!ADVMAN_VERSION) {die();}
-
 class Advman_Template_Edit
 {
 	function display($ad, $nw = false)

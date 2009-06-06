@@ -1,10 +1,11 @@
 <?php
-if(!ADVMAN_VERSION) {die();}
-
-class Template_Settings
+require_once(OX_LIB . '/Tools.php');
+class Advman_Template_Settings
 {
 	function display($target = null)
 	{
+		global $advman_engine;
+		
 		$action = isset($_POST['advman-action']) ? OX_Tools::sanitize($_POST['advman-action'], 'key') : '';
 		
 		$oxMarket = $advman_engine->getSetting('openx-market');
