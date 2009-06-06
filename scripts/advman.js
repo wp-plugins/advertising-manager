@@ -18,7 +18,8 @@
 		target = document.getElementById(id);
 		switch (what) {
 			case 'bg':	target.style.background='#' + element.value; break;
-			case 'border':	target.style.border='1px solid #' + element.value; break;
+			case 'border':	target.style.borderColor='#' + element.value; break;
+			case 'font-link':
 			case 'font-text':
 			case 'font-title':
 				target.style.fontFamily=element.value; break;
@@ -33,7 +34,7 @@
 			n = s.length;
 			for (i=0; i<n; i++) {
 				v = s.options[i].value;
-				r = document.getElementById('advman-form-'+v+'-format');
+				r = document.getElementById('advman-form-adformat-'+v);
 				if (r) {
 					r.style.display = s.options[i].selected ? '' : 'none';
 				}
@@ -42,11 +43,10 @@
 	}
 
 		
-	function advman_update_custom(){
-	
-		if(document.getElementById('advman-adformat') && document.getElementById('advman-settings-custom')){
+	function advman_update_custom()
+	{
+		if(document.getElementById('advman-adformat') && document.getElementById('advman-settings-custom')) {
 			format=document.getElementById('advman-adformat').value;
-		
 			if(format=='custom'){on='';} else {on='none';}
 			document.getElementById('advman-settings-custom').style.display=on
 		}
