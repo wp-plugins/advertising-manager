@@ -57,7 +57,7 @@ http://wordpress.org/extend/plugins/about/validator/
 Follow the build process below:
 
 mkdir ~/build
-cd build
+cd ~/build
 svn export http://svn.wp-plugins.org/advertising-manager/trunk
 mv trunk advertising-manager
 zip -r advertising-manager-3.4.zip advertising-manager/
