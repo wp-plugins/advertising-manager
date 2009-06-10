@@ -99,12 +99,8 @@ class OX_Ad extends OX_Plugin
 			'notes' => '',
 			'openx-market' => 'yes',
 			'openx-market-cpm' => '0.20',
-			'show-archive' => 'yes',
-			'show-author' => 'all',
-			'show-home' => 'yes',
-			'show-page' => 'yes',
-			'show-post' => 'yes',
-			'show-search' => 'yes',
+			'show-pagetype' => array('archive','home','page','post','search'),
+			'show-author' => '',
 			'weight' => '1',
 			'width' => '728',
 		);
@@ -139,9 +135,9 @@ class OX_Ad extends OX_Plugin
 		}
 		
 		// Filter by author
-		$author = $this->get('show-author', true);
-		if (!empty($author) && ($author != 'all')) {
-			if ($post->post_author != $this->get('show-author')) {
+		$authors = $this->get('show-author', true);
+		if (!empty($authors)) {
+			if (!in_array($post->post_author, $authors)) {
 				return false;
 			}
 		}
@@ -164,13 +160,26 @@ class OX_Ad extends OX_Plugin
 		}
 */		
 		//Extend this to include all ad-specific checks, so it can used to filter adzone groups in future.
-		return (
-			( ($this->get('show-home', true) == 'yes') && is_home() ) ||
-			( ($this->get('show-post', true) == 'yes') && is_single() ) ||
-			( ($this->get('show-page', true) == 'yes') && is_page() ) ||
-			( ($this->get('show-archive', true) == 'yes') && is_archive() ) ||
-			( ($this->get('show-search', true) == 'yes') && is_search() )
-		);
+		$pageTypes = $this->get_property('show-pagetype');
+		if (!empty($pageTypes)) {
+			if (is_home() && !in_array('home', $pageTypes)) {
+				return false;
+			}
+			if (is_single() && !in_array('post', $pageTypes)) {
+				return false;
+			}
+			if (is_page() && !in_array('page', $pageTypes)) {
+				return false;
+			}
+			if (is_archive() && !in_array('archive', $pageTypes)) {
+				return false;
+			}
+			if (is_search() && !in_array('search', $pageTypes)) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	function display($codeonly = false, $search = array(), $replace = array())

@@ -62,6 +62,31 @@ jQuery(document).ready( function($) {
 	} else {
 		add_postbox_toggles('advman'); //wp2.6-
 	}
+	// Default options
+//	$("#control_1, #control_3, #control_4, #control_5").multiSelect();
+	
+//	// With callback
+//	$("#control_6").multiSelect( null, function(el) {
+//		$("#callbackResult").show().fadeOut();
+//	});
+	
+	// Options displayed in comma-separated list
+	$("#advman-pagetype").multiSelect({
+		oneOrMoreSelected: '*',
+		allSelected: 'All Pages',
+		noneSelected: 'No Pages',
+		selectAllText: 'All Pages'
+	});
+	$("#advman-author").multiSelect({
+		oneOrMoreSelected: '*',
+		allSelected: 'All Authors',
+		noneSelected: 'No Authors',
+		selectAllText: 'All Authors'
+	});
+	
+//	// 'Select All' text changed
+//	$("#control_8").multiSelect({ selectAllText: 'Pick &lsquo;em all!' });
+	
 	advman_update_custom();
 	advman_update_formats();
 });  
