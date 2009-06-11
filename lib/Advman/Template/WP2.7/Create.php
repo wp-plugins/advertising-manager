@@ -10,10 +10,11 @@ class Advman_Template_Create
 	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
 	<input type="hidden" name="advman-action" id="advman-action">
 	<input type="hidden" name="advman-target" id="advman-target">
-
+<!--
 	<div id="side-info-column" class="inner-sidebar">
 		<p><h3>Or, select an ad network below:</p></h3>
 	</div>
+-->
 	<div id="post-body" class="has-sidebar">
 		<div id="post-body-content" class="has-sidebar-content" style="width:520px">
 			

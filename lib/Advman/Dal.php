@@ -63,7 +63,10 @@ class Advman_Dal extends OX_Dal
 	{
 		$oAds = array();
 		foreach ($data['ads'] as $id => $aAd) {
-			$oAds[$id] = $this->factory($aAd['class'], $aAd, $data);
+			$ad = $this->factory($aAd['class'], $aAd, $data);
+			if ($ad) {
+				$oAds[$id] = $ad;
+			}
 		}
 		$data['ads'] = $oAds;
 	}
@@ -80,28 +83,32 @@ class Advman_Dal extends OX_Dal
 	
 	function factory($class, $aAd = null, $data = null)
 	{
-		$ad = new $class();
-		if (is_null($data)) {
-			$data = $this->data;
-		}
-		if (is_null($aAd)) {
-			$ad->active = true;
-			$ad->name = OX_Tools::generate_name($ad->network_name);
+		if (class_exists($class)) {
+			$ad = new $class();
+			if (is_null($data)) {
+				$data = $this->data;
+			}
+			if (is_null($aAd)) {
+				$ad->active = true;
+				$ad->name = OX_Tools::generate_name($ad->network_name);
+			} else {
+				$ad->name = $aAd['name'];
+				$ad->id = $aAd['id'];
+				$ad->active = $aAd['active'];
+				$aProperties = Advman_Tools::get_properties_from_array($aAd);
+				$ad->p = $aProperties;
+			}
+			
+			if (empty($data['networks'][$class])) {
+				$ad->np = $ad->get_network_property_defaults();
+			} else {
+				$ad->np = $data['networks'][$class];
+			}
+			
+			return $ad;
 		} else {
-			$ad->name = $aAd['name'];
-			$ad->id = $aAd['id'];
-			$ad->active = $aAd['active'];
-			$aProperties = Advman_Tools::get_properties_from_array($aAd);
-			$ad->p = $aProperties;
+			return false;
 		}
-		
-		if (empty($data['networks'][$class])) {
-			$ad->np = $ad->get_network_property_defaults();
-		} else {
-			$ad->np = $data['networks'][$class];
-		}
-		
-		return $ad;
 	}
 	
 	function select_setting($key)

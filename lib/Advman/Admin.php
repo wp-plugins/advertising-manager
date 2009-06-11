@@ -209,8 +209,10 @@ class Advman_Admin
 			case 'reset' :
 				$mode = 'edit_network';
 				$ad = $advman_engine->factory($target);
-				$ad->reset_network_properties();
-				$advman_engine->setAdNetwork($ad);
+				if ($ad) {
+					$ad->reset_network_properties();
+					$advman_engine->setAdNetwork($ad);
+				}
 				break;
 			
 			case 'apply' :
@@ -220,8 +222,10 @@ class Advman_Admin
 					$advman_engine->setAd($ad);
 				} elseif ($mode == 'edit_network') {
 					$ad = $advman_engine->factory($target);
-					Advman_Admin::save_properties($ad, true);
-					$advman_engine->setAdNetwork($ad);
+					if ($ad) {
+						Advman_Admin::save_properties($ad, true);
+						$advman_engine->setAdNetwork($ad);
+					}
 				} elseif ($mode == 'settings') {
 					Advman_Admin::save_settings();
 				}
@@ -242,12 +246,8 @@ class Advman_Admin
 				break;
 		}
 		
+		$template = null;
 		switch ($mode) {
-			case 'list_ads' :
-				$template = Advman_Tools::get_template('List');
-				$template->display();
-				break;
-			
 			case 'create_ad' :
 				Advman_Admin::create();
 				break;
@@ -259,14 +259,28 @@ class Advman_Admin
 			
 			case 'edit_network' :
 				$ad = $advman_engine->factory($target);
-				$template = Advman_Tools::get_template('Edit_Network', $ad);
-				$template->display($ad);
+				if ($ad) {
+					$template = Advman_Tools::get_template('Edit_Network', $ad);
+					$template->display($ad);
+				}
 				break;
 			
 			case 'settings' :
 				$template = Advman_Tools::get_template('Settings');
 				$template->display();
 				break;
+			
+			case 'list_ads' :
+			default :
+				$template = Advman_Tools::get_template('List');
+				$template->display();
+				break;
+			
+		}
+		
+		if (is_null($template)) {
+			$template = Advman_Tools::get_template('List');
+			$template->display();
 		}
 	}
 	
@@ -329,11 +343,13 @@ class Advman_Admin
 			wp_enqueue_script('prototype');
 			wp_enqueue_script('postbox');
 //			wp_enqueue_script('jquery');
-//			wp_enqueue_script('jquery-swifty', ADVMAN_URL . '/scripts/jQuery.swifty.js', array('jquery'));
+			wp_enqueue_script('jquery-multiselect', ADVMAN_URL . '/scripts/jquery.multiSelect.js', array('jquery'));
 			wp_enqueue_script('advman', ADVMAN_URL . '/scripts/advman.js');
 			$page = !empty($_GET['page']) ? $_GET['page'] : '';
 			if ($page == 'advman-manage') {
-				echo "<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.css' />";
+				echo "
+<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.css' />
+<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/jquery.multiSelect.css' />";
 			}
 		}
 	}

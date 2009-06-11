@@ -100,53 +100,45 @@ class Advman_Template_Metabox
 	}
 	function display_options($ad, $nw = false)
 	{
-		// Query the users
+		// Authors
 		$users = get_users_of_blog();
-		$defaultAuthor = $ad->get_network_property('show-author');
-		if (is_numeric($defaultAuthor)) {
-			$u = get_users_of_blog($defaultAuthor);
-			$defaultAuthor = $u[0]->display_name;
-		} else {
-			$defaultAuthor = __('All Authors', 'advman');
-		}
-		
-		$options = array(
-				 'home' => __('On Homepage:', 'advman'),
-				 'post' => __('On Posts:', 'advman'),
-				 'page' => __('On Pages:', 'advman'),
-				 'archive' => __('On Archives:', 'advman'),
-				 'search' => __('On Search:', 'advman'),
-				 'author' => __('By Author:', 'advman'),
+
+		// Page Types
+		$pageTypes = array(
+			'home' => __('Homepage', 'advman'),
+			'post' => __('Posts', 'advman'),
+			'page' => __('Pages', 'advman'),
+			'archive' => __('Archives', 'advman'),
+			'search' => __('Search', 'advman'),
 		);
 		
-		$users = get_users_of_blog();
+		$pageTypeValues = $ad->get_property('show-pagetype');
+		$authorValues = $ad->get_property('show-author');
+
+		
 ?><div style="text-align:right; width:250px; font-size:small;">
 	<table class="form-table">
-<?php foreach ($options as $option => $label) : ?>
-<?php $value = $nw ? $ad->get_network_property('show-' . $option) : $ad->get_property('show-' . $option); ?>
-	<tr>
-		<td style="white-space:nowrap"><label for="advman-show-<?php echo $option ?>"><?php echo $label; ?></label></td>
+	<tr style="white-space:nowrap">
+		<td><label for="advman-pagetype"><?php _e('By Page Type:'); ?></label></td>
 		<td align="left">
-			<select name="advman-show-<?php echo $option ?>" id="advman-show-<?php echo $option ?>">
-<?php if (!$nw) : ?>
-				<option value=""> <?php _e('Use Default', 'advman'); ?></option>
-<?php endif; ?>
-<?php if ($option == 'author'): ?>
-				<option<?php echo ($value == 'all' ? " selected='selected'" : ''); ?> value="all"> <?php _e('All Authors', 'advman'); ?></option>
-<?php foreach ($users as $user) : ?>
-				<option<?php echo ($value == $user->user_id ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
+			<select id="advman-pagetype" name="advman-show-pagetype[]" multiple="multiple" size="5">
+				<option value=""></option>
+<?php foreach ($pageTypes as $n => $v) : ?>
+				<option value="<?php echo $n; ?>"<?php echo ($pageTypeValues == '' || in_array($n, $pageTypeValues) ? " selected='selected'" : ''); ?>><?php echo $v; ?></option>
 <?php endforeach; ?>
-<?php else: ?>
-				<option<?php echo ($value == 'yes' ? " selected='selected'" : ''); ?> value="yes"> <?php _e('Yes', 'advman'); ?></option>
-				<option<?php echo ($value == 'no' ? " selected='selected'" : ''); ?> value="no"> <?php _e('No', 'advman'); ?></option>
-<?php endif; ?>
 			</select>
-<?php if (!$nw) : ?>
-			<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('show-' . $option); ?>">
-<?php endif; ?>
 		</td>
 	</tr>
+	<tr style="white-space:nowrap">
+		<td><label for="advman-author"><?php _e('By Author:'); ?></label></td>
+		<td align="left">
+			<select id="advman-author" name="advman-show-author[]" multiple="multiple" size="5">
+<?php foreach ($users as $user) : ?>
+				<option<?php echo ($authorValues == '' || in_array($user->user_id, $authorValues) ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
 <?php endforeach; ?>
+			</select>
+		</td>
+	</tr>
 	</table>
 </div>
 <br />
