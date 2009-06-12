@@ -112,6 +112,7 @@ By popular demand, below are the changes for versions listed. Use this to determ
 
 As a general rule the version X.Y.Z increments Z with bugfixes, Y with additional features, and X with major overhaul.
 
+* **3.4.3** Fixed display bug with WP 2.8
 * **3.4.2** Added multiple select for author field, changed the page type field (show *), fixed error in factory method
 * **3.4.1** Fixed settings screen, and random bug with printf
 * **3.4** New architecture - less space, more efficient code.  Tons of ad network bug fixes.  Added plugin design, and new ad serving engine.

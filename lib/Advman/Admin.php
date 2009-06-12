@@ -249,7 +249,8 @@ class Advman_Admin
 		$template = null;
 		switch ($mode) {
 			case 'create_ad' :
-				Advman_Admin::create();
+				$template = Advman_Tools::get_template('Create');
+				$template->display();
 				break;
 			
 			case 'edit_ad' :

@@ -9,7 +9,7 @@ class Advman_Upgrade
 	{
 		$version = Advman_Upgrade::_get_version($data);
 		Advman_Upgrade::_backup($data, $version);
-		$versions = array('3.4', '3.4.2');
+		$versions = array('3.4', '3.4.2', '3.4.3');
 		foreach ($versions as $v) {
 			if (version_compare($version, $v, '<')) {
 				call_user_func(array('Advman_Upgrade', 'advman_' . str_replace('.','_',$v)), &$data);  //wrap var in array to pass by reference
@@ -18,7 +18,14 @@ class Advman_Upgrade
 		
 		$data['settings']['version'] = ADVMAN_VERSION;
 	}
-	
+	function advman_3_4_3(&$data)
+	{
+		// for some reason our meta boxes were hidden - remove this from database
+		$us = get_users_of_blog();
+		foreach ($us as $u) {
+			delete_usermeta($u->user_id, 'meta-box-hidden_advman');
+		}
+	}
 	function advman_3_4_2(&$data)
 	{
 		global $advman_engine;
