@@ -113,9 +113,11 @@ class OX_Swifty
 			foreach ($networks as $network) {
 				if (call_user_func(array($network, 'import_detect_network'), $tag)) {
 					$ad = $advman_engine->factory($network);
-					$ad->import_settings($tag);
-					$imported = true;
-					break; //leave the foreach loop
+					if ($ad) {
+						$ad->import_settings($tag);
+						$imported = true;
+						break; //leave the foreach loop
+					}
 				}
 			}
 		}
