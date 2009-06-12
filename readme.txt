@@ -3,8 +3,8 @@ Contributors: switzer, mutube
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40switzer%2eorg&item_name=Do%20you%20like%20Advertising%20Manager%20for%20Wordpress%3F%20%20Please%20help%20development%20by%20donating%21&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
 Tags: ad, adbrite, adgridwork, adify, admin, adpinion, adroll, ads, adsense, adserver, advertisement, advertising, affiliate, banner, banners, chitika, cj, commercial, commission, crispads, google, income, junction, link, manager, media, money, openx, plugin, random, referral, revenue, rotator, seo, server, shoppingads, widget, widgetbucks, yahoo, ypn
 Requires at least: 2.5
-Tested up to: 2.7.1
-Stable tag: 3.4.2
+Tested up to: 2.8
+Stable tag: 3.4.3
 
 This plugin will manage and rotate your Google Adsense and other ads on your Wordpress blog.
 
