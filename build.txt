@@ -69,6 +69,7 @@ DEPLOYMENT
 - Add a zipped file to the repository:
     Follow the build process below:
     
+    rm -rf ~/build
     mkdir ~/build
     cd ~/build
     svn export http://svn.wp-plugins.org/advertising-manager/trunk
