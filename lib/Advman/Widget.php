@@ -89,7 +89,7 @@ class Advman_Widget
 		// Save data if it is posted from the widget control
 		if ( $_POST["advman-$id-submit"] ) {
 			$title = strip_tags(stripslashes($_POST["advman-$id-title"]));
-			$widgets[$id]['title'] = $title;
+			$widgets[$id]['title'] = apply_filters('widget_title', $title);
 			$suppress = !empty($_POST["advman-$id-suppress"]);
 			$widgets[$id]['suppress'] = $suppress;
 		}
