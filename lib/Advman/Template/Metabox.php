@@ -43,8 +43,6 @@ class Advman_Template_Metabox
 			<option<?php echo ($adtype == $t ? ' selected="selected"' : ''); ?> value="<?php echo $t; ?>"> <?php echo $formats['types'][$t]; ?></option>
 <?php endforeach; ?>
 		</select>
-	</td>
-	<td>
 		<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('adtype'); ?>">
 	</td>
 </tr>
@@ -69,10 +67,8 @@ class Advman_Template_Metabox
 			</optgroup>
 <?php endforeach; ?>
 		</select>
+		<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('adformat'); ?>">
 	</td>
-<?php if (!$nw) : ?>
-	<td><img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get('adformat', true); ?>"></td>
-<?php endif; ?>
 </tr>
 <?php endforeach; ?>
 <?php if (!empty($formats['sections']['custom'])) : ?>
@@ -116,11 +112,10 @@ class Advman_Template_Metabox
 		$authorValues = $ad->get_property('show-author');
 
 		
-?><div style="text-align:right; width:250px; font-size:small;">
-	<table class="form-table">
-	<tr style="white-space:nowrap">
-		<td><label for="advman-pagetype"><?php _e('By Page Type:'); ?></label></td>
-		<td align="left">
+?>	<table class="form-table">
+	<tr>
+		<td class="advman_label"><label for="advman-pagetype"><?php _e('By Page Type:'); ?></label></td>
+		<td class="advman_field">
 			<select id="advman-pagetype" name="advman-show-pagetype[]" multiple="multiple" size="5">
 				<option value=""></option>
 <?php foreach ($pageTypes as $n => $v) : ?>
@@ -130,8 +125,8 @@ class Advman_Template_Metabox
 		</td>
 	</tr>
 	<tr style="white-space:nowrap">
-		<td><label for="advman-author"><?php _e('By Author:'); ?></label></td>
-		<td align="left">
+		<td class="advman_label"><label for="advman-author"><?php _e('By Author:'); ?></label></td>
+		<td>
 			<select id="advman-author" name="advman-show-author[]" multiple="multiple" size="5">
 <?php foreach ($users as $user) : ?>
 				<option<?php echo ($authorValues == '' || in_array($user->user_id, $authorValues) ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
@@ -140,7 +135,6 @@ class Advman_Template_Metabox
 		</td>
 	</tr>
 	</table>
-</div>
 <br />
 <span style="font-size:x-small;color:gray;"><?php _e('Website display options determine where on your website your ads will appear.', 'advman'); ?></span>
 <?php
@@ -210,7 +204,7 @@ class Advman_Template_Metabox
 <tr>
 	<td>
 	<label for="html_before"><?php _e('HTML Code Before'); ?></label><br />
-	<textarea rows="1" cols="57" name="advman-html-before" id="advman-html-before" onfocus="this.select();"><?php echo $htmlBefore; ?></textarea>
+	<textarea rows="1" cols="57" name="advman-html-before" id="advman-html-before" onfocus="this.select();"><?php echo htmlspecialchars($htmlBefore); ?></textarea>
 <?php if (!$nw): ?>
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-before'); ?>">
 <?php endif; ?>
@@ -220,14 +214,14 @@ class Advman_Template_Metabox
 <tr>
 	<td>
 	<label for="ad_code"><?php _e('Ad Code'); ?></label><br />
-	<textarea rows="6" cols="60" id="advman-code"<?php echo $edit ? ' name="advman-code"' : " style='background:#cccccc'"; ?> onfocus="this.select();" onclick="this.select();"<?php if (!$edit) echo " readonly='readonly'"; ?>><?php echo $ad->display(true); ?></textarea>
+	<textarea rows="6" cols="60" id="advman-code"<?php echo $edit ? ' name="advman-code"' : " style='background:#cccccc'"; ?> onfocus="this.select();" onclick="this.select();"<?php if (!$edit) echo " readonly='readonly'"; ?>><?php echo htmlspecialchars($ad->display(true)); ?></textarea>
 	</td>
 </tr>
 <?php endif; ?>
 <tr>
 	<td>
 	<label for="html_after"><?php _e('HTML Code After'); ?></label><br />
-	<textarea rows="1" cols="57" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo $htmlAfter; ?></textarea>
+	<textarea rows="1" cols="57" name="advman-html-after" id="advman-html-after" onfocus="this.select();"><?php echo htmlspecialchars($htmlAfter); ?></textarea>
 <?php if (!$nw): ?>
 	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('html-after'); ?>">
 <?php endif; ?>
@@ -257,6 +251,7 @@ class Advman_Template_Metabox
 			'password' => __('Password:', 'advman'),
 			'partner' => __('Partner ID:', 'advman'),
 			'slot' => __('Slot ID:', 'advman'),
+			'counter' => __('Max Ads Per Page:', 'advman'),
 			'channel' => __('Channel:', 'advman'),
 			'campaign' => __('Campaign:', 'advman'),
 			'alt-url' => __('Alternate URL:', 'advman'),
@@ -275,8 +270,13 @@ class Advman_Template_Metabox
 <?php if (isset($properties[$key])) : ?>
 <?php $value = $nw ? $ad->get_network_property($key) : $ad->get_property($key); ?>
 <tr>
-	<td><label for="advman-<?php echo $key; ?>"><?php echo $text; ?></label></td>
-	<td><input type="<?php echo ($key == 'password') ? 'password' : 'text'; ?>" name="advman-<?php echo $key; ?>" style="width:200px" id="advman-<?php echo $key; ?>" value="<?php echo $value; ?>" /></td>
+	<td class="advman_label"><label for="advman-<?php echo $key; ?>"><?php echo $text; ?></label></td>
+	<td class="advman_field">
+		<input type="<?php echo ($key == 'password') ? 'password' : 'text'; ?>" name="advman-<?php echo $key; ?>" style="width:200px" id="advman-<?php echo $key; ?>" value="<?php echo $value; ?>" />
+<?php if (!$nw) : ?>
+		<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property($key); ?>">
+<?php endif; ?>
+	</td>
 </tr>
 <?php endif; ?>
 <?php endforeach; ?>
@@ -319,15 +319,15 @@ class Advman_Template_Metabox
 <?php
 	}
 	
-	function display_colors_network($ad)
+	function display_appearance_network($ad)
 	{
-		return Advman_Template_Metabox::display_colors($ad, true);
+		return Advman_Template_Metabox::display_appearance($ad, true);
 	}
-	function display_colors_ad($ad)
+	function display_appearance_ad($ad)
 	{
-		return Advman_Template_Metabox::display_colors($ad, false);
+		return Advman_Template_Metabox::display_appearance($ad, false);
 	}
-	function display_colors($ad, $nw = false)
+	function display_appearance($ad, $nw = false)
 	{
 		$settings = Advman_Tools::organize_appearance($ad);
 ?><table id="advman-settings-colors" width="100%">
@@ -365,7 +365,21 @@ class Advman_Template_Metabox
 			</td>
 		</tr>
 <?php endforeach; ?>
+<?php endif;
+$properties = $ad->get_network_property_defaults();
+$available_props = array(
+	'alt-text' => __('Alternate Text:', 'advman'),
+	'status' => __('Status Text:', 'advman'),
+);
+foreach ($available_props as $key => $text) : ?>
+<?php if (isset($properties[$key])) : ?>
+<?php $value = $nw ? $ad->get_network_property($key) : $ad->get_property($key); ?>
+<tr>
+	<td class="advman_label"><label for="advman-<?php echo $key; ?>"><?php echo $text; ?></label></td>
+	<td><input type="<?php echo ($key == 'password') ? 'password' : 'text'; ?>" name="advman-<?php echo $key; ?>" style="width:200px" id="advman-<?php echo $key; ?>" value="<?php echo $value; ?>" /></td>
+</tr>
 <?php endif; ?>
+<?php endforeach; ?>
 		</table>
 	</td>
 	<td>
@@ -400,12 +414,26 @@ class Advman_Template_Metabox
 <?php 	$color = empty($color) ? 'EEEEEE' : $color; ?>
 		<div id="ad-color-link" style="font: 11px <?php echo $font ?>; padding: 2px; color: #<?php echo htmlspecialchars($color, ENT_QUOTES); ?>;"><?php _e('www.advertiser-url.com', 'advman'); ?><br /></div>
 <?php endif; ?>
+<?php if (!empty($settings['color'])) : ?>
 		<div style="color: #000000; font: 10px verdana, arial, sans-serif; text-align:center"><u><?php printf(__('Ads by %s', 'advman'), $ad->network_name); ?></u></div>
+<?php endif; ?>
 	</td>
 </tr>
 </table>
 <br />
-<span style="font-size:x-small;color:gray;"><?php _e('Choose how you want your ad to appear.  Enter the RGB value of the color in the appropriate box.  The sample ad to the right will show you what your color scheme looks like.', 'advman'); ?></span>
+<?php
+	$msg = __('Choose how you want your ad to appear.', 'advman');
+	if (!empty($settings['color']) || !empty($settings['font'])) {
+		$msg .= ' ' . __('Enter the RGB value of the color, or selet the font in the appropriate box.  The sample ad to the right will show you what your selections look like.', 'advman');
+	}
+	if (isset($properties['alt-text'])) {
+		$msg .= ' ' . __('Alternate text will display as an image tooltip.', 'advman');
+	}
+	if (isset($properties['status'])) {
+		$msg .= ' ' . __('Status text will display in the status bar of some browsers (not all browsers support this).', 'advman');
+	}
+?>
+<span style="font-size:x-small;color:gray;"><?php echo $msg; ?></span>
 <?php
 	}
 	function display_shortcuts_ad($ad)
