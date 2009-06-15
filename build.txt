@@ -63,8 +63,8 @@ CHECK IN ALL FILES
 DEPLOYMENT
 - Tag the version in wordpress
     cd ~/code/advertising-manager
-    svn cp trunk tags/3.4.5
-    svn ci -m "tagging version 3.4.5"
+    svn cp trunk tags/3.4.6
+    svn ci -m "tagging version 3.4.6"
 
 - Add a zipped file to the repository:
     Follow the build process below:
@@ -74,7 +74,7 @@ DEPLOYMENT
     cd ~/build
     svn export http://svn.wp-plugins.org/advertising-manager/trunk
     mv trunk advertising-manager
-    zip -r advertising-manager-3.4.5.zip advertising-manager/
+    zip -r advertising-manager-3.4.6.zip advertising-manager/
     
     http://code.openx.org/projects/list_files/advertising-manager
 
