@@ -52,6 +52,8 @@ class OX_Plugin_Crispads extends OX_Ad
 		if (preg_match("/n=(\w*)/", $code, $matches)!=0) {
 			$this->set_property('identifier', $matches[1]);
 			$code = str_replace("n={$matches[1]}", "n={{identifier}}", $code);
+			$code = str_replace("id=\"{$matches[1]}\"", "id=\"{{identifier}}\"", $code);
+			$code = str_replace("name=\"{$matches[1]}\"", "name=\"{{identifier}}\"", $code);
 		}
 		
 		//Only available on IFRAME ads

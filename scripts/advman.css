@@ -3,6 +3,9 @@ th {border-bottom:2px solid #000;font-size:smaller;}
 #manage-ads {}
 #manage-ads td {padding: 2px 5px; vertical-align:middle;}
 
+.advman_label {width:100px;}
+.advman_field {white-space:nowrap;}
+
 .network_blanking {height:20px;}
 .network_header td {border-top:1px solid #000;font-weight:bold;background-color:#ddd;}
 .network_admin * {font-weight:normal; text-align:center;}

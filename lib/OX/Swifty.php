@@ -129,6 +129,10 @@ class OX_Swifty
 		}
 		
 		$ad = $this->insertAd($ad);
+		// Add the ad network defaults if they are not set yet
+		if (empty($ad->np)) {
+			$this->setAdNetwork($ad);
+		}
 		
 		return $ad;
 	}
