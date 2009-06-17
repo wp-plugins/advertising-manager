@@ -6,7 +6,7 @@ Requires at least: 2.5
 Tested up to: 2.8
 Stable tag: 3.4.7
 
-This plugin will manage and rotate your Google Adsense and other ads on your Wordpress blog.
+Easily place Google Adsense and other ads on your Wordpress blog.  Simple to use, with powerful management and optimisation features.
 
 == Description ==
 
