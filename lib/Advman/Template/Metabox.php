@@ -59,7 +59,7 @@ class Advman_Template_Metabox
 			</optgroup>
 <?php endif; ?>
 <?php foreach ($sectionFormats as $section => $sformats) : ?>
-			<optgroup id="advman-optgroup-<?php echo $section ?>" label="<? echo $formats['sections'][$section]; ?>">
+			<optgroup id="advman-optgroup-<?php echo $section ?>" label="<?php echo $formats['sections'][$section]; ?>">
 <?php foreach ($sformats as $sformat) : ?>
 <?php list($w, $h, $l) = OX_Tools::explode_format($sformat); ?>
 				<option<?php echo ($adformat == $sformat ? ' selected="selected"' : ''); ?> value="<?php echo $sformat; ?>"> <?php printf($formats['formats'][$sformat], $w, $h, $l); ?></option>
