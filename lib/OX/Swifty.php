@@ -29,10 +29,7 @@ class OX_Swifty
 	
 	function addAction($key, $value)
 	{
-		$actions = $this->actions[$key];
-		if (empty($actions)) {
-			$actions = array();
-		}
+		$actions = !empty($this->actions[$key]) ? $this->actions[$key] : array();
 		$actions[] = $value;
 		
 		$this->actions[$key] = $actions;
