@@ -29,10 +29,7 @@ class OX_Swifty
 	
 	function addAction($key, $value)
 	{
-		$actions = $this->actions[$key];
-		if (empty($actions)) {
-			$actions = array();
-		}
+		$actions = !empty($this->actions[$key]) ? $this->actions[$key] : array();
 		$actions[] = $value;
 		
 		$this->actions[$key] = $actions;
@@ -129,6 +126,10 @@ class OX_Swifty
 		}
 		
 		$ad = $this->insertAd($ad);
+		// Add the ad network defaults if they are not set yet
+		if (empty($ad->np)) {
+			$this->setAdNetwork($ad);
+		}
 		
 		return $ad;
 	}

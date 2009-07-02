@@ -34,7 +34,10 @@ class OX_Plugin_Openx extends OX_Ad
 	
 	function import_detect_network($code)
 	{
-		return (strpos($code, 'd1.openx.org') !== false);
+		return (
+			(strpos($code, 'd1.openx.org') !== false) ||
+			(strpos($code, 'MAX_used') !== false)
+		);
 	}
 		
 	function import_settings($code)

@@ -65,14 +65,26 @@ class Advman_Admin
 	{
 		global $advman_engine;
 		
+		// Whether we changed any setting in this entity
+		$changed = false;
+		
 		// Set the ad properties (if not setting default properties)
 		if (!$default) {
 			if (isset($_POST['advman-name'])) {
-				$ad->name = OX_Tools::sanitize($_POST['advman-name']);
+				$value = OX_Tools::sanitize($_POST['advman-name']);
+				if ($value != $ad->name) {
+					Advman_Admin::check_default($ad, $value);
+					$ad->name = $value;
+					$changed = true;
+				}
 			}
 			
 			if (isset($_POST['advman-active'])) {
-				$ad->active = ($_POST['advman-active'] == 'yes');
+				$value = $_POST['advman-active'] == 'yes';
+				if ($ad->active != $value) {
+					$ad->active = $value;
+					$changed = true;
+				}
 			}
 		}
 		
@@ -82,27 +94,59 @@ class Advman_Admin
 				if (isset($_POST["advman-{$property}"])) {
 					$value = OX_Tools::sanitize($_POST["advman-{$property}"]);
 					if ($default) {
-						$ad->set_network_property($property, $value);
+						if ($ad->get_network_property($property) != $value) {
+							$ad->set_network_property($property, $value);
+							$changed = true;
+						}
 					} else {
-						$ad->set_property($property, $value);
+						if ($ad->get_property($property) != $value) {
+							$ad->set_property($property, $value);
+							$changed = true;
+						}
 					}
-					
 					// deal with adtype
 					if ($property == 'adtype') {
 						if (isset($_POST["advman-adformat-{$value}"])) {
 							$v = OX_Tools::sanitize($_POST["advman-adformat-{$value}"]);
 							if ($default) {
-								$ad->set_network_property('adformat', $v);
+								if ($ad->get_network_property('adformat') != $v) {
+									$ad->set_network_property('adformat', $v);
+									$changed = true;
+								}
 							} else {
-								$ad->set_property('adformat', $v);
+								if ($ad->get_property('adformat') != $v) {
+									$ad->set_property('adformat', $v);
+									$changed = true;
+								}
 							}
 						}
 					}
 				}
 			}
 		}
+		
+		return $changed;
 	}
 	
+	function check_default($ad, $value)
+	{
+		global $advman_engine;
+		
+		$d = $advman_engine->getSetting('default-ad');
+		if (!empty($d) && $ad->name == $d) {
+			$modify = true;
+			$ads = $advman_engine->getAds();
+			foreach ($ads as $a) {
+				if ($a->id != $ad->id && $a->name == $d) {
+					$modify = false;
+					break;
+				}
+			}
+			if ($modify) {
+				$advman_engine->setSetting('default-ad', $value);
+			}
+		}
+	}
 	
 	/**
 	 * Process input from the Admin UI.  Called staticly from the Wordpress form screen.
@@ -165,7 +209,8 @@ class Advman_Admin
 				break;
 			
 			case 'default' :
-				$advman_engine->setSetting('default-ad', $ad->name);
+				$default = ($advman_engine->getSetting('default-ad') != $ad->name ? $ad->name : '');
+				$advman_engine->setSetting('default-ad', $default);
 				break;
 			
 			case 'delete' :
@@ -218,13 +263,15 @@ class Advman_Admin
 			case 'apply' :
 			case 'save' :
 				if ($mode == 'edit_ad') {
-					Advman_Admin::save_properties($ad);
-					$advman_engine->setAd($ad);
+					if (Advman_Admin::save_properties($ad)) {
+						$advman_engine->setAd($ad);
+					}
 				} elseif ($mode == 'edit_network') {
 					$ad = $advman_engine->factory($target);
 					if ($ad) {
-						Advman_Admin::save_properties($ad, true);
-						$advman_engine->setAdNetwork($ad);
+						if (Advman_Admin::save_properties($ad, true)) {
+							$advman_engine->setAdNetwork($ad);
+						}
 					}
 				} elseif ($mode == 'settings') {
 					Advman_Admin::save_settings();

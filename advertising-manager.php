@@ -4,7 +4,7 @@ Plugin Name: Advertising Manager
 PLugin URI: http://code.openx.org/projects/show/advertising-manager
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer, Martin Fitzpatrick
-Version: 3.4.4
+Version: 3.4.8
 Author URI: http://www.switzer.org
 */
 
@@ -18,14 +18,15 @@ add_action('plugins_loaded', 'advman_run', 1);
 
 function advman_init()
 {
-	@define('ADVMAN_VERSION', '3.4.4');
+	global $wp_version;
+
+	@define('ADVMAN_VERSION', '3.4.8');
 	@define('ADVMAN_PATH', dirname(__FILE__));
 	@define('ADVMAN_LIB', ADVMAN_PATH . '/lib/Advman');
 	@define('OX_LIB', ADVMAN_PATH . '/lib/OX');
 	@define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
 
 	// Get the template path
-	global $wp_version;
 	$version = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP2.6' : 'WP2.7';
 	@define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . "/lib/Advman/Template/{$version}");
 
@@ -36,7 +37,6 @@ function advman_init()
 	require_once(OX_LIB . '/Tools.php');
 	require_once(OX_LIB . '/Swifty.php');
 	require_once(ADVMAN_LIB . '/Dal.php');
-	require_once(ADVMAN_LIB . '/Widget.php');
 
 	// Define PHP_INT_MAX for versions of PHP < 4.4.0
 	if (!defined('PHP_INT_MAX')) {
@@ -49,6 +49,15 @@ function advman_init()
 	// Next, load admin if needed
 	if (is_admin()) {
 		require_once(ADVMAN_LIB . '/Admin.php');
+	}
+	
+	// Add widgets
+	if (version_compare($wp_version,"2.8-alpha", "<")) {
+		include_once(ADVMAN_LIB . '/Widget_Old.php');
+		add_action('widgets_init',  array('Advman_Widget', 'init'), 1);
+	} else {
+		include_once(ADVMAN_LIB . '/Widget.php');
+		add_action('widgets_init', create_function('', 'return register_widget("Advman_Widget");'));
 	}
 }
 
@@ -78,8 +87,6 @@ function advman_run()
 
 	// Add a filter for displaying an ad in the content
 	add_filter('the_content', 'advman_filter_content');
-	// Widgets are initialised
-	add_action('widgets_init',  array('Advman_Widget', 'init'), 1);
 	// Add an action when the wordpress footer displays
 	add_action('wp_footer', 'advman_footer');
 	// If admin, initialise the Admin functionality	
