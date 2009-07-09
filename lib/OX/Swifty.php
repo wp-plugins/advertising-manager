@@ -94,6 +94,45 @@ class OX_Swifty
 		return false;
 	}
 	
+	function insertZone(&$zone)
+	{
+		$zone->add_revision();
+		return $this->dal->insert_zone($zone);
+	}
+	
+	function deleteZone($id)
+	{
+		return $this->dal->delete_zone($id);
+	}
+	
+	function getZones()
+	{
+		return $this->dal->select_zones();
+	}
+	
+	function getZone($id)
+	{
+		return $this->dal->select_zone($id);
+	}
+	
+	function setZone(&$zone)
+	{
+		$zone->add_revision();
+		return $this->dal->update_zone($zone);
+	}
+	
+	function copyZone($id)
+	{
+		$zone = $this->dal->select_zone($id);
+		if ($zone) {
+			$zone = version_compare(phpversion(), '5.0') < 0 ? $zone : clone($zone); // Hack to deal with PHP 4/5 incompatiblity with cloning
+			$zone->add_revision();
+			return $this->dal->insert_zone($zone);
+		}
+		
+		return false;
+	}
+	
 	function setAdNetwork(&$ad)
 	{
 		$ad->add_revision(true);
