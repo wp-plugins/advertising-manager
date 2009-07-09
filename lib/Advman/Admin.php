@@ -394,9 +394,9 @@ class Advman_Admin
 				wp_enqueue_script('postbox');
 //				wp_enqueue_script('jquery');
 				wp_enqueue_script('jquery-multiselect', ADVMAN_URL . '/scripts/jquery.multiSelect.js', array('jquery'));
-				wp_enqueue_script('advman', ADVMAN_URL . '/scripts/advman.js');
+				wp_enqueue_script('advman', ADVMAN_URL . '/scripts/advman.admin.js');
 				echo "
-<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.css' />
+<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.admin.css' />
 <link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/jquery.multiSelect.css' />";
 			}
 		}
