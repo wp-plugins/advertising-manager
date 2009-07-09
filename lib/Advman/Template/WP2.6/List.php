@@ -1,7 +1,7 @@
 <?php
 class Advman_Template_List
 {
-	function display($target = null, $filter = null)
+	function display($target = null)
 	{
 		// Get our options and see if we're handling a form submission.
 		global $advman_engine;

@@ -9,7 +9,7 @@ class Advman_Upgrade
 	{
 		$version = Advman_Upgrade::_get_version($data);
 		Advman_Upgrade::_backup($data, $version);
-		$versions = array('3.4', '3.4.2', '3.4.3');
+		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7');
 		foreach ($versions as $v) {
 			if (version_compare($version, $v, '<')) {
 				call_user_func(array('Advman_Upgrade', 'advman_' . str_replace('.','_',$v)), &$data);  //wrap var in array to pass by reference
@@ -17,6 +17,22 @@ class Advman_Upgrade
 		}
 		
 		$data['settings']['version'] = ADVMAN_VERSION;
+	}
+	function advman_3_4_7(&$data)
+	{
+		// Account ID for adsense did not get saved correctly.  See if we can grab it and save it correctly
+		if (isset($data['networks']['ox_plugin_adsense']['account-id'])) {
+			$accountId = $data['networks']['ox_plugin_adsense']['account-id'];
+			if (is_numeric($accountId)) {
+				$accountId = 'pub-' . $accountId;
+				$data['networks']['ox_plugin_adsense']['account-id'] = $accountId;
+			}
+			foreach ($data['ads'] as $id => $ad) {
+				if ($ad['class'] = 'ox_plugin_adsense' && empty($ad['account-id'])) {
+					$data['ads'][$id]['account-id'] = $accountId;
+				}
+			}
+		}
 	}
 	function advman_3_4_3(&$data)
 	{
@@ -227,6 +243,10 @@ class Advman_Upgrade
 		if (isset($data['account-ids'])) {
 			foreach ($data['account-ids'] as $c => $accountId) {
 				$newclass = in_array(strtolower($c), $adnets) ? $c : $adnets[strtolower($c)];
+				// Fix account ID for adsense
+				if (strtolower($newclass) == 'ox_plugin_adsense' && is_numeric($accountId)) {
+					$accountId = 'pub-' . $accountId;
+				}
 				$data['networks'][$newclass]['account-id'] = $accountId;
 				foreach ($data['ads'] as $id => $ad) {
 					if ((strtolower($ad['class']) == strtolower($newclass)) && empty($ad['account-id'])) {
@@ -484,7 +504,7 @@ class Advman_Upgrade
 	function _get_code_adsense($ad)
 	{
 		$code = '<script type="text/javascript"><!--' . "\n";
-		$code.= 'google_ad_client = "' . $accountId . '";' . "\n";
+		$code.= 'google_ad_client = "' . $ad['account-id'] . '";' . "\n";
 		$code.= 'google_ad_slot = "' . str_pad($ad['slot'],10,'0',STR_PAD_LEFT) . '"' . ";\n"; //String padding to max 10 char slot ID
 		
 		if($ad['adtype']=='ref_text'){

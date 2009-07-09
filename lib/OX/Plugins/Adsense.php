@@ -91,6 +91,7 @@ class OX_Plugin_Adsense extends OX_Ad
 		}
 		if (($width != '') && ($height != '')) {
 			$this->set_property('adformat', $width . 'x' . $height);
+			$this->set_property('adtype', 'all');
 		}
 		
 		parent::import_settings($code);

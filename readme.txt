@@ -4,11 +4,13 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40
 Tags: ad, adbrite, adgridwork, adify, admin, adpinion, adroll, ads, adsense, adserver, advertisement, advertising, affiliate, banner, banners, chitika, cj, commercial, commission, crispads, google, income, junction, link, manager, media, money, openx, plugin, random, referral, revenue, rotator, seo, server, shoppingads, widget, widgetbucks, yahoo, ypn
 Requires at least: 2.5
 Tested up to: 2.8
-Stable tag: 3.4.4
+Stable tag: 3.4.8
 
-This plugin will manage and rotate your Google Adsense and other ads on your Wordpress blog.
+Easily place Google Adsense and other ads on your Wordpress blog.  Simple to use, with powerful management and optimisation features.
 
 == Description ==
+
+The most popular advertising plug-in for Wordpress!
 
 This plugin will manage and rotate your Google Adsense and other ads on your Wordpress blog.  It automatically recognises many ad networks including [Google Adsense](http://www.google.com/adsense), [AdBrite](http://www.adbrite.com/mb/landing_both.php?spid=51549&afb=120x60-1-blue), [Adify](http://www.adify.com), [AdGridWork](http://www.adgridwork.com/?r=18501), [Adpinion](http://www.adpinion.com/), [Adroll](http://re.adroll.com/a/D44UNLTJPNH5ZDXTTXII7V/7L73RCFU5VCG7FRNNIGH7O/d6ca1e265e654df2010a2153d5c42ed4.re), [Chitika](http://chitika.com/publishers.php?refid=switzer), [Commission Junction](http://www.cj.com/), [CrispAds](http://www.crispads.com/), [OpenX](http://www.openx.org/), [ShoppingAds](http://www.shoppingads.com/refer_1ebff04bf5805f6da1b4), [Yahoo!PN](http://ypn.yahoo.com/), and [WidgetBucks](http://www.widgetbucks.com/home.page?referrer=468034).  Unsupported ad networks can be used as well.
 
@@ -29,7 +31,7 @@ Related Links:
 
 1. Unzip the package and upload the advertising-manager directory into your wp-content/plugins directory
 1. Activate the plugin at the plugin administration page
-1. Add your ad networks by clicking 'Create new' under the 'Ads' menu.  Manage your ad networks by clicking 'Edit' under the 'Ads' menu.
+1. Add your ad networks by clicking 'Create new' under the 'Advertising' menu.  Manage your ad networks by clicking 'Edit' under the 'Advertising' menu.
 1. Place ads in your template by adding '<?php advman_ad(name) ?>' to your template in the place you want to see an ad (where 'name' is the name of your ad).
 1. Place ads in your blog posts and pages by adding '[ad#name]' to your blog post (where 'name' is the name of your ad)
 
@@ -112,6 +114,10 @@ By popular demand, below are the changes for versions listed. Use this to determ
 
 As a general rule the version X.Y.Z increments Z with bugfixes, Y with additional features, and X with major overhaul.
 
+* **3.4.8** Fixed minor Google Adsense 'type' issue, minor notice, and fixed defaulting
+* **3.4.7** Fixed adsense account id importing issue, short tag issue, and openx importing issue
+* **3.4.6** Fixed and expanded widget functionality for WP2.8 users
+* **3.4.5** Fixed many small bugs, formatting changes, and missing fields from some ad networks
 * **3.4.4** Fixed an issue where scripts were being delivered to all admin screens
 * **3.4.3** Fixed display bug with WP 2.8
 * **3.4.2** Added multiple select for author field, changed the page type field (show *), fixed error in factory method

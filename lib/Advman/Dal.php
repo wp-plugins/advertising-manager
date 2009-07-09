@@ -32,8 +32,10 @@ class Advman_Dal extends OX_Dal
 		if (empty($data)) {
 			$data['ads'] = array();
 			$data['networks'] = array();
+			$data['zones'] = array();
 			$data['settings'] = array();
 			$data['settings']['next_ad_id'] = 1;
+			$data['settings']['next_zone_id'] = 1;
 			$data['settings']['default-ad'] = '';
 			$data['settings']['version'] = ADVMAN_VERSION;
 			$data['settings']['openx-sync'] = true;
@@ -189,6 +191,41 @@ class Advman_Dal extends OX_Dal
 	{
 		$this->data['networks'][strtolower(get_class($ad))] = $ad->np;
 		$this->_update_data();
+	}
+	
+	function insert_zone($zone)
+	{
+		$id = $this->data['settings']['next_zone_id'];
+		$this->data['settings']['next_zone_id'] = $id+1;
+		$zone->id = $id;
+		$this->data['zones'][$id] = $zone;
+		OX_Tools::sort($this->data['zones']);
+		$this->_update_data();
+		return $zone;
+	}
+	
+	function delete_zone($id)
+	{
+		unset($this->data['zones'][$id]);
+		$this->_update_data();
+	}
+	
+	function select_zone($id)
+	{
+		return $this->data['zones'][$id];
+	}
+	
+	function select_zones()
+	{
+		return $this->data['zones'];
+	}
+	
+	function update_zone($zone)
+	{
+		$id = $zone->id;
+		$this->data['zones'][$id] = $zone;
+		$this->_update_data();
+		return $id;
 	}
 }
 ?>

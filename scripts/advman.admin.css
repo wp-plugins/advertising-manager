@@ -3,6 +3,9 @@ th {border-bottom:2px solid #000;font-size:smaller;}
 #manage-ads {}
 #manage-ads td {padding: 2px 5px; vertical-align:middle;}
 
+.advman_label {width:100px;}
+.advman_field {white-space:nowrap;}
+
 .network_blanking {height:20px;}
 .network_header td {border-top:1px solid #000;font-weight:bold;background-color:#ddd;}
 .network_admin * {font-weight:normal; text-align:center;}
@@ -32,3 +35,101 @@ th {border-bottom:2px solid #000;font-size:smaller;}
 .ox_plugin_ypn {padding-left:25px;background:url(http://www.yahoo.com/favicon.ico) left no-repeat;}
 
 .default_note {padding-left:20px;background:url(../images/default.png) left no-repeat;width:16px;height:16px;}
+
+/* favorite-actions */
+#advman-list-actions {
+	float: left;
+	margin: 11px 12px 0;
+	min-width: 130px;
+	position: relative;
+	padding-left: 12px;
+	padding-bottom: 11px;
+}
+
+#advman-list-first {
+	-moz-border-radius: 12px;
+	-khtml-border-radius: 12px;
+	-webkit-border-radius: 12px;
+	border-radius: 12px;
+	line-height: 15px;
+	padding: 3px 30px 4px 12px;
+	border-width: 1px;
+	border-style: solid;
+}
+
+#advman-list-inside {
+	margin: 0 0 0 0px;
+	padding: 0 1px 6px 1px;
+	border-width: 1px;
+	border-style: solid;
+	position: absolute;
+	z-index: 11;
+	display: none;
+	-moz-border-radius: 0 0 12px 12px;
+	-webkit-border-bottom-right-radius: 12px;
+	-webkit-border-bottom-left-radius: 12px;
+	-khtml-border-bottom-right-radius: 12px;
+	-khtml-border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	border-bottom-left-radius: 12px;
+}
+
+#advman-list-actions a {
+	display: block;
+	text-decoration: none;
+	font-size: 11px;
+}
+
+#advman-list-inside a {
+	padding: 3px 5px 3px 10px;
+}
+
+#advman-list-toggle {
+	height: 22px;
+	position: absolute;
+	right: 0;
+	top: 1px;
+	width: 28px;
+}
+
+#advman-list-actions .slide-down {
+	-moz-border-radius: 12px 12px 0 0;
+	-webkit-border-bottom-right-radius: 0;
+	-webkit-border-bottom-left-radius: 0;
+	-khtml-border-bottom-right-radius: 0;
+	-khtml-border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+#advman-list-first {
+	background: #F9F9F9;
+	border-color: #CCCCCC !important;
+}
+
+#advman-list-inside {
+	border-color: transparent #CCCCCC #CCCCCC #CCCCCC;
+	background-color: #F9F9F9;
+}
+
+#advman-list-toggle {
+	background: transparent url(../images/fav-arrow.gif) no-repeat 0 -4px;
+}
+
+#advman-list-actions a {
+	color: #666666;
+}
+
+#advman-list-actions a:hover {
+	color: #333333;
+}
+
+#advman-list-inside a:hover {
+	text-decoration: underline;
+}
+
+#advman-list-actions .slide-down {
+	border-bottom-color: #CCCCCC;
+}
