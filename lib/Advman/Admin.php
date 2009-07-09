@@ -12,17 +12,15 @@ class Advman_Admin
 		
 		
 		if (version_compare($wp_version,"2.7-alpha", '>')) {
-			add_object_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
+			add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
 			add_submenu_page('advman-manage', __('Edit Ads', 'advman'), __('Edit', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
 			add_submenu_page('advman-manage', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-create', array('Advman_Admin','create'));
-			add_submenu_page('advman-manage', __('Statistics', 'advman'), __('Statistics', 'advman'), 8, 'advman-stats', array('Advman_Admin','stats'));
-			add_options_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
+			add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 		} else {
-			add_menu_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
+			add_menu_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
 			add_submenu_page('advman-manage', __('Edit Ads', 'advman'), __('Edit', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
 			add_submenu_page('advman-manage', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-create', array('Advman_Admin','create'));
-			add_submenu_page('advman-manage', __('Statistics', 'advman'), __('Statistics', 'advman'), 8, 'advman-stats', array('Advman_Admin','stats'));
-			add_options_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
+			add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 		}
 		
 		add_action('admin_print_scripts', array('Advman_Admin', 'add_scripts'));
@@ -359,20 +357,11 @@ class Advman_Admin
 	}
 	
 	/**
-	 * This function is called from the Wordpress Advertising menu
+	 * This function is called from the Wordpress Ads menu
 	 */
 	function create()
 	{
 		$template = Advman_Tools::get_template('Create');
-		$template->display();
-	}
-	
-	/**
-	 * This function is called from the Wordpress Advertising menu
-	 */
-	function stats()
-	{
-		$template = Advman_Tools::get_template('Stats');
 		$template->display();
 	}
 	
@@ -405,9 +394,9 @@ class Advman_Admin
 				wp_enqueue_script('postbox');
 //				wp_enqueue_script('jquery');
 				wp_enqueue_script('jquery-multiselect', ADVMAN_URL . '/scripts/jquery.multiSelect.js', array('jquery'));
-				wp_enqueue_script('advman-admin', ADVMAN_URL . '/scripts/advman.admin.js');
+				wp_enqueue_script('advman', ADVMAN_URL . '/scripts/advman.js');
 				echo "
-<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.admin.css' />
+<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.css' />
 <link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/jquery.multiSelect.css' />";
 			}
 		}
