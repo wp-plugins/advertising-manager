@@ -390,11 +390,12 @@ class Advman_Admin
 		if (is_admin()) {
 			$page = !empty($_GET['page']) ? $_GET['page'] : '';
 			if ($page == 'advman-manage') {
-				wp_enqueue_script('prototype');
+//				wp_enqueue_script('prototype');
 				wp_enqueue_script('postbox');
-//				wp_enqueue_script('jquery');
+//				wp_enqueue_script('link');
 				wp_enqueue_script('jquery-multiselect', ADVMAN_URL . '/scripts/jquery.multiSelect.js', array('jquery'));
 				wp_enqueue_script('advman', ADVMAN_URL . '/scripts/advman.admin.js');
+				wp_enqueue_script('advman-link', ADVMAN_URL . '/scripts/link.dev.js', array('jquery','wp-lists','wp-ajax-response'));
 				echo "
 <link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.admin.css' />
 <link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/jquery.multiSelect.css' />";

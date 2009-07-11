@@ -3,6 +3,60 @@ require_once(ADVMAN_LIB . '/Tools.php');
 
 class Advman_Template_Metabox
 {
+
+	function display_zones_network($ad)
+	{
+		return Advman_Template_Metabox::display_zones($ad, true);
+	}
+	
+	function display_zones_ad($ad)
+	{
+		return Advman_Template_Metabox::display_zones($ad, false);
+	}
+	
+
+
+function link_categories_meta_box($link) { ?>
+<ul id="category-tabs">
+	<li class="tabs"><a href="#categories-all"><?php _e( 'All Categories' ); ?></a></li>
+	<li class="hide-if-no-js"><a href="#categories-pop"><?php _e( 'Most Used' ); ?></a></li>
+</ul>
+
+<div id="categories-all" class="tabs-panel">
+	<ul id="categorychecklist" class="list:category categorychecklist form-no-clear">
+		<?php
+		if ( isset($link->link_id) )
+			wp_link_category_checklist($link->link_id);
+		else
+			wp_link_category_checklist();
+		?>
+	</ul>
+</div>
+
+<div id="categories-pop" class="tabs-panel" style="display: none;">
+	<ul id="categorychecklist-pop" class="categorychecklist form-no-clear">
+		<?php wp_popular_terms_checklist('link_category'); ?>
+	</ul>
+</div>
+
+<div id="category-adder" class="">
+	<h4><a id="category-add-toggle" href="#category-add"><?php _e( '+ Add New Category' ); ?></a></h4>
+	<p id="link-category-add" class="wp-hidden-child">
+		<label class="screen-reader-text" for="newcat"><?php _e( '+ Add New Category' ); ?></label>
+		<input type="text" name="newcat" id="newcat" class="form-required form-input-tip" value="<?php esc_attr_e( 'New category name' ); ?>" aria-required="true" />
+		<input type="button" id="category-add-submit" class="add:categorychecklist:linkcategorydiv button" value="<?php esc_attr_e( 'Add' ); ?>" />
+		<?php wp_nonce_field( 'add-link-category', '_ajax_nonce', false ); ?>
+		<span id="category-ajax-response"></span>
+	</p>
+</div>
+<?php
+}
+
+
+
+
+
+
 	function display_format_network($ad)
 	{
 		return Advman_Template_Metabox::display_format($ad, true);

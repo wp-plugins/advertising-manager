@@ -35,3 +35,66 @@ th {border-bottom:2px solid #000;font-size:smaller;}
 .ox_plugin_ypn {padding-left:25px;background:url(http://www.yahoo.com/favicon.ico) left no-repeat;}
 
 .default_note {padding-left:20px;background:url(../images/default.png) left no-repeat;width:16px;height:16px;}
+
+
+
+
+
+
+#category-adder {
+	padding: 4px 0;
+}
+
+#category-adder h4 {
+	margin: 0 0 8px;
+}
+
+#category-add input {
+	width: 94%;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	margin: 1px;
+	padding: 3px;
+}
+
+#category-add select {
+	width: 70%;
+	-x-system-font: none;
+	border-style: solid;
+	border-width: 1px;
+	font-family: "Lucida Grande", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+	font-size: 12px;
+	height: 2em;
+	line-height: 20px;
+	padding: 2px;
+	margin: 1px;
+	vertical-align: top;
+}
+
+#category-add input,
+#category-add-sumbit {
+	width: auto;
+}
+
+/* Categories */
+#categorydiv ul,
+#linkcategorydiv ul {
+		list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+#categorydiv ul.categorychecklist ul {
+	margin-left: 18px;
+}
+
+#categorydiv div.tabs-panel {
+	height: 140px;
+	overflow: auto;
+}
+
+ul.categorychecklist li {
+	margin: 0;
+	padding: 0;
+	line-height: 19px;
+}
