@@ -39,7 +39,7 @@ function link_categories_meta_box($link) { ?>
 	</ul>
 </div>
 
-<div id="category-adder" class="">
+<div id="category-adder" class="wp-hidden-children">
 	<h4><a id="category-add-toggle" href="#category-add"><?php _e( '+ Add New Category' ); ?></a></h4>
 	<p id="link-category-add" class="wp-hidden-child">
 		<label class="screen-reader-text" for="newcat"><?php _e( '+ Add New Category' ); ?></label>
