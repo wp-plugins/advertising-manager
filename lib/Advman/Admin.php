@@ -43,6 +43,45 @@ class Advman_Admin
 		}
 	}
 	
+	function add_zone_ajax()
+	{
+		global $advman_engine;
+		
+		check_ajax_referer( 'advman-add-zone' );
+		$x = new WP_Ajax_Response();
+		$new_zone = trim(OX_Tools::sanitize($_POST['advman-zone-name']));
+		$found = false;
+		$zones = $advman_engine->getZones();
+		if (!empty($zones)) {
+			foreach ( $zones as $zone ) {
+				if ($new_zone == $zone->name) {
+					$found = true;
+					break;
+				}
+			}
+		}
+		
+		if (!$found) {
+			
+			$zone = new OX_Zone();
+			$zone->name = $new_zone;
+			// If the name contains the size, automatically set the size (e.g. 'MyZone 768x60')
+			if (preg_match('#(\d*)\s*x\s*(\d*)#', $new_zone, $matches)) {
+				$zone->set_property('adformat', $matches[1] . 'x' . $matches[2]);
+			}
+			$zone = $advman_engine->insertZone($zone);
+			$id = $zone->id;
+			
+			$new_zone = esc_html(stripslashes($new_zone));
+			$x->add( array(
+				'what' => 'advman-zone',
+				'id' => $id,
+				'data' => "<li id='advman-zone-{$id}'><label for='in-advman-zone-{$id}' class='selectit'><input value='{$id}' type='checkbox' name='link_category[]' id='in-advman-zone-{$id}' checked='checked' /> {$new_zone}</label></li>",
+				'position' => -1
+			) );
+		}
+		$x->send();
+	}
 	function set_auto_optimise($active)
 	{
 		global $advman_engine;

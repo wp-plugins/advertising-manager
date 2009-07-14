@@ -195,8 +195,8 @@ class Advman_Dal extends OX_Dal
 	
 	function insert_zone($zone)
 	{
-		$id = $this->data['settings']['next_zone_id'];
-		$this->data['settings']['next_zone_id'] = $id+1;
+		$id = empty($this->data['settings']['next_zone_id']) ? 1 : $this->data['settings']['next_zone_id'];
+		$this->data['settings']['next_zone_id'] = $id + 1;
 		$zone->id = $id;
 		$this->data['zones'][$id] = $zone;
 		OX_Tools::sort($this->data['zones']);

@@ -2,6 +2,7 @@
 require_once(OX_LIB . '/Ad.php');
 require_once(OX_LIB . '/Dal.php');
 require_once(OX_LIB . '/Html.php');
+require_once(OX_LIB . '/Zone.php');
 
 class OX_Swifty
 {

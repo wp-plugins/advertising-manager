@@ -92,6 +92,7 @@ function advman_run()
 	// If admin, initialise the Admin functionality	
 	if (is_admin()) {
 		add_action('admin_menu', array('Advman_Admin','init'));
+		add_action('wp_ajax_add-advman-zone', array('Advman_Admin', 'add_zone_ajax'));
 	}
 }
 

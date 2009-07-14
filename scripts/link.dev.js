@@ -1,6 +1,6 @@
 jQuery(document).ready( function($) {
 
-	var newCat, noSyncChecks = false, syncChecks, catAddAfter;
+	var newZone, noSyncChecks = false, syncChecks, catAddAfter;
 
 	$('#link_name').focus();
 	// postboxes
@@ -21,9 +21,9 @@ jQuery(document).ready( function($) {
 	if ( getUserSetting('cats') )
 		$('#category-tabs a[href="#categories-pop"]').click();
 
-	// Ajax Cat
-	newCat = $('#newcat').one( 'focus', function() { $(this).val( '' ).removeClass( 'form-input-tip' ) } );
-	$('#category-add-submit').click( function() { newCat.focus(); } );
+	// Ajax Zone
+	newZone = $('#advman-zone-name').one( 'focus', function() { $(this).val( '' ).removeClass( 'form-input-tip' ) } );
+	$('#category-add-submit').click( function() { newZone.focus(); } );
 	syncChecks = function() {
 		if ( noSyncChecks )
 			return;
@@ -46,8 +46,8 @@ jQuery(document).ready( function($) {
 
 	$('#categorychecklist').wpList( {
 		alt: '',
-		what: 'link-category',
-		response: 'category-ajax-response',
+		what: 'advman-zone',
+		response: 'advman-zone-ajax-response',
 		addAfter: catAddAfter
 	} );
 

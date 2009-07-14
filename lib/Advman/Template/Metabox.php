@@ -14,48 +14,61 @@ class Advman_Template_Metabox
 		return Advman_Template_Metabox::display_zones($ad, false);
 	}
 	
-
-
-function link_categories_meta_box($link) { ?>
-<ul id="category-tabs">
-	<li class="tabs"><a href="#categories-all"><?php _e( 'All Categories' ); ?></a></li>
-	<li class="hide-if-no-js"><a href="#categories-pop"><?php _e( 'Most Used' ); ?></a></li>
-</ul>
-
-<div id="categories-all" class="tabs-panel">
-	<ul id="categorychecklist" class="list:category categorychecklist form-no-clear">
-		<?php
-		if ( isset($link->link_id) )
-			wp_link_category_checklist($link->link_id);
-		else
-			wp_link_category_checklist();
-		?>
+	function display_zones($ad)
+	{
+		global $advman_engine;
+		
+		$all_zones_list = array();
+		$matching_zones_list = array();
+		
+		$zones = $advman_engine->getZones();
+		
+		foreach ($zones as $id => $zone) {
+			$name = $zone->name;
+			$row = "<li id='advman-zone-{$id}'><label for='in-advman-zone-{$id}' class='selectit'><input value='{$id}' type='checkbox' name='link_category[]' id='in-advman-zone-{$id}' checked='checked' /> {$name}</label></li>";
+			if ($zone['width'] == $ad->get_property['width'] && $zone['height'] == $ad->get_property['height']) {
+				$matching_zones_list[] = $row;
+			}
+			$all_zones_list[] = $row;
+		}
+		
+	?><ul id="category-tabs">
+		<li class="tabs"><a href="#categories-all"><?php _e( 'Matching Zones' ); ?></a></li>
+		<li class="hide-if-no-js"><a href="#categories-pop"><?php _e( 'All Zones' ); ?></a></li>
 	</ul>
-</div>
-
-<div id="categories-pop" class="tabs-panel" style="display: none;">
-	<ul id="categorychecklist-pop" class="categorychecklist form-no-clear">
-		<?php wp_popular_terms_checklist('link_category'); ?>
-	</ul>
-</div>
-
-<div id="category-adder" class="wp-hidden-children">
-	<h4><a id="category-add-toggle" href="#category-add"><?php _e( '+ Add New Category' ); ?></a></h4>
-	<p id="link-category-add" class="wp-hidden-child">
-		<label class="screen-reader-text" for="newcat"><?php _e( '+ Add New Category' ); ?></label>
-		<input type="text" name="newcat" id="newcat" class="form-required form-input-tip" value="<?php esc_attr_e( 'New category name' ); ?>" aria-required="true" />
-		<input type="button" id="category-add-submit" class="add:categorychecklist:linkcategorydiv button" value="<?php esc_attr_e( 'Add' ); ?>" />
-		<?php wp_nonce_field( 'add-link-category', '_ajax_nonce', false ); ?>
-		<span id="category-ajax-response"></span>
-	</p>
-</div>
-<?php
-}
-
-
-
-
-
+	
+	<div id="categories-all" class="tabs-panel">
+		<ul id="categorychecklist" class="list:category categorychecklist form-no-clear">
+			<?php
+			foreach ($matching_zones_list as $matching_zone) {
+				echo $matching_zone;
+			}
+			?>
+		</ul>
+	</div>
+	
+	<div id="categories-pop" class="tabs-panel" style="display: none;">
+		<ul id="categorychecklist-pop" class="categorychecklist form-no-clear">
+			<?php
+			foreach ($all_zones_list as $all_zone) {
+				echo $all_zone;
+			}
+			?>
+		</ul>
+	</div>
+	
+	<div id="category-adder" class="wp-hidden-children">
+		<h4><a id="category-add-toggle" href="#category-add"><?php _e( '+ Add New Zone' ); ?></a></h4>
+		<p id="advman-zone-add" class="wp-hidden-child">
+			<label class="screen-reader-text" for="advman-zone-name"><?php _e( '+ Add New Zone' ); ?></label>
+			<input type="text" name="advman-zone-name" id="advman-zone-name" class="form-required form-input-tip" value="<?php esc_attr_e( 'New zone name' ); ?>" aria-required="true" />
+			<input type="button" id="category-add-submit" class="add:categorychecklist:linkcategorydiv button" value="<?php esc_attr_e( 'Add' ); ?>" />
+			<?php wp_nonce_field( 'advman-add-zone', '_ajax_nonce', false ); ?>
+			<span id="advman-zone-ajax-response"></span>
+		</p>
+	</div>
+	<?php
+	}
 
 	function display_format_network($ad)
 	{
