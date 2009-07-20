@@ -1,14 +1,15 @@
 <?php
-require_once(OX_LIB . '/Ad.php');	
+require_once(OX_LIB . '/Network.php');	
 
-class OX_Plugin_Adpinion extends OX_Ad
+class OX_Plugin_Adpinion extends OX_Network
 {
 	var $network_name = 'Adpinion';
 	var $url = 'http://www.adpinion.com';
 	
-	function OX_Plugin_Adpinion($aAd = null)
+	function OX_Plugin_Adpinion($network = null)
 	{
-		$this->OX_Ad($aAd);
+		$this->OX_Network($network);
+		$this->name = 'adpinion';  // Short name which is the prefix for the default name of ads
 	}
 	
 	/**
@@ -16,7 +17,7 @@ class OX_Plugin_Adpinion extends OX_Ad
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->addAction('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class($this));
 	}
 	
 	function display($codeonly = false, $search = array(), $replace = array())
@@ -54,17 +55,17 @@ class OX_Plugin_Adpinion extends OX_Ad
 		return array('all' => array('728x90', '468x60', '120x600', '160x600', '300x250'));
 	}
 	
-	function import_detect_network($code)
+	function is_tag_detected($code)
 	{
 		return ( preg_match('/src="http:\/\/www.adpinion.com\/app\//', $code, $matches) !==0);
 	}
 		
-	function import_settings($code)
+	function import($code, &$ad)
 	{
 		$width = '';
 		$height = '';
 		if (preg_match("/website=(\w*)/", $code, $matches) != 0) {
-			$this->set_property('account-id', $matches[1]);
+			$ad->set_property('account-id', $matches[1]);
 			$code = str_replace("website={$matches[1]}", "website={{account-id}}'", $code);
 		}
 		if (preg_match("/width=(\w*)/", $code, $matches) != 0) {
@@ -80,16 +81,16 @@ class OX_Plugin_Adpinion extends OX_Ad
 		}
 		
 		if ($width != '') {
-			$this->set_property('width', $width);
+			$ad->set_property('width', $width);
 		}
 		if ($height != '') {
-			$this->set_property('height', $height);
+			$ad->set_property('height', $height);
 		}
 		if (($width != '') && ($height != '')) {
-			$this->set_property('adformat', $width . 'x' . $height);
+			$ad->set_property('adformat', $width . 'x' . $height);
 		}
 		
-		parent::import_settings($code);
+		return parent::import($code, $ad);
 	}
 }
 /*

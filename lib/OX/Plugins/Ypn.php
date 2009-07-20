@@ -1,14 +1,15 @@
 <?php
-require_once(OX_LIB . '/Ad.php');
+require_once(OX_LIB . '/Network.php');
 
-class OX_Plugin_Ypn extends OX_Ad
+class OX_Plugin_Ypn extends OX_Network
 {
 	var $network_name = 'Yahoo! Publisher Network';
 	var $url = 'http://ypn.yahoo.com';
 	
-	function OX_Plugin_Ypn($aAd = null)
+	function OX_Plugin_Ypn($network = null)
 	{
-		$this->OX_Ad($aAd);
+		$this->OX_Network($network);
+		$this->name = 'ypn';  // Short name which is the prefix for the default name of ads
 	}
 	
 	/**
@@ -16,7 +17,7 @@ class OX_Plugin_Ypn extends OX_Ad
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->addAction('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class($this));
 	}
 	
 	function get_network_property_defaults()
@@ -42,41 +43,41 @@ class OX_Plugin_Ypn extends OX_Ad
 		return array('border', 'title', 'bg', 'text');
 	}
 	
-	function import_detect_network($code)
+	function is_tag_detected($code)
 	{
 		return ( (strpos($code,'ypn-js.overture.com')!==false) );
 	}
 		
-	function import_settings($code)
+	function import($code, &$ad)
 	{
 		if (preg_match('/ctxt_ad_partner( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->set_property('account-id', $matches[3]);
+			$ad->set_property('account-id', $matches[3]);
 			$code = str_replace("ctxt_ad_partner{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_partner{$matches[1]}={$matches[2]}\"{{account-id}}\"", $code);
 		}
 		
 		if (preg_match('/ctxt_ad_section( *)=( *)"(.*)"/', $code, $matches)){
-			$this->set_property('channel', $matches[3]);
+			$ad->set_property('channel', $matches[3]);
 			$code = str_replace("ctxt_ad_section{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_section{$matches[1]}={$matches[2]}\"{{channel}}\"", $code);
 		}
 
 		if (preg_match('/ctxt_ad_bc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->set_property('color-border', $matches[3]);
+			$ad->set_property('color-border', $matches[3]);
 			$code = str_replace("ctxt_ad_bc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_bc{$matches[1]}={$matches[2]}\"{{color-border}}\"", $code);
 		}
 		if (preg_match('/ctxt_ad_cc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->set_property('color-bg', $matches[3]);
+			$ad->set_property('color-bg', $matches[3]);
 			$code = str_replace("ctxt_ad_cc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_cc{$matches[1]}={$matches[2]}\"{{color-bg}}\"", $code);
 		}
 		if (preg_match('/ctxt_ad_lc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->set_property('color-title', $matches[3]);
+			$ad->set_property('color-title', $matches[3]);
 			$code = str_replace("ctxt_ad_lc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_lc{$matches[1]}={$matches[2]}\"{{color-title}}\"", $code);
 		}
 		if (preg_match('/ctxt_ad_tc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->set_property('color-text', $matches[3]);
+			$ad->set_property('color-text', $matches[3]);
 			$code = str_replace("ctxt_ad_tc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_tc{$matches[1]}={$matches[2]}\"{{color-text}}\"", $code);
 		}
 		if (preg_match('/ctxt_ad_uc( *)=( *)"(.*)"/', $code, $matches)) {
-			$this->set_property('color-link', $matches[3]);
+			$ad->set_property('color-link', $matches[3]);
 			$code = str_replace("ctxt_ad_uc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_uc{$matches[1]}={$matches[2]}\"{{color-link}}\"", $code);
 		}
 		
@@ -91,16 +92,16 @@ class OX_Plugin_Ypn extends OX_Ad
 			$code = str_replace("ctxt_ad_height{$matches[1]}={$matches[2]}{$matches[3]}", "ctxt_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
 		}
 		if ($width != '') {
-			$this->set_property('width', $width);
+			$ad->set_property('width', $width);
 		}
 		if ($height != '') {
-			$this->set_property('height', $height);
+			$ad->set_property('height', $height);
 		}
 		if (($width != '') && ($height != '')) {
-			$this->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
+			$ad->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 		
-		parent::import_settings($code);
+		return parent::import($code, $ad);
 	}
 }
 /*

@@ -54,24 +54,30 @@ class Advman_Dal extends OX_Dal
 	
 	function _map_arrays(&$data)
 	{
-		$aAds = array();
-		foreach ($data['ads'] as $id => $oAd) {
-			$aAds[$id] = $oAd->to_array();
-			$aAds[$id]['class'] = get_class($oAd);
+		foreach (array('ads','networks','zones') as $name) {
+			$aEntities = array();
+			foreach ($data[$name] as $id => $oEntity) {
+				$aEntities[$id] = $oEntity->to_array();
+			}
+			$data[$name] = $aEntities;
 		}
-		$data['ads'] = $aAds;
 	}
 	function _map_objects(&$data)
 	{
-		$oAds = array();
-		foreach ($data['ads'] as $id => $aAd) {
-			$ad = $this->factory($aAd['class'], $aAd, $data);
-			if ($ad) {
-				$oAds[$id] = $ad;
+		foreach (array('ads','networks','zones') as $name) {
+			$oEntities = array();
+			foreach ($data[$name] as $id => $aEntity) {
+				switch ($name) {
+					case 'ads' : $oEntity = OX_Ad::to_object($aEntity); break;
+					case 'networks' : $oEntity = OX_Network::to_object($aEntity); break;
+					case 'zones' : $oEntity = OX_Zone::to_object($aEntity); break;
+				}
+				$oEntities[$id] = $oEntity;
 			}
+			$data[$name] = $oEntities;
 		}
-		$data['ads'] = $oAds;
 	}
+	
 	function _update_data($data = null, $key = 'plugin_advman')
 	{
 		if (is_null($data)) {
@@ -81,36 +87,6 @@ class Advman_Dal extends OX_Dal
 		$this->_map_arrays($data);
 	
 		update_option($key, $data);
-	}
-	
-	function factory($class, $aAd = null, $data = null)
-	{
-		if (class_exists($class)) {
-			$ad = new $class();
-			if (is_null($data)) {
-				$data = $this->data;
-			}
-			if (is_null($aAd)) {
-				$ad->active = true;
-				$ad->name = OX_Tools::generate_name($ad->network_name);
-			} else {
-				$ad->name = $aAd['name'];
-				$ad->id = $aAd['id'];
-				$ad->active = $aAd['active'];
-				$aProperties = Advman_Tools::get_properties_from_array($aAd);
-				$ad->p = $aProperties;
-			}
-			
-			if (empty($data['networks'][$class])) {
-				$ad->np = $ad->get_network_property_defaults();
-			} else {
-				$ad->np = $data['networks'][$class];
-			}
-			
-			return $ad;
-		} else {
-			return false;
-		}
 	}
 	
 	function select_setting($key)
@@ -187,9 +163,32 @@ class Advman_Dal extends OX_Dal
 		return $id;
 	}
 	
-	function update_ad_network($ad)
+	function insert_network($network)
 	{
-		$this->data['networks'][strtolower(get_class($ad))] = $ad->np;
+		$this->data['networks'][strtolower(get_class($network))] = $network->to_array();
+		$this->_update_data();
+		return $ad;
+	}
+	
+	function delete_network($id)
+	{
+		unset($this->data['networks'][$id]);
+		$this->_update_data();
+	}
+	
+	function select_network($id)
+	{
+		return $this->data['networks'][$id];
+	}
+	
+	function select_networks()
+	{
+		return $this->data['networks'];
+	}
+	
+	function update_network($network)
+	{
+		$this->data['networks'][strtolower(get_class($network))] = $network->to_array();
 		$this->_update_data();
 	}
 	

@@ -1,14 +1,15 @@
 <?php
-require_once(OX_LIB . '/Ad.php');	
+require_once(OX_LIB . '/Network.php');	
 
-class OX_Plugin_Adgridwork extends OX_Ad
+class OX_Plugin_Adgridwork extends OX_Network
 {
 	var $network_name = 'AdGridWork';
 	var $url = 'http://www.adgridwork.com';
 	
-	function OX_Plugin_Adgridwork($aAd = null)
+	function OX_Plugin_Adgridwork($network = null)
 	{
-		$this->OX_Ad($aAd);
+		$this->OX_Network($network);
+		$this->name = 'adgridwork';  // Short name which is the prefix for the default name of ads
 	}
 		
 	/**
@@ -16,7 +17,7 @@ class OX_Plugin_Adgridwork extends OX_Ad
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->addAction('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class($this));
 	}
 	
 	function get_network_property_defaults()
@@ -39,20 +40,19 @@ class OX_Plugin_Adgridwork extends OX_Ad
 		return array('all' => array('800x90', '728x90', '600x90', '468x60', '400x90', '234x60', '200x90', '120x600', '160x600', '200x360', '200x270', '336x280', '300x250', '250x250', '200x180', '180x150'));
 	}
 	
-	function import_detect_network($code)
+	function is_tag_detected($code)
 	{
 		
-		return (
-			(strpos($code,'www.adgridwork.com') !== false) ||
+		return ((strpos($code,'www.adgridwork.com') !== false) ||
 			(strpos($code,'www.mediagridwork.com/mx.js') !== false)
 		);
 
 	}
 		
-	function import_settings($code)
+	function import($code, &$ad)
 	{
 		if (preg_match("/www\.adgridwork\.com\/\?r=(\d*)/", $code, $matches)) {
-			$this->set_property('account-id', $matches[1]);
+			$ad->set_property('account-id', $matches[1]);
 			$code = str_replace("www.adgridwork.com/?r={$matches[1]}", "www.adgridwork.com/?r={{account-id}}", $code);
 		}
 		
@@ -62,36 +62,36 @@ class OX_Plugin_Adgridwork extends OX_Ad
 		}
 		
 		if (preg_match('/style=\"color: #(\w*);/', $code, $matches)) {
-			$this->set_property('color-link', $matches[1]);
+			$ad->set_property('color-link', $matches[1]);
 			$code = str_replace("style=\"color: #{$matches[1]};", "style=\"color: #{{color-link}};", $code);
 		}
 		
 		if (preg_match("/var title_color = '(\w*)'/", $code, $matches)) {
-			$this->set_property('color-title', $matches[1]);
+			$ad->set_property('color-title', $matches[1]);
 			$code = str_replace("var title_color = '{$matches[1]}'", "var title_color = '{{color-title}}'", $code);
 		}
 		
 		if (preg_match("/var description_color = '(\w*)'/", $code, $matches)) {
-			$this->set_property('color-text', $matches[1]);
+			$ad->set_property('color-text', $matches[1]);
 			$code = str_replace("var description_color = '{$matches[1]}'", "var description_color = '{{color-text}}'", $code);
 		}
 		
 		if (preg_match("/var link_color = '(\w*)'/", $code, $matches)) {
-			$this->set_property('color-url', $matches[1]);
+			$ad->set_property('color-url', $matches[1]);
 			$code = str_replace("var link_color = '{$matches[1]}'", "var link_color = '{{color-link}}'", $code);
 		}
 		
 		if (preg_match("/var background_color = '(\w*)'/", $code, $matches)) {
-			$this->set_property('color-bg', $matches[1]);
+			$ad->set_property('color-bg', $matches[1]);
 			$code = str_replace("var background_color = '{$matches[1]}'", "var background_color = '{{color-bg}}'", $code);
 		}
 		
 		if (preg_match("/var border_color = '(\w*)'/", $code, $matches)) {
-			$this->set_property('color-border', $matches[1]);
+			$ad->set_property('color-border', $matches[1]);
 			$code = str_replace("var border_color = '{$matches[1]}'", "var border_color = '{{color-border}}'", $code);
 		}
 		
-		parent::import_settings($code);
+		return parent::import($code, $ad);
 	}
 
 	function _form_settings_help(){

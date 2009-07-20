@@ -1,14 +1,15 @@
 <?php
-require_once(OX_LIB . '/Ad.php');	
+require_once(OX_LIB . '/Network.php');	
 
-class OX_Plugin_Widgetbucks extends OX_Ad
+class OX_Plugin_Widgetbucks extends OX_Network
 {
 	var $network_name = 'WidgetBucks';
 	var $url = 'http://www.widgetbucks.com';
 	
-	function OX_Plugin_Widgetbucks($aAd = null)
+	function OX_Plugin_Widgetbucks($network = null)
 	{
-		$this->OX_Ad($aAd);
+		$this->OX_Network($network);
+		$this->name = 'widgetbucks';  // Short name which is the prefix for the default name of ads
 	}
 	
 	/**
@@ -16,7 +17,7 @@ class OX_Plugin_Widgetbucks extends OX_Ad
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->addAction('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class($this));
 	}
 	
 	function get_network_property_defaults()
@@ -32,19 +33,19 @@ class OX_Plugin_Widgetbucks extends OX_Ad
 		return array('border', 'title', 'bg', 'text');
 	}
 	
-	function import_detect_network($code)
+	function is_tag_detected($code)
 	{
 		return (preg_match('/(\w*)\.widgetbucks.com\/script\/(\w*).js\?uid=(\w*)/', $code, $matches));
 	}
 		
-	function import_settings($code)
+	function import($code, &$ad)
 	{
 		if (preg_match('/(\w*)\.widgetbucks.com\/script\/(\w*).js\?uid=(\w*)/', $code, $matches)!=0) { 
-			$this->set_property('slot', $matches[3]);
+			$ad->set_property('slot', $matches[3]);
 			$code = str_replace("{$matches[1]}.widgetbucks.com/script/{$matches[2]}.js?uid={$matches[3]}", "{$matches[1]}.widgetbucks.com/script/{$matches[2]}.js?uid={{slot}}", $code);
 		}
 		
-		parent::import_settings($code);
+		return parent::import($code, $ad);
 	}
 
 	function _form_settings_help()

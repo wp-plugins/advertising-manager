@@ -5,7 +5,7 @@ class Advman_Template_List
 	{
 		// Get our options and see if we're handling a form submission.
 		global $advman_engine;
-		$ads = $advman_engine->getAds();
+		$ads = $advman_engine->get_ads();
 		
 ?>		<div class="wrap">
 			<form action="" method="post" id="advman-form" enctype="multipart/form-data">
@@ -28,7 +28,7 @@ class Advman_Template_List
 <?php
 		$previous_network='';
 		if (is_array($ads)) {
-			$default = $advman_engine->getSetting('default-ad');
+			$default = $advman_engine->get_setting('default-ad');
 			foreach ($ads as $id => $ad) {
 				if ($ad->network_name !== $previous_network) {
 					Advman_Template_List::_display_network_row($ad);
@@ -42,7 +42,7 @@ class Advman_Template_List
 					<td>
 						<input class="button" type="submit" value="<?php _e('Copy', 'advman'); ?>" onClick="document.getElementById('advman-action').value='copy'; document.getElementById('advman-target').value='<?php echo $id; ?>';">
 <?php
-				if ( ($ad->name != $advman_engine->getSetting('default-ad')) || (count($ads) == 1) ) {
+				if ( ($ad->name != $advman_engine->get_setting('default-ad')) || (count($ads) == 1) ) {
 ?>						<input class="button" type="submit" value="<?php _e('Delete', 'advman'); ?>" onClick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-target').value='<?php echo $id; ?>';} else {return false;}">
 					</td>
 <?php

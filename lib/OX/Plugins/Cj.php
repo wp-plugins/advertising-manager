@@ -1,14 +1,15 @@
 <?php
-require_once(OX_LIB . '/Ad.php');	
+require_once(OX_LIB . '/Network.php');	
 
-class OX_Plugin_Cj extends OX_Ad
+class OX_Plugin_Cj extends OX_Network
 {
 	var $network_name = 'Commission Junction';
 	var $url = 'http://www.cj.com';
 	
-	function OX_Plugin_Cj($aAd = null)
+	function OX_Plugin_Cj($network = null)
 	{
-		$this->OX_Ad($aAd);
+		$this->OX_Network($network);
+		$this->name = 'cj';  // Short name which is the prefix for the default name of ads
 	}
 	
 	/**
@@ -16,7 +17,7 @@ class OX_Plugin_Cj extends OX_Ad
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->addAction('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class($this));
 	}
 	
 	function display($codeonly = false, $search = array(), $replace = array())
@@ -71,7 +72,7 @@ class OX_Plugin_Cj extends OX_Ad
 		return array('border', 'title', 'bg', 'text');
 	}
 	
-	function import_detect_network($code)
+	function is_tag_detected($code)
 	{
 		$match = false;
 		$xdomains = OX_Plugin_Cj::get_domains();
@@ -85,11 +86,11 @@ class OX_Plugin_Cj extends OX_Ad
 		return $match;
 	}
 		
-	function import_settings($code)
+	function import($code, &$ad)
 	{
 		if (preg_match('/http:\/\/([.\w]*)\/click-(\d*)-(\d*)/', $code, $matches) != 0) { 
-			$this->set_property('account-id', $matches[2]);
-			$this->set_property('slot', $matches[3]); 
+			$ad->set_property('account-id', $matches[2]);
+			$ad->set_property('slot', $matches[3]); 
 			$code = str_replace("http://{$matches[1]}/click-{$matches[2]}-{$matches[3]}", "http://{{xdomain}}/click-{{account-id}}-{{slot}}", $code);
 		}
 
@@ -100,17 +101,17 @@ class OX_Plugin_Cj extends OX_Ad
 		}
 		
 		if (preg_match("/onmouseover=\"window.status='([^']*)';return true;\"/", $code, $matches)) {
-			$this->set_property('status', $matches[1]);
+			$ad->set_property('status', $matches[1]);
 			$code = str_replace("onmouseover=\"window.status='{$matches[1]}';return true;\"", "onmouseover=\"window.status='{{status}}';return true;\"", $code);
 		}
 
 		if (preg_match("/ alt=\"([^\"]*)\"/", $code, $matches)) {
-			$this->set_property('alt-text', $matches[1]);
+			$ad->set_property('alt-text', $matches[1]);
 			$code = str_replace(" alt=\"{$matches[1]}\"", " alt=\"{{alt-text}}\"", $code);
 		}
 		
 		if ($v = strpos($code, " target=\"_blank\"")) {
-			$this->set_property('new-window', 'yes');
+			$ad->set_property('new-window', 'yes');
 			$code = str_replace(" target=\"_blank\"", "{{new-window}}", $code);
 		}
 		
@@ -125,16 +126,16 @@ class OX_Plugin_Cj extends OX_Ad
 			$code = str_replace("height=\"{$height}\"", "height=\"{{height}}\"", $code);
 		}
 		if ($width != '') {
-			$this->set_property('width', $width);
+			$ad->set_property('width', $width);
 		}
 		if ($height != '') {
-			$this->set_property('height', $height);
+			$ad->set_property('height', $height);
 		}
 		if (($width != '') && ($height != '')) {
-			$this->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
+			$ad->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 		
-		parent::import_settings($code);
+		return parent::import($code, $ad);
 	}
 }
 /*

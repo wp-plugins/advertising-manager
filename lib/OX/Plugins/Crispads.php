@@ -1,14 +1,15 @@
 <?php
-require_once(OX_LIB . '/Ad.php');	
+require_once(OX_LIB . '/Network.php');	
 
-class OX_Plugin_Crispads extends OX_Ad
+class OX_Plugin_Crispads extends OX_Network
 {
 	var $network_name = 'Crisp Ads';
 	var $url = 'http://www.crispads.com';
 	
-	function OX_Plugin_Crispads($aAd = null)
+	function OX_Plugin_Crispads($network = null)
 	{
-		$this->OX_Ad($aAd);
+		$this->OX_Network($network);
+		$this->name = 'crisp';  // Short name which is the prefix for the default name of ads
 	}
 
 	/**
@@ -16,7 +17,7 @@ class OX_Plugin_Crispads extends OX_Ad
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->addAction('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class($this));
 	}
 	
 	function get_network_property_defaults()
@@ -38,19 +39,19 @@ class OX_Plugin_Crispads extends OX_Ad
 		return array('border', 'title', 'bg', 'text');
 	}
 	
-	function import_detect_network($code)
+	function is_tag_detected($code)
 	{
 		return (	preg_match('/http:\/\/www.crispads.com\/spinner\//', $code, $matches) !==0);
 	}
 		
-	function import_settings($code)
+	function import($code, &$ad)
 	{
 		if (preg_match("/zoneid=(\w*)/", $code, $matches) !=0) {
-			$this->set_property('slot', $matches[1]);
+			$ad->set_property('slot', $matches[1]);
 			$code = str_replace("zoneid={$matches[1]}", "zoneid={{slot}}", $code);
 		}
 		if (preg_match("/n=(\w*)/", $code, $matches)!=0) {
-			$this->set_property('identifier', $matches[1]);
+			$ad->set_property('identifier', $matches[1]);
 			$code = str_replace("n={$matches[1]}", "n={{identifier}}", $code);
 			$code = str_replace("id=\"{$matches[1]}\"", "id=\"{{identifier}}\"", $code);
 			$code = str_replace("name=\"{$matches[1]}\"", "name=\"{{identifier}}\"", $code);
@@ -68,18 +69,18 @@ class OX_Plugin_Crispads extends OX_Ad
 			$code = str_replace("height=\"{$height}\"", "height=\"{{height}}\"", $code);
 		}
 		if ($width != '') {
-			$this->set_property('width', $width);
+			$ad->set_property('width', $width);
 		}
 		if ($height != '') {
-			$this->set_property('height', $height);
+			$ad->set_property('height', $height);
 		}
 		if (($width != '') && ($height != '')) {
-			$this->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
+			$ad->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 		
 		$code = str_replace('INSERT_RANDOM_NUMBER_HERE', '{{random}}', $code);
 		
-		parent::import_settings($code);
+		return parent::import($code, $ad);
 	}
 }
 /*

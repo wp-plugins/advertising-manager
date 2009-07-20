@@ -1,14 +1,15 @@
 <?php
-require_once(OX_LIB . '/Ad.php');	
+require_once(OX_LIB . '/Network.php');
 
-class OX_Plugin_Shoppingads extends OX_Ad
+class OX_Plugin_Shoppingads extends OX_Network
 {
 	var $network_name = 'Shopping Ads';
 	var $url = 'http://www.shoppingads.com';
 	
-	function OX_Plugin_Shoppingads($aAd = null)
+	function OX_Plugin_Shoppingads($network = null)
 	{
-		$this->OX_Ad($aAd);
+		$this->OX_Network($network);
+		$this->name = 'shop';  // Short name which is the prefix for the default name of ads
 	}
 		
 	/**
@@ -16,7 +17,7 @@ class OX_Plugin_Shoppingads extends OX_Ad
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->addAction('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class($this));
 	}
 	
 	function get_network_property_defaults()
@@ -49,20 +50,20 @@ class OX_Plugin_Shoppingads extends OX_Ad
 		return array('border', 'title', 'bg', 'text');
 	}
 	
-	function import_detect_network($code)
+	function is_tag_detected($code)
 	{
 		return ( strpos($code,'shoppingads_ad_client')!==false );
 	}
 		
-	function import_settings($code)
+	function import($code, &$ad)
 	{
 		if (preg_match("/shoppingads_ad_client(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->set_property('account-id', $matches[4]);
+			$ad->set_property('account-id', $matches[4]);
 			$code = str_replace("shoppingads_ad_client{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_ad_client{$matches[1]}={$matches[2]}{$matches[3]}{{account-id}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_ad_campaign(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->set_property('campaign', $matches[4]);
+			$ad->set_property('campaign', $matches[4]);
 			$code = str_replace("shoppingads_ad_campaign{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_ad_campaign{$matches[1]}={$matches[2]}{$matches[3]}{{campaign}}{$matches[5]}", $code);
 		}
 		
@@ -78,56 +79,56 @@ class OX_Plugin_Shoppingads extends OX_Ad
 			$code = str_replace("shoppingads_ad_width{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_ad_width{$matches[1]}={$matches[2]}{$matches[3]}{{width}}{$matches[5]}", $code);
 		}
 		if ($width != '') {
-			$this->set_property('width', $width);
+			$ad->set_property('width', $width);
 		}
 		if ($height != '') {
-			$this->set_property('height', $height);
+			$ad->set_property('height', $height);
 		}
 		if (($width != '') && ($height != '')) {
-			$this->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
+			$ad->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 		
 		if (preg_match("/shoppingads_ad_kw(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->set_property('keywords', $matches[4]);
+			$ad->set_property('keywords', $matches[4]);
 			$code = str_replace("shoppingads_ad_kw{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_ad_kw{$matches[1]}={$matches[2]}{$matches[3]}{{keywords}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_color_border(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->set_property('color-border', $matches[4]);
+			$ad->set_property('color-border', $matches[4]);
 			$code = str_replace("shoppingads_color_border{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_color_border{$matches[1]}={$matches[2]}{$matches[3]}{{color-border}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_color_bg(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->set_property('color-bg', $matches[4]);
+			$ad->set_property('color-bg', $matches[4]);
 			$code = str_replace("shoppingads_color_bg{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_color_bg{$matches[1]}={$matches[2]}{$matches[3]}{{color-bg}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_color_heading(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->set_property('color-title', $matches[4]);
+			$ad->set_property('color-title', $matches[4]);
 			$code = str_replace("shoppingads_color_heading{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_color_heading{$matches[1]}={$matches[2]}{$matches[3]}{{color-title}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_color_text(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->set_property('color-text', $matches[4]);
+			$ad->set_property('color-text', $matches[4]);
 			$code = str_replace("shoppingads_color_text{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_color_text{$matches[1]}={$matches[2]}{$matches[3]}{{color-text}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_color_link(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->set_property('color-link', $matches[4]);
+			$ad->set_property('color-link', $matches[4]);
 			$code = str_replace("shoppingads_color_link{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_color_link{$matches[1]}={$matches[2]}{$matches[3]}{{color-link}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_attitude(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->set_property('attitude', $matches[4]);
+			$ad->set_property('attitude', $matches[4]);
 			$code = str_replace("shoppingads_attitude{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_attitude{$matches[1]}={$matches[2]}{$matches[3]}{{attitude}}{$matches[5]}", $code);
 		}
 		
 		if (preg_match("/shoppingads_options(\s*)=(\s*)([\'\"]{1})(\w*)([\'\"]{1});/", $code, $matches) != 0) {
-			$this->set_property('new-window', ($matches[4]=='n') ? 'yes' : 'no');
+			$ad->set_property('new-window', ($matches[4]=='n') ? 'yes' : 'no');
 			$code = str_replace("shoppingads_options{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}", "shoppingads_options{$matches[1]}={$matches[2]}{$matches[3]}{{new-window}}{$matches[5]}", $code);
 		}
 		
-		parent::import_settings($code);
+		return parent::import($code, $ad);
 	}
 }
 /*

@@ -1,14 +1,15 @@
 <?php
-require_once(OX_LIB . '/Ad.php');	
+require_once(OX_LIB . '/Network.php');	
 
-class OX_Plugin_Adroll extends OX_Ad
+class OX_Plugin_Adroll extends OX_Network
 {
 	var $network_name = 'AdRoll';
 	var $url = 'http://www.adroll.com';
 	
-	function OX_Plugin_Adroll($aAd = null)
+	function OX_Plugin_Adroll($network = null)
 	{
-		$this->OX_Ad($aAd);
+		$this->OX_Network($network);
+		$this->name = 'adroll';  // Short name which is the prefix for the default name of ads
 	}
 	
 	/**
@@ -16,7 +17,7 @@ class OX_Plugin_Adroll extends OX_Ad
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->addAction('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class($this));
 	}
 	
 	function get_network_property_defaults()
@@ -34,15 +35,14 @@ class OX_Plugin_Adroll extends OX_Ad
 		return array('all' => array('728x90', '468x60', '234x60', '120x600', '160x600', '120x240', '336x280', '300x250', '250x250', '200x200', '180x150', '125x125'));
 	}
 	
-	function import_detect_network($code){
-		
+	function is_tag_detected($code)
+	{
 		return (
 			preg_match('/src="http:\/\/(\w*).adroll.com\/(\w*)\//', $code, $matches) !==0
 		);
-		
 	}
 		
-	function import_settings($code)
+	function import($code, &$ad)
 	{
 		if (preg_match("/http:\/\/(\w*).adroll.com\/(\w*)\/(\w*)\/(\w*)/", $code, $matches)!=0) { 
 			$this->set_property('account-id', $matches[3]);
@@ -50,7 +50,7 @@ class OX_Plugin_Adroll extends OX_Ad
 			$code = str_replace("http://{$matches[1]}.adroll.com/{$matches[2]}/{$matches[3]}/{$matches[4]}", "http://{$matches[1]}.adroll.com/{$matches[2]}/{{account-id}}/{{slot}}", $code);
 		}
 		
-		parent::import_settings($code);
+		return parent::import($code, $ad);
 	}
 
 	function _form_settings_help()

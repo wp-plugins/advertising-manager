@@ -1,14 +1,15 @@
 <?php
-require_once(OX_LIB . '/Ad.php');	
+require_once(OX_LIB . '/Network.php');	
 
-class OX_Plugin_Openx extends OX_Ad
+class OX_Plugin_Openx extends OX_Network
 {
 	var $network_name = 'OpenX';
 	var $url = 'http://www.openx.org';
 	
-	function OX_Plugin_Openx($aAd = null)
+	function OX_Plugin_Openx($network = null)
 	{
-		$this->OX_Ad($aAd);
+		$this->OX_Network($network);
+		$this->name = 'openx';  // Short name which is the prefix for the default name of ads
 	}
 
 	/**
@@ -16,7 +17,7 @@ class OX_Plugin_Openx extends OX_Ad
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->addAction('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class($this));
 	}
 	
 	function get_network_property_defaults()
@@ -32,7 +33,7 @@ class OX_Plugin_Openx extends OX_Ad
 		return array('border', 'title', 'bg', 'text');
 	}
 	
-	function import_detect_network($code)
+	function is_tag_detected($code)
 	{
 		return (
 			(strpos($code, 'd1.openx.org') !== false) ||
@@ -40,16 +41,16 @@ class OX_Plugin_Openx extends OX_Ad
 		);
 	}
 		
-	function import_settings($code)
+	function import($code, &$ad)
 	{
 		if (preg_match("/zoneid=(\w*)/", $code, $matches) !=0) {
-			$this->set_property('slot', $matches[1]);
+			$ad->set_property('slot', $matches[1]);
 			$code = str_replace('zoneid=' . $matches[1], 'zoneid={{slot}}', $code);
 		}
 		
 		$code = str_replace('INSERT_RANDOM_NUMBER_HERE', '{{random}}', $code);
 		
-		parent::import_settings($code);
+		return parent::import($code, $ad);
 	}
 }
 /*

@@ -167,7 +167,7 @@ class OX_Tools
 	function generate_name($base = null)
 	{
 		global $advman_engine;
-		$ads = $advman_engine->getAds();
+		$ads = $advman_engine->get_ads();
 		
 		// Generate a unique name if no name was specified
 		$unique = false;

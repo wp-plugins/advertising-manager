@@ -3,8 +3,8 @@
 Plugin Name: Advertising Manager
 PLugin URI: http://code.openx.org/projects/show/advertising-manager
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
-Author: Scott Switzer, Martin Fitzpatrick
-Version: 3.4.8
+Author: Scott Switzer
+Version: 3.4.10
 Author URI: http://www.switzer.org
 */
 
@@ -20,7 +20,7 @@ function advman_init()
 {
 	global $wp_version;
 
-	@define('ADVMAN_VERSION', '3.4.8');
+	@define('ADVMAN_VERSION', '3.4.10');
 	@define('ADVMAN_PATH', dirname(__FILE__));
 	@define('ADVMAN_LIB', ADVMAN_PATH . '/lib/Advman');
 	@define('OX_LIB', ADVMAN_PATH . '/lib/OX');
@@ -68,7 +68,7 @@ function advman_run()
 	// An ad is being requested by its name
 	if (!empty($_REQUEST['advman-ad-name'])) {
 		$name = OX_Tools::sanitize($_REQUEST['advman-ad-name'], 'key');
-		$ad = $advman_engine->selectAd($name);
+		$ad = $advman_engine->choose_ad($name);
 		if (!empty($ad)) {
 			echo $ad->display();
 		}
@@ -78,7 +78,7 @@ function advman_run()
 	// An ad is being requested by its id
 	if (!empty($_REQUEST['advman-ad-id'])) {
 		$id = OX_Tools::sanitize($_REQUEST['advman-ad-id'], 'number');
-		$ad = $advman_engine->getAd($id);
+		$ad = $advman_engine->get_ad($id);
 		if (!empty($ad)) {
 			echo $ad->display();
 		}
@@ -118,7 +118,7 @@ function advman_filter_content_callback($matches)
 {
 	global $advman_engine;
 	
-	$ad = $advman_engine->selectAd($matches[1]);
+	$ad = $advman_engine->choose_ad($matches[1]);
 	if (!empty($ad)) {
 		return $ad->display();
 	}
@@ -137,7 +137,7 @@ function advman_ad($name = false)
 {
 	global $advman_engine;
 	
-	$ad = $advman_engine->selectAd($name);
+	$ad = $advman_engine->choose_ad($name);
 	if (!empty($ad)) {
 		echo $ad->display();
 	}

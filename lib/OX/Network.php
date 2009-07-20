@@ -1,68 +1,34 @@
 <?php
 require_once (OX_LIB . '/Entity.php');
 
-class OX_Ad extends OX_Entity
+class OX_Network extends OX_Entity
 {
-	var $network_type = 'OX_Ad_Html';
-	
-	function OX_Ad()
-	{
-		$this->OX_Entity();
-	}
+	var $network_type;
 	
 	function register_plugin(&$engine)
 	{
 		$engine->add_action('ad_network', get_class($this));
 	}
 	
-	/**
-	 * Returns a property setting
-	 * @param $key the property name
-	 */
-	function get($key)
-	{
-		$property = $this->get_property($key);
-		if ($property != '') {
-			return $property;
-		}
-		
-		$network = $this->get_network();
-		return $network->get_property($key);
-	}
-	
-	function get_network()
+	function get_default_properties()
 	{
 		global $advman_engine;
 		
-		$type = $this->network_type;
-		$network = $advman_engine->get_network($type);
-		
-		if (empty($network)) {
-			$properties = $this->get_property_defaults();
-			$properties['class'] = $type;
-			$network = OX_Network::to_object($properties);
-			$advman_engine->set_network($network);
-		}
-		
-		return $network;
-	}
-	
-	function get_network_property($key)
-	{
-		$network = $this->get_network();
-		return $network->get_property($key);
-	}
-	
-	function set_network_property($key, $value)
-	{
-		$network = $this->get_network();
-		return $network->set_property($key, $value);
-	}
-	
-	function get_default_properties()
-	{
-		$network = $this->get_network();
-		return $network->get_properties();
+		return array (
+			'adformat' => '728x90',
+			'code' => '',
+			'counter' => '',
+			'height' => '90',
+			'html-after' => '',
+			'html-before' => '',
+			'notes' => '',
+			'openx-market' => $advman_engine->get_setting('openx-market'),
+			'openx-market-cpm' => $advman_engine->get_setting('openx-market-cpm'),
+			'show-pagetype' => array('archive','home','page','post','search'),
+			'show-author' => '',
+			'weight' => '1',
+			'width' => '728',
+		);
 	}
 	
 	/**
@@ -160,26 +126,46 @@ class OX_Ad extends OX_Entity
 //		return $this->get('code');
 	}
 	
-	function to_array()
+	function import_detect_network($code)
 	{
-		$aAd = parent::to_array();
-		$aAd['network_type'] = $this->network_type;
-		
-		return $aAd;
+		return false;
 	}
 	
-	function to_object($properties = null, $class = 'OX_Ad')
+	function import_settings($code)
 	{
-		$ad = parent::to_object($properties, $class);
+		$this->set_property('code', $code);
+	}
+	
+	function get_ad_formats()
+	{
+		return array('all' => array('custom', '728x90', '468x60', '120x600', '160x600', '300x250', '125x125'));
+	}
+	
+	function get_ad_colors()
+	{
+		return false;
+	}
+	
+	function to_array()
+	{
+		$aNetwork = parent::to_array();
+		$aNetwork['class'] = get_class($this);
+		
+		return $aNetwork;
+	}
+	
+	function to_object($properties = null, $class = 'OX_Network')
+	{
+		$network = parent::to_object($properties, $class);
 		
 		if (!empty($properties)) {
 			if (isset($properties['network_type'])) {
-				$ad->network_type = $properties['network_type'];
-				unset($ad->p['network_type']);
+				$network->network_type = $properties['network_type'];
+				unset($network->p['network_type']);
 			}
 		}
 		
-		return $ad;
+		return $network;
 	}
 }
 ?>

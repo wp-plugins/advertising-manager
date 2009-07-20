@@ -21,7 +21,7 @@ class Advman_Template_Metabox
 		$all_zones_list = array();
 		$matching_zones_list = array();
 		
-		$zones = $advman_engine->getZones();
+		$zones = $advman_engine->get_zones();
 		
 		foreach ($zones as $id => $zone) {
 			$name = $zone->name;

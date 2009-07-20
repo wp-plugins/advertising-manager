@@ -1,14 +1,15 @@
 <?php
-require_once(OX_LIB . '/Ad.php');	
+require_once(OX_LIB . '/Network.php');	
 
-class OX_Plugin_Adify extends OX_Ad
+class OX_Plugin_Adify extends OX_Network
 {
 	var $network_name = 'Adify';
 	var $url = 'http://www.adify.com';
 	
-	function OX_Plugin_Adify($aAd = null)
+	function OX_Plugin_Adify($network = null)
 	{
-		$this->OX_Ad($aAd);
+		$this->OX_Network($network);
+		$this->name = 'adify';  // Short name which is the prefix for the default name of ads
 	}
 		
 	/**
@@ -16,7 +17,7 @@ class OX_Plugin_Adify extends OX_Ad
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->addAction('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class($this));
 	}
 	
 	function get_network_property_defaults()
@@ -40,19 +41,16 @@ class OX_Plugin_Adify extends OX_Ad
 		return array('all' => array('custom','728x90', '468x60', '120x600', '160x600', '300x250', '160x160'));
 	}
 	
-	function import_detect_network($code)
+	function is_tag_detected($code)
 	{
 		return (strpos($code,'sr_adspace_id') !== false);
 	}
 		
-	function import_settings($code)
+	function import($code, &$ad)
 	{
-		// Import parent settings first!
-		parent::import_settings($code);
-		
 		// Slot ID
 		if (preg_match('/sr_adspace_id( *)=( *)(\d*);/', $code, $matches) != 0) {
-			$this->set_property('slot', $matches[3]);
+			$ad->set_property('slot', $matches[3]);
 			$code = str_replace("sr_adspace_id{$matches[1]}={$matches[2]}{$matches[3]}", "sr_adspace_id{$matches[1]}={$matches[2]}{{slot}}", $code);
 			$code = str_replace("azId={$matches[3]}", "azId={{slot}}", $code);
 			$code = str_replace("ID #{$matches[3]}", "ID #{{slot}}", $code);
@@ -64,22 +62,24 @@ class OX_Plugin_Adify extends OX_Ad
 		if (preg_match('/sr_adspace_width( *)=( *)(\d*);/', $code, $matches) != 0) {
 			$width = $matches[3]; 
 			if ($width != '') {
-				$this->set_property('width', $width);
+				$ad->set_property('width', $width);
 			}
 			$code = str_replace("sr_adspace_width{$matches[1]}={$matches[2]}{$width}", "sr_adspace_width{$matches[1]}={$matches[2]}{{width}}", $code);
 		}
 		if (preg_match('/sr_adspace_height( *)=( *)(\d*);/', $code, $matches) != 0) {
 			$height = $matches[3];
 			if ($height != '') {
-				$this->set_property('height', $height);
+				$ad->set_property('height', $height);
 			}
 			$code = str_replace("sr_adspace_height{$matches[1]}={$matches[2]}{$height}", "sr_adspace_height{$matches[1]}={$matches[2]}{{height}}", $code);
 		}
 		if (($width != '') && ($height != '')) {
 			$adformats = $this->get_ad_formats();
 			$adformat = in_array("{$width}x{$height}", $adformats['all']) ? "{$width}x{$height}" : 'custom';
-			$this->set_property('adformat', $adformat);
+			$ad->set_property('adformat', $adformat);
 		}
+		
+		return parent::import($code, $ad);
 	}
 }
 /*
