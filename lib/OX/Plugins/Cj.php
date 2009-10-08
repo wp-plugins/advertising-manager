@@ -20,13 +20,13 @@ class OX_Plugin_Cj extends OX_Network
 		$engine->add_action('ad_network', get_class($this));
 	}
 	
-	function display($codeonly = false, $search = array(), $replace = array())
+	function substitute_fields($ad, $search = array(), $replace = array())
 	{
 		$xdomains = OX_Plugin_Cj::get_domains();
 		$search[] = '{{xdomain}}';
 		$replace[] = $xdomains[array_rand($xdomains)];
 		
-		return parent::display($codeonly, $search, $replace);
+		return parent::display($ad, $search, $replace);
 	}
 	
 	/**

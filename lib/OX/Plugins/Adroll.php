@@ -45,8 +45,8 @@ class OX_Plugin_Adroll extends OX_Network
 	function import($code, &$ad)
 	{
 		if (preg_match("/http:\/\/(\w*).adroll.com\/(\w*)\/(\w*)\/(\w*)/", $code, $matches)!=0) { 
-			$this->set_property('account-id', $matches[3]);
-			$this->set_property('slot', $matches[4]);
+			$ad->set_property('account-id', $matches[3]);
+			$ad->set_property('slot', $matches[4]);
 			$code = str_replace("http://{$matches[1]}.adroll.com/{$matches[2]}/{$matches[3]}/{$matches[4]}", "http://{$matches[1]}.adroll.com/{$matches[2]}/{{account-id}}/{{slot}}", $code);
 		}
 		

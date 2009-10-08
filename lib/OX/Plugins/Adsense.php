@@ -97,37 +97,6 @@ class OX_Plugin_Adsense extends OX_Network
 		
 		return parent::import($code, $ad);
 	}
-	
-	function save_settings()
-	{
-		// Save settings to parent first!
-		parent::save_settings();
-		
-		//Override adformat saving already
-		switch($this->get_property('adtype')){
-			case 'slot' :
-			case 'ad' :
-				$this->set_property('adformat', OX_Tools::sanitize($_POST['advman-adformat'], 'format'));
-				break;
-			case 'link' :
-				$this->set_property('adformat', OX_Tools::sanitize($_POST['advman-linkformat'], 'format'));
-				break;
-			case 'ref_image' :
-				$this->set_property('adformat', OX_Tools::sanitize($_POST['advman-referralformat'], 'format'));
-				break;
-			default :
-				$this->set_property('adformat', '');
-		 }
-
-		 list($width, $height, $null) = split('[x]', $this->get_property('adformat'));
-		 $this->set_property('width', $width);
-		 $this->set_property('height', $height);
-	}
-
-	function _form_settings_stats()
-	{
-?><tr><td><p><a href="https://www.google.com/adsense/report/overview">Statistics and earnings</a></p></td></tr><?php
-	}
 }
 
 /*

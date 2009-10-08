@@ -357,7 +357,7 @@ class Advman_Upgrade
 			if (empty($ad['width']) || empty($ad['height'])) {
 				$format = $ad['adformat'];
 				if ( !empty($format) && ($format != 'custom')) {
-					list($width, $height, $null) = split('[x]', $format);
+					list($width, $height, $null) = preg_split('/[x]/', $format);
 					$ad['width'] = $width;
 					$ad['height'] = $height;
 				}
@@ -430,7 +430,7 @@ class Advman_Upgrade
 			}
 			// Set height and width for an ad format
 			if (!empty($network['adformat']) && ($network['adformat'] != 'custom')) {
-				list($width, $height) = split('[x]', $network['adformat']);
+				list($width, $height) = preg_split('/[x]/', $network['adformat']);
 				if (is_numeric($width)) {
 					$data['networks'][$c]['width'] = $width;
 				}
@@ -763,7 +763,7 @@ class Advman_Upgrade
 		$code.= 'shoppingads_ad_client = "' . $ad['account-id'] . '";' . "\n";
 		$code.= 'shoppingads_ad_campaign = "' . $ad['campaign'] . '";' . "\n";
 
-		list($width,$height)=split('[x]',$ad['adformat']);
+		list($width,$height) = preg_split('/[x]/',$ad['adformat']);
 		$code.= 'shoppingads_ad_width = "' . $width . '";' . "\n";
 		$code.= 'shoppingads_ad_height = "' . $height . '";' . "\n";
 

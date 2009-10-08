@@ -1,7 +1,7 @@
 <?php
 class Advman_Template_List
 {
-	function display($target = null)
+	function display($id = null)
 	{
 		global $advman_engine;
 		$ads = $advman_engine->get_ads();
@@ -29,18 +29,19 @@ class Advman_Template_List
 <form action="" method="post" id="advman-form" enctype="multipart/form-data">
 <input type="hidden" id="advman-mode" name="advman-mode" value="list_ads" />
 <input type="hidden" id="advman-action" name="advman-action" />
-<input type="hidden" id="advman-target" name="advman-target" />
+<input type="hidden" id="advman-id" name="advman-id" />
 
 <div class="tablenav">
 
 <div class="alignleft actions">
 
 <div id="advman-list-actions">
-	<div id="advman-list-first"><a href="admin.php?page=advman-manage-ads&amp;action=create"><?php _e('Create new ad', 'advman'); ?></a></div>
+	<div id="advman-list-first"><a href="admin.php?page=advman-manage-ads&amp;advman-action=create"><?php _e('Create new ad', 'advman'); ?></a></div>
 	<div id="advman-list-toggle"><br /></div>
 	<div id="advman-list-inside">
 		<div class='advman-list-action'><a href="javascript:advman_set_action('copy');"><?php _e('Copy selected ads', 'advman'); ?></a></div>
 		<div class='advman-list-action'><a href="javascript:advman_set_action('delete');"><?php _e('Delete selected ads', 'advman'); ?></a></div>
+		<div class='advman-list-action'><a href="javascript:alert(jQuery('#TB_window').id);"><?php _e('TEST THICKBOX', 'advman'); ?></a></div>
 	</div>
 </div> <!-- advman-list-actions -->
 
@@ -75,14 +76,14 @@ class Advman_Template_List
 	<tbody>
 <?php foreach ($ads as $ad) : ?>
 	<tr id='post-3' class='alternate author-self status-publish iedit' valign="top">
-		<th scope="row" class="check-column"><input type="checkbox" name="advman-targets[]" value="<?php echo $ad->id; ?>" /></th>
+		<th scope="row" class="check-column"><input type="checkbox" name="advman-ids[]" value="<?php echo $ad->id; ?>" /></th>
 		<td class="post-title column-title">
-			<strong><a id='advman-ad-<?php echo $ad->id; ?>' class="row-title" href="admin.php?page=advman-manage-ads&amp;action=edit&amp;id=<?php echo $ad->id; ?>" title="<?php printf(__('Edit the ad: %s', 'advman'), $ad->name); ?>">[<?php echo $ad->id; ?>] <?php echo $ad->name; ?></a></strong>
+			<strong><a id='advman-ad-<?php echo $ad->id; ?>' class="row-title" href="admin.php?page=advman-manage-ads&amp;advman-action=edit&amp;advman-id=<?php echo $ad->id; ?>" title="<?php printf(__('Edit the ad: %s', 'advman'), $ad->name); ?>">[<?php echo $ad->id; ?>] <?php echo $ad->name; ?></a></strong>
 			<div class="row-actions">
-				<span class='edit'><a href="admin.php?page=advman-manage-ads&amp;action=edit&amp;target=<?php echo $ad->id; ?>" title="<?php printf(__('Edit the ad &quot;%s&quot;', 'advman'), $ad->name); ?>"><?php _e('Edit', 'advman'); ?></a> | </span>
-				<span class='edit'><a class='submitdelete' title="<?php _e('Copy this ad', 'advman'); ?>" href="javascript:advman_set_action('copy','<?php echo $ad->id; ?>');"><?php _e('Copy', 'advman'); ?></a> | </span>
+				<span class='edit'><a href="admin.php?page=advman-manage-ads&amp;advman-action=edit&amp;advman-id=<?php echo $ad->id; ?>" title="<?php printf(__('Edit the ad &quot;%s&quot;', 'advman'), $ad->name); ?>"><?php _e('Edit', 'advman'); ?></a> | </span>
+				<span class='edit'><a class='submitdelete' title="<?php _e('Copy this ad', 'advman'); ?>" href="javascript:advman_set_action('copy','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>'););"><?php _e('Copy', 'advman'); ?></a> | </span>
 				<span class='edit'><a class='submitdelete' title="<?php _e('Delete this ad', 'advman'); ?>" href="javascript:advman_set_action('delete','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>');" onclick=""><?php _e('Delete', 'advman'); ?></a> | </span>
-				<span class='edit'><a href="admin.php?page=advman-preview-ad&amp;ad_id=<?php echo $ad->id; ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview', 'advman'); ?></a></span>
+				<span class='edit'><a class='thickbox' href="<?php echo 'http://www.openx.org?a=b'; //$ad->get_preview_url(); ?>&amp;modal=true&amp;height=500&amp;width=500&amp;TB_iframe=true" id="post-preview" tabindex="4"><?php _e('Preview', 'advman'); ?></a></span>
 			</div>
 		</td>
 		<td class="author column-author"><?php echo $this->displayZones($ad, $zones); ?></td>

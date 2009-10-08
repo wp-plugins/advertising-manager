@@ -12,7 +12,7 @@ class OX_Tools
 					
 					if (file_exists($require_file)) {
 						require_once $require_file;
-						$fileName = split('[.]', $file);
+						$fileName = preg_split('/[.]/', $file);
 						$class = 'OX_Plugin_' . $fileName[0];
 						$plugin = new $class();
 						$plugin->register_plugin($obj);
@@ -137,8 +137,8 @@ class OX_Tools
 	
 	function explode_format($format)
 	{
-		list($w, $h) = split('[x]', $format);
-		list($h, $l) = split('[#]', $h);
+		list($w, $h) = preg_split('/[x]/', $format);
+		list($h, $l) = preg_split('/[#]/', $h);
 		return array($w, $h, $l);
 	}
 	

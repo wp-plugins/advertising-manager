@@ -117,7 +117,7 @@ By popular demand, below are the changes for versions listed. Use this to determ
 
 As a general rule the version X.Y.Z increments Z with bugfixes, Y with additional features, and X with major overhaul.
 
-* **3.4.9** Got zones working!
+* **3.4.9** Got zones working!  Also changed split to preg_split
 * **3.4.8** Fixed minor Google Adsense 'type' issue, minor notice, and fixed defaulting
 * **3.4.7** Fixed adsense account id importing issue, short tag issue, and openx importing issue
 * **3.4.6** Fixed and expanded widget functionality for WP2.8 users

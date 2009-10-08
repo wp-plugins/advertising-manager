@@ -1,13 +1,13 @@
 <?php
 require_once(OX_LIB . '/Network.php');
 
-class OX_Ad_Html extends OX_Ad
+class OX_Network_Html extends OX_Network
 {
 	var $network_name = 'HTML';
 	
-	function OX_Ad_Html($aAd = null)
+	function OX_Network_Html($network = null)
 	{
-		$this->OX_Ad($aAd);
+		$this->OX_Network($network);
 	}
 	
 	function get_network_property_defaults()
@@ -16,11 +16,8 @@ class OX_Ad_Html extends OX_Ad
 		return $properties + parent::get_network_property_defaults();
 	}
 	
-	function import_settings($code)
+	function import($code, &$ad)
 	{
-		// Import parent settings first!
-		parent::import_settings($code);
-		
 		//Attempt to find html width/height strings
 		$width = '';
 		$height = '';
@@ -31,14 +28,16 @@ class OX_Ad_Html extends OX_Ad
 			$height = $matches[1];
 		}
 		if ($width != '') {
-			$this->set_property('width', $width);
+			$ad->set_property('width', $width);
 		}
 		if ($height != '') {
-			$this->set_property('height', $height);
+			$ad->set_property('height', $height);
 		}
 		if (($width != '') && ($height != '')) {
-			$this->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
+			$ad->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
+		
+		return parent::import($code, $ad);
 	}
 }
 ?>

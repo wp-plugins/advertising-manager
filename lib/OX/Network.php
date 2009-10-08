@@ -5,6 +5,11 @@ class OX_Network extends OX_Entity
 {
 	var $network_type;
 	
+	function OX_Network()
+	{
+		$this->OX_Entity();
+	}
+	
 	function register_plugin(&$engine)
 	{
 		$engine->add_action('ad_network', get_class($this));
@@ -107,7 +112,28 @@ class OX_Network extends OX_Entity
 		return true;
 	}
 	
-	function display($codeonly = false, $search = array(), $replace = array())
+	function is_tag_detected($code)
+	{
+		return false;
+	}
+	
+	function import($code, &$ad)
+	{
+		$ad->set_property('code', $code);
+		$ad->network_type = get_class($this);
+	}
+	
+	function get_ad_formats()
+	{
+		return array('all' => array('custom', '728x90', '468x60', '120x600', '160x600', '300x250', '125x125'));
+	}
+	
+	function get_ad_colors()
+	{
+		return false;
+	}
+	
+	function substitute_fields($ad, $search = array(), $replace = array())
 	{
 		$search[] = '{{random}}';
 		$replace[] = mt_rand();
@@ -120,30 +146,8 @@ class OX_Network extends OX_Entity
 			$replace[] = $this->get($property);
 		}
 		
-		$code = $codeonly ? $this->get('code') : ($this->get('html-before') . $this->get('code') . $this->get('html-after'));
-		
+		$code = $codeonly ? $ad->get('code') : ($ad->get('html-before') . $ad->get('code') . $ad->get('html-after'));
 		return str_replace($search, $replace, $code);
-//		return $this->get('code');
-	}
-	
-	function import_detect_network($code)
-	{
-		return false;
-	}
-	
-	function import_settings($code)
-	{
-		$this->set_property('code', $code);
-	}
-	
-	function get_ad_formats()
-	{
-		return array('all' => array('custom', '728x90', '468x60', '120x600', '160x600', '300x250', '125x125'));
-	}
-	
-	function get_ad_colors()
-	{
-		return false;
 	}
 	
 	function to_array()

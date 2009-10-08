@@ -57,7 +57,7 @@ class OX_Plugin_Adgridwork extends OX_Network
 		}
 		
 		if (preg_match('/var sid = \'(\w*)\'/', $code, $matches)) {
-			$this->set_property('slot', $matches[1]);
+			$ad->set_property('slot', $matches[1]);
 			$code = str_replace("var sid = '{$matches[1]}'", "var sid = '{{slot}}'", $code);
 		}
 		
@@ -92,17 +92,6 @@ class OX_Plugin_Adgridwork extends OX_Network
 		}
 		
 		return parent::import($code, $ad);
-	}
-
-	function _form_settings_help(){
-	?><tr><td><p>Further configuration and control over channel and slot setup can be achieved through <a href="http://www.adgridwork.com/u.php" target="_blank">AdGridWorks's online system</a>:</p>
-	<ul>
-	<li><a href="http://www.adgridwork.com/u.php?page=metrics&sid=<?php echo $this->get_property('slot'); ?>" target="_blank">Campaign Metrics</a><br />
-			View hits, clicks, and other stats information.</li>
-	<li><a href="http://www.adgridwork.com/u.php?page=submitsite&sid=<?php echo $this->get_property('slot'); ?>" target="_blank">Edit Campaign</a><br />
-			Change keywords, ad format and layout.</li>
-	</ul></td></tr>
-	<?php	
 	}
 }
 /*

@@ -3,7 +3,7 @@ require_once (OX_LIB . '/Entity.php');
 
 class OX_Ad extends OX_Entity
 {
-	var $network_type = 'OX_Ad_Html';
+	var $network_type;
 	
 	function OX_Ad()
 	{
@@ -38,9 +38,7 @@ class OX_Ad extends OX_Entity
 		$network = $advman_engine->get_network($type);
 		
 		if (empty($network)) {
-			$properties = $this->get_property_defaults();
-			$properties['class'] = $type;
-			$network = OX_Network::to_object($properties);
+			$network = OX_Network::to_object($properties, $type);
 			$advman_engine->set_network($network);
 		}
 		
@@ -141,23 +139,16 @@ class OX_Ad extends OX_Entity
 		return true;
 	}
 	
-	function display($codeonly = false, $search = array(), $replace = array())
+	function get_preview_url()
 	{
-		$search[] = '{{random}}';
-		$replace[] = mt_rand();
-		$search[] = '{{timestamp}}';
-		$replace[] = time();
-		
-		$properties = $this->get_network_property_defaults();
-		foreach ($properties as $property => $value) {
-			$search[] = '{{' . $property . '}}';
-			$replace[] = $this->get($property);
-		}
-		
-		$code = $codeonly ? $this->get('code') : ($this->get('html-before') . $this->get('code') . $this->get('html-after'));
-		
-		return str_replace($search, $replace, $code);
-//		return $this->get('code');
+		return 'admin.php?page=advman-manage-ads&amp;advman-action=preview&amp;advman-id=' . $this->id;
+	}
+
+	function display($codeonly = false)
+	{
+		// Substitute the network specific macro fields...
+		$network = $this->get_network();
+		return $network->substitute_fields($this);
 	}
 	
 	function to_array()

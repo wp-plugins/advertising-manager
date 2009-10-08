@@ -23,8 +23,8 @@ class Advman_Admin
 			add_options_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 		}
 		
-		// Process any notices that have been taken down
-		Advman_Admin::process_notices();
+		// Deal with input that needs to be processed before Wordpress menus display
+		Advman_Admin::pre_process();
 		
 		add_action('admin_print_scripts', array('Advman_Admin', 'add_scripts'));
 		add_action('admin_notices', array('Advman_Admin','display_notices'), 1 );
@@ -41,6 +41,8 @@ class Advman_Admin
 
 		// Now go through the admin pages
 		if (is_admin()) {
+			wp_enqueue_script('jquery');
+			add_thickbox();
 			switch ( $plugin_page . '-' . $mode) {
 				case 'advman-manage-ads-edit' :
 				case 'advman-manage-zones-edit' :
@@ -50,14 +52,16 @@ class Advman_Admin
 					wp_enqueue_script('advman-admin', ADVMAN_URL . '/scripts/advman.admin.js');
 					echo "
 <link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.admin.css' />
-<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/jquery.multiSelect.css' />";
+<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/jquery.multiSelect.css' />
+";
 					break;
 				case 'advman-manage-ads-list' :
 				case 'advman-manage-zones-list' :
 				default :
 					wp_enqueue_script('advman', ADVMAN_URL . '/scripts/advman.admin.js');
 					echo "
-<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.admin.css' />";
+<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.admin.css' />
+";
 			}
 		}
 	}
@@ -85,6 +89,13 @@ class Advman_Admin
 		Advman_Admin::set_notices($notices);
 	}
 	
+	function pre_process()
+	{
+		// Process any notices that have been taken down
+		Advman_Admin::process_notices();
+		// Display an ad preview
+//		Advman_Admin::process_preview_ad();
+	}
 	/**
 	 * Process input from the Admin UI.  Called staticly from the Wordpress form screen.
 	 */
@@ -115,6 +126,9 @@ class Advman_Admin
 				break;
 			case 'advman-manage-ads-edit' :
 				Advman_Admin::process_edit_ad($action);
+				break;
+			case 'advman-manage-ads-preview' :
+				Advman_Admin::process_preview_ad($action);
 				break;
 			case 'advman-manage-ads-edit_network' :
 				Advman_Admin::process_edit_network($action);
@@ -173,9 +187,17 @@ class Advman_Admin
 //				$filter = Advman_Admin::get_filter_from_form();
 //				Advman_Admin::display_page('List_Ad', $filter);
 //				break;
+			case 'preview' :
+				$ad = $ads[0]; // can only edit one ad at a time
+				Advman_Admin::display_page('Preview', $ad);
+				break;
 			case 'cancel' :
 			default :
-				Advman_Admin::display_page('List_Ad');
+				if (!empty($ads)) {
+					Advman_Admin::display_page('List_Ad');
+				} else {
+					Advman_Admin::display_page('Create_Ad');
+				}
 		}
 	}
 	
@@ -198,6 +220,13 @@ class Advman_Admin
 		}
 	}
 
+	/**
+	 * Process input from the 'Preview Ad' page
+	 */
+	function process_preview_ad($action)
+	{
+		
+	}
 	/**
 	 * Process input from the 'Edit Ad' page
 	 */
@@ -504,4 +533,10 @@ class Advman_Admin
 		}
 	}
 }
+/*
+ To request a page with the wordpress adornments:
+ admin.php?page=advman-manage-ads&action=edit&id=1
+ admin.php?page=advman-manage-ads&action=delete&id=1&id=2&id=3
+ To request a page without the wordpress adornments:
+ 
 ?>

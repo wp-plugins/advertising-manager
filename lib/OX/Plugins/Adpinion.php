@@ -20,9 +20,9 @@ class OX_Plugin_Adpinion extends OX_Network
 		$engine->add_action('ad_network', get_class($this));
 	}
 	
-	function display($codeonly = false, $search = array(), $replace = array())
+	function substitute_fields($ad, $search = array(), $replace = array())
 	{
-		if($this->get('width', true) > $this->get('height', true)) {
+		if($ad->get('width', true) > $ad->get('height', true)) {
 			$xwidth=18;
 			$xheight=17;
 		} else {
@@ -32,10 +32,10 @@ class OX_Plugin_Adpinion extends OX_Network
 	
 		$search[] = '{{xwidth}}';
 		$search[] = '{{xheight}}';
-		$replace[] = $this->get('width', true) + $xwidth;
-		$replace[] = $this->get('height', true) + $xheight;
+		$replace[] = $ad->get('width', true) + $xwidth;
+		$replace[] = $ad->get('height', true) + $xheight;
 		
-		return parent::display($codeonly, $search, $replace);
+		return parent::substitue_fields($ad, $search, $replace);
 	}
 	
 	function get_network_property_defaults()

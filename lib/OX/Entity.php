@@ -43,7 +43,7 @@ class OX_Entity extends OX_Plugin
 				$width = '';
 				$height = '';
 			} else {
-				list($width, $height) = split('[x]', $value);
+				list($width, $height) = preg_split('/[x]/', $value);
 			}
 			$this->set_property('width', $width);
 			$this->set_property('height', $height);

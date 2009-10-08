@@ -237,7 +237,7 @@ class OX_Swifty
 		if (!empty($tag)) {
 			$network_types = $this->get_action('ad_network');
 			foreach ($network_types as $network_type) {
-				if ($ad = call_user_func(array($network_type, 'import'), $tag)) {
+				if (call_user_func(array($network_type, 'import'), $tag, $ad)) {
 					$imported = true;
 					break; //leave the foreach loop
 				}
@@ -246,7 +246,7 @@ class OX_Swifty
 		
 		// Not a pre-defined network - we will make it HTML code...
 		if (!$imported) {
-			$ad = OX_Network_Html::import($tag);
+			OX_Network_Html::import($tag, $ad);
 		}
 		
 		return $this->add_ad($ad);
