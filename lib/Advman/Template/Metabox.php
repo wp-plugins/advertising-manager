@@ -127,9 +127,10 @@ class Advman_Template_Metabox
 	<tr style="white-space:nowrap">
 		<td class="advman_label"><label for="advman-author"><?php _e('By Author:'); ?></label></td>
 		<td>
+			<input type="hidden" name="advman-show-author[]" value="">
 			<select id="advman-author" name="advman-show-author[]" multiple="multiple" size="5">
 <?php foreach ($users as $user) : ?>
-				<option<?php echo ($authorValues == '' || in_array($user->user_id, $authorValues) ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
+				<option<?php echo ($authorValues == 'all' || in_array($user->user_id, $authorValues) ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
 <?php endforeach; ?>
 			</select>
 		</td>
