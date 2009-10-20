@@ -25,7 +25,7 @@ function advman_init()
 	@define('ADVMAN_LIB', ADVMAN_PATH . '/lib/Advman');
 	@define('OX_LIB', ADVMAN_PATH . '/lib/OX');
 	@define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
-	@define('ADVMAN_ADMIN_URL', get_bloginfo('wpurl') . '/admin.php');
+	@define('ADVMAN_ADMIN_URL', get_bloginfo('wpurl') . '/wp-admin/admin.php');
 
 	// Get the template path
 	$version = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP2.6' : 'WP2.7';
