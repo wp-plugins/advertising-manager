@@ -11,15 +11,16 @@ class Advman_Admin
 		global $wp_version;
 		
 		if (version_compare($wp_version,"2.7-alpha", '>')) {
-			add_object_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 8, 'advman-manage-ads', array('Advman_Admin','process'));
-			add_submenu_page('advman-manage-ads', __('Manage Ads', 'advman'), __('Manage Ads', 'advman'), 8, 'advman-manage-ads', array('Advman_Admin','process'));
-			add_submenu_page('advman-manage-ads', __('Manage Ad Zones', 'advman'), __('Manage Zones', 'advman'), 8, 'advman-manage-zones', array('Advman_Admin','process'));
-			add_submenu_page('advman-manage-ads', __('Ad Statistics', 'advman'), __('Statistics', 'advman'), 8, 'advman-statistics', array('Advman_Admin','process'));
+			add_object_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 8, 'advman-ads', array('Advman_Admin','process'));
+			add_submenu_page('advman-ads', __('Manage Ads', 'advman'), __('Manage Ads', 'advman'), 8, 'advman-ads', array('Advman_Admin','process'));
+			add_submenu_page('advman-ads', __('Manage Ad Zones', 'advman'), __('Manage Zones', 'advman'), 8, 'advman-zones', array('Advman_Admin','process'));
+			add_submenu_page('advman-ads', __('Ad Statistics', 'advman'), __('Statistics', 'advman'), 8, 'advman-statistics', array('Advman_Admin','process'));
 			add_options_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 		} else {
-			add_menu_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
-			add_submenu_page('advman-manage', __('Manage Ads', 'advman'), __('Manage Ads', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
-			add_submenu_page('advman-manage', __('Manage Zones', 'advman'), __('Manage Zones', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
+			add_menu_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 8, 'advman-ads', array('Advman_Admin','process'));
+			add_submenu_page('advman-ads', __('Manage Ads', 'advman'), __('Manage Ads', 'advman'), 8, 'advman-ads', array('Advman_Admin','process'));
+			add_submenu_page('advman-ads', __('Manage Zones', 'advman'), __('Manage Zones', 'advman'), 8, 'advman-zones', array('Advman_Admin','process'));
+			add_submenu_page('advman-ads', __('Ad Statistics', 'advman'), __('Statistics', 'advman'), 8, 'advman-statistics', array('Advman_Admin','process'));
 			add_options_page(__('Advertising', 'advman'), __('Advertising', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 		}
 		
@@ -27,6 +28,7 @@ class Advman_Admin
 		Advman_Admin::pre_process();
 		
 		add_action('admin_print_scripts', array('Advman_Admin', 'add_scripts'));
+		add_action('admin_print_styles', array('Advman_Admin', 'add_styles'));
 		add_action('admin_notices', array('Advman_Admin','display_notices'), 1 );
 		add_action('admin_footer', array('Advman_Admin','display_editor'));
 	}
@@ -36,32 +38,42 @@ class Advman_Admin
 		global $plugin_page;
 		$mode = OX_Tools::sanitize($_REQUEST['advman-mode'], 'key');
 		
-		// All pages should have the advman ad counting scripts
-//		wp_enqueue_script('advman-delivery', ADVMAN_URL . '/scripts/advman.delivery.js', array('jquery'));
-
 		// Now go through the admin pages
 		if (is_admin()) {
 			wp_enqueue_script('jquery');
 			add_thickbox();
 			switch ( $plugin_page . '-' . $mode) {
-				case 'advman-manage-ads-edit' :
-				case 'advman-manage-zones-edit' :
+				case 'advman-ads-edit' :
+				case 'advman-zones-edit' :
 					wp_enqueue_script('postbox');
 					wp_enqueue_script('jquery-multiselect', ADVMAN_URL . '/scripts/jquery.multiSelect.js', array('jquery'));
 					wp_enqueue_script('advman-link', ADVMAN_URL . '/scripts/link.dev.js', array('jquery','wp-lists','wp-ajax-response'));
 					wp_enqueue_script('advman-admin', ADVMAN_URL . '/scripts/advman.admin.js');
-					echo "
-<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.admin.css' />
-<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/jquery.multiSelect.css' />
-";
 					break;
-				case 'advman-manage-ads-list' :
-				case 'advman-manage-zones-list' :
+				case 'advman-ads-list' :
+				case 'advman-zones-list' :
 				default :
-					wp_enqueue_script('advman', ADVMAN_URL . '/scripts/advman.admin.js');
-					echo "
-<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.admin.css' />
-";
+					wp_enqueue_script('advman-admin', ADVMAN_URL . '/scripts/advman.admin.js');
+			}
+		}
+	}
+	function add_styles()
+	{
+		global $plugin_page;
+		$mode = OX_Tools::sanitize($_REQUEST['advman-mode'], 'key');
+		
+		// Now go through the admin pages
+		if (is_admin()) {
+			switch ( $plugin_page . '-' . $mode) {
+				case 'advman-ads-edit' :
+				case 'advman-zones-edit' :
+					wp_enqueue_style('advman-admin', ADVMAN_URL . '/scripts/advman.admin.css');
+					wp_enqueue_style('jquery-multiselect', 'ADVMAN_URL' . '/scripts/jquery.multiSelect.css');
+					break;
+				case 'advman-ads-list' :
+				case 'advman-zones-list' :
+				default :
+					wp_enqueue_style('advman-admin', ADVMAN_URL . '/scripts/advman.admin.css');
 			}
 		}
 	}
@@ -98,6 +110,15 @@ class Advman_Admin
 	}
 	/**
 	 * Process input from the Admin UI.  Called staticly from the Wordpress form screen.
+	 * page values:
+	 * 	advman-ads
+	 * 	advman-zones
+	 * 	advman-statistics
+	 *
+	 * mode value:
+	 * 	advman-list
+	 * 	advman-create
+	 * 	advman-edit
 	 */
 	function process()
 	{
@@ -108,33 +129,33 @@ class Advman_Admin
 		$action = OX_Tools::sanitize($_REQUEST['advman-action'], 'key');
 		
 		switch ($plugin_page . '-' . $mode) {
-			case 'advman-manage-zones-create' :
+			case 'advman-zones-create' :
 				Advman_Admin::process_create_zone($action);
 				break;
-			case 'advman-manage-zones-edit' :
+			case 'advman-zones-edit' :
 				Advman_Admin::process_edit_zone($action);
 				break;
-			case 'advman-manage-zones-list' :
-			case 'advman-manage-zones-' :
+			case 'advman-zones-list' :
+			case 'advman-zones-' :
 				Advman_Admin::process_manage_zones($action);
 				break;
 			case 'advman-statistics' :
 				Advman_Admin::process_statistics($action);
 				break;
-			case 'advman-manage-ads-create' :
+			case 'advman-ads-create' :
 				Advman_Admin::process_create_ad($action);
 				break;
-			case 'advman-manage-ads-edit' :
+			case 'advman-ads-edit' :
 				Advman_Admin::process_edit_ad($action);
 				break;
-			case 'advman-manage-ads-preview' :
+			case 'advman-ads-preview' :
 				Advman_Admin::process_preview_ad($action);
 				break;
-			case 'advman-manage-ads-edit_network' :
+			case 'advman-ads-edit_network' :
 				Advman_Admin::process_edit_network($action);
 				break;
-			case 'advman-manage-ads-list' :
-			case 'advman-manage-ads-' :
+			case 'advman-ads-list' :
+			case 'advman-ads-' :
 			default :
 				Advman_Admin::process_manage_ads($action);
 				break;
@@ -147,6 +168,7 @@ class Advman_Admin
 	function process_manage_ads($action)
 	{
 		global $advman_engine;
+		global $plugin_page;
 		
 		// Returns either an ID or list of IDs 
 		$ids = Advman_Tools::get_ids_from_form();
@@ -191,13 +213,13 @@ class Advman_Admin
 				$ad = $ads[0]; // can only edit one ad at a time
 				Advman_Admin::display_page('Preview', $ad);
 				break;
-			case 'cancel' :
 			default :
-				if (!empty($ads)) {
-					Advman_Admin::display_page('List_Ad');
-				} else {
-					Advman_Admin::display_page('Create_Ad');
+				if (empty($ads)) {
+					wp_redirect(Advman_Tools::build_admin_url($plugin_page, 'create'));
+					exit();
 				}
+				
+				Advman_Admin::display_page('List_Ad');
 		}
 	}
 	
@@ -215,8 +237,9 @@ class Advman_Admin
 				Advman_Admin::display_page('Edit_Ad', $ad);
 				break;
 			case 'cancel' :
-			default :
 				Advman_Admin::display_page('List_Ad');
+			default :
+				Advman_Admin::display_page('Create_Ad');
 		}
 	}
 
@@ -535,8 +558,8 @@ class Advman_Admin
 }
 /*
  To request a page with the wordpress adornments:
- admin.php?page=advman-manage-ads&action=edit&id=1
- admin.php?page=advman-manage-ads&action=delete&id=1&id=2&id=3
+ admin.php?page=advman-ads&action=edit&id=1
+ admin.php?page=advman-ads&action=delete&id=1&id=2&id=3
  To request a page without the wordpress adornments:
  
 ?>

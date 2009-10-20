@@ -1,5 +1,6 @@
 <?php
 require_once (OX_LIB . '/Entity.php');
+require_once (ADVMAN_LIB . '/Tools.php');
 
 class OX_Ad extends OX_Entity
 {
@@ -141,7 +142,7 @@ class OX_Ad extends OX_Entity
 	
 	function get_preview_url()
 	{
-		return 'admin.php?page=advman-manage-ads&amp;advman-action=preview&amp;advman-id=' . $this->id;
+		return  Advman_Tools::build_admin_url('advman-ads', 'preview', $this->id);
 	}
 
 	function display($codeonly = false)

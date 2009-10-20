@@ -3,6 +3,26 @@ require_once(OX_LIB . '/Tools.php');
 
 class Advman_Tools
 {
+	function build_admin_url($page = null, $mode = null, $id = null)
+	{
+		$params = array();
+		if (!empty($page)) {
+			$params[] = "page=$page";
+		}
+		if (!empty($mode)) {
+			$params[] = "advman-mode=$mode";
+		}
+		if (!empty($id)) {
+			$params[] = "advman-id=$id";
+		}
+		
+		$url = ADVMAN_ADMIN_URL;
+		if (!empty($params)) {
+			$url = $url . '?' . implode('&', $params);
+		}
+		
+		return $url;
+	}
 	/**
 	 * Get the last edit of this ad
 	 */
