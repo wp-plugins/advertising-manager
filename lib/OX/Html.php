@@ -1,23 +1,20 @@
 <?php
 require_once(OX_LIB . '/Network.php');
 
-class OX_Network_Html extends OX_Network
+class OX_Plugin_Html extends OX_Network
 {
-	var $network_name = 'HTML';
-	
-	function OX_Network_Html($network = null)
+	function OX_Plugin_Html()
 	{
-		$this->OX_Network($network);
-	}
-	
-	function get_network_property_defaults()
-	{
-		$properties = array();
-		return $properties + parent::get_network_property_defaults();
+		$this->OX_Network();
+		$this->name = 'HTML';
+		$this->short_name = 'html';
 	}
 	
 	function import($code, &$ad)
 	{
+		$ad = OX_Ad::to_object();
+		$ad->network_type = get_class();
+		
 		//Attempt to find html width/height strings
 		$width = '';
 		$height = '';
@@ -37,7 +34,9 @@ class OX_Network_Html extends OX_Network
 			$ad->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
 		}
 		
-		return parent::import($code, $ad);
+		$ad->set_property('code', $code);
+		
+		return $ad;
 	}
 }
 ?>

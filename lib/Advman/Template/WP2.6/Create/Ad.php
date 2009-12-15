@@ -9,7 +9,7 @@ class Advman_Template_Create_Ad
 		global $_advman;
 		global $_advman_networks;
 ?>	<div class="wrap">
-		<form action="<?php echo Advman_Tools::build_admin_url('advman-ads'); ?>" method="post" id="advman-form" enctype="multipart/form-data">
+		<form action="<?php echo Advman_Tools::build_admin_url('advman-ad'); ?>" method="post" id="advman-form" enctype="multipart/form-data">
 			<input type="hidden" name="advman-mode" id="advman-mode" value="create_ad">	
 			<input type="hidden" name="advman-action" id="advman-action">
 			<input type="hidden" name="advman-target" id="advman-target">

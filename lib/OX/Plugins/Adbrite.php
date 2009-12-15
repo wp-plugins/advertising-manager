@@ -3,13 +3,11 @@ require_once(OX_LIB . '/Network.php');
 
 class OX_Plugin_Adbrite extends OX_Network
 {
-	var $network_name = 'AdBrite';
-	var $url = 'http://www.adbrite.com';
-	
-	function OX_Plugin_Adbrite($network = null)
+	function OX_Plugin_Adbrite()
 	{
-		$this->OX_Network($network);
-		$this->name = 'adgridwork';  // Short name which is the prefix for the default name of ads
+		$this->OX_Network();
+		$this->name = 'AdBrite';
+		$this->short_name = 'adbrite';
 	}
 	
 	/**
@@ -17,7 +15,7 @@ class OX_Plugin_Adbrite extends OX_Network
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class());
 	}
 	
 	function get_property_defaults()
@@ -43,50 +41,52 @@ class OX_Plugin_Adbrite extends OX_Network
 		return array(all => array('728x90', '468x60', '120x600', '160x600', '300x250'));
 	}
 	
-	function is_tag_detected($code)
+	function import($code)
 	{
+		$ad = false;
 		
-		return ((strpos($code,'<!-- Begin: AdBrite -->') !== false) ||
-			(strpos($code,'src="http://ads.adbrite.com') !== false) ||
-			(strpos($code,'<!-- End: AdBrite -->') !== false)
-		);
-
-	}
-	
-	function import($code, &$ad)
-	{
-		if (preg_match("/var AdBrite_Title_Color = '(\w*)'/", $code, $matches)) {
-			$ad->set_property('color-title', $matches[1]);
-			$code = str_replace("var AdBrite_Title_Color = '{$matches[1]}'", "var AdBrite_Title_Color = '{{color-title}}'", $code);
-		}
-		if (preg_match("/var AdBrite_Text_Color = '(\w*)'/", $code, $matches)) {
-			$ad->set_property('color-text', $matches[1]);
-			$code = str_replace("var AdBrite_Text_Color = '{$matches[1]}'", "var AdBrite_Text_Color = '{{color-text}}'", $code);
-		}
-		if (preg_match("/var AdBrite_Background_Color = '(\w*)'/", $code, $matches)) {
-			$ad->set_property('color-bg', $matches[1]);
-			$code = str_replace("var AdBrite_Background_Color = '{$matches[1]}'", "var AdBrite_Background_Color = '{{color-bg}}'", $code);
-		}
-		if (preg_match("/var AdBrite_Border_Color = '(\w*)'/", $code, $matches)) {
-			$ad->set_property('color-border', $matches[1]);
-			$code = str_replace("var AdBrite_Border_Color = '{$matches[1]}'", "var AdBrite_Border_Color = '{{color-border}}'", $code);
-		}
-		if (preg_match("/var AdBrite_URL_Color = '(\w*)'/", $code, $matches)) {
-			$ad->set_property('color-link', $matches[1]);
-			$code = str_replace("var AdBrite_URL_Color = '{$matches[1]}'", "var AdBrite_URL_Color = '{{color-link}}'", $code);
+		if ((strpos($code,'<!-- Begin: AdBrite -->') !== false) ||
+		    (strpos($code,'src="http://ads.adbrite.com') !== false) ||
+		    (strpos($code,'<!-- End: AdBrite -->') !== false)) {
+			
+			$ad = OX_Ad::to_object();
+			$ad->network_type = get_class();
+			
+			if (preg_match("/var AdBrite_Title_Color = '(\w*)'/", $code, $matches)) {
+				$ad->set_property('color-title', $matches[1]);
+				$code = str_replace("var AdBrite_Title_Color = '{$matches[1]}'", "var AdBrite_Title_Color = '{{color-title}}'", $code);
+			}
+			if (preg_match("/var AdBrite_Text_Color = '(\w*)'/", $code, $matches)) {
+				$ad->set_property('color-text', $matches[1]);
+				$code = str_replace("var AdBrite_Text_Color = '{$matches[1]}'", "var AdBrite_Text_Color = '{{color-text}}'", $code);
+			}
+			if (preg_match("/var AdBrite_Background_Color = '(\w*)'/", $code, $matches)) {
+				$ad->set_property('color-bg', $matches[1]);
+				$code = str_replace("var AdBrite_Background_Color = '{$matches[1]}'", "var AdBrite_Background_Color = '{{color-bg}}'", $code);
+			}
+			if (preg_match("/var AdBrite_Border_Color = '(\w*)'/", $code, $matches)) {
+				$ad->set_property('color-border', $matches[1]);
+				$code = str_replace("var AdBrite_Border_Color = '{$matches[1]}'", "var AdBrite_Border_Color = '{{color-border}}'", $code);
+			}
+			if (preg_match("/var AdBrite_URL_Color = '(\w*)'/", $code, $matches)) {
+				$ad->set_property('color-link', $matches[1]);
+				$code = str_replace("var AdBrite_URL_Color = '{$matches[1]}'", "var AdBrite_URL_Color = '{{color-link}}'", $code);
+			}
+			
+			if (preg_match("/zs=(\w*)/", $code, $matches) != 0) {
+				$ad->set_property('account-id', $matches[1]);
+				$code = str_replace("zs={$matches[1]}", "zs={{account-id}}", $code);
+			}
+			if (preg_match("/sid=(\w*)/", $code, $matches) != 0) {
+				$ad->set_property('slot', $matches[1]);
+				$code = str_replace("sid={$matches[1]}", "sid={{slot}}", $code);
+				$code = str_replace("opid={$matches[1]}", "sid={{slot}}", $code);
+			}
+			
+			$ad->set_property('code', $code);
 		}
 		
-		if (preg_match("/zs=(\w*)/", $code, $matches) != 0) {
-			$ad->set_property('account-id', $matches[1]);
-			$code = str_replace("zs={$matches[1]}", "zs={{account-id}}", $code);
-		}
-		if (preg_match("/sid=(\w*)/", $code, $matches) != 0) {
-			$ad->set_property('slot', $matches[1]);
-			$code = str_replace("sid={$matches[1]}", "sid={{slot}}", $code);
-			$code = str_replace("opid={$matches[1]}", "sid={{slot}}", $code);
-		}
-		
-		return parent::import($code, $ad);
+		return $ad;
 	}
 }
 /*

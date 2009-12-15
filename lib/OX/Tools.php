@@ -164,29 +164,5 @@ class OX_Tools
 		}
 		return $response;
 	}
-	function generate_name($base = null)
-	{
-		global $advman_engine;
-		$ads = $advman_engine->get_ads();
-		
-		// Generate a unique name if no name was specified
-		$unique = false;
-		$i = 1;
-		$name = $base;
-		while (!$unique) {
-			$unique = true;
-			foreach ($ads as $ad) {
-				if ($ad->name == $name) {
-					$unique = false;
-					break;
-				}
-			}
-			if (!$unique) {
-				$name = $base . '-' . $i++;
-			}
-		}
-		
-		return $name;
-	}
 }
 ?>

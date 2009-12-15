@@ -3,13 +3,11 @@ require_once(OX_LIB . '/Network.php');
 
 class OX_Plugin_Cj extends OX_Network
 {
-	var $network_name = 'Commission Junction';
-	var $url = 'http://www.cj.com';
-	
-	function OX_Plugin_Cj($network = null)
+	function OX_Plugin_Cj()
 	{
-		$this->OX_Network($network);
-		$this->name = 'cj';  // Short name which is the prefix for the default name of ads
+		$this->OX_Network();
+		$this->name = 'Commission Junction';
+		$this->short_name = 'cj';
 	}
 	
 	/**
@@ -17,7 +15,7 @@ class OX_Plugin_Cj extends OX_Network
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class());
 	}
 	
 	function substitute_fields($ad, $search = array(), $replace = array())
@@ -47,7 +45,7 @@ class OX_Plugin_Cj extends OX_Network
 		);
 	}
 	
-	function get_network_property_defaults()
+	function get_default_properties()
 	{
 		$properties = array(
 			'account-id' => '',
@@ -59,7 +57,7 @@ class OX_Plugin_Cj extends OX_Network
 			'status' => '',
 			'width' => '250',
 		);
-		return $properties + parent::get_network_property_defaults();
+		return $properties + parent::get_default_properties();
 	}
 	
 	function get_ad_formats()
@@ -72,8 +70,10 @@ class OX_Plugin_Cj extends OX_Network
 		return array('border', 'title', 'bg', 'text');
 	}
 	
-	function is_tag_detected($code)
+	function import($code)
 	{
+		$ad = false;
+		
 		$match = false;
 		$xdomains = OX_Plugin_Cj::get_domains();
 		foreach ($xdomains as $d) {
@@ -83,59 +83,62 @@ class OX_Plugin_Cj extends OX_Network
 			}
 		}
 		
-		return $match;
-	}
+		if ($match) {
+			
+			$ad = OX_Ad::to_object();
+			$ad->network_type = get_class();
+			
+			if (preg_match('/http:\/\/([.\w]*)\/click-(\d*)-(\d*)/', $code, $matches) != 0) { 
+				$ad->set_property('account-id', $matches[2]);
+				$ad->set_property('slot', $matches[3]); 
+				$code = str_replace("http://{$matches[1]}/click-{$matches[2]}-{$matches[3]}", "http://{{xdomain}}/click-{{account-id}}-{{slot}}", $code);
+			}
+	
+			$a = $matches[2];
+			$s = $matches[3];
+			if (preg_match("/http:\/\/([.\w]*)\/image-{$a}-{$s}/", $code, $matches) != 0) { 
+				$code = str_replace("http://{$matches[1]}/image-{$a}-{$s}", "http://{{xdomain}}/image-{{account-id}}-{{slot}}", $code);
+			}
+			
+			if (preg_match("/onmouseover=\"window.status='([^']*)';return true;\"/", $code, $matches)) {
+				$ad->set_property('status', $matches[1]);
+				$code = str_replace("onmouseover=\"window.status='{$matches[1]}';return true;\"", "onmouseover=\"window.status='{{status}}';return true;\"", $code);
+			}
+	
+			if (preg_match("/ alt=\"([^\"]*)\"/", $code, $matches)) {
+				$ad->set_property('alt-text', $matches[1]);
+				$code = str_replace(" alt=\"{$matches[1]}\"", " alt=\"{{alt-text}}\"", $code);
+			}
+			
+			if ($v = strpos($code, " target=\"_blank\"")) {
+				$ad->set_property('new-window', 'yes');
+				$code = str_replace(" target=\"_blank\"", "{{new-window}}", $code);
+			}
+			
+			$width = '';
+			$height = '';
+			if (preg_match('/width="(\w*)"/', $code, $matches) != 0) {
+				$width = $matches[1];
+				$code = str_replace("width=\"{$width}\"", "width=\"{{width}}\"", $code);
+			}
+			if (preg_match('/height="(\w*)"/', $code, $matches) != 0) {
+				$height = $matches[1];
+				$code = str_replace("height=\"{$height}\"", "height=\"{{height}}\"", $code);
+			}
+			if ($width != '') {
+				$ad->set_property('width', $width);
+			}
+			if ($height != '') {
+				$ad->set_property('height', $height);
+			}
+			if (($width != '') && ($height != '')) {
+				$ad->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
+			}
+			
+			$ad->set_property('code', $code);
+		}
 		
-	function import($code, &$ad)
-	{
-		if (preg_match('/http:\/\/([.\w]*)\/click-(\d*)-(\d*)/', $code, $matches) != 0) { 
-			$ad->set_property('account-id', $matches[2]);
-			$ad->set_property('slot', $matches[3]); 
-			$code = str_replace("http://{$matches[1]}/click-{$matches[2]}-{$matches[3]}", "http://{{xdomain}}/click-{{account-id}}-{{slot}}", $code);
-		}
-
-		$a = $matches[2];
-		$s = $matches[3];
-		if (preg_match("/http:\/\/([.\w]*)\/image-{$a}-{$s}/", $code, $matches) != 0) { 
-			$code = str_replace("http://{$matches[1]}/image-{$a}-{$s}", "http://{{xdomain}}/image-{{account-id}}-{{slot}}", $code);
-		}
-		
-		if (preg_match("/onmouseover=\"window.status='([^']*)';return true;\"/", $code, $matches)) {
-			$ad->set_property('status', $matches[1]);
-			$code = str_replace("onmouseover=\"window.status='{$matches[1]}';return true;\"", "onmouseover=\"window.status='{{status}}';return true;\"", $code);
-		}
-
-		if (preg_match("/ alt=\"([^\"]*)\"/", $code, $matches)) {
-			$ad->set_property('alt-text', $matches[1]);
-			$code = str_replace(" alt=\"{$matches[1]}\"", " alt=\"{{alt-text}}\"", $code);
-		}
-		
-		if ($v = strpos($code, " target=\"_blank\"")) {
-			$ad->set_property('new-window', 'yes');
-			$code = str_replace(" target=\"_blank\"", "{{new-window}}", $code);
-		}
-		
-		$width = '';
-		$height = '';
-		if (preg_match('/width="(\w*)"/', $code, $matches) != 0) {
-			$width = $matches[1];
-			$code = str_replace("width=\"{$width}\"", "width=\"{{width}}\"", $code);
-		}
-		if (preg_match('/height="(\w*)"/', $code, $matches) != 0) {
-			$height = $matches[1];
-			$code = str_replace("height=\"{$height}\"", "height=\"{{height}}\"", $code);
-		}
-		if ($width != '') {
-			$ad->set_property('width', $width);
-		}
-		if ($height != '') {
-			$ad->set_property('height', $height);
-		}
-		if (($width != '') && ($height != '')) {
-			$ad->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
-		}
-		
-		return parent::import($code, $ad);
+		return $ad;
 	}
 }
 /*

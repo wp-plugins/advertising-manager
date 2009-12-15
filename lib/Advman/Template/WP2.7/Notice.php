@@ -6,27 +6,25 @@ class Advman_Template_Notice
 		if (is_array($notices)) {
 			foreach ($notices as $action => $notice) {
 
-?>				<div id="message" class="updated fade">
-					<p>
-						<form method="post" enctype="multipart/form-data">
-						<input type="hidden" name="advman-mode" value="notice">		
-						<input type="hidden" name="advman-action" value="<?php echo $action; ?>">												
-						<?php echo $notice['text']; ?>
+?><div id="message" class="updated fade">
+	<form method="post" enctype="multipart/form-data">
+	<input type="hidden" name="advman-mode" value="notice" />
+	<input type="hidden" name="advman-action" value="<?php echo $action; ?>" />												
+	<?php echo $notice['text']; ?>
 <?php
 				if ($notice['confirm'] == 'yn') {
-?>						<input class="button-secondary action" name="advman-notice-confirm-yes" type="submit" value="Yes">
-						<input class="button-secondary action" name="advman-notice-confirm-no" type="submit" value="No">
+?>	<input class="button-secondary action" name="advman-notice-confirm-yes" type="submit" value="Yes" />
+	<input class="button-secondary action" name="advman-notice-confirm-no" type="submit" value="No" />
 <?php
 				} elseif ($notice['confirm'] == 'ok') {
-?>						<input class="button-secondary action" name="advman-notice-confirm-ok" type="submit" value="OK">
+?>	<input class="button-secondary action" name="advman-notice-confirm-ok" type="submit" value="OK" />
 <?php
 				} elseif ($notice['confirm'] == 'x') {
-?>						<input class="button-secondary action" name="advman-notice-confirm-x" type="submit" value="x">
+?>	<input class="button-secondary action" name="advman-notice-confirm-x" type="submit" value="x" />
 <?php
 				}
-?>						</form>
-					</p>
-				</div>
+?>	</form>
+</div>
 <?php
 			}
 		}

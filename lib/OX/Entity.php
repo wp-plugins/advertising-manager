@@ -3,7 +3,7 @@ require_once (OX_LIB . '/Plugin.php');
 
 class OX_Entity extends OX_Plugin
 {
-	var $name; //Name of this ad
+	var $name; //Name of this ad/network
 	var $id; // ID of the ad
 	var $active = true; //whether this ad can display
 	
@@ -16,7 +16,7 @@ class OX_Entity extends OX_Plugin
 	
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_type', get_class($this));
+		$engine->add_action('ad_type', get_class());
 	}
 	
 	function get_property($key)

@@ -3,13 +3,11 @@ require_once(OX_LIB . '/Network.php');
 
 class OX_Plugin_Openx extends OX_Network
 {
-	var $network_name = 'OpenX';
-	var $url = 'http://www.openx.org';
-	
-	function OX_Plugin_Openx($network = null)
+	function OX_Plugin_Openx()
 	{
-		$this->OX_Network($network);
-		$this->name = 'openx';  // Short name which is the prefix for the default name of ads
+		$this->OX_Network();
+		$this->name = 'OpenX';
+		$this->short_name = 'openx';
 	}
 
 	/**
@@ -17,15 +15,15 @@ class OX_Plugin_Openx extends OX_Network
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class());
 	}
 	
-	function get_network_property_defaults()
+	function get_default_properties()
 	{
 		$properties = array(
 			'slot' => '',
 		);
-		return $properties + parent::get_network_property_defaults();
+		return $properties + parent::get_default_properties();
 	}
 	
 	function get_ad_colors()
@@ -33,24 +31,27 @@ class OX_Plugin_Openx extends OX_Network
 		return array('border', 'title', 'bg', 'text');
 	}
 	
-	function is_tag_detected($code)
+	function import($code)
 	{
-		return (
-			(strpos($code, 'd1.openx.org') !== false) ||
-			(strpos($code, 'MAX_used') !== false)
-		);
-	}
+		$ad = false;
 		
-	function import($code, &$ad)
-	{
-		if (preg_match("/zoneid=(\w*)/", $code, $matches) !=0) {
-			$ad->set_property('slot', $matches[1]);
-			$code = str_replace('zoneid=' . $matches[1], 'zoneid={{slot}}', $code);
+		if ((strpos($code, 'd1.openx.org') !== false) ||
+		    (strpos($code, 'MAX_used') !== false)) {
+			
+			$ad = OX_Ad::to_object();
+			$ad->network_type = get_class();
+		
+			if (preg_match("/zoneid=(\w*)/", $code, $matches) !=0) {
+				$ad->set_property('slot', $matches[1]);
+				$code = str_replace('zoneid=' . $matches[1], 'zoneid={{slot}}', $code);
+			}
+			
+			$code = str_replace('INSERT_RANDOM_NUMBER_HERE', '{{random}}', $code);
+			
+			$ad->set_property('code', $code);
 		}
 		
-		$code = str_replace('INSERT_RANDOM_NUMBER_HERE', '{{random}}', $code);
-		
-		return parent::import($code, $ad);
+		return $ad;
 	}
 }
 /*

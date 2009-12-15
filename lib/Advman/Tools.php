@@ -51,11 +51,11 @@ class Advman_Tools
 	function get_ids_from_form()
 	{
 		// For operations on a single ad
-		$id = OX_Tools::sanitize($_POST['advman-target'], 'number');
+		$id = OX_Tools::sanitize($_POST['advman-id'], 'number');
 		if (is_numeric($id)) {
 			$ids = array($id);
 		} else {
-			$ids = OX_Tools::sanitize($_POST['advman-targets'], 'number');
+			$ids = OX_Tools::sanitize($_POST['advman-ids'], 'number');
 			if (empty($ids)) {
 				$ids = array();
 			}
@@ -98,12 +98,12 @@ class Advman_Tools
 	
 	function get_tag_from_form()
 	{
-		$tag = OX_Tools::sanitize($_POST['advman-code']);
+		return OX_Tools::sanitize($_POST['advman-code']);
 	}
 		
 	function organize_appearance($ad)
 	{
-		$defaults = $ad->get_network_property_defaults();
+		$defaults = $ad->get_default_properties();
 		
 		$app = array();
 		$app['color']['border'] = __('Border:', 'advman');
@@ -314,7 +314,7 @@ class Advman_Tools
 			if (isset($_POST['advman-name'])) {
 				$value = OX_Tools::sanitize($_POST['advman-name']);
 				if ($value != $ad->name) {
-					Advman_Admin::check_default($ad, $value);
+					Advman_Tools::check_default($ad, $value);
 					$ad->name = $value;
 					$changed = true;
 				}
@@ -329,7 +329,7 @@ class Advman_Tools
 			}
 		}
 		
-		$properties = $ad->get_network_property_defaults();
+		$properties = $ad->get_default_properties();
 		if (!empty($properties)) {
 			foreach ($properties as $property => $d) {
 				if (isset($_POST["advman-{$property}"])) {
@@ -387,6 +387,32 @@ class Advman_Tools
 				$advman_engine->set_setting('default-ad', $value);
 			}
 		}
+	}
+	
+	function generate_ad_name($ad)
+	{
+		global $advman_engine;
+		$base = $ad->get_network_short_name();
+		$ads = $advman_engine->get_ads();
+		
+		// Generate a unique name if no name was specified
+		$unique = false;
+		$i = 1;
+		$name = $base;
+		while (!$unique) {
+			$unique = true;
+			foreach ($ads as $ad) {
+				if ($ad->name == $name) {
+					$unique = false;
+					break;
+				}
+			}
+			if (!$unique) {
+				$name = $base . '-' . $i++;
+			}
+		}
+		
+		return $name;
 	}
 }
 ?>

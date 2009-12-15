@@ -11,7 +11,7 @@ function advman_set_action(action, id, name)
 			var ad = document.getElementById('advman-ad-' + id);
 			items.push(ad.firstChild.nodeValue);
 		} else {
-			var cb = document.getElementsByName('advman-targets[]');
+			var cb = document.getElementsByName('advman-ids[]');
 			var len = cb.length;
 			for (var i=0; i<cb.length; i++) {
 				if (cb[i].checked) {
@@ -38,7 +38,7 @@ function advman_set_action(action, id, name)
 	
 	if (submit) {
 		document.getElementById('advman-action').value = action;
-		document.getElementById('advman-target').value = id;
+		document.getElementById('advman-id').value = id;
 		document.getElementById('advman-form').submit();
 	}
 }

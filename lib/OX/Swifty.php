@@ -91,6 +91,11 @@ class OX_Swifty
 		}
 	}
 	
+	function get_ad_count()
+	{
+		return count($this->dal->select_ads());
+	}
+	
 	function get_ad($id)
 	{
 		return $this->dal->select_ad($id);
@@ -122,6 +127,17 @@ class OX_Swifty
 		}
 		
 		return false;
+	}
+	
+	function copy_ads($ids)
+	{
+		$ads = array();
+		foreach ($ids as $id) {
+			$ad = $this->copy_ad($id);
+			$ads[$ad->id] = $ad;
+		}
+		
+		return $ads;
 	}
 	
 	function add_zone(&$zone)
@@ -232,12 +248,11 @@ class OX_Swifty
 		global $advman_engine;
 		
 		$imported = false;
-		$ad = OX_Ad::to_object();
 		
 		if (!empty($tag)) {
 			$network_types = $this->get_action('ad_network');
 			foreach ($network_types as $network_type) {
-				if (call_user_func(array($network_type, 'import'), $tag, $ad)) {
+				if ($ad = call_user_func_array(array($network_type, 'import'), array($tag, &$ad))) {
 					$imported = true;
 					break; //leave the foreach loop
 				}
@@ -246,7 +261,7 @@ class OX_Swifty
 		
 		// Not a pre-defined network - we will make it HTML code...
 		if (!$imported) {
-			OX_Network_Html::import($tag, $ad);
+			OX_Plugin_Html::import($tag, $ad);
 		}
 		
 		return $this->add_ad($ad);
