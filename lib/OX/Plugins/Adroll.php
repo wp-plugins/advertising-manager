@@ -1,13 +1,14 @@
 <?php
-require_once(OX_LIB . '/Network.php');	
+require_once(OX_LIB . '/Ad.php');	
 
-class OX_Plugin_Adroll extends OX_Network
+class OX_Plugin_Adroll extends OX_Ad
 {
-	function OX_Plugin_Adroll()
+	var $network_name = 'AdRoll';
+	var $url = 'http://www.adroll.com';
+	
+	function OX_Plugin_Adroll($aAd = null)
 	{
-		$this->OX_Network();
-		$this->name = 'Adroll';
-		$this->short_name = 'adroll';
+		$this->OX_Ad($aAd);
 	}
 	
 	/**
@@ -15,17 +16,17 @@ class OX_Plugin_Adroll extends OX_Network
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class());
+		$engine->addAction('ad_network', get_class($this));
 	}
 	
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'account-id' => '',
 			'slot' => '',
 		);
 		
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function get_ad_formats()
@@ -33,25 +34,23 @@ class OX_Plugin_Adroll extends OX_Network
 		return array('all' => array('728x90', '468x60', '234x60', '120x600', '160x600', '120x240', '336x280', '300x250', '250x250', '200x200', '180x150', '125x125'));
 	}
 	
-	function import($code, &$ad)
-	{
-		$ad = false;
+	function import_detect_network($code){
 		
-		if (preg_match('/src="http:\/\/(\w*).adroll.com\/(\w*)\//', $code, $matches) !==0 ) {
-			
-			$ad = OX_Ad::to_object();
-			$ad->network_type = get_class();
-			
-			if (preg_match("/http:\/\/(\w*).adroll.com\/(\w*)\/(\w*)\/(\w*)/", $code, $matches)!=0) { 
-				$ad->set_property('account-id', $matches[3]);
-				$ad->set_property('slot', $matches[4]);
-				$code = str_replace("http://{$matches[1]}.adroll.com/{$matches[2]}/{$matches[3]}/{$matches[4]}", "http://{$matches[1]}.adroll.com/{$matches[2]}/{{account-id}}/{{slot}}", $code);
-			}
-			
-			$ad->set_property('code', $code);
+		return (
+			preg_match('/src="http:\/\/(\w*).adroll.com\/(\w*)\//', $code, $matches) !==0
+		);
+		
+	}
+		
+	function import_settings($code)
+	{
+		if (preg_match("/http:\/\/(\w*).adroll.com\/(\w*)\/(\w*)\/(\w*)/", $code, $matches)!=0) { 
+			$this->set_property('account-id', $matches[3]);
+			$this->set_property('slot', $matches[4]);
+			$code = str_replace("http://{$matches[1]}.adroll.com/{$matches[2]}/{$matches[3]}/{$matches[4]}", "http://{$matches[1]}.adroll.com/{$matches[2]}/{{account-id}}/{{slot}}", $code);
 		}
 		
-		return $ad;
+		parent::import_settings($code);
 	}
 
 	function _form_settings_help()

@@ -1,13 +1,14 @@
 <?php
-require_once(OX_LIB . '/Network.php');	
+require_once(OX_LIB . '/Ad.php');	
 
-class OX_Plugin_Chitika extends OX_Network
+class OX_Plugin_Chitika extends OX_Ad
 {
-	function OX_Plugin_Chitika()
+	var $network_name = 'Chitika';
+	var $url = 'http://www.chitika.com';
+	
+	function OX_Plugin_Chitika($aAd = null)
 	{
-		$this->OX_Network();
-		$this->name = 'Chitika';
-		$this->short_name = 'chitika';
+		$this->OX_Ad($aAd);
 	}
 		
 	/**
@@ -15,10 +16,10 @@ class OX_Plugin_Chitika extends OX_Network
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class());
+		$engine->addAction('ad_network', get_class($this));
 	}
 	
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'account-id' => '',
@@ -36,7 +37,7 @@ class OX_Plugin_Chitika extends OX_Network
 			'width' => '728',
 		);
 		
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function get_ad_formats()
@@ -44,91 +45,89 @@ class OX_Plugin_Chitika extends OX_Network
 		return array('all' => array('728x90', '468x60', '468x90', '468x120', '468x180', '550x250', '550x120', '550x90', '450x90', '430x90', '400x90', '120x600', '160x600', '180x300', '300x250', '300x150', '300x125', '300x70', '250x250', '200x200', '160x160', '336x280', '336x160', '334x100', '180x150'));
 	}
 	
-	function import($code)
+	function import_detect_network($code)
 	{
-		$ad = false;
 		
-		if ((strpos($code,'chitika')!==false) &&
-		    (strpos($code,'ch_client') !==false)) {
-			
-			$ad = OX_Ad::to_object();
-			$ad->network_type = get_class();
+		return ( (strpos($code,'chitika')!==false) &&
+				(strpos($code,'ch_client') !==false)
+		);
+
+	}
 		
-			$s = '([\s]*)'; // search for a space character
-			$q = "([\\'\\\"]{1})"; // search for a quote character
-			
-			if (preg_match("/ch_client{$s}={$s}{$q}(.*){$q};/", $code, $matches) != 0) {
-				$ad->set_property('account-id', $matches[4]);
-				$code = str_replace("ch_client{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_client{$matches[1]}={$matches[2]}{$matches[3]}{{account-id}}{$matches[5]};", $code);
-			}
-	
-			if (preg_match("/ch_color_bg{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
-				$ad->set_property('color-bg', $matches[4]);
-				$code = str_replace("ch_color_bg{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_color_bg{$matches[1]}={$matches[2]}{$matches[3]}{{color-bg}}{$matches[5]};", $code);
-			}
-			
-			if (preg_match("/ch_color_border{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
-				$ad->set_property('color-border', $matches[4]);
-				$code = str_replace("ch_color_border{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_color_border{$matches[1]}={$matches[2]}{$matches[3]}{{color-border}}{$matches[5]};", $code);
-			}
-			
-			if (preg_match("/ch_color_title{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
-				$ad->set_property('color-title', $matches[4]);
-				$code = str_replace("ch_color_title{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_color_title{$matches[1]}={$matches[2]}{$matches[3]}{{color-title}}{$matches[5]};", $code);
-			}
-			
-			if (preg_match("/ch_color_site_link{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
-				$ad->set_property('color-link', $matches[4]);
-				$code = str_replace("ch_color_site_link{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_color_site_link{$matches[1]}={$matches[2]}{$matches[3]}{{color-link}}{$matches[5]};", $code);
-			}
-			
-			if (preg_match("/ch_color_text{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
-				$ad->set_property('color-text', $matches[4]);
-				$code = str_replace("ch_color_text{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_color_text{$matches[1]}={$matches[2]}{$matches[3]}{{color-text}}{$matches[5]};", $code);
-			}
-			
-			if (preg_match("/ch_font_title{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
-				$ad->set_property('font-title', $matches[4]);
-				$code = str_replace("ch_font_title{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_font_title{$matches[1]}={$matches[2]}{$matches[3]}{{font-title}}{$matches[5]};", $code);
-			}
-			
-			if (preg_match("/ch_font_text{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
-				$ad->set_property('font-text', $matches[4]);
-				$code = str_replace("ch_font_text{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_font_text{$matches[1]}={$matches[2]}{$matches[3]}{{font-text}}{$matches[5]};", $code);
-			}
-			
-			if (preg_match("/ch_sid{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
-				$ad->set_property('channel', $matches[4]);
-				$code = str_replace("ch_sid{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_sid{$matches[1]}={$matches[2]}{$matches[3]}{{channel}}{$matches[5]};", $code);
-			}
-			
-			if (preg_match("/ch_alternate_ad_url{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
-				$ad->set_property('alt-url', $matches[4]);
-				$code = str_replace("ch_alternate_ad_url{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_alternate_ad_url{$matches[1]}={$matches[2]}{$matches[3]}{{alt-url}}{$matches[5]};", $code);
-			}
-			
-			$width = '';
-			$height = '';
-			if (preg_match("/ch_width{$s}={$s}(\d*);/", $code, $matches) != 0) {
-				$width = $matches[3];
-				$ad->set_property('width', $width);
-				$code = str_replace("ch_width{$matches[1]}={$matches[2]}{$matches[3]};", "ch_width{$matches[1]}={$matches[2]}{{width}};", $code);
-			}
-	
-			if (preg_match("/ch_height{$s}={$s}(\d*);/", $code, $matches) != 0) {
-				$height = $matches[3];
-				$ad->set_property('height', $height);
-				$code = str_replace("ch_height{$matches[1]}={$matches[2]}{$matches[3]};", "ch_height{$matches[1]}={$matches[2]}{{height}};", $code);
-			}
-			
-			if (($width != '') && ($height != '')) {
-				$ad->set_property('adformat', $width . 'x' . $height);
-			}
-			
-			$ad->set_property('code', $code);
+	function import_settings($code)
+	{
+		$s = '([\s]*)'; // search for a space character
+		$q = "([\\'\\\"]{1})"; // search for a quote character
+		
+		if (preg_match("/ch_client{$s}={$s}{$q}(.*){$q};/", $code, $matches) != 0) {
+			$this->set_property('account-id', $matches[4]);
+			$code = str_replace("ch_client{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_client{$matches[1]}={$matches[2]}{$matches[3]}{{account-id}}{$matches[5]};", $code);
+		}
+
+		if (preg_match("/ch_color_bg{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
+			$this->set_property('color-bg', $matches[4]);
+			$code = str_replace("ch_color_bg{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_color_bg{$matches[1]}={$matches[2]}{$matches[3]}{{color-bg}}{$matches[5]};", $code);
 		}
 		
-		return $ad;
+		if (preg_match("/ch_color_border{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
+			$this->set_property('color-border', $matches[4]);
+			$code = str_replace("ch_color_border{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_color_border{$matches[1]}={$matches[2]}{$matches[3]}{{color-border}}{$matches[5]};", $code);
+		}
+		
+		if (preg_match("/ch_color_title{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
+			$this->set_property('color-title', $matches[4]);
+			$code = str_replace("ch_color_title{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_color_title{$matches[1]}={$matches[2]}{$matches[3]}{{color-title}}{$matches[5]};", $code);
+		}
+		
+		if (preg_match("/ch_color_site_link{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
+			$this->set_property('color-link', $matches[4]);
+			$code = str_replace("ch_color_site_link{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_color_site_link{$matches[1]}={$matches[2]}{$matches[3]}{{color-link}}{$matches[5]};", $code);
+		}
+		
+		if (preg_match("/ch_color_text{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
+			$this->set_property('color-text', $matches[4]);
+			$code = str_replace("ch_color_text{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_color_text{$matches[1]}={$matches[2]}{$matches[3]}{{color-text}}{$matches[5]};", $code);
+		}
+		
+		if (preg_match("/ch_font_title{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
+			$this->set_property('font-title', $matches[4]);
+			$code = str_replace("ch_font_title{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_font_title{$matches[1]}={$matches[2]}{$matches[3]}{{font-title}}{$matches[5]};", $code);
+		}
+		
+		if (preg_match("/ch_font_text{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
+			$this->set_property('font-text', $matches[4]);
+			$code = str_replace("ch_font_text{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_font_text{$matches[1]}={$matches[2]}{$matches[3]}{{font-text}}{$matches[5]};", $code);
+		}
+		
+		if (preg_match("/ch_sid{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
+			$this->set_property('channel', $matches[4]);
+			$code = str_replace("ch_sid{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_sid{$matches[1]}={$matches[2]}{$matches[3]}{{channel}}{$matches[5]};", $code);
+		}
+		
+		if (preg_match("/ch_alternate_ad_url{$s}={$s}{$q}(.*){$q};/", $code, $matches)) {
+			$this->set_property('alt-url', $matches[4]);
+			$code = str_replace("ch_alternate_ad_url{$matches[1]}={$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]};", "ch_alternate_ad_url{$matches[1]}={$matches[2]}{$matches[3]}{{alt-url}}{$matches[5]};", $code);
+		}
+		
+		$width = '';
+		$height = '';
+		if (preg_match("/ch_width{$s}={$s}(\d*);/", $code, $matches) != 0) {
+			$width = $matches[3];
+			$this->set_property('width', $width);
+			$code = str_replace("ch_width{$matches[1]}={$matches[2]}{$matches[3]};", "ch_width{$matches[1]}={$matches[2]}{{width}};", $code);
+		}
+
+		if (preg_match("/ch_height{$s}={$s}(\d*);/", $code, $matches) != 0) {
+			$height = $matches[3];
+			$this->set_property('height', $height);
+			$code = str_replace("ch_height{$matches[1]}={$matches[2]}{$matches[3]};", "ch_height{$matches[1]}={$matches[2]}{{height}};", $code);
+		}
+		
+		if (($width != '') && ($height != '')) {
+			$this->set_property('adformat', $width . 'x' . $height);
+		}
+
+		parent::import_settings($code);
 	}
 	
 	function get_preview_url()

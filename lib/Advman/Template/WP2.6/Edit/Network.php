@@ -7,7 +7,7 @@ class Advman_Template_Edit_Network extends Advman_Template_Edit
 	function display($ad)
 	{
 		// Main pane - default options
-		$properties = $ad->get_default_properties();
+		$properties = $ad->get_network_property_defaults();
 		
 		// Account information
 		$fields = array('account-id','slot');

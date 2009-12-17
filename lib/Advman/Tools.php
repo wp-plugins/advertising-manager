@@ -3,26 +3,6 @@ require_once(OX_LIB . '/Tools.php');
 
 class Advman_Tools
 {
-	function build_admin_url($page = null, $mode = null, $id = null)
-	{
-		$params = array();
-		if (!empty($page)) {
-			$params[] = "page=$page";
-		}
-		if (!empty($mode)) {
-			$params[] = "advman-mode=$mode";
-		}
-		if (!empty($id)) {
-			$params[] = "advman-id=$id";
-		}
-		
-		$url = ADVMAN_ADMIN_URL;
-		if (!empty($params)) {
-			$url = $url . '?' . implode('&', $params);
-		}
-		
-		return $url;
-	}
 	/**
 	 * Get the last edit of this ad
 	 */
@@ -48,62 +28,21 @@ class Advman_Tools
 		}
 		return array($last_user, $last_timestamp, $last_timestamp2);
 	}
-	function get_ids_from_form()
-	{
-		// For operations on a single ad
-		$id = OX_Tools::sanitize($_POST['advman-id'], 'number');
-		if (is_numeric($id)) {
-			$ids = array($id);
-		} else {
-			$ids = OX_Tools::sanitize($_POST['advman-ids'], 'number');
-			if (empty($ids)) {
-				$ids = array();
-			}
-		}
-		
-		return $ids;
-	}
 	
 	/**
-	 * This function is called from the Wordpress Settings menu
+	 * Get a template based on the class of an object
 	 */
-	function settings()
+	function get_template($name)
 	{
-		
-		// Get our options and see if we're handling a form submission.
-		$action = OX_Tools::sanitize($_POST['advman-action'], 'key');
-		if ($action == 'save') {
-			global $advman_engine;
-			$settings = array('openx-market', 'openx-market-cpm', 'openx-sync');
-			foreach ($settings as $setting) {
-				$value = isset($_POST["advman-{$setting}"]) ? OX_Tools::sanitize($_POST["advman-{$setting}"]) : false;
-				$advman_engine->set_setting($setting, $value);
-			}
-		}
-		$template = Advman_Tools::get_template('Settings');
-		$template->display();
+		$namePath = str_replace('_', '/', $name);
+		include_once(ADVMAN_TEMPLATE_PATH . "/{$namePath}.php");
+		$className = "Advman_Template_{$name}";
+		return new $className;
 	}
 	
-	function get_filter_from_form()
-	{
-		$filter_active = OX_Tools::sanitize($_POST['advman-filter-active'], 'key');
-		$filter_network = OX_Tools::sanitize($_POST['advman-filter-network'], 'key');
-		if (!empty($filter_active)) {
-			$filter['active'] = $filter_active;
-		}
-		if (!empty($filter_network)) {
-			$filter['network'] = $filter_network;
-		}
-	}
-	
-	function get_tag_from_form()
-	{
-		return OX_Tools::sanitize($_POST['advman-code']);
-	}
-		
 	function organize_appearance($ad)
 	{
-		$defaults = $ad->get_default_properties();
+		$defaults = $ad->get_network_property_defaults();
 		
 		$app = array();
 		$app['color']['border'] = __('Border:', 'advman');
@@ -244,175 +183,17 @@ class Advman_Tools
 		return array('data' => $data, 'types' => $types, 'sections' => $sections, 'formats' => $formats);
 	}
 	
-	function add_zone_ajax()
+	function get_properties_from_array($aAd)
 	{
-		global $advman_engine;
-		
-		check_ajax_referer( 'advman-add-zone' );
-		$x = new WP_Ajax_Response();
-		$new_zone = trim(OX_Tools::sanitize($_POST['advman-zone-name']));
-		$found = false;
-		$zones = $advman_engine->get_zones();
-		if (!empty($zones)) {
-			foreach ( $zones as $zone ) {
-				if ($new_zone == $zone->name) {
-					$found = true;
-					break;
-				}
+		$aProperties = array();
+		$aOmit = array('name', 'id', 'active', 'class');
+		foreach ($aAd as $n => $v) {
+			if (!in_array($n, $aOmit)) {
+				$aProperties[$n] = $v;
 			}
 		}
 		
-		if (!$found) {
-			
-			$zone = new OX_Zone();
-			$zone->name = $new_zone;
-			// If the name contains the size, automatically set the size (e.g. 'MyZone 768x60')
-			if (preg_match('#(\d*)\s*x\s*(\d*)#', $new_zone, $matches)) {
-				$zone->set_property('adformat', $matches[1] . 'x' . $matches[2]);
-			}
-			$zone = $advman_engine->insertZone($zone);
-			$id = $zone->id;
-			
-			$new_zone = esc_html(stripslashes($new_zone));
-			$x->add( array(
-				'what' => 'advman-zone',
-				'id' => $id,
-				'data' => "<li id='advman-zone-{$id}'><label for='in-advman-zone-{$id}' class='selectit'><input value='{$id}' type='checkbox' name='link_category[]' id='in-advman-zone-{$id}' checked='checked' /> {$new_zone}</label></li>",
-				'position' => -1
-			) );
-		}
-		$x->send();
-	}
-	
-	function set_auto_optimise($active)
-	{
-		global $advman_engine;
-		
-		$market = ($active) ? 'yes' : 'no';
-		$ads = $advman_engine->get_ads();
-		foreach ($ads as $id => $ad) {
-			$p = $ad->get_network_property('openx-market');
-			if ($p != $market) {
-				$ad->set_network_property('openx-market', $market);
-			}
-			$p = $ad->get_property('openx-market');
-			if (!empty($p) && $p != $market) {
-				$ad->set_property('openx-market', $market);
-			}
-		}
-	}
-	
-	function save_properties(&$ad, $default = false)
-	{
-		global $advman_engine;
-		
-		// Whether we changed any setting in this entity
-		$changed = false;
-		
-		// Set the ad properties (if not setting default properties)
-		if (!$default) {
-			if (isset($_POST['advman-name'])) {
-				$value = OX_Tools::sanitize($_POST['advman-name']);
-				if ($value != $ad->name) {
-					Advman_Tools::check_default($ad, $value);
-					$ad->name = $value;
-					$changed = true;
-				}
-			}
-			
-			if (isset($_POST['advman-active'])) {
-				$value = $_POST['advman-active'] == 'yes';
-				if ($ad->active != $value) {
-					$ad->active = $value;
-					$changed = true;
-				}
-			}
-		}
-		
-		$properties = $ad->get_default_properties();
-		if (!empty($properties)) {
-			foreach ($properties as $property => $d) {
-				if (isset($_POST["advman-{$property}"])) {
-					$value = OX_Tools::sanitize($_POST["advman-{$property}"]);
-					if ($default) {
-						if ($ad->get_network_property($property) != $value) {
-							$ad->set_network_property($property, $value);
-							$changed = true;
-						}
-					} else {
-						if ($ad->get_property($property) != $value) {
-							$ad->set_property($property, $value);
-							$changed = true;
-						}
-					}
-					// deal with adtype
-					if ($property == 'adtype') {
-						if (isset($_POST["advman-adformat-{$value}"])) {
-							$v = OX_Tools::sanitize($_POST["advman-adformat-{$value}"]);
-							if ($default) {
-								if ($ad->get_network_property('adformat') != $v) {
-									$ad->set_network_property('adformat', $v);
-									$changed = true;
-								}
-							} else {
-								if ($ad->get_property('adformat') != $v) {
-									$ad->set_property('adformat', $v);
-									$changed = true;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		return $changed;
-	}
-	
-	function check_default($ad, $value)
-	{
-		global $advman_engine;
-		
-		$d = $advman_engine->get_setting('default-ad');
-		if (!empty($d) && $ad->name == $d) {
-			$modify = true;
-			$ads = $advman_engine->get_ads();
-			foreach ($ads as $a) {
-				if ($a->id != $ad->id && $a->name == $d) {
-					$modify = false;
-					break;
-				}
-			}
-			if ($modify) {
-				$advman_engine->set_setting('default-ad', $value);
-			}
-		}
-	}
-	
-	function generate_ad_name($ad)
-	{
-		global $advman_engine;
-		$base = $ad->get_network_short_name();
-		$ads = $advman_engine->get_ads();
-		
-		// Generate a unique name if no name was specified
-		$unique = false;
-		$i = 1;
-		$name = $base;
-		while (!$unique) {
-			$unique = true;
-			foreach ($ads as $ad) {
-				if ($ad->name == $name) {
-					$unique = false;
-					break;
-				}
-			}
-			if (!$unique) {
-				$name = $base . '-' . $i++;
-			}
-		}
-		
-		return $name;
+		return $aProperties;
 	}
 }
 ?>

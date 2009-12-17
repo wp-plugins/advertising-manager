@@ -9,7 +9,7 @@ class Advman_Widget
 		global $wp_version;
 		global $advman_engine;
 		
-		$ads = $advman_engine->get_ads();
+		$ads = $advman_engine->getAds();
 		
 		if (!empty($ads)) {
 			$widgets = array();
@@ -60,13 +60,13 @@ class Advman_Widget
 		}
 		
 		if ($n == 'default-ad') {
-			$n = $advman_engine->get_setting('default-ad');
+			$n = $advman_engine->getSetting('default-ad');
 		}
 		
-		$ad = $advman_engine->choose_ad($n);
+		$ad = $advman_engine->selectAd($n);
 		
 		if (!empty($ad)) {
-			$widgets = $advman_engine->get_setting('widgets');
+			$widgets = $advman_engine->getSetting('widgets');
 			$id = substr(md5($ad->name), 0, 10);
 			$suppress = !empty($widgets[$id]['suppress']);
 			$ad_widget = '';
@@ -86,7 +86,7 @@ class Advman_Widget
 	{
 		global $advman_engine;
 		
-		$widgets = $advman_engine->get_setting('widgets');
+		$widgets = $advman_engine->getSetting('widgets');
 		$id = substr(md5($name),0,10);
 		
 		// Save data if it is posted from the widget control
@@ -99,7 +99,7 @@ class Advman_Widget
 		
 		// Clean up any data from the widgets (e.g. if ads have been renamed)
 		if (!empty($widgets)) {
-			$ads = $advman_engine->get_ads();
+			$ads = $advman_engine->getAds();
 			foreach ($widgets as $i => $w) {
 				$found = false;
 				foreach ($ads as $ad) {
@@ -114,7 +114,7 @@ class Advman_Widget
 				}
 			}
 		}
-		$advman_engine->set_setting('widgets', $widgets);
+		$advman_engine->setSetting('widgets', $widgets);
 		
 		// Display the widget options
 		$title = isset($widgets[$id]['title']) ? $widgets[$id]['title'] : '';

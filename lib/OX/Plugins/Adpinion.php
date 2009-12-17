@@ -1,13 +1,14 @@
 <?php
-require_once(OX_LIB . '/Network.php');	
+require_once(OX_LIB . '/Ad.php');	
 
-class OX_Plugin_Adpinion extends OX_Network
+class OX_Plugin_Adpinion extends OX_Ad
 {
-	function OX_Plugin_Adpinion()
+	var $network_name = 'Adpinion';
+	var $url = 'http://www.adpinion.com';
+	
+	function OX_Plugin_Adpinion($aAd = null)
 	{
-		$this->OX_Network();
-		$this->name = 'Adpinion';
-		$this->short_name = 'adpinion';
+		$this->OX_Ad($aAd);
 	}
 	
 	/**
@@ -15,12 +16,12 @@ class OX_Plugin_Adpinion extends OX_Network
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class());
+		$engine->addAction('ad_network', get_class($this));
 	}
 	
-	function substitute_fields($ad, $search = array(), $replace = array())
+	function display($codeonly = false, $search = array(), $replace = array())
 	{
-		if($ad->get('width', true) > $ad->get('height', true)) {
+		if($this->get('width', true) > $this->get('height', true)) {
 			$xwidth=18;
 			$xheight=17;
 		} else {
@@ -30,13 +31,13 @@ class OX_Plugin_Adpinion extends OX_Network
 	
 		$search[] = '{{xwidth}}';
 		$search[] = '{{xheight}}';
-		$replace[] = $ad->get('width', true) + $xwidth;
-		$replace[] = $ad->get('height', true) + $xheight;
+		$replace[] = $this->get('width', true) + $xwidth;
+		$replace[] = $this->get('height', true) + $xheight;
 		
-		return parent::substitue_fields($ad, $search, $replace);
+		return parent::display($codeonly, $search, $replace);
 	}
 	
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'account-id' => '',
@@ -45,7 +46,7 @@ class OX_Plugin_Adpinion extends OX_Network
 			'width' => '728',
 		);
 		
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function get_ad_formats()
@@ -53,47 +54,42 @@ class OX_Plugin_Adpinion extends OX_Network
 		return array('all' => array('728x90', '468x60', '120x600', '160x600', '300x250'));
 	}
 	
-	function import($code)
+	function import_detect_network($code)
 	{
-		$ad = false;
+		return ( preg_match('/src="http:\/\/www.adpinion.com\/app\//', $code, $matches) !==0);
+	}
 		
-		if ( preg_match('/src="http:\/\/www.adpinion.com\/app\//', $code, $matches) !== 0 ) {
-			
-			$ad = OX_Ad::to_object();
-			$ad->network_type = get_class();
-			
-			$width = '';
-			$height = '';
-			if (preg_match("/website=(\w*)/", $code, $matches) != 0) {
-				$ad->set_property('account-id', $matches[1]);
-				$code = str_replace("website={$matches[1]}", "website={{account-id}}'", $code);
-			}
-			if (preg_match("/width=(\w*)/", $code, $matches) != 0) {
-				$width = $matches[1];
-				$code = str_replace("width={$matches[1]}", "width={{width}}'", $code);
-			}
-			if (preg_match("/height=(\w*)/", $code, $matches) != 0) {
-				$height = $matches[1];
-				$code = str_replace("height={$matches[1]}", "height={{height}}'", $code);
-			}
-			if (preg_match("/style=\"width:(\d*)px;height:(\d*)px/", $code, $matches) != 0) {
-				$code = str_replace("style=\"width:{$matches[1]}px;height:{$matches[2]}px", "style=\"width:{{xwidth}}px;height:{{xheight}}px", $code);
-			}
-			
-			if ($width != '') {
-				$ad->set_property('width', $width);
-			}
-			if ($height != '') {
-				$ad->set_property('height', $height);
-			}
-			if (($width != '') && ($height != '')) {
-				$ad->set_property('adformat', $width . 'x' . $height);
-			}
-			
-			$ad->set_property('code', $code);
+	function import_settings($code)
+	{
+		$width = '';
+		$height = '';
+		if (preg_match("/website=(\w*)/", $code, $matches) != 0) {
+			$this->set_property('account-id', $matches[1]);
+			$code = str_replace("website={$matches[1]}", "website={{account-id}}'", $code);
+		}
+		if (preg_match("/width=(\w*)/", $code, $matches) != 0) {
+			$width = $matches[1];
+			$code = str_replace("width={$matches[1]}", "width={{width}}'", $code);
+		}
+		if (preg_match("/height=(\w*)/", $code, $matches) != 0) {
+			$height = $matches[1];
+			$code = str_replace("height={$matches[1]}", "height={{height}}'", $code);
+		}
+		if (preg_match("/style=\"width:(\d*)px;height:(\d*)px/", $code, $matches) != 0) {
+			$code = str_replace("style=\"width:{$matches[1]}px;height:{$matches[2]}px", "style=\"width:{{xwidth}}px;height:{{xheight}}px", $code);
 		}
 		
-		return $ad;
+		if ($width != '') {
+			$this->set_property('width', $width);
+		}
+		if ($height != '') {
+			$this->set_property('height', $height);
+		}
+		if (($width != '') && ($height != '')) {
+			$this->set_property('adformat', $width . 'x' . $height);
+		}
+		
+		parent::import_settings($code);
 	}
 }
 /*

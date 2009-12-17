@@ -15,8 +15,8 @@ class Advman_Widget extends WP_Widget
         
         global $advman_engine;
         
-        $n = $instance['name'] == '' ? $advman_engine->get_setting('default-ad') : $instance['name'];
-        $ad = $advman_engine->choose_ad($n);
+        $n = $instance['name'] == '' ? $advman_engine->getSetting('default-ad') : $instance['name'];
+        $ad = $advman_engine->selectAd($n);
         
         if (!empty($ad)) {
             $suppress = !empty($instance['suppress']);
@@ -39,7 +39,7 @@ class Advman_Widget extends WP_Widget
     {
         global $advman_engine;
         
-        $ads = $advman_engine->get_ads();
+        $ads = $advman_engine->getAds();
         $names = array();
         foreach ($ads as $ad) {
             $names[$ad->name] = $ad->name;

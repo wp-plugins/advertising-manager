@@ -1,3 +1,4 @@
+
 	function advman_form_update(element){
 		//element is the calling element, element.id has the identifier
 		//detect calling form element and action accordingly
@@ -41,6 +42,7 @@
 		}
 	}
 
+		
 	function advman_update_custom()
 	{
 		if(document.getElementById('advman-adformat') && document.getElementById('advman-settings-custom')) {
@@ -50,16 +52,23 @@
 		}
 	}
 	
+	
 //Initialize everything (call the display/hide functions)
 jQuery(document).ready( function($) {
-	
-	// close postboxes that should be closed on edit pages
+	// close postboxes that should be closed
 	jQuery('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 	if (typeof(postboxes) != 'undefined') {
 		postboxes.add_postbox_toggles('advman'); //wp2.7+
 	} else {
 		add_postbox_toggles('advman'); //wp2.6-
 	}
+	// Default options
+//	$("#control_1, #control_3, #control_4, #control_5").multiSelect();
+	
+//	// With callback
+//	$("#control_6").multiSelect( null, function(el) {
+//		$("#callbackResult").show().fadeOut();
+//	});
 	
 	// Options displayed in comma-separated list
 	$("#advman-pagetype").multiSelect({
@@ -75,6 +84,10 @@ jQuery(document).ready( function($) {
 		selectAllText: 'All Authors'
 	});
 	
+//	// 'Select All' text changed
+//	$("#control_8").multiSelect({ selectAllText: 'Pick &lsquo;em all!' });
+	
 	advman_update_custom();
 	advman_update_formats();
-});
+});  
+//End Initialise

@@ -9,7 +9,7 @@ class Advman_Upgrade
 	{
 		$version = Advman_Upgrade::_get_version($data);
 		Advman_Upgrade::_backup($data, $version);
-		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.10');
+		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7');
 		foreach ($versions as $v) {
 			if (version_compare($version, $v, '<')) {
 				call_user_func(array('Advman_Upgrade', 'advman_' . str_replace('.','_',$v)), &$data);  //wrap var in array to pass by reference
@@ -17,23 +17,6 @@ class Advman_Upgrade
 		}
 		
 		$data['settings']['version'] = ADVMAN_VERSION;
-	}
-	function advman_3_4_10(&$data)
-	{
-		if (!empty($data['ads'])) {
-			foreach ($data['ads'] as $id => $ad) {
-				if (!empty($data['ads'][$id]['class'])) {
-					$data['ads'][$id]['network_type'] = $data['ads'][$id]['class'];
-					unset($data['ads'][$id]['class']);
-				}
-			}
-		}
-		
-		if (!empty($data['networks'])) {
-			foreach ($data['networks'] as $id => $network) {
-				$data['networks'][$id]['class'] = $id;
-			}
-		}
 	}
 	function advman_3_4_7(&$data)
 	{
@@ -318,9 +301,9 @@ class Advman_Upgrade
 				if (!empty($ad['class'])) {
 					$class = $ad['class'];
 					$tmp = new $class;
-					$base = $tmp->short_name;
+					$base = $tmp->network_name;
 				}
-				$ad['name'] = Advman_Tools::generate_ad_name($base);
+				$ad['name'] = OX_Tools::generate_name($base);
 			}
 			// add active
 			if (!isset($ad['active'])) {
@@ -357,7 +340,7 @@ class Advman_Upgrade
 			if (empty($ad['width']) || empty($ad['height'])) {
 				$format = $ad['adformat'];
 				if ( !empty($format) && ($format != 'custom')) {
-					list($width, $height, $null) = preg_split('/[x]/', $format);
+					list($width, $height, $null) = split('[x]', $format);
 					$ad['width'] = $width;
 					$ad['height'] = $height;
 				}
@@ -430,7 +413,7 @@ class Advman_Upgrade
 			}
 			// Set height and width for an ad format
 			if (!empty($network['adformat']) && ($network['adformat'] != 'custom')) {
-				list($width, $height) = preg_split('/[x]/', $network['adformat']);
+				list($width, $height) = split('[x]', $network['adformat']);
 				if (is_numeric($width)) {
 					$data['networks'][$c]['width'] = $width;
 				}
@@ -511,7 +494,7 @@ class Advman_Upgrade
 		
 		if (!empty($code)) {
 			$oAd = new $ad['class'];
-			$oAd->import($code);
+			$oAd->import_settings($code);
 			foreach ($oAd->p as $property => $value) {
 				$ad[$property] = $value;
 			}
@@ -763,7 +746,7 @@ class Advman_Upgrade
 		$code.= 'shoppingads_ad_client = "' . $ad['account-id'] . '";' . "\n";
 		$code.= 'shoppingads_ad_campaign = "' . $ad['campaign'] . '";' . "\n";
 
-		list($width,$height) = preg_split('/[x]/',$ad['adformat']);
+		list($width,$height)=split('[x]',$ad['adformat']);
 		$code.= 'shoppingads_ad_width = "' . $width . '";' . "\n";
 		$code.= 'shoppingads_ad_height = "' . $height . '";' . "\n";
 

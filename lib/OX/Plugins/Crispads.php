@@ -1,13 +1,14 @@
 <?php
-require_once(OX_LIB . '/Network.php');	
+require_once(OX_LIB . '/Ad.php');	
 
-class OX_Plugin_Crispads extends OX_Network
+class OX_Plugin_Crispads extends OX_Ad
 {
-	function OX_Plugin_Crispads()
+	var $network_name = 'Crisp Ads';
+	var $url = 'http://www.crispads.com';
+	
+	function OX_Plugin_Crispads($aAd = null)
 	{
-		$this->OX_Network();
-		$this->name = 'CrispAds';
-		$this->short_name = 'crisp';
+		$this->OX_Ad($aAd);
 	}
 
 	/**
@@ -15,16 +16,16 @@ class OX_Plugin_Crispads extends OX_Network
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class());
+		$engine->addAction('ad_network', get_class($this));
 	}
 	
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'identifier' => '',
 			'slot' => '',
 		);
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function get_ad_formats()
@@ -37,53 +38,48 @@ class OX_Plugin_Crispads extends OX_Network
 		return array('border', 'title', 'bg', 'text');
 	}
 	
-	function import($code)
+	function import_detect_network($code)
 	{
-		$ad = false;
+		return (	preg_match('/http:\/\/www.crispads.com\/spinner\//', $code, $matches) !==0);
+	}
 		
-		if ( preg_match('/http:\/\/www.crispads.com\/spinner\//', $code, $matches) !== 0) {
-	
-			$ad = OX_Ad::to_object();
-			$ad->network_type = get_class();
-		
-			if (preg_match("/zoneid=(\w*)/", $code, $matches) !=0) {
-				$ad->set_property('slot', $matches[1]);
-				$code = str_replace("zoneid={$matches[1]}", "zoneid={{slot}}", $code);
-			}
-			if (preg_match("/n=(\w*)/", $code, $matches)!=0) {
-				$ad->set_property('identifier', $matches[1]);
-				$code = str_replace("n={$matches[1]}", "n={{identifier}}", $code);
-				$code = str_replace("id=\"{$matches[1]}\"", "id=\"{{identifier}}\"", $code);
-				$code = str_replace("name=\"{$matches[1]}\"", "name=\"{{identifier}}\"", $code);
-			}
-			
-			//Only available on IFRAME ads
-			$width = '';
-			$height = '';
-			if (preg_match('/width="(\w*)"/', $code, $matches) != 0) {
-				$width = $matches[1]; 
-				$code = str_replace("width=\"{$width}\"", "width=\"{{width}}\"", $code);
-			}
-			if (preg_match('/height="(\w*)"/', $code, $matches) != 0) {
-				$height = $matches[1];
-				$code = str_replace("height=\"{$height}\"", "height=\"{{height}}\"", $code);
-			}
-			if ($width != '') {
-				$ad->set_property('width', $width);
-			}
-			if ($height != '') {
-				$ad->set_property('height', $height);
-			}
-			if (($width != '') && ($height != '')) {
-				$ad->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
-			}
-			
-			$code = str_replace('INSERT_RANDOM_NUMBER_HERE', '{{random}}', $code);
-			
-			$ad->set_property('code', $code);
+	function import_settings($code)
+	{
+		if (preg_match("/zoneid=(\w*)/", $code, $matches) !=0) {
+			$this->set_property('slot', $matches[1]);
+			$code = str_replace("zoneid={$matches[1]}", "zoneid={{slot}}", $code);
+		}
+		if (preg_match("/n=(\w*)/", $code, $matches)!=0) {
+			$this->set_property('identifier', $matches[1]);
+			$code = str_replace("n={$matches[1]}", "n={{identifier}}", $code);
+			$code = str_replace("id=\"{$matches[1]}\"", "id=\"{{identifier}}\"", $code);
+			$code = str_replace("name=\"{$matches[1]}\"", "name=\"{{identifier}}\"", $code);
 		}
 		
-		return $ad;
+		//Only available on IFRAME ads
+		$width = '';
+		$height = '';
+		if (preg_match('/width="(\w*)"/', $code, $matches) != 0) {
+			$width = $matches[1]; 
+			$code = str_replace("width=\"{$width}\"", "width=\"{{width}}\"", $code);
+		}
+		if (preg_match('/height="(\w*)"/', $code, $matches) != 0) {
+			$height = $matches[1];
+			$code = str_replace("height=\"{$height}\"", "height=\"{{height}}\"", $code);
+		}
+		if ($width != '') {
+			$this->set_property('width', $width);
+		}
+		if ($height != '') {
+			$this->set_property('height', $height);
+		}
+		if (($width != '') && ($height != '')) {
+			$this->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
+		}
+		
+		$code = str_replace('INSERT_RANDOM_NUMBER_HERE', '{{random}}', $code);
+		
+		parent::import_settings($code);
 	}
 }
 /*

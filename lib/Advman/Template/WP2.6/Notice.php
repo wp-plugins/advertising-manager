@@ -1,6 +1,4 @@
 <?php
-require_once (ADVMAN_LIB . '/Tools.php');
-
 class Advman_Template_Notice
 {
 	function display($notices = null)
@@ -8,7 +6,7 @@ class Advman_Template_Notice
 		if (is_array($notices)) {
 			foreach ($notices as $action => $notice) {
 ?>				<div id='update-nag'>
-				<form action="<?php echo Advman_Tools::build_admin_url('advman-ad'); ?>" method="post" id="advman-config-manage" enctype="multipart/form-data">
+				<form action="admin.php?page=advman-manage" method="post" id="advman-config-manage" enctype="multipart/form-data">
 				<input type="hidden" name="advman-mode" value="notice">		
 				<input type="hidden" name="advman-action" value="<?php echo $action; ?>">												
 <?php

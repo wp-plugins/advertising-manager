@@ -12,7 +12,7 @@ class OX_Tools
 					
 					if (file_exists($require_file)) {
 						require_once $require_file;
-						$fileName = preg_split('/[.]/', $file);
+						$fileName = split('[.]', $file);
 						$class = 'OX_Plugin_' . $fileName[0];
 						$plugin = new $class();
 						$plugin->register_plugin($obj);
@@ -137,8 +137,8 @@ class OX_Tools
 	
 	function explode_format($format)
 	{
-		list($w, $h) = preg_split('/[x]/', $format);
-		list($h, $l) = preg_split('/[#]/', $h);
+		list($w, $h) = split('[x]', $format);
+		list($h, $l) = split('[#]', $h);
 		return array($w, $h, $l);
 	}
 	
@@ -163,6 +163,30 @@ class OX_Tools
 			return false; //silently fail
 		}
 		return $response;
+	}
+	function generate_name($base = null)
+	{
+		global $advman_engine;
+		$ads = $advman_engine->getAds();
+		
+		// Generate a unique name if no name was specified
+		$unique = false;
+		$i = 1;
+		$name = $base;
+		while (!$unique) {
+			$unique = true;
+			foreach ($ads as $ad) {
+				if ($ad->name == $name) {
+					$unique = false;
+					break;
+				}
+			}
+			if (!$unique) {
+				$name = $base . '-' . $i++;
+			}
+		}
+		
+		return $name;
 	}
 }
 ?>

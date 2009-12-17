@@ -28,7 +28,7 @@ class OX_Dal
 	function delete_ads($ids)
 	{
 	}
-	function update_network($ad)
+	function update_ad_network($ad)
 	{
 	}
 	function select_setting($key)

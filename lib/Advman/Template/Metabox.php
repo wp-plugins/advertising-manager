@@ -3,73 +3,6 @@ require_once(ADVMAN_LIB . '/Tools.php');
 
 class Advman_Template_Metabox
 {
-
-	function display_zones_network($ad)
-	{
-		return Advman_Template_Metabox::display_zones($ad, true);
-	}
-	
-	function display_zones_ad($ad)
-	{
-		return Advman_Template_Metabox::display_zones($ad, false);
-	}
-	
-	function display_zones($ad)
-	{
-		global $advman_engine;
-		
-		$all_zones_list = array();
-		$matching_zones_list = array();
-		
-		$zones = $advman_engine->get_zones();
-		
-		foreach ($zones as $id => $zone) {
-			$name = $zone->name;
-			$row = "<li id='advman-zone-{$id}'><label for='in-advman-zone-{$id}' class='selectit'><input value='{$id}' type='checkbox' name='link_category[]' id='in-advman-zone-{$id}' checked='checked' /> {$name}</label></li>";
-			if ($zone['width'] == $ad->get_property['width'] && $zone['height'] == $ad->get_property['height']) {
-				$matching_zones_list[] = $row;
-			}
-			$all_zones_list[] = $row;
-		}
-		
-	?><ul id="category-tabs">
-		<li class="tabs"><a href="#categories-all"><?php _e( 'Matching Zones' ); ?></a></li>
-		<li class="hide-if-no-js"><a href="#categories-pop"><?php _e( 'All Zones' ); ?></a></li>
-	</ul>
-	
-	<div id="categories-all" class="tabs-panel">
-		<ul id="categorychecklist" class="list:category categorychecklist form-no-clear">
-			<?php
-			foreach ($matching_zones_list as $matching_zone) {
-				echo $matching_zone;
-			}
-			?>
-		</ul>
-	</div>
-	
-	<div id="categories-pop" class="tabs-panel" style="display: none;">
-		<ul id="categorychecklist-pop" class="categorychecklist form-no-clear">
-			<?php
-			foreach ($all_zones_list as $all_zone) {
-				echo $all_zone;
-			}
-			?>
-		</ul>
-	</div>
-	
-	<div id="category-adder" class="wp-hidden-children">
-		<h4><a id="category-add-toggle" href="#category-add"><?php _e( '+ Add New Zone' ); ?></a></h4>
-		<p id="advman-zone-add" class="wp-hidden-child">
-			<label class="screen-reader-text" for="advman-zone-name"><?php _e( '+ Add New Zone' ); ?></label>
-			<input type="text" name="advman-zone-name" id="advman-zone-name" class="form-required form-input-tip" value="<?php esc_attr_e( 'New zone name' ); ?>" aria-required="true" />
-			<input type="button" id="category-add-submit" class="add:categorychecklist:linkcategorydiv button" value="<?php esc_attr_e( 'Add' ); ?>" />
-			<?php wp_nonce_field( 'advman-add-zone', '_ajax_nonce', false ); ?>
-			<span id="advman-zone-ajax-response"></span>
-		</p>
-	</div>
-	<?php
-	}
-
 	function display_format_network($ad)
 	{
 		return Advman_Template_Metabox::display_format($ad, true);
@@ -82,7 +15,7 @@ class Advman_Template_Metabox
 	
 	function display_format($ad, $nw = false)
 	{
-		$properties = $ad->get_default_properties();
+		$properties = $ad->get_network_property_defaults();
 		if (isset($properties['adtype'])) {
 			$adtype = ($nw) ? $ad->get_network_property('adtype') : $ad->get_property('adtype');
 		} else {
@@ -311,7 +244,7 @@ class Advman_Template_Metabox
 	}
 	function display_account($ad, $nw = false)
 	{
-		$properties = $ad->get_default_properties();
+		$properties = $ad->get_network_property_defaults();
 		$available_props = array(
 			'account-id' => __('Account ID:', 'advman'),
 			'username' => __('Username:', 'advman'),
@@ -350,7 +283,7 @@ class Advman_Template_Metabox
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php printf($msg, $ad->get_network_name(), $ad->get_network_name()); ?></span>
+<span style="font-size:x-small; color:gray;"><?php printf($msg, $ad->network_name, $ad->network_name); ?></span>
 <?php
 	}
 	function display_history_network($ad)
@@ -433,7 +366,7 @@ class Advman_Template_Metabox
 		</tr>
 <?php endforeach; ?>
 <?php endif;
-$properties = $ad->get_default_properties();
+$properties = $ad->get_network_property_defaults();
 $available_props = array(
 	'alt-text' => __('Alternate Text:', 'advman'),
 	'status' => __('Status Text:', 'advman'),
@@ -482,7 +415,7 @@ foreach ($available_props as $key => $text) : ?>
 		<div id="ad-color-link" style="font: 11px <?php echo $font ?>; padding: 2px; color: #<?php echo htmlspecialchars($color, ENT_QUOTES); ?>;"><?php _e('www.advertiser-url.com', 'advman'); ?><br /></div>
 <?php endif; ?>
 <?php if (!empty($settings['color'])) : ?>
-		<div style="color: #000000; font: 10px verdana, arial, sans-serif; text-align:center"><u><?php printf(__('Ads by %s', 'advman'), $ad->get_network_name()); ?></u></div>
+		<div style="color: #000000; font: 10px verdana, arial, sans-serif; text-align:center"><u><?php printf(__('Ads by %s', 'advman'), $ad->network_name); ?></u></div>
 <?php endif; ?>
 	</td>
 </tr>
@@ -507,9 +440,9 @@ foreach ($available_props as $key => $text) : ?>
 	{
 ?>
 <p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
-<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to copy the %s ad:', 'advman'), $ad->get_network_name()); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to do nothing, OK to copy)', 'advman'); ?>')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Copy this ad', 'advman'); ?></a></p>
-<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->get_network_name()); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></p>
-<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->get_network_name()); ?></a></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to copy the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to do nothing, OK to copy)', 'advman'); ?>')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Copy this ad', 'advman'); ?></a></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
 <?php
 	}
 	function display_shortcuts_network($ad)
@@ -517,9 +450,9 @@ foreach ($available_props as $key => $text) : ?>
 ?>
 <p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
 <?php if (!empty($ad->url)) : ?>
-<p class="hide-if-no-js"><a href="<?php echo $ad->url; ?>"><?php printf(__('%s home page', 'advman'), $ad->get_network_name()); ?></a></p>
+<p class="hide-if-no-js"><a href="<?php echo $ad->url; ?>"><?php printf(__('%s home page', 'advman'), $ad->network_name); ?></a></p>
 <?php endif; ?>
-<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='reset'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Reset %s settings to defaults', 'advman'), $ad->get_network_name()); ?></a></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='reset'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Reset %s settings to defaults', 'advman'), $ad->network_name); ?></a></p>
 <?php
 	}
 	

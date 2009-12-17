@@ -7,7 +7,7 @@ class Advman_Template_Edit_Ad extends Advman_Template_Edit
 	function display($ad)
 	{
 		// Main pane - default options
-		$properties = $ad->get_default_properties();
+		$properties = $ad->get_network_property_defaults();
 		
 		// Account information
 		$fields = array('account-id','slot');
@@ -26,9 +26,6 @@ class Advman_Template_Edit_Ad extends Advman_Template_Edit
 				break;
 			}
 		}
-		
-		// Zone information
-		add_meta_box('linkcategorydiv', __('Zones'), array('Advman_Template_Metabox', 'display_zones_ad'), 'advman', 'main');
 		
 		// Appearance information
 		$fields = array('alt-text','color-bg','color-border','color-link','color-text','color-title','font-text','font-title','status');

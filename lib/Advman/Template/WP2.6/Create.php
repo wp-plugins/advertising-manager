@@ -1,7 +1,5 @@
 <?php
-require_once (ADVMAN_LIB . '/Tools.php');
-
-class Advman_Template_Create_Ad
+class Advman_Template_Create
 {
 	function display($target = null)
 	{
@@ -9,7 +7,7 @@ class Advman_Template_Create_Ad
 		global $_advman;
 		global $_advman_networks;
 ?>	<div class="wrap">
-		<form action="<?php echo Advman_Tools::build_admin_url('advman-ad'); ?>" method="post" id="advman-form" enctype="multipart/form-data">
+		<form action="admin.php?page=advman-manage" method="post" id="advman-form" enctype="multipart/form-data">
 			<input type="hidden" name="advman-mode" id="advman-mode" value="create_ad">	
 			<input type="hidden" name="advman-action" id="advman-action">
 			<input type="hidden" name="advman-target" id="advman-target">

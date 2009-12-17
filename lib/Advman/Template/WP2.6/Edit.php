@@ -4,7 +4,7 @@ class Advman_Template_Edit
 	function display($ad, $nw = false)
 	{
 		$target = $nw ? strtolower(get_class($ad)) : $ad->id;
-		$mode = $nw ? 'edit_network' : 'edit';
+		$mode = $nw ? 'edit_network' : 'edit_ad';
 		$revisions = ($nw) ? $ad->get_network_property('revisions') : $ad->get_property('revisions');
 		list($last_user, $last_timestamp, $last_timestamp2) = Advman_Tools::get_last_edit($revisions);
 ?>
@@ -18,9 +18,9 @@ class Advman_Template_Edit
 	wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );  
 ?><div class="wrap">
 <?php if ($nw): ?>
-	<h2><?php printf(__('Edit %s Network Settings', 'advman'), "<span class='" . strtolower(get_class($ad)) . "'>" . $ad->get_network_name() . "</span>"); ?></h2>
+	<h2><?php printf(__('Edit %s Network Settings', 'advman'), "<span class='" . strtolower(get_class($ad)) . "'>" . $ad->network_name . "</span>"); ?></h2>
 <?php else: ?>
-	<h2><?php printf(__('Edit Settings for %s Ad:', 'advman'), $ad->get_network_name()); ?> <span class="<?php echo strtolower(get_class($ad)); ?>"><?php echo "[{$ad->id}] " . $ad->name; ?></span></h2>
+	<h2><?php printf(__('Edit Settings for %s Ad:', 'advman'), $ad->network_name); ?> <span class="<?php echo strtolower(get_class($ad)); ?>"><?php echo "[{$ad->id}] " . $ad->name; ?></span></h2>
 <?php endif; ?>		
 <div id="poststuff">
 <div class="submitbox" id="submitpost">
@@ -56,13 +56,13 @@ class Advman_Template_Edit
 	<ul>
 <?php if ($nw) : ?>
 <?php if (!empty($ad->url)) : ?>
-		<li><a href="<?php echo $ad->url; ?>"><?php printf(__('%s home page', 'advman'), $ad->get_network_name()); ?></a></li>
+		<li><a href="<?php echo $ad->url; ?>"><?php printf(__('%s home page', 'advman'), $ad->network_name); ?></a></li>
 <?php endif; ?>
-		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='reset'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Reset %s settings to defaults', 'advman'), $ad->get_network_name()); ?></a></li>
+		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='reset'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Reset %s settings to defaults', 'advman'), $ad->network_name); ?></a></li>
 <?php else : ?>
 		<li><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to copy the %s ad:', 'advman'), $ad->networkName); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to do nothing, OK to copy)', 'advman'); ?>')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Copy this ad', 'advman'); ?></a></li>
-		<li><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->get_network_name()); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></li>
-		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->get_network_name()); ?></a></li>
+		<li><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></li>
+		<li><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></li>
 <?php endif; ?>
 	</ul>
 

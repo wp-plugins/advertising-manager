@@ -8,15 +8,15 @@ class Advman_Template_Settings
 		
 		$action = isset($_POST['advman-action']) ? OX_Tools::sanitize($_POST['advman-action'], 'key') : '';
 		
-		$oxMarket = $advman_engine->get_setting('openx-market');
+		$oxMarket = $advman_engine->getSetting('openx-market');
 		if (is_null($oxMarket)) {
 			$oxMarket = false;
 		}
-		$oxUpdates = $advman_engine->get_setting('openx-sync');
+		$oxUpdates = $advman_engine->getSetting('openx-sync');
 		if (is_null($oxUpdates)) {
 			$oxUpdates = false;
 		}
-		$oxCpm = $advman_engine->get_setting('openx-market-cpm');
+		$oxCpm = $advman_engine->getSetting('openx-market-cpm');
 		if (is_null($oxCpm)) {
 			$oxCpm = '0.20';
 		}

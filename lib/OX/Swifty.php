@@ -2,12 +2,11 @@
 require_once(OX_LIB . '/Ad.php');
 require_once(OX_LIB . '/Dal.php');
 require_once(OX_LIB . '/Html.php');
-require_once(OX_LIB . '/Network.php');
-require_once(OX_LIB . '/Zone.php');
 
 class OX_Swifty
 {
 	var $dal;
+	var $ad_networks;
 	var $counter;
 	var $actions;
 	
@@ -15,6 +14,7 @@ class OX_Swifty
 	{
 		// Functions here are initialisation only - plugins have not been loaded (so we cannot initialise data)
 		$this->counter = array();
+		$this->ad_networks = array();
 		$this->actions = array();
 		
 		// Load all Swifty plugins
@@ -27,7 +27,7 @@ class OX_Swifty
 		$this->sync();
 	}
 	
-	function add_action($key, $value)
+	function addAction($key, $value)
 	{
 		$actions = !empty($this->actions[$key]) ? $this->actions[$key] : array();
 		$actions[] = $value;
@@ -35,89 +35,54 @@ class OX_Swifty
 		$this->actions[$key] = $actions;
 	}
 	
-	function get_action($key)
+	function getAction($key)
 	{
 		return $this->actions[$key];
 	}
 	
-	function get_setting($key)
+	function factory($class)
+	{
+		return $this->dal->factory($class);
+	}
+	
+	function getSetting($key)
 	{
 		return $this->dal->select_setting($key);
 	}
 	
-	function set_setting($key, $value)
+	function setSetting($key, $value)
 	{
 		return $this->dal->update_setting($key, $value);
 	}
 	
-	function add_ad(&$ad)
+	function insertAd(&$ad)
 	{
 		$ad->add_revision();
 		return $this->dal->insert_ad($ad);
 	}
-	function add_ads(&$ads)
-	{
-		$aads = array();
-		foreach ($ads as $ad) {
-			$aads[] = $this->add_ad($ad);
-		}
-		return $aads;
-	}
 	
-	function remove_ad($id)
+	function deleteAd($id)
 	{
 		return $this->dal->delete_ad($id);
 	}
 	
-	function remove_ads($ids)
+	function getAds()
 	{
-		$aads = array();
-		foreach ($ids as $id) {
-			$aads[] = $this->remove_ad($id);
-		}
-		return $aads;
+		return $this->dal->select_ads();
 	}
 	
-	function get_ads($ids = null)
-	{
-		if (empty($ids)) {
-			return $this->dal->select_ads();
-		} else {
-			$aads = array();
-			foreach ($ids as $id) {
-				$aads[$id] = $this->get_ad($id);
-			}
-			return $aads;
-		}
-	}
-	
-	function get_ad_count()
-	{
-		return count($this->dal->select_ads());
-	}
-	
-	function get_ad($id)
+	function getAd($id)
 	{
 		return $this->dal->select_ad($id);
 	}
 	
-	function set_ad(&$ad)
+	function setAd(&$ad)
 	{
 		$ad->add_revision();
 		return $this->dal->update_ad($ad);
 	}
 	
-	function set_ad_active(&$ad, $active)
-	{
-		if ($ad->active != $active) {
-			$ad->active = $active;
-			return $this->set_ad($ad);
-		}
-		
-		return $ad;
-	}
-	
-	function copy_ad($id)
+	function copyAd($id)
 	{
 		$ad = $this->dal->select_ad($id);
 		if ($ad) {
@@ -129,154 +94,67 @@ class OX_Swifty
 		return false;
 	}
 	
-	function copy_ads($ids)
+	function setAdNetwork(&$ad)
 	{
-		$ads = array();
-		foreach ($ids as $id) {
-			$ad = $this->copy_ad($id);
-			$ads[$ad->id] = $ad;
-		}
-		
-		return $ads;
+		$ad->add_revision(true);
+		return $this->dal->update_ad_network($ad);
 	}
 	
-	function add_zone(&$zone)
-	{
-		$zone->add_revision();
-		return $this->dal->insert_zone($zone);
-	}
-	
-	function remove_zone($id)
-	{
-		return $this->dal->delete_zone($id);
-	}
-	
-	function get_zones()
-	{
-		return $this->dal->select_zones();
-	}
-	
-	function get_zone($id)
-	{
-		return $this->dal->select_zone($id);
-	}
-	
-	function set_zone(&$zone)
-	{
-		$zone->add_revision();
-		return $this->dal->update_zone($zone);
-	}
-	
-	function copy_zone($id)
-	{
-		$zone = $this->dal->select_zone($id);
-		if ($zone) {
-			$zone = version_compare(phpversion(), '5.0') < 0 ? $zone : clone($zone); // Hack to deal with PHP 4/5 incompatiblity with cloning
-			$zone->add_revision();
-			return $this->dal->insert_zone($zone);
-		}
-		
-		return false;
-	}
-	
-	function add_network(&$network)
-	{
-		$network->add_revision();
-		return $this->dal->insert_network($network);
-	}
-	function add_networks(&$networks)
-	{
-		$new_networks = array();
-		foreach ($networks as $network) {
-			$new_networks[] = $this->add_network($network);
-		}
-		return $new_networks;
-	}
-	
-	function remove_network($id)
-	{
-		return $this->dal->delete_network($id);
-	}
-	
-	function remove_networks($ids)
-	{
-		$networks = array();
-		foreach ($ids as $id) {
-			$networks[] = $this->remove_network($id);
-		}
-		return $networks;
-	}
-	
-	function get_networks($ids = null)
-	{
-		if (empty($ids)) {
-			return $this->dal->select_networks();
-		} else {
-			$networks = array();
-			foreach ($ids as $id) {
-				$networks[$id] = $this->get_network($id);
-			}
-			return $networks;
-		}
-	}
-	
-	function get_network($id)
-	{
-		return $this->dal->select_network($id);
-	}
-	
-	function set_network(&$network)
-	{
-		$network->add_revision();
-		return $this->dal->update_network($network);
-	}
-	
-	function copy_network($id)
-	{
-		$network = $this->dal->select_network($id);
-		if ($network) {
-			$network = version_compare(phpversion(), '5.0') < 0 ? $network : clone($network); // Hack to deal with PHP 4/5 incompatiblity with cloning
-			$network->add_revision();
-			return $this->dal->insert_network($network);
-		}
-		
-		return false;
-	}
-	
-	function import_ad_tag($tag)
+	function importAdTag($tag)
 	{
 		global $advman_engine;
 		
 		$imported = false;
-		
 		if (!empty($tag)) {
-			$network_types = $this->get_action('ad_network');
-			foreach ($network_types as $network_type) {
-				if ($ad = call_user_func_array(array($network_type, 'import'), array($tag, &$ad))) {
-					$imported = true;
-					break; //leave the foreach loop
+			$networks = $this->getAction('ad_network');
+			foreach ($networks as $network) {
+				if (call_user_func(array($network, 'import_detect_network'), $tag)) {
+					$ad = $advman_engine->factory($network);
+					if ($ad) {
+						$ad->import_settings($tag);
+						$imported = true;
+						break; //leave the foreach loop
+					}
 				}
 			}
 		}
 		
 		// Not a pre-defined network - we will make it HTML code...
 		if (!$imported) {
-			OX_Plugin_Html::import($tag, $ad);
+			$ad = $advman_engine->factory('OX_Ad_Html');
+			$ad->import_settings($tag);
 		}
 		
-		return $this->add_ad($ad);
+		$ad = $this->insertAd($ad);
+		// Add the ad network defaults if they are not set yet
+		if (empty($ad->np)) {
+			$this->setAdNetwork($ad);
+		}
+		
+		return $ad;
 	}
 	
-	function choose_ad($name = null)
+	function setAdActive($id, $active)
+	{
+		$ad = $this->dal->select_ad($id);
+		if ($active != $ad->active) {
+			$ad->active = $active;
+			return $this->setAd($ad);
+		}
+		
+		return false;
+	}
+		
+	function selectAd($name = null)
 	{
 		global $advman_engine;
 		
 		if (empty($name)) {
-			$name = $this->get_setting('default-ad');
+			$name = $this->getSetting('default-ad');
 		}
 		if (!empty($name)) {
 			// Find the ads which match the name
-			$ads = $advman_engine->get_ads();
+			$ads = $advman_engine->getAds();
 			$totalWeight = 0;
 			$validAds = array();
 			foreach ($ads as $id => $ad) {
@@ -326,21 +204,21 @@ class OX_Swifty
 	 */
 	function sync()
 	{
-		$sync = $this->get_setting('openx-sync');
+		$sync = $this->dal->select_setting('openx-sync');
 		if ($sync) {
-			$timestamp = $this->get_setting('last-sync');
+			$timestamp = $this->dal->select_setting('last-sync');
 //			$timestamp = 1235710700; //FOR TESTING
 			$now = mktime(0,0,0);
 			if (empty($timestamp) || ($now - $timestamp > 0) ) {
-				$this->set_setting('last-sync', $now);
+				$this->dal->update_setting('last-sync', $now);
 				
 				$params = array(
-					'p' => $this->get_setting('product-name'),
-					'i' => $this->get_setting('publisher-id'),
-					'v' => $this->get_setting('version'),
-					'w' => $this->get_setting('host-version'),
-					'e' => $this->get_setting('admin-email'),
-					's' => $this->get_setting('website-url'),
+					'p' => $this->dal->select_setting('product-name'),
+					'i' => $this->dal->select_setting('publisher-id'),
+					'v' => $this->dal->select_setting('version'),
+					'w' => $this->dal->select_setting('host-version'),
+					'e' => $this->dal->select_setting('admin-email'),
+					's' => $this->dal->select_setting('website-url'),
 				);
 				
 				$id = base64_encode(serialize($params));

@@ -1,13 +1,14 @@
 <?php
-require_once(OX_LIB . '/Network.php');
+require_once(OX_LIB . '/Ad.php');
 
-class OX_Plugin_Adsense extends OX_Network
+class OX_Plugin_Adsense extends OX_Ad
 {
-	function OX_Plugin_Adsense()
+	var $network_name = 'Google Adsense';
+	var $url = 'http://www.google.com/adsense';
+	
+	function OX_Plugin_Adsense($aAd = null)
 	{
-		$this->OX_Network();
-		$this->name = 'Google Adsense';
-		$this->short_name = 'adsense';
+		$this->OX_Ad($aAd);
 	}
 	
 	/**
@@ -15,10 +16,10 @@ class OX_Plugin_Adsense extends OX_Network
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class());
+		$engine->addAction('ad_network', get_class($this));
 	}
 	
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'account-id' => '',
@@ -32,7 +33,7 @@ class OX_Plugin_Adsense extends OX_Network
 //			'username' => '',
 			'width' => '90',
 		);
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function get_ad_formats()
@@ -45,60 +46,86 @@ class OX_Plugin_Adsense extends OX_Network
 		return array('all' => $text + $image + $video, 'text' => $text, 'image' => $image, 'video' => $video, 'link' => $link);
 	}
 	
-	function import($code)
+	function import_detect_network($code)
 	{
-		$ad = false;
-		
-		if (strpos($code,'google_ad_client') !== false) {
-			
-			$ad = OX_Ad::to_object();
-			$ad->network_type = get_class();
-		
-			// Account ID
-			if (preg_match('/google_ad_client( *)=( *)"(.*)"/', $code, $matches) != 0) {
-				$ad->set_property('account-id', $matches[3]);
-				$code = str_replace("google_ad_client{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_client{$matches[1]}={$matches[2]}\"{{account-id}}\"", $code);
-			}
-			
-			// Partner ID
-			if (preg_match('/google_ad_host( *)=( *)"(.*)"/', $code, $matches) != 0) {
-				$ad->set_property('partner', $matches[3]);
-				$code = str_replace("google_ad_host{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_host{$matches[1]}={$matches[2]}\"{{partner}}\"", $code);
-			}
-			
-			// Slot ID
-			if (preg_match('/google_ad_slot( *)=( *)"(.*)"/', $code, $matches) != 0) {
-				$ad->set_property('slot', $matches[3]);
-				$ad->set_property('adtype', 'all');
-				$code = str_replace("google_ad_slot{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_slot{$matches[1]}={$matches[2]}\"{{slot}}\"", $code);
-			}
-			
-			// Width / Height
-			$width = '';
-			$height = '';
-			if (preg_match('/google_ad_width( *)=( *)(\d*);/', $code, $matches) != 0) {
-				$width = $matches[3]; 
-				if ($width != '') {
-					$ad->set_property('width', $width);
-				}
-				$code = str_replace("google_ad_width{$matches[1]}={$matches[2]}{$width}", "google_ad_width{$matches[1]}={$matches[2]}{{width}}", $code);
-			}
-			if (preg_match('/google_ad_height( *)=( *)(\d*);/', $code, $matches) != 0) {
-				$height = $matches[3];
-				if ($height != '') {
-					$ad->set_property('height', $height);
-				}
-				$code = str_replace("google_ad_height{$matches[1]}={$matches[2]}{$height}", "google_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
-			}
-			if (($width != '') && ($height != '')) {
-				$ad->set_property('adformat', $width . 'x' . $height);
-				$ad->set_property('adtype', 'all');
-			}
-		
-			$ad->set_property('code', $code);
+		return (strpos($code,'google_ad_client') !== false);
+	}
+
+	function import_settings($code)
+	{
+		// Account ID
+		if (preg_match('/google_ad_client( *)=( *)"(.*)"/', $code, $matches) != 0) {
+			$this->set_property('account-id', $matches[3]);
+			$code = str_replace("google_ad_client{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_client{$matches[1]}={$matches[2]}\"{{account-id}}\"", $code);
 		}
 		
-		return $ad;
+		// Partner ID
+		if (preg_match('/google_ad_host( *)=( *)"(.*)"/', $code, $matches) != 0) {
+			$this->set_property('partner', $matches[3]);
+			$code = str_replace("google_ad_host{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_host{$matches[1]}={$matches[2]}\"{{partner}}\"", $code);
+		}
+		
+		// Slot ID
+		if (preg_match('/google_ad_slot( *)=( *)"(.*)"/', $code, $matches) != 0) {
+			$this->set_property('slot', $matches[3]);
+			$this->set_property('adtype', 'all');
+			$code = str_replace("google_ad_slot{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_slot{$matches[1]}={$matches[2]}\"{{slot}}\"", $code);
+		}
+		
+		// Width / Height
+		$width = '';
+		$height = '';
+		if (preg_match('/google_ad_width( *)=( *)(\d*);/', $code, $matches) != 0) {
+			$width = $matches[3]; 
+			if ($width != '') {
+				$this->set_property('width', $width);
+			}
+			$code = str_replace("google_ad_width{$matches[1]}={$matches[2]}{$width}", "google_ad_width{$matches[1]}={$matches[2]}{{width}}", $code);
+		}
+		if (preg_match('/google_ad_height( *)=( *)(\d*);/', $code, $matches) != 0) {
+			$height = $matches[3];
+			if ($height != '') {
+				$this->set_property('height', $height);
+			}
+			$code = str_replace("google_ad_height{$matches[1]}={$matches[2]}{$height}", "google_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
+		}
+		if (($width != '') && ($height != '')) {
+			$this->set_property('adformat', $width . 'x' . $height);
+			$this->set_property('adtype', 'all');
+		}
+		
+		parent::import_settings($code);
+	}
+	
+	function save_settings()
+	{
+		// Save settings to parent first!
+		parent::save_settings();
+		
+		//Override adformat saving already
+		switch($this->get_property('adtype')){
+			case 'slot' :
+			case 'ad' :
+				$this->set_property('adformat', OX_Tools::sanitize($_POST['advman-adformat'], 'format'));
+				break;
+			case 'link' :
+				$this->set_property('adformat', OX_Tools::sanitize($_POST['advman-linkformat'], 'format'));
+				break;
+			case 'ref_image' :
+				$this->set_property('adformat', OX_Tools::sanitize($_POST['advman-referralformat'], 'format'));
+				break;
+			default :
+				$this->set_property('adformat', '');
+		 }
+
+		 list($width, $height, $null) = split('[x]', $this->get_property('adformat'));
+		 $this->set_property('width', $width);
+		 $this->set_property('height', $height);
+	}
+
+	function _form_settings_stats()
+	{
+?><tr><td><p><a href="https://www.google.com/adsense/report/overview">Statistics and earnings</a></p></td></tr><?php
 	}
 }
 

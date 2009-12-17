@@ -1,19 +1,23 @@
 <?php
-require_once (OX_LIB . '/Entity.php');
-require_once (ADVMAN_LIB . '/Tools.php');
+require_once (OX_LIB . '/Plugin.php');
 
-class OX_Ad extends OX_Entity
+class OX_Ad extends OX_Plugin
 {
-	var $network_type;
+	var $name; //Name of this ad
+	var $id; // ID of the ad
+	var $active; //whether this ad can display
 	
+	var $p; //$p holds Ad properties (e.g. dimensions etc.) - acessible through $this->get(''); see $this->get_network_property('') for default merged
+	var $np; //$np holds Network properties - defaults, network settings, etc.
+	
+	//Global start up functions for all network classes	
 	function OX_Ad()
 	{
-		$this->OX_Entity();
 	}
 	
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class());
+		$engine->addAction('ad_network', get_class($this));
 	}
 	
 	/**
@@ -23,55 +27,83 @@ class OX_Ad extends OX_Entity
 	function get($key)
 	{
 		$property = $this->get_property($key);
-		if ($property != '') {
-			return $property;
-		}
-		
-		$network = $this->get_network();
-		return $network->get_property($key);
+		return $property == '' ? $this->get_network_property($key) : $property;
 	}
 	
-	function get_network()
+	function get_property($key)
 	{
-		global $advman_engine;
-		
-		$type = $this->network_type;
-		$network = $advman_engine->get_network($type);
-		
-		if (empty($network)) {
-			$network = OX_Network::to_object(null, $type);
-			$advman_engine->set_network($network);
-		}
-		
-		return $network;
+		$properties = $this->p;
+		return isset($properties[$key]) ? $properties[$key] : '';
 	}
 	
-	function get_network_name()
-	{
-		$network = $this->get_network();
-		return $network->name;
-	}
-	function get_network_short_name()
-	{
-		$network = $this->get_network();
-		return $network->short_name;
-	}
 	function get_network_property($key)
 	{
-		$network = $this->get_network();
-		return $network->get_property($key);
+		$properties = $this->np;
+		return isset($properties[$key]) ? $properties[$key] : '';
+	}
+	
+	/**
+	 * Returns the given property
+	 * @param $key the property that is to be set
+	 * @param $value the value to set the property to.  If the value is null, the property will be deleted.
+	 * @param $default if true, the default will be set.  Otherwise, the property will be set.
+	 */
+	function set_property($key, $value)
+	{
+		$properties = $this->p;
+		$this->_set($properties, $key, $value);
+		$this->p = $properties;
 	}
 	
 	function set_network_property($key, $value)
 	{
-		$network = $this->get_network();
-		return $network->set_property($key, $value);
+		$properties = $this->np;
+		$this->_set($properties, $key, $value);
+		$this->np = $properties;
 	}
 	
-	function get_default_properties()
+	function _set(&$properties, $key, $value)
 	{
-		$network = $this->get_network();
-		return $network->get_properties();
+		if (is_null($value)) {
+			unset($properties[$key]);
+		} else {
+			$properties[$key] = $value;
+		}
+		
+		if ($key == 'adformat' && $value !== 'custom') {
+			if (empty($value)) {
+				$width = '';
+				$height = '';
+			} else {
+				list($width, $height) = split('[x]', $value);
+			}
+			$this->_set($properties, 'width', $width);
+			$this->_set($properties, 'height', $height);
+		}
+	}
+	
+	function reset_network_properties()
+	{
+		$this->np = $this->get_network_property_defaults();
+	}
+	
+	function get_network_property_defaults()
+	{
+		return array (
+			'adformat' => '728x90',
+			'code' => '',
+			'counter' => '',
+			'height' => '90',
+			'html-after' => '',
+			'html-before' => '',
+			'notes' => '',
+			'openx-market' => 'yes',
+			'openx-market-cpm' => '0.20',
+			'show-pagetype' => array('archive','home','page','post','search'),
+			'show-author' => '',
+			'weight' => '1',
+			'width' => '728',
+		);
 	}
 	
 	/**
@@ -150,38 +182,94 @@ class OX_Ad extends OX_Entity
 		return true;
 	}
 	
+	function display($codeonly = false, $search = array(), $replace = array())
+	{
+		$search[] = '{{random}}';
+		$replace[] = mt_rand();
+		$search[] = '{{timestamp}}';
+		$replace[] = time();
+		
+		$properties = $this->get_network_property_defaults();
+		foreach ($properties as $property => $value) {
+			$search[] = '{{' . $property . '}}';
+			$replace[] = $this->get($property);
+		}
+		
+		$code = $codeonly ? $this->get('code') : ($this->get('html-before') . $this->get('code') . $this->get('html-after'));
+		
+		return str_replace($search, $replace, $code);
+//		return $this->get('code');
+	}
+	
+	function import_detect_network($code)
+	{
+		return false;
+	}
+	
+	function import_settings($code)
+	{
+		$this->set_property('code', $code);
+	}
+	
 	function get_preview_url()
 	{
-		return  Advman_Tools::build_admin_url('advman-ad', 'preview', $this->id);
+		return get_bloginfo('wpurl') . '/wp-admin/edit.php?page=advman-manage&advman-ad-id=' . $this->id;
 	}
 
-	function display($codeonly = false)
+	function get_ad_formats()
 	{
-		// Substitute the network specific macro fields...
-		$network = $this->get_network();
-		return $network->substitute_fields($this);
+		return array('all' => array('custom', '728x90', '468x60', '120x600', '160x600', '300x250', '125x125'));
+	}
+	function get_ad_colors()
+	{
+		return false;
+	}
+	function add_revision($network = false)
+	{
+		$revisions = $network ? $this->get_network_property('revisions') : $this->get_property('revisions');
+		
+		// Get the user login information
+		global $user_login;
+		get_currentuserinfo();
+		
+		// If there is no revisions, use my own revisions
+		if (!is_array($revisions)) {
+			$revisions = array();
+		}
+		
+		// Deal with revisions
+		$r = array();
+		$now = mktime();
+		$r[$now] = $user_login;
+		
+		// Get rid of revisions more than 30 days old
+		if (!empty($revisions)) {
+			foreach ($revisions as $ts => $user) {
+				$days = (strtotime($now) - strtotime($ts)) / 86400 + 1;
+				if ($days <= 30) {
+					$r[$ts] = $user;
+				}
+			}
+		}
+		
+		krsort($r);
+		
+		if ($network) {
+			$this->set_network_property('revisions', $r);
+		} else {
+			$this->set_property('revisions', $r);
+		}
 	}
 	
 	function to_array()
 	{
-		$aAd = parent::to_array();
-		$aAd['network_type'] = $this->network_type;
+		$aAd = $this->p;
+		$aAd['name'] = $this->name;
+		$aAd['id'] = $this->id;
+		$aAd['active'] = $this->active;
 		
 		return $aAd;
 	}
-	
-	function to_object($properties = null, $class = 'OX_Ad')
-	{
-		$ad = parent::to_object($properties, $class);
-		
-		if (!empty($properties)) {
-			if (isset($properties['network_type'])) {
-				$ad->network_type = $properties['network_type'];
-				unset($ad->p['network_type']);
-			}
-		}
-		
-		return $ad;
-	}
 }
+
 ?>

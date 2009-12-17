@@ -32,10 +32,8 @@ class Advman_Dal extends OX_Dal
 		if (empty($data)) {
 			$data['ads'] = array();
 			$data['networks'] = array();
-			$data['zones'] = array();
 			$data['settings'] = array();
 			$data['settings']['next_ad_id'] = 1;
-			$data['settings']['next_zone_id'] = 1;
 			$data['settings']['default-ad'] = '';
 			$data['settings']['version'] = ADVMAN_VERSION;
 			$data['settings']['openx-sync'] = true;
@@ -54,30 +52,24 @@ class Advman_Dal extends OX_Dal
 	
 	function _map_arrays(&$data)
 	{
-		foreach (array('ads','networks','zones') as $name) {
-			$aEntities = array();
-			foreach ($data[$name] as $id => $oEntity) {
-				$aEntities[$id] = $oEntity->to_array();
-			}
-			$data[$name] = $aEntities;
+		$aAds = array();
+		foreach ($data['ads'] as $id => $oAd) {
+			$aAds[$id] = $oAd->to_array();
+			$aAds[$id]['class'] = get_class($oAd);
 		}
+		$data['ads'] = $aAds;
 	}
 	function _map_objects(&$data)
 	{
-		foreach (array('ads','networks','zones') as $name) {
-			$oEntities = array();
-			foreach ($data[$name] as $id => $aEntity) {
-				switch ($name) {
-					case 'ads' : $oEntity = OX_Ad::to_object($aEntity); break;
-					case 'networks' : $oEntity = OX_Network::to_object($aEntity); break;
-					case 'zones' : $oEntity = OX_Zone::to_object($aEntity); break;
-				}
-				$oEntities[$id] = $oEntity;
+		$oAds = array();
+		foreach ($data['ads'] as $id => $aAd) {
+			$ad = $this->factory($aAd['class'], $aAd, $data);
+			if ($ad) {
+				$oAds[$id] = $ad;
 			}
-			$data[$name] = $oEntities;
 		}
+		$data['ads'] = $oAds;
 	}
-	
 	function _update_data($data = null, $key = 'plugin_advman')
 	{
 		if (is_null($data)) {
@@ -87,6 +79,36 @@ class Advman_Dal extends OX_Dal
 		$this->_map_arrays($data);
 	
 		update_option($key, $data);
+	}
+	
+	function factory($class, $aAd = null, $data = null)
+	{
+		if (class_exists($class)) {
+			$ad = new $class();
+			if (is_null($data)) {
+				$data = $this->data;
+			}
+			if (is_null($aAd)) {
+				$ad->active = true;
+				$ad->name = OX_Tools::generate_name($ad->network_name);
+			} else {
+				$ad->name = $aAd['name'];
+				$ad->id = $aAd['id'];
+				$ad->active = $aAd['active'];
+				$aProperties = Advman_Tools::get_properties_from_array($aAd);
+				$ad->p = $aProperties;
+			}
+			
+			if (empty($data['networks'][$class])) {
+				$ad->np = $ad->get_network_property_defaults();
+			} else {
+				$ad->np = $data['networks'][$class];
+			}
+			
+			return $ad;
+		} else {
+			return false;
+		}
 	}
 	
 	function select_setting($key)
@@ -163,68 +185,10 @@ class Advman_Dal extends OX_Dal
 		return $id;
 	}
 	
-	function insert_network($network)
+	function update_ad_network($ad)
 	{
-		$this->data['networks'][strtolower(get_class($network))] = $network->to_array();
+		$this->data['networks'][strtolower(get_class($ad))] = $ad->np;
 		$this->_update_data();
-		return $ad;
-	}
-	
-	function delete_network($id)
-	{
-		unset($this->data['networks'][$id]);
-		$this->_update_data();
-	}
-	
-	function select_network($id)
-	{
-		return $this->data['networks'][$id];
-	}
-	
-	function select_networks()
-	{
-		return $this->data['networks'];
-	}
-	
-	function update_network($network)
-	{
-		$this->data['networks'][strtolower(get_class($network))] = $network;
-		$this->_update_data();
-	}
-	
-	function insert_zone($zone)
-	{
-		$id = empty($this->data['settings']['next_zone_id']) ? 1 : $this->data['settings']['next_zone_id'];
-		$this->data['settings']['next_zone_id'] = $id + 1;
-		$zone->id = $id;
-		$this->data['zones'][$id] = $zone;
-		OX_Tools::sort($this->data['zones']);
-		$this->_update_data();
-		return $zone;
-	}
-	
-	function delete_zone($id)
-	{
-		unset($this->data['zones'][$id]);
-		$this->_update_data();
-	}
-	
-	function select_zone($id)
-	{
-		return $this->data['zones'][$id];
-	}
-	
-	function select_zones()
-	{
-		return $this->data['zones'];
-	}
-	
-	function update_zone($zone)
-	{
-		$id = $zone->id;
-		$this->data['zones'][$id] = $zone;
-		$this->_update_data();
-		return $id;
 	}
 }
 ?>

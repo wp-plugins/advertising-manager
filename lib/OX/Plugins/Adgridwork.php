@@ -1,13 +1,14 @@
 <?php
-require_once(OX_LIB . '/Network.php');	
+require_once(OX_LIB . '/Ad.php');	
 
-class OX_Plugin_Adgridwork extends OX_Network
+class OX_Plugin_Adgridwork extends OX_Ad
 {
-	function OX_Plugin_Adgridwork()
+	var $network_name = 'AdGridWork';
+	var $url = 'http://www.adgridwork.com';
+	
+	function OX_Plugin_Adgridwork($aAd = null)
 	{
-		$this->OX_Network();
-		$this->name = 'AdGridWork';
-		$this->short_name = 'agw';
+		$this->OX_Ad($aAd);
 	}
 		
 	/**
@@ -15,10 +16,10 @@ class OX_Plugin_Adgridwork extends OX_Network
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class());
+		$engine->addAction('ad_network', get_class($this));
 	}
 	
-	function get_default_properties()
+	function get_network_property_defaults()
 	{
 		$properties = array(
 			'account-id' => '',
@@ -30,7 +31,7 @@ class OX_Plugin_Adgridwork extends OX_Network
 			'slot' => '',
 		);
 		
-		return $properties + parent::get_default_properties();
+		return $properties + parent::get_network_property_defaults();
 	}
 	
 	function get_ad_formats()
@@ -38,60 +39,70 @@ class OX_Plugin_Adgridwork extends OX_Network
 		return array('all' => array('800x90', '728x90', '600x90', '468x60', '400x90', '234x60', '200x90', '120x600', '160x600', '200x360', '200x270', '336x280', '300x250', '250x250', '200x180', '180x150'));
 	}
 	
-	function import($code, &$ad)
+	function import_detect_network($code)
 	{
-		$ad = false;
 		
-		if ((strpos($code,'www.adgridwork.com') !== false) ||
-		    (strpos($code,'www.mediagridwork.com/mx.js') !== false)) {
-			
-			$ad = OX_Ad::to_object();
-			$ad->network_type = get_class();
-			
-			if (preg_match("/www\.adgridwork\.com\/\?r=(\d*)/", $code, $matches)) {
-				$ad->set_property('account-id', $matches[1]);
-				$code = str_replace("www.adgridwork.com/?r={$matches[1]}", "www.adgridwork.com/?r={{account-id}}", $code);
-			}
-			
-			if (preg_match('/var sid = \'(\w*)\'/', $code, $matches)) {
-				$ad->set_property('slot', $matches[1]);
-				$code = str_replace("var sid = '{$matches[1]}'", "var sid = '{{slot}}'", $code);
-			}
-			
-			if (preg_match('/style=\"color: #(\w*);/', $code, $matches)) {
-				$ad->set_property('color-link', $matches[1]);
-				$code = str_replace("style=\"color: #{$matches[1]};", "style=\"color: #{{color-link}};", $code);
-			}
-			
-			if (preg_match("/var title_color = '(\w*)'/", $code, $matches)) {
-				$ad->set_property('color-title', $matches[1]);
-				$code = str_replace("var title_color = '{$matches[1]}'", "var title_color = '{{color-title}}'", $code);
-			}
-			
-			if (preg_match("/var description_color = '(\w*)'/", $code, $matches)) {
-				$ad->set_property('color-text', $matches[1]);
-				$code = str_replace("var description_color = '{$matches[1]}'", "var description_color = '{{color-text}}'", $code);
-			}
-			
-			if (preg_match("/var link_color = '(\w*)'/", $code, $matches)) {
-				$ad->set_property('color-url', $matches[1]);
-				$code = str_replace("var link_color = '{$matches[1]}'", "var link_color = '{{color-link}}'", $code);
-			}
-			
-			if (preg_match("/var background_color = '(\w*)'/", $code, $matches)) {
-				$ad->set_property('color-bg', $matches[1]);
-				$code = str_replace("var background_color = '{$matches[1]}'", "var background_color = '{{color-bg}}'", $code);
-			}
-			
-			if (preg_match("/var border_color = '(\w*)'/", $code, $matches)) {
-				$ad->set_property('color-border', $matches[1]);
-				$code = str_replace("var border_color = '{$matches[1]}'", "var border_color = '{{color-border}}'", $code);
-			}
-			
-			$ad->set_property('code', $code);
+		return (
+			(strpos($code,'www.adgridwork.com') !== false) ||
+			(strpos($code,'www.mediagridwork.com/mx.js') !== false)
+		);
+
+	}
+		
+	function import_settings($code)
+	{
+		if (preg_match("/www\.adgridwork\.com\/\?r=(\d*)/", $code, $matches)) {
+			$this->set_property('account-id', $matches[1]);
+			$code = str_replace("www.adgridwork.com/?r={$matches[1]}", "www.adgridwork.com/?r={{account-id}}", $code);
 		}
 		
-		return $ad;
+		if (preg_match('/var sid = \'(\w*)\'/', $code, $matches)) {
+			$this->set_property('slot', $matches[1]);
+			$code = str_replace("var sid = '{$matches[1]}'", "var sid = '{{slot}}'", $code);
+		}
+		
+		if (preg_match('/style=\"color: #(\w*);/', $code, $matches)) {
+			$this->set_property('color-link', $matches[1]);
+			$code = str_replace("style=\"color: #{$matches[1]};", "style=\"color: #{{color-link}};", $code);
+		}
+		
+		if (preg_match("/var title_color = '(\w*)'/", $code, $matches)) {
+			$this->set_property('color-title', $matches[1]);
+			$code = str_replace("var title_color = '{$matches[1]}'", "var title_color = '{{color-title}}'", $code);
+		}
+		
+		if (preg_match("/var description_color = '(\w*)'/", $code, $matches)) {
+			$this->set_property('color-text', $matches[1]);
+			$code = str_replace("var description_color = '{$matches[1]}'", "var description_color = '{{color-text}}'", $code);
+		}
+		
+		if (preg_match("/var link_color = '(\w*)'/", $code, $matches)) {
+			$this->set_property('color-url', $matches[1]);
+			$code = str_replace("var link_color = '{$matches[1]}'", "var link_color = '{{color-link}}'", $code);
+		}
+		
+		if (preg_match("/var background_color = '(\w*)'/", $code, $matches)) {
+			$this->set_property('color-bg', $matches[1]);
+			$code = str_replace("var background_color = '{$matches[1]}'", "var background_color = '{{color-bg}}'", $code);
+		}
+		
+		if (preg_match("/var border_color = '(\w*)'/", $code, $matches)) {
+			$this->set_property('color-border', $matches[1]);
+			$code = str_replace("var border_color = '{$matches[1]}'", "var border_color = '{{color-border}}'", $code);
+		}
+		
+		parent::import_settings($code);
+	}
+
+	function _form_settings_help(){
+	?><tr><td><p>Further configuration and control over channel and slot setup can be achieved through <a href="http://www.adgridwork.com/u.php" target="_blank">AdGridWorks's online system</a>:</p>
+	<ul>
+	<li><a href="http://www.adgridwork.com/u.php?page=metrics&sid=<?php echo $this->get_property('slot'); ?>" target="_blank">Campaign Metrics</a><br />
+			View hits, clicks, and other stats information.</li>
+	<li><a href="http://www.adgridwork.com/u.php?page=submitsite&sid=<?php echo $this->get_property('slot'); ?>" target="_blank">Edit Campaign</a><br />
+			Change keywords, ad format and layout.</li>
+	</ul></td></tr>
+	<?php	
 	}
 }
 /*
