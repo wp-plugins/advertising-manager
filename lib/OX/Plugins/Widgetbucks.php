@@ -3,13 +3,11 @@ require_once(OX_LIB . '/Network.php');
 
 class OX_Plugin_Widgetbucks extends OX_Network
 {
-	var $network_name = 'WidgetBucks';
-	var $url = 'http://www.widgetbucks.com';
-	
-	function OX_Plugin_Widgetbucks($network = null)
+	function OX_Plugin_Widgetbucks()
 	{
-		$this->OX_Network($network);
-		$this->name = 'widgetbucks';  // Short name which is the prefix for the default name of ads
+		$this->OX_Network();
+		$this->name = 'WidgetBucks';
+		$this->short_name = 'wb';
 	}
 	
 	/**
@@ -17,15 +15,15 @@ class OX_Plugin_Widgetbucks extends OX_Network
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class());
 	}
 	
-	function get_network_property_defaults()
+	function get_default_properties()
 	{
 		$properties = array(
 			'slot' => '',
 		);
-		return $properties + parent::get_network_property_defaults();
+		return $properties + parent::get_default_properties();
 	}
 	
 	function get_ad_colors()
@@ -33,34 +31,24 @@ class OX_Plugin_Widgetbucks extends OX_Network
 		return array('border', 'title', 'bg', 'text');
 	}
 	
-	function is_tag_detected($code)
+	function import($code)
 	{
-		return (preg_match('/(\w*)\.widgetbucks.com\/script\/(\w*).js\?uid=(\w*)/', $code, $matches));
-	}
+		$ad = false;
 		
-	function import($code, &$ad)
-	{
-		if (preg_match('/(\w*)\.widgetbucks.com\/script\/(\w*).js\?uid=(\w*)/', $code, $matches)!=0) { 
-			$ad->set_property('slot', $matches[3]);
-			$code = str_replace("{$matches[1]}.widgetbucks.com/script/{$matches[2]}.js?uid={$matches[3]}", "{$matches[1]}.widgetbucks.com/script/{$matches[2]}.js?uid={{slot}}", $code);
+		if ( preg_match('/(\w*)\.widgetbucks.com\/script\/(\w*).js\?uid=(\w*)/', $code, $matches) ) {
+		
+			$ad = OX_Ad::to_object();
+			$ad->network_type = get_class();
+		
+			if (preg_match('/(\w*)\.widgetbucks.com\/script\/(\w*).js\?uid=(\w*)/', $code, $matches)!=0) { 
+				$ad->set_property('slot', $matches[3]);
+				$code = str_replace("{$matches[1]}.widgetbucks.com/script/{$matches[2]}.js?uid={$matches[3]}", "{$matches[1]}.widgetbucks.com/script/{$matches[2]}.js?uid={{slot}}", $code);
+			}
+			
+			$ad->set_property('code', $code);
 		}
 		
-		return parent::import($code, $ad);
-	}
-
-	function _form_settings_help()
-	{
-?><tr><td><p>Configuration is available through the <a href="http://www.widgetbucks.com/" target="_blank">WidgetBucks site</a>. 
-Account maintenance links:</p>
-<ul>
-<li><a href="http://www.widgetbucks.com/myWidgets.page?action=call" target="_blank">My Widgets</a><br />
-		View, manage and create widgets.</li>
-<li><a href="http://www.widgetbucks.com/myBucks.page?action=call" target="_blank">My Bucks</a><br />
-		View your account balance and payment schedule.</li>
-<li><a href="https://www.widgetbucks.com/mySettings.page?action=call" target="_blank">My Settings</a><br />
-		Change account details and other global settings.</li>
-</ul>
-</td></tr><?php
+		return $ad;
 	}
 }
 /*

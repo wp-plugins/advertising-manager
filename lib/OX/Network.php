@@ -3,16 +3,18 @@ require_once (OX_LIB . '/Entity.php');
 
 class OX_Network extends OX_Entity
 {
-	var $network_type;
+	var $short_name;
 	
 	function OX_Network()
 	{
 		$this->OX_Entity();
+//		$this->name = 'Unknown Ad Network';
+//		$this->short_name = 'network';
 	}
 	
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class());
 	}
 	
 	function get_default_properties()
@@ -117,12 +119,6 @@ class OX_Network extends OX_Entity
 		return false;
 	}
 	
-	function import($code, &$ad)
-	{
-		$ad->set_property('code', $code);
-		$ad->network_type = get_class($this);
-	}
-	
 	function get_ad_formats()
 	{
 		return array('all' => array('custom', '728x90', '468x60', '120x600', '160x600', '300x250', '125x125'));
@@ -140,10 +136,10 @@ class OX_Network extends OX_Entity
 		$search[] = '{{timestamp}}';
 		$replace[] = time();
 		
-		$properties = $this->get_network_property_defaults();
+		$properties = $this->get_default_properties();
 		foreach ($properties as $property => $value) {
 			$search[] = '{{' . $property . '}}';
-			$replace[] = $this->get($property);
+			$replace[] = $ad->get($property);
 		}
 		
 		$code = $codeonly ? $ad->get('code') : ($ad->get('html-before') . $ad->get('code') . $ad->get('html-after'));
@@ -161,14 +157,14 @@ class OX_Network extends OX_Entity
 	function to_object($properties = null, $class = 'OX_Network')
 	{
 		$network = parent::to_object($properties, $class);
-		
+/*		
 		if (!empty($properties)) {
 			if (isset($properties['network_type'])) {
 				$network->network_type = $properties['network_type'];
 				unset($network->p['network_type']);
 			}
 		}
-		
+*/		
 		return $network;
 	}
 }

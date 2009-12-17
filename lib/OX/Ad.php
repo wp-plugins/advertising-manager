@@ -13,7 +13,7 @@ class OX_Ad extends OX_Entity
 	
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class());
 	}
 	
 	/**
@@ -39,13 +39,23 @@ class OX_Ad extends OX_Entity
 		$network = $advman_engine->get_network($type);
 		
 		if (empty($network)) {
-			$network = OX_Network::to_object($properties, $type);
+			$network = OX_Network::to_object(null, $type);
 			$advman_engine->set_network($network);
 		}
 		
 		return $network;
 	}
 	
+	function get_network_name()
+	{
+		$network = $this->get_network();
+		return $network->name;
+	}
+	function get_network_short_name()
+	{
+		$network = $this->get_network();
+		return $network->short_name;
+	}
 	function get_network_property($key)
 	{
 		$network = $this->get_network();
@@ -142,7 +152,7 @@ class OX_Ad extends OX_Entity
 	
 	function get_preview_url()
 	{
-		return  Advman_Tools::build_admin_url('advman-ads', 'preview', $this->id);
+		return  Advman_Tools::build_admin_url('advman-ad', 'preview', $this->id);
 	}
 
 	function display($codeonly = false)

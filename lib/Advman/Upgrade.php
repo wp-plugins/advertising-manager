@@ -318,9 +318,9 @@ class Advman_Upgrade
 				if (!empty($ad['class'])) {
 					$class = $ad['class'];
 					$tmp = new $class;
-					$base = $tmp->network_name;
+					$base = $tmp->short_name;
 				}
-				$ad['name'] = OX_Tools::generate_name($base);
+				$ad['name'] = Advman_Tools::generate_ad_name($base);
 			}
 			// add active
 			if (!isset($ad['active'])) {

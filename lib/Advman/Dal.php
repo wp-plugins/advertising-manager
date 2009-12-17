@@ -188,7 +188,7 @@ class Advman_Dal extends OX_Dal
 	
 	function update_network($network)
 	{
-		$this->data['networks'][strtolower(get_class($network))] = $network->to_array();
+		$this->data['networks'][strtolower(get_class($network))] = $network;
 		$this->_update_data();
 	}
 	

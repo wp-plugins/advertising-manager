@@ -3,13 +3,11 @@ require_once(OX_LIB . '/Network.php');
 
 class OX_Plugin_Ypn extends OX_Network
 {
-	var $network_name = 'Yahoo! Publisher Network';
-	var $url = 'http://ypn.yahoo.com';
-	
-	function OX_Plugin_Ypn($network = null)
+	function OX_Plugin_Ypn()
 	{
-		$this->OX_Network($network);
-		$this->name = 'ypn';  // Short name which is the prefix for the default name of ads
+		$this->OX_Network();
+		$this->name = 'Yahoo Publisher Network';
+		$this->short_name = 'ypn';
 	}
 	
 	/**
@@ -17,10 +15,10 @@ class OX_Plugin_Ypn extends OX_Network
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class());
 	}
 	
-	function get_network_property_defaults()
+	function get_default_properties()
 	{
 		$properties = array(
 			'account-id' => '',
@@ -35,7 +33,7 @@ class OX_Plugin_Ypn extends OX_Network
 			'url' => '',
 			'width' => '250',
 		);
-		return $properties + parent::get_network_property_defaults();
+		return $properties + parent::get_default_properties();
 	}
 	
 	function get_ad_colors()
@@ -43,65 +41,68 @@ class OX_Plugin_Ypn extends OX_Network
 		return array('border', 'title', 'bg', 'text');
 	}
 	
-	function is_tag_detected($code)
+	function import($code)
 	{
-		return ( (strpos($code,'ypn-js.overture.com')!==false) );
-	}
+		if (strpos($code,'ypn-js.overture.com') !== false) {
+			
+			$ad = OX_Ad::to_object();
+			$ad->network_type = get_class();
 		
-	function import($code, &$ad)
-	{
-		if (preg_match('/ctxt_ad_partner( *)=( *)"(.*)"/', $code, $matches)) {
-			$ad->set_property('account-id', $matches[3]);
-			$code = str_replace("ctxt_ad_partner{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_partner{$matches[1]}={$matches[2]}\"{{account-id}}\"", $code);
+			if (preg_match('/ctxt_ad_partner( *)=( *)"(.*)"/', $code, $matches)) {
+				$ad->set_property('account-id', $matches[3]);
+				$code = str_replace("ctxt_ad_partner{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_partner{$matches[1]}={$matches[2]}\"{{account-id}}\"", $code);
+			}
+			
+			if (preg_match('/ctxt_ad_section( *)=( *)"(.*)"/', $code, $matches)){
+				$ad->set_property('channel', $matches[3]);
+				$code = str_replace("ctxt_ad_section{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_section{$matches[1]}={$matches[2]}\"{{channel}}\"", $code);
+			}
+	
+			if (preg_match('/ctxt_ad_bc( *)=( *)"(.*)"/', $code, $matches)) {
+				$ad->set_property('color-border', $matches[3]);
+				$code = str_replace("ctxt_ad_bc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_bc{$matches[1]}={$matches[2]}\"{{color-border}}\"", $code);
+			}
+			if (preg_match('/ctxt_ad_cc( *)=( *)"(.*)"/', $code, $matches)) {
+				$ad->set_property('color-bg', $matches[3]);
+				$code = str_replace("ctxt_ad_cc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_cc{$matches[1]}={$matches[2]}\"{{color-bg}}\"", $code);
+			}
+			if (preg_match('/ctxt_ad_lc( *)=( *)"(.*)"/', $code, $matches)) {
+				$ad->set_property('color-title', $matches[3]);
+				$code = str_replace("ctxt_ad_lc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_lc{$matches[1]}={$matches[2]}\"{{color-title}}\"", $code);
+			}
+			if (preg_match('/ctxt_ad_tc( *)=( *)"(.*)"/', $code, $matches)) {
+				$ad->set_property('color-text', $matches[3]);
+				$code = str_replace("ctxt_ad_tc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_tc{$matches[1]}={$matches[2]}\"{{color-text}}\"", $code);
+			}
+			if (preg_match('/ctxt_ad_uc( *)=( *)"(.*)"/', $code, $matches)) {
+				$ad->set_property('color-link', $matches[3]);
+				$code = str_replace("ctxt_ad_uc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_uc{$matches[1]}={$matches[2]}\"{{color-link}}\"", $code);
+			}
+			
+			$width = '';
+			$height = '';
+			if (preg_match('/ctxt_ad_width( *)=( *)(\d*)/', $code, $matches)) {
+				$width = $matches[3];
+				$code = str_replace("ctxt_ad_width{$matches[1]}={$matches[2]}{$matches[3]}", "ctxt_ad_width{$matches[1]}={$matches[2]}{{width}}", $code);
+			}
+			if (preg_match('/ctxt_ad_height( *)=( *)(\d*)/', $code, $matches)) {
+				$height = $matches[3];
+				$code = str_replace("ctxt_ad_height{$matches[1]}={$matches[2]}{$matches[3]}", "ctxt_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
+			}
+			if ($width != '') {
+				$ad->set_property('width', $width);
+			}
+			if ($height != '') {
+				$ad->set_property('height', $height);
+			}
+			if (($width != '') && ($height != '')) {
+				$ad->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
+			}
+			
+			$ad->set_property('code', $code);
 		}
 		
-		if (preg_match('/ctxt_ad_section( *)=( *)"(.*)"/', $code, $matches)){
-			$ad->set_property('channel', $matches[3]);
-			$code = str_replace("ctxt_ad_section{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_section{$matches[1]}={$matches[2]}\"{{channel}}\"", $code);
-		}
-
-		if (preg_match('/ctxt_ad_bc( *)=( *)"(.*)"/', $code, $matches)) {
-			$ad->set_property('color-border', $matches[3]);
-			$code = str_replace("ctxt_ad_bc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_bc{$matches[1]}={$matches[2]}\"{{color-border}}\"", $code);
-		}
-		if (preg_match('/ctxt_ad_cc( *)=( *)"(.*)"/', $code, $matches)) {
-			$ad->set_property('color-bg', $matches[3]);
-			$code = str_replace("ctxt_ad_cc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_cc{$matches[1]}={$matches[2]}\"{{color-bg}}\"", $code);
-		}
-		if (preg_match('/ctxt_ad_lc( *)=( *)"(.*)"/', $code, $matches)) {
-			$ad->set_property('color-title', $matches[3]);
-			$code = str_replace("ctxt_ad_lc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_lc{$matches[1]}={$matches[2]}\"{{color-title}}\"", $code);
-		}
-		if (preg_match('/ctxt_ad_tc( *)=( *)"(.*)"/', $code, $matches)) {
-			$ad->set_property('color-text', $matches[3]);
-			$code = str_replace("ctxt_ad_tc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_tc{$matches[1]}={$matches[2]}\"{{color-text}}\"", $code);
-		}
-		if (preg_match('/ctxt_ad_uc( *)=( *)"(.*)"/', $code, $matches)) {
-			$ad->set_property('color-link', $matches[3]);
-			$code = str_replace("ctxt_ad_uc{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "ctxt_ad_uc{$matches[1]}={$matches[2]}\"{{color-link}}\"", $code);
-		}
-		
-		$width = '';
-		$height = '';
-		if (preg_match('/ctxt_ad_width( *)=( *)(\d*)/', $code, $matches)) {
-			$width = $matches[3];
-			$code = str_replace("ctxt_ad_width{$matches[1]}={$matches[2]}{$matches[3]}", "ctxt_ad_width{$matches[1]}={$matches[2]}{{width}}", $code);
-		}
-		if (preg_match('/ctxt_ad_height( *)=( *)(\d*)/', $code, $matches)) {
-			$height = $matches[3];
-			$code = str_replace("ctxt_ad_height{$matches[1]}={$matches[2]}{$matches[3]}", "ctxt_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
-		}
-		if ($width != '') {
-			$ad->set_property('width', $width);
-		}
-		if ($height != '') {
-			$ad->set_property('height', $height);
-		}
-		if (($width != '') && ($height != '')) {
-			$ad->set_property('adformat', $width . 'x' . $height); //Only set if both width and height present
-		}
-		
-		return parent::import($code, $ad);
+		return $ad;
 	}
 }
 /*

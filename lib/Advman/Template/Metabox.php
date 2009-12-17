@@ -82,7 +82,7 @@ class Advman_Template_Metabox
 	
 	function display_format($ad, $nw = false)
 	{
-		$properties = $ad->get_network_property_defaults();
+		$properties = $ad->get_default_properties();
 		if (isset($properties['adtype'])) {
 			$adtype = ($nw) ? $ad->get_network_property('adtype') : $ad->get_property('adtype');
 		} else {
@@ -311,7 +311,7 @@ class Advman_Template_Metabox
 	}
 	function display_account($ad, $nw = false)
 	{
-		$properties = $ad->get_network_property_defaults();
+		$properties = $ad->get_default_properties();
 		$available_props = array(
 			'account-id' => __('Account ID:', 'advman'),
 			'username' => __('Username:', 'advman'),
@@ -350,7 +350,7 @@ class Advman_Template_Metabox
 </table>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php printf($msg, $ad->network_name, $ad->network_name); ?></span>
+<span style="font-size:x-small; color:gray;"><?php printf($msg, $ad->get_network_name(), $ad->get_network_name()); ?></span>
 <?php
 	}
 	function display_history_network($ad)
@@ -433,7 +433,7 @@ class Advman_Template_Metabox
 		</tr>
 <?php endforeach; ?>
 <?php endif;
-$properties = $ad->get_network_property_defaults();
+$properties = $ad->get_default_properties();
 $available_props = array(
 	'alt-text' => __('Alternate Text:', 'advman'),
 	'status' => __('Status Text:', 'advman'),
@@ -482,7 +482,7 @@ foreach ($available_props as $key => $text) : ?>
 		<div id="ad-color-link" style="font: 11px <?php echo $font ?>; padding: 2px; color: #<?php echo htmlspecialchars($color, ENT_QUOTES); ?>;"><?php _e('www.advertiser-url.com', 'advman'); ?><br /></div>
 <?php endif; ?>
 <?php if (!empty($settings['color'])) : ?>
-		<div style="color: #000000; font: 10px verdana, arial, sans-serif; text-align:center"><u><?php printf(__('Ads by %s', 'advman'), $ad->network_name); ?></u></div>
+		<div style="color: #000000; font: 10px verdana, arial, sans-serif; text-align:center"><u><?php printf(__('Ads by %s', 'advman'), $ad->get_network_name()); ?></u></div>
 <?php endif; ?>
 	</td>
 </tr>
@@ -507,9 +507,9 @@ foreach ($available_props as $key => $text) : ?>
 	{
 ?>
 <p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
-<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to copy the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to do nothing, OK to copy)', 'advman'); ?>')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Copy this ad', 'advman'); ?></a></p>
-<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></p>
-<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to copy the %s ad:', 'advman'), $ad->get_network_name()); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to do nothing, OK to copy)', 'advman'); ?>')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Copy this ad', 'advman'); ?></a></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->get_network_name()); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->get_network_name()); ?></a></p>
 <?php
 	}
 	function display_shortcuts_network($ad)
@@ -517,9 +517,9 @@ foreach ($available_props as $key => $text) : ?>
 ?>
 <p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
 <?php if (!empty($ad->url)) : ?>
-<p class="hide-if-no-js"><a href="<?php echo $ad->url; ?>"><?php printf(__('%s home page', 'advman'), $ad->network_name); ?></a></p>
+<p class="hide-if-no-js"><a href="<?php echo $ad->url; ?>"><?php printf(__('%s home page', 'advman'), $ad->get_network_name()); ?></a></p>
 <?php endif; ?>
-<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='reset'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Reset %s settings to defaults', 'advman'), $ad->network_name); ?></a></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='reset'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Reset %s settings to defaults', 'advman'), $ad->get_network_name()); ?></a></p>
 <?php
 	}
 	

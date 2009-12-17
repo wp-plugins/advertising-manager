@@ -3,13 +3,11 @@ require_once(OX_LIB . '/Network.php');
 
 class OX_Plugin_Adify extends OX_Network
 {
-	var $network_name = 'Adify';
-	var $url = 'http://www.adify.com';
-	
-	function OX_Plugin_Adify($network = null)
+	function OX_Plugin_Adify()
 	{
-		$this->OX_Network($network);
-		$this->name = 'adify';  // Short name which is the prefix for the default name of ads
+		$this->OX_Network();
+		$this->name = 'Adify';
+		$this->short_name = 'adify';
 	}
 		
 	/**
@@ -17,10 +15,10 @@ class OX_Plugin_Adify extends OX_Network
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class());
 	}
 	
-	function get_network_property_defaults()
+	function get_default_properties()
 	{
 		$properties = array(
 			'adformat' => '250x250',
@@ -33,7 +31,7 @@ class OX_Plugin_Adify extends OX_Network
 			'width' => '250',
 		);
 		
-		return $properties + parent::get_network_property_defaults();
+		return $properties + parent::get_default_properties();
 	}
 	
 	function get_ad_formats()
@@ -41,45 +39,50 @@ class OX_Plugin_Adify extends OX_Network
 		return array('all' => array('custom','728x90', '468x60', '120x600', '160x600', '300x250', '160x160'));
 	}
 	
-	function is_tag_detected($code)
+	function import($code)
 	{
-		return (strpos($code,'sr_adspace_id') !== false);
-	}
+		$ad = false;
 		
-	function import($code, &$ad)
-	{
-		// Slot ID
-		if (preg_match('/sr_adspace_id( *)=( *)(\d*);/', $code, $matches) != 0) {
-			$ad->set_property('slot', $matches[3]);
-			$code = str_replace("sr_adspace_id{$matches[1]}={$matches[2]}{$matches[3]}", "sr_adspace_id{$matches[1]}={$matches[2]}{{slot}}", $code);
-			$code = str_replace("azId={$matches[3]}", "azId={{slot}}", $code);
-			$code = str_replace("ID #{$matches[3]}", "ID #{{slot}}", $code);
-		}
-		
-		// Width / Height
-		$width = '';
-		$height = '';
-		if (preg_match('/sr_adspace_width( *)=( *)(\d*);/', $code, $matches) != 0) {
-			$width = $matches[3]; 
-			if ($width != '') {
-				$ad->set_property('width', $width);
+		if (strpos($code,'sr_adspace_id') !== false) {
+			
+			$ad = OX_Ad::to_object();
+			$ad->network_type = get_class();
+			
+			// Slot ID
+			if (preg_match('/sr_adspace_id( *)=( *)(\d*);/', $code, $matches) != 0) {
+				$ad->set_property('slot', $matches[3]);
+				$code = str_replace("sr_adspace_id{$matches[1]}={$matches[2]}{$matches[3]}", "sr_adspace_id{$matches[1]}={$matches[2]}{{slot}}", $code);
+				$code = str_replace("azId={$matches[3]}", "azId={{slot}}", $code);
+				$code = str_replace("ID #{$matches[3]}", "ID #{{slot}}", $code);
 			}
-			$code = str_replace("sr_adspace_width{$matches[1]}={$matches[2]}{$width}", "sr_adspace_width{$matches[1]}={$matches[2]}{{width}}", $code);
-		}
-		if (preg_match('/sr_adspace_height( *)=( *)(\d*);/', $code, $matches) != 0) {
-			$height = $matches[3];
-			if ($height != '') {
-				$ad->set_property('height', $height);
+			
+			// Width / Height
+			$width = '';
+			$height = '';
+			if (preg_match('/sr_adspace_width( *)=( *)(\d*);/', $code, $matches) != 0) {
+				$width = $matches[3]; 
+				if ($width != '') {
+					$ad->set_property('width', $width);
+				}
+				$code = str_replace("sr_adspace_width{$matches[1]}={$matches[2]}{$width}", "sr_adspace_width{$matches[1]}={$matches[2]}{{width}}", $code);
 			}
-			$code = str_replace("sr_adspace_height{$matches[1]}={$matches[2]}{$height}", "sr_adspace_height{$matches[1]}={$matches[2]}{{height}}", $code);
-		}
-		if (($width != '') && ($height != '')) {
-			$adformats = $this->get_ad_formats();
-			$adformat = in_array("{$width}x{$height}", $adformats['all']) ? "{$width}x{$height}" : 'custom';
-			$ad->set_property('adformat', $adformat);
+			if (preg_match('/sr_adspace_height( *)=( *)(\d*);/', $code, $matches) != 0) {
+				$height = $matches[3];
+				if ($height != '') {
+					$ad->set_property('height', $height);
+				}
+				$code = str_replace("sr_adspace_height{$matches[1]}={$matches[2]}{$height}", "sr_adspace_height{$matches[1]}={$matches[2]}{{height}}", $code);
+			}
+			if (($width != '') && ($height != '')) {
+				$adformats = $this->get_ad_formats();
+				$adformat = in_array("{$width}x{$height}", $adformats['all']) ? "{$width}x{$height}" : 'custom';
+				$ad->set_property('adformat', $adformat);
+			}
+			
+			$ad->set_property('code', $code);
 		}
 		
-		return parent::import($code, $ad);
+		return $ad;
 	}
 }
 /*

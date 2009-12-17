@@ -18,7 +18,7 @@ class Advman_Template_List
 				if ($ad->active) {
 					$activeAdCount++;
 				}
-				$networks[strtolower(get_class($ad))] = $ad->network_name;
+				$networks[strtolower(get_class($ad))] = $ad->get_network_name();
 			}
 		}
 		
@@ -38,12 +38,11 @@ class Advman_Template_List
 <div class="alignleft actions">
 
 <div id="advman-list-actions">
-	<div id="advman-list-first"><a href="<?php echo Advman_Tools::build_admin_url('advman-ads', 'create'); ?>"><?php _e('Create new ad', 'advman'); ?></a></div>
+	<div id="advman-list-first"><a href="<?php echo Advman_Tools::build_admin_url('advman-ad', 'create'); ?>"><?php _e('Create new ad', 'advman'); ?></a></div>
 	<div id="advman-list-toggle"><br /></div>
 	<div id="advman-list-inside">
 		<div class='advman-list-action'><a href="javascript:advman_set_action('copy');"><?php _e('Copy selected ads', 'advman'); ?></a></div>
 		<div class='advman-list-action'><a href="javascript:advman_set_action('delete');"><?php _e('Delete selected ads', 'advman'); ?></a></div>
-		<div class='advman-list-action'><a href="javascript:alert(jQuery('#TB_window').id);"><?php _e('TEST THICKBOX', 'advman'); ?></a></div>
 	</div>
 </div> <!-- advman-list-actions -->
 
@@ -76,22 +75,27 @@ class Advman_Template_List
 	</tfoot>
 
 	<tbody>
-<?php foreach ($ads as $ad) : ?>
+<?php foreach ($ads as $ad) :
+	$w = $ad->get('width') + 50;
+	$h = $ad->get('height') + 50;
+	$w = $w<50 ? 50 : $w;
+	$w = $w>800 ? 800 : $w;
+	$h = $h>650 ? 650 : $h; ?>
 	<tr id='post-3' class='alternate author-self status-publish iedit' valign="top">
 		<th scope="row" class="check-column"><input type="checkbox" name="advman-ids[]" value="<?php echo $ad->id; ?>" /></th>
 		<td class="post-title column-title">
-			<strong><a id='advman-ad-<?php echo $ad->id; ?>' class="row-title" href="<?php echo Advman_Tools::build_admin_url('advman-ads', 'edit', $ad->id); ?>" title="<?php printf(__('Edit the ad: %s', 'advman'), $ad->name); ?>">[<?php echo $ad->id; ?>] <?php echo $ad->name; ?></a></strong>
+			<strong><a id='advman-ad-<?php echo $ad->id; ?>' class="row-title" href="<?php echo Advman_Tools::build_admin_url('advman-ad', 'edit', $ad->id); ?>" title="<?php printf(__('Edit the ad: %s', 'advman'), $ad->name); ?>">[<?php echo $ad->id; ?>] <?php echo $ad->name; ?></a></strong>
 			<div class="row-actions">
-				<span class='edit'><a href="<?php echo Advman_Tools::build_admin_url('advman-ads', 'edit', $ad->id); ?>" title="<?php printf(__('Edit the ad &quot;%s&quot;', 'advman'), $ad->name); ?>"><?php _e('Edit', 'advman'); ?></a> | </span>
-				<span class='edit'><a class='submitdelete' title="<?php _e('Copy this ad', 'advman'); ?>" href="javascript:advman_set_action('copy','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>'););"><?php _e('Copy', 'advman'); ?></a> | </span>
-				<span class='edit'><a class='submitdelete' title="<?php _e('Delete this ad', 'advman'); ?>" href="javascript:advman_set_action('delete','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>');" onclick=""><?php _e('Delete', 'advman'); ?></a> | </span>
-				<span class='edit'><a class='thickbox' href="<?php echo 'http://www.openx.org?a=b'; //$ad->get_preview_url(); ?>&amp;modal=true&amp;height=500&amp;width=500&amp;TB_iframe=true" id="post-preview" tabindex="4"><?php _e('Preview', 'advman'); ?></a></span>
+				<span class='edit'><a href="<?php echo Advman_Tools::build_admin_url('advman-ad', 'edit', $ad->id); ?>" title="<?php printf(__('Edit the ad &quot;%s&quot;', 'advman'), $ad->name); ?>"><?php _e('Edit', 'advman'); ?></a> | </span>
+				<span class='edit'><a class='submitdelete' title="<?php _e('Copy this ad', 'advman'); ?>"   href="javascript:advman_set_action('copy','<?php echo $ad->id; ?>','<?php echo $ad->name; ?>');"><?php _e('Copy', 'advman'); ?></a> | </span>
+				<span class='edit'><a class='submitdelete' title="<?php _e('Delete this ad', 'advman'); ?>" href="javascript:advman_set_action('delete','<?php echo $ad->id; ?>','<?php echo $ad->name; ?>');"><?php _e('Delete', 'advman'); ?></a> | </span>
+				<span class='edit'><a class='thickbox' href="<?php echo $ad->get_preview_url(); ?>&amp;modal=true&amp;height=<?php echo $h; ?>&amp;width=<?php echo $w; ?>&amp;TB_iframe=true" id="post-preview" tabindex="4"><?php _e('Preview', 'advman'); ?></a></span>
 			</div>
 		</td>
 		<td class="author column-author"><?php echo $this->displayZones($ad, $zones); ?></td>
 		<td class="categories column-categories"> <?php echo $this->displayFormat($ad); ?></td>
-		<td class="categories column-tags"><a href="javascript:advman_set_action('<?php echo ($ad->active) ? 'deactivate' : 'activate'; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
-		<td class="categories column-tags"><a href="javascript:advman_set_action('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $defaultAdName) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
+		<td class="tags column-tags"><a href="javascript:advman_set_action('<?php echo ($ad->active) ? 'deactivate' : 'activate'; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
+		<td class="tags column-tags"><a href="javascript:advman_set_action('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $defaultAdName) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
 <?php
 		list($last_user, $last_timestamp, $last_timestamp2) = Advman_Tools::get_last_edit($ad->get_property('revisions'));
 ?>		<td class="date column-date"><abbr title="<?php echo $last_timestamp2 ?>"><?php echo $last_timestamp . __(' ago', 'advman'); ?></abbr><br /> <?php echo __('by', 'advman') . ' ' . $last_user; ?></td>

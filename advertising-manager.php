@@ -92,8 +92,13 @@ function advman_run()
 	add_action('wp_footer', 'advman_footer');
 	// If admin, initialise the Admin functionality	
 	if (is_admin()) {
-		add_action('admin_menu', array('Advman_Admin','init'));
+		add_action('admin_init', array('Advman_Admin','init'));
+		add_action('admin_menu', array('Advman_Admin','menu'));
 		add_action('wp_ajax_add-advman-zone', array('Advman_Admin', 'add_zone_ajax'));
+		add_action('admin_print_scripts', array('Advman_Admin', 'add_scripts'));
+		add_action('admin_print_styles', array('Advman_Admin', 'add_styles'));
+		add_action('admin_notices', array('Advman_Admin','display_notices'), 1 );
+		add_action('admin_footer', array('Advman_Admin','display_editor'));
 	}
 }
 

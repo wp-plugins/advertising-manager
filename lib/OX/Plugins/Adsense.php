@@ -3,13 +3,11 @@ require_once(OX_LIB . '/Network.php');
 
 class OX_Plugin_Adsense extends OX_Network
 {
-	var $network_name = 'Google Adsense';
-	var $url = 'http://www.google.com/adsense';
-	
-	function OX_Plugin_Adsense($network = null)
+	function OX_Plugin_Adsense()
 	{
-		$this->OX_Network($network);
-		$this->name = 'adsense';  // Short name which is the prefix for the default name of ads
+		$this->OX_Network();
+		$this->name = 'Google Adsense';
+		$this->short_name = 'adsense';
 	}
 	
 	/**
@@ -17,10 +15,10 @@ class OX_Plugin_Adsense extends OX_Network
 	 */
 	function register_plugin(&$engine)
 	{
-		$engine->add_action('ad_network', get_class($this));
+		$engine->add_action('ad_network', get_class());
 	}
 	
-	function get_network_property_defaults()
+	function get_default_properties()
 	{
 		$properties = array(
 			'account-id' => '',
@@ -34,7 +32,7 @@ class OX_Plugin_Adsense extends OX_Network
 //			'username' => '',
 			'width' => '90',
 		);
-		return $properties + parent::get_network_property_defaults();
+		return $properties + parent::get_default_properties();
 	}
 	
 	function get_ad_formats()
@@ -47,55 +45,60 @@ class OX_Plugin_Adsense extends OX_Network
 		return array('all' => $text + $image + $video, 'text' => $text, 'image' => $image, 'video' => $video, 'link' => $link);
 	}
 	
-	function is_tag_detected($code)
+	function import($code)
 	{
-		return (strpos($code,'google_ad_client') !== false);
-	}
-
-	function import($code, &$ad)
-	{
-		// Account ID
-		if (preg_match('/google_ad_client( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$ad->set_property('account-id', $matches[3]);
-			$code = str_replace("google_ad_client{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_client{$matches[1]}={$matches[2]}\"{{account-id}}\"", $code);
-		}
+		$ad = false;
 		
-		// Partner ID
-		if (preg_match('/google_ad_host( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$ad->set_property('partner', $matches[3]);
-			$code = str_replace("google_ad_host{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_host{$matches[1]}={$matches[2]}\"{{partner}}\"", $code);
-		}
+		if (strpos($code,'google_ad_client') !== false) {
+			
+			$ad = OX_Ad::to_object();
+			$ad->network_type = get_class();
 		
-		// Slot ID
-		if (preg_match('/google_ad_slot( *)=( *)"(.*)"/', $code, $matches) != 0) {
-			$ad->set_property('slot', $matches[3]);
-			$ad->set_property('adtype', 'all');
-			$code = str_replace("google_ad_slot{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_slot{$matches[1]}={$matches[2]}\"{{slot}}\"", $code);
-		}
-		
-		// Width / Height
-		$width = '';
-		$height = '';
-		if (preg_match('/google_ad_width( *)=( *)(\d*);/', $code, $matches) != 0) {
-			$width = $matches[3]; 
-			if ($width != '') {
-				$ad->set_property('width', $width);
+			// Account ID
+			if (preg_match('/google_ad_client( *)=( *)"(.*)"/', $code, $matches) != 0) {
+				$ad->set_property('account-id', $matches[3]);
+				$code = str_replace("google_ad_client{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_client{$matches[1]}={$matches[2]}\"{{account-id}}\"", $code);
 			}
-			$code = str_replace("google_ad_width{$matches[1]}={$matches[2]}{$width}", "google_ad_width{$matches[1]}={$matches[2]}{{width}}", $code);
-		}
-		if (preg_match('/google_ad_height( *)=( *)(\d*);/', $code, $matches) != 0) {
-			$height = $matches[3];
-			if ($height != '') {
-				$ad->set_property('height', $height);
+			
+			// Partner ID
+			if (preg_match('/google_ad_host( *)=( *)"(.*)"/', $code, $matches) != 0) {
+				$ad->set_property('partner', $matches[3]);
+				$code = str_replace("google_ad_host{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_host{$matches[1]}={$matches[2]}\"{{partner}}\"", $code);
 			}
-			$code = str_replace("google_ad_height{$matches[1]}={$matches[2]}{$height}", "google_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
-		}
-		if (($width != '') && ($height != '')) {
-			$ad->set_property('adformat', $width . 'x' . $height);
-			$ad->set_property('adtype', 'all');
+			
+			// Slot ID
+			if (preg_match('/google_ad_slot( *)=( *)"(.*)"/', $code, $matches) != 0) {
+				$ad->set_property('slot', $matches[3]);
+				$ad->set_property('adtype', 'all');
+				$code = str_replace("google_ad_slot{$matches[1]}={$matches[2]}\"{$matches[3]}\"", "google_ad_slot{$matches[1]}={$matches[2]}\"{{slot}}\"", $code);
+			}
+			
+			// Width / Height
+			$width = '';
+			$height = '';
+			if (preg_match('/google_ad_width( *)=( *)(\d*);/', $code, $matches) != 0) {
+				$width = $matches[3]; 
+				if ($width != '') {
+					$ad->set_property('width', $width);
+				}
+				$code = str_replace("google_ad_width{$matches[1]}={$matches[2]}{$width}", "google_ad_width{$matches[1]}={$matches[2]}{{width}}", $code);
+			}
+			if (preg_match('/google_ad_height( *)=( *)(\d*);/', $code, $matches) != 0) {
+				$height = $matches[3];
+				if ($height != '') {
+					$ad->set_property('height', $height);
+				}
+				$code = str_replace("google_ad_height{$matches[1]}={$matches[2]}{$height}", "google_ad_height{$matches[1]}={$matches[2]}{{height}}", $code);
+			}
+			if (($width != '') && ($height != '')) {
+				$ad->set_property('adformat', $width . 'x' . $height);
+				$ad->set_property('adtype', 'all');
+			}
+		
+			$ad->set_property('code', $code);
 		}
 		
-		return parent::import($code, $ad);
+		return $ad;
 	}
 }
 

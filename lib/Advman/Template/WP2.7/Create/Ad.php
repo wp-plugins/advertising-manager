@@ -8,7 +8,7 @@ class Advman_Template_Create_Ad
 ?><div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
 	<h2><?php _e('Create Ad', 'advman'); ?></h2>
-	<form action="<?php echo Advman_Tools::build_admin_url('advman-ads'); ?>" method="post" id="advman-form" enctype="multipart/form-data">
+	<form action="<?php echo Advman_Tools::build_admin_url('advman-ad'); ?>" method="post" id="advman-form" enctype="multipart/form-data">
 	<input type="hidden" name="advman-mode" id="advman-mode" value="create">
 	<input type="hidden" name="advman-action" id="advman-action">
 	<input type="hidden" name="advman-target" id="advman-target">
