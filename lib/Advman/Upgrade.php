@@ -9,7 +9,7 @@ class Advman_Upgrade
 	{
 		$version = Advman_Upgrade::_get_version($data);
 		Advman_Upgrade::_backup($data, $version);
-		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7');
+		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9');
 		foreach ($versions as $v) {
 			if (version_compare($version, $v, '<')) {
 				call_user_func(array('Advman_Upgrade', 'advman_' . str_replace('.','_',$v)), &$data);  //wrap var in array to pass by reference
@@ -17,6 +17,25 @@ class Advman_Upgrade
 		}
 		
 		$data['settings']['version'] = ADVMAN_VERSION;
+	}
+	function advman_3_4_9(&$data)
+	{
+		// If all authors are selected, make the value '' (which means all), so that when new users are added, they will be included.
+		$users = get_users_of_blog();
+		foreach ($data['ads'] as $id => $ad) {
+			if (is_array($ad['show-author'])) {
+				$all = true;
+				foreach ($users as $user) {
+					if (!in_array($user->user_id, $ad['show-author'])) {
+						$all = false;
+						break;
+					}
+				}
+				if ($all) {
+					$data['ads'][$id]['show-author'] = '';
+				}
+			}
+		}
 	}
 	function advman_3_4_7(&$data)
 	{
