@@ -127,6 +127,7 @@ class Advman_Template_Metabox
 	<tr style="white-space:nowrap">
 		<td class="advman_label"><label for="advman-author"><?php _e('By Author:'); ?></label></td>
 		<td>
+			<input type="hidden" name="advman-show-author[]" value="">
 			<select id="advman-author" name="advman-show-author[]" multiple="multiple" size="5">
 <?php foreach ($users as $user) : ?>
 				<option<?php echo ($authorValues == '' || in_array($user->user_id, $authorValues) ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
@@ -257,12 +258,15 @@ class Advman_Template_Metabox
 			'alt-url' => __('Alternate URL:', 'advman'),
 			'identifier' => __('Identifier:', 'advman'),
 		);
-		$msg = __('Enter the information specific to your %s account.');
+		$msg = __('Enter the information specific to the %s ad type.');
 		if (isset($properties['partner'])) {
 			$msg .= ' ' . __('The Partner ID is the ID for a partner revenue sharing account, usually your blog hosting provider.  Note that a Partner ID does not necessarily mean that your partner is sharing revenues.  %s will notify you if this is the case.', 'advman');
 		}
 		if (isset($properties['channel'])) {
 			$msg .= ' ' . __('The Channel is the name for the specific inventory segment set up in your %s account.');
+		}
+		if (isset($properties['counter'])) {
+			$msg .= ' ' . __('Leave the Max Ads Per Page field blank if you do not want to restrict the number of ads per page.');
 		}
 ?><div style="font-size:small;">
 <table class="form-table">

@@ -3,6 +3,22 @@ require_once(OX_LIB . '/Tools.php');
 
 class Advman_Tools
 {
+	function format_author_value(&$value)
+	{
+		if (is_array($value)) {
+			$users = get_users_of_blog();
+			$all = true;
+			foreach ($users as $user) {
+				if (!in_array($user->user_id, $value)) {
+					$all = false;
+					break;
+				}
+			}
+			if ($all) {
+				$value = '';
+			}
+		}
+	}
 	/**
 	 * Get the last edit of this ad
 	 */
