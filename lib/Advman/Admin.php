@@ -94,11 +94,19 @@ class Advman_Admin
 				if (isset($_POST["advman-{$property}"])) {
 					$value = OX_Tools::sanitize($_POST["advman-{$property}"]);
 					if ($default) {
+						// Deal with multi select 'show-author'
+						if ($property == 'show-author') {
+							Advman_Tools::format_author_value($value);
+						}
 						if ($ad->get_network_property($property) != $value) {
 							$ad->set_network_property($property, $value);
 							$changed = true;
 						}
 					} else {
+						// Deal with multi select 'show-author'
+						if ($property == 'show-author') {
+							Advman_Tools::format_author_value($value);
+						}
 						if ($ad->get_property($property) != $value) {
 							$ad->set_property($property, $value);
 							$changed = true;

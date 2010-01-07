@@ -136,7 +136,7 @@ class OX_Ad extends OX_Plugin
 		
 		// Filter by author
 		$authors = $this->get('show-author', true);
-		if (!empty($authors)) {
+		if (is_array($authors)) {
 			if (!in_array($post->post_author, $authors)) {
 				return false;
 			}
