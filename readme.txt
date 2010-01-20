@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40
 Tags: ad, adbrite, adgridwork, adify, admin, adpinion, adroll, ads, adsense, adserver, advertisement, advertising, affiliate, banner, banners, chitika, cj, commercial, commission, crispads, google, income, junction, link, manager, media, money, openx, plugin, random, referral, revenue, rotator, seo, server, shoppingads, widget, widgetbucks, yahoo, ypn
 Requires at least: 2.5
 Tested up to: 2.9.1
-Stable tag: 3.4.11
+Stable tag: 3.4.12
 
 Easily place Google Adsense and other ads on your Wordpress blog.  Simple to use, with powerful management and optimisation features.
 
@@ -21,6 +21,7 @@ Features:
 Related Links:
 
 * <a href="http://code.openx.org/projects/show/advertising-manager" title="Advertising Manager plugin for WordPress">Plugin Homepage</a>
+* Follow <a href="http://twitter.com/scottswitzer" title="Track Advertising Manager developments by following author Scott Switzer on Twitter">Scott Switzer</a> and <a href="http://twitter.com/openx" title="Track Advertising Manager developments by following sponsor OpenX on Twitter">OpenX</a> on Twitter
 * <a href="http://code.openx.org/projects/activity/advertising-manager" title="Recent changes for the Advertising Manager plugin for WordPress">Recent Changes</a>
 * <a href="http://code.openx.org/projects/advertising-manager/issues" title="Feature requests and bugs">Feature Requests and Bugs</a>
 * <a href="http://wordpress.org/tags/advertising-manager">Support Forum</a>
@@ -113,6 +114,7 @@ By popular demand, below are the changes for versions listed. Use this to determ
 
 As a general rule the version X.Y.Z increments Z with bugfixes, Y with additional features, and X with major overhaul.
 
+* **3.4.12** Added displaying ads to particular categories.
 * **3.4.11** Fixed error when using Advman for Swedish and other languages.
 * **3.4.10** Fixed array error when checking for author.
 * **3.4.9** Fixed show-author functionality.  Add ability to 'Set Max Ads Per Page' for all ad types.

@@ -98,6 +98,8 @@ class Advman_Template_Metabox
 	{
 		// Authors
 		$users = get_users_of_blog();
+		// Categories
+		$categories = get_categories("hierarchical=0&hide_empty=0");
 
 		// Page Types
 		$pageTypes = array(
@@ -110,6 +112,7 @@ class Advman_Template_Metabox
 		
 		$pageTypeValues = $ad->get_property('show-pagetype');
 		$authorValues = $ad->get_property('show-author');
+		$categoryValues = $ad->get_property('show-category');
 
 		
 ?>	<table class="form-table">
@@ -131,6 +134,17 @@ class Advman_Template_Metabox
 			<select id="advman-author" name="advman-show-author[]" multiple="multiple" size="5">
 <?php foreach ($users as $user) : ?>
 				<option<?php echo ($authorValues == '' || in_array($user->user_id, $authorValues) ? " selected='selected'" : ''); ?> value="<?php echo $user->user_id; ?>"> <?php echo $user->display_name ?></option>
+<?php endforeach; ?>
+			</select>
+		</td>
+	</tr>
+	<tr style="white-space:nowrap">
+		<td class="advman_label"><label for="advman-category"><?php _e('By Category:'); ?></label></td>
+		<td>
+			<input type="hidden" name="advman-show-category[]" value="">
+			<select id="advman-category" name="advman-show-category[]" multiple="multiple" size="5">
+<?php foreach ($categories as $category) : ?>
+				<option<?php echo ($categoryValues == '' || in_array($category->cat_ID, $categoryValues) ? " selected='selected'" : ''); ?> value="<?php echo $category->cat_ID; ?>"> <?php echo $category->cat_name ?></option>
 <?php endforeach; ?>
 			</select>
 		</td>

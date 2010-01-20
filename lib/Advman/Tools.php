@@ -19,6 +19,22 @@ class Advman_Tools
 			}
 		}
 	}
+	function format_category_value(&$value)
+	{
+		if (is_array($value)) {
+			$categories = get_categories("hierarchical=0&hide_empty=0");
+			$all = true;
+			foreach ($categories as $category) {
+				if (!in_array($category->cat_ID, $value)) {
+					$all = false;
+					break;
+				}
+			}
+			if ($all) {
+				$value = '';
+			}
+		}
+	}
 	/**
 	 * Get the last edit of this ad
 	 */
