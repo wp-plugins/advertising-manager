@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40
 Tags: ad, adbrite, adgridwork, adify, admin, adpinion, adroll, ads, adsense, adserver, advertisement, advertising, affiliate, banner, banners, chitika, cj, commercial, commission, crispads, google, income, junction, link, manager, media, money, openx, plugin, random, referral, revenue, rotator, seo, server, shoppingads, widget, widgetbucks, yahoo, ypn
 Requires at least: 2.5
 Tested up to: 2.9.1
-Stable tag: 3.4.12
+Stable tag: 3.4.13
 
 Easily place Google Adsense and other ads on your Wordpress blog.  Simple to use, with powerful management and optimisation features.
 
@@ -114,6 +114,7 @@ By popular demand, below are the changes for versions listed. Use this to determ
 
 As a general rule the version X.Y.Z increments Z with bugfixes, Y with additional features, and X with major overhaul.
 
+* **3.4.13** Added additional checking before including files in the plugin directory.  Removed '@' for defines - if there is an error, things should stop there.
 * **3.4.12** Added displaying ads to particular categories.
 * **3.4.11** Fixed error when using Advman for Swedish and other languages.
 * **3.4.10** Fixed array error when checking for author.

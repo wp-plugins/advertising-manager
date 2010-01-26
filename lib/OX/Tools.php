@@ -7,7 +7,7 @@ class OX_Tools
 			while (false !== ($file = readdir($handle))) {
 				// Make sure that the first character does not start with a '.' (omit hidden files like '.', '..', '.svn', etc.)
 				// as well as make sure the file is not a directory
-				if ($file[0] != '.') {
+				if ($file[0] != '.' && substr($file, -4) == '.php') {
 					$require_file = is_dir("{$dir}/{$file}") ? "{$dir}/{$file}/{$file}.php" : "{$dir}/{$file}";
 					
 					if (file_exists($require_file)) {
