@@ -9,7 +9,7 @@ class Advman_Upgrade
 	{
 		$version = Advman_Upgrade::_get_version($data);
 		Advman_Upgrade::_backup($data, $version);
-		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14');
+		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14', '3.4.15');
 		foreach ($versions as $v) {
 			if (version_compare($version, $v, '<')) {
 				call_user_func(array('Advman_Upgrade', 'advman_' . str_replace('.','_',$v)), &$data);  //wrap var in array to pass by reference
@@ -19,6 +19,15 @@ class Advman_Upgrade
 		$data['settings']['version'] = ADVMAN_VERSION;
 	}
 	
+	function advman_3_4_15(&$data)
+	{
+		// Set the category to be 'all' (by making it = '')
+		foreach ($data['ads'] as $id => $ad) {
+			if (!isset($data['ads'][$id]['show-tag'])) {
+				$data['ads'][$id]['show-tag'] = '';
+			}
+		}
+	}
 	function advman_3_4_14(&$data)
 	{
 		// Add the 'enable php' setting

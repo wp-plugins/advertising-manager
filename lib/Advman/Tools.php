@@ -35,6 +35,22 @@ class Advman_Tools
 			}
 		}
 	}
+	function format_tag_value(&$value)
+	{
+		if (is_array($value)) {
+			$tags = get_tags("hierarchical=0&hide_empty=0");
+			$all = true;
+			foreach ($tags as $tag) {
+				if (!in_array($tag->term_id, $value)) {
+					$all = false;
+					break;
+				}
+			}
+			if ($all) {
+				$value = '';
+			}
+		}
+	}
 	/**
 	 * Get the last edit of this ad
 	 */

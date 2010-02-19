@@ -101,6 +101,9 @@ class Advman_Admin
 						if ($property == 'show-category') {
 							Advman_Tools::format_category_value($value);
 						}
+						if ($property == 'show-tag') {
+							Advman_Tools::format_tag_value($value);
+						}
 						if ($ad->get_network_property($property) != $value) {
 							$ad->set_network_property($property, $value);
 							$changed = true;
@@ -112,6 +115,9 @@ class Advman_Admin
 						}
 						if ($property == 'show-category') {
 							Advman_Tools::format_category_value($value);
+						}
+						if ($property == 'show-tag') {
+							Advman_Tools::format_tag_value($value);
 						}
 						if ($ad->get_property($property) != $value) {
 							$ad->set_property($property, $value);

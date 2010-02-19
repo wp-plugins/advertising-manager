@@ -3,8 +3,8 @@ Contributors: switzer
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40switzer%2eorg&item_name=Do%20you%20like%20Advertising%20Manager%20for%20Wordpress%3F%20%20Please%20help%20development%20by%20donating%21&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
 Tags: ad, adbrite, adgridwork, adify, admin, adpinion, adroll, ads, adsense, adserver, advertisement, advertising, affiliate, banner, banners, chitika, cj, commercial, commission, crispads, google, income, junction, link, manager, media, money, openx, plugin, random, referral, revenue, rotator, seo, server, shoppingads, widget, widgetbucks, yahoo, ypn
 Requires at least: 2.5
-Tested up to: 2.9.1
-Stable tag: 3.4.13
+Tested up to: 2.9.2
+Stable tag: 3.4.15
 
 Easily place Google Adsense and other ads on your Wordpress blog.  Simple to use, with powerful management and optimisation features.
 
@@ -114,6 +114,7 @@ By popular demand, below are the changes for versions listed. Use this to determ
 
 As a general rule the version X.Y.Z increments Z with bugfixes, Y with additional features, and X with major overhaul.
 
+* **3.4.15** Fixed issue with serving ads in a post.  Added tag based ad limitations.
 * **3.4.14** Removed some notices from the code.  Added PHP ad ability (BETA).  Added collecting statistics on ads (as a start - much more to do).  Added the 'notes' column in the ad list.
 * **3.4.13** Added additional checking before including files in the plugin directory.  Removed '@' for defines - if there is an error, things should stop there.
 * **3.4.12** Added displaying ads to particular categories.

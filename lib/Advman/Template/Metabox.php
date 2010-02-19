@@ -100,6 +100,7 @@ class Advman_Template_Metabox
 		$users = get_users_of_blog();
 		// Categories
 		$categories = get_categories("hierarchical=0&hide_empty=0");
+		$tags = get_tags("hierarchical=0&hide_empty=0");
 
 		// Page Types
 		$pageTypes = array(
@@ -113,6 +114,7 @@ class Advman_Template_Metabox
 		$pageTypeValues = $ad->get_property('show-pagetype');
 		$authorValues = $ad->get_property('show-author');
 		$categoryValues = $ad->get_property('show-category');
+		$tagValues = $ad->get_property('show-tag');
 
 		
 ?>	<table class="form-table">
@@ -145,6 +147,17 @@ class Advman_Template_Metabox
 			<select id="advman-category" name="advman-show-category[]" multiple="multiple" size="5">
 <?php foreach ($categories as $category) : ?>
 				<option<?php echo ($categoryValues == '' || in_array($category->cat_ID, $categoryValues) ? " selected='selected'" : ''); ?> value="<?php echo $category->cat_ID; ?>"> <?php echo $category->cat_name ?></option>
+<?php endforeach; ?>
+			</select>
+		</td>
+	</tr>
+	<tr style="white-space:nowrap">
+		<td class="advman_label"><label for="advman-tag"><?php _e('By Tag:'); ?></label></td>
+		<td>
+			<input type="hidden" name="advman-show-tag[]" value="">
+			<select id="advman-tag" name="advman-show-tag[]" multiple="multiple" size="5">
+<?php foreach ($tags as $tag) : ?>
+				<option<?php echo ($tagValues == '' || in_array($tag->term_id, $tagValues) ? " selected='selected'" : ''); ?> value="<?php echo $tag->term_id; ?>"> <?php echo $tag->name ?></option>
 <?php endforeach; ?>
 			</select>
 		</td>

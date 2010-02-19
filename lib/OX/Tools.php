@@ -1,24 +1,6 @@
 <?php
 class OX_Tools
 {
-	function display_ad($ad)
-	{
-		global $advman_engine;
-		
-		// Display the ad
-		echo $ad->display();
-		// Count the ad
-		$date = date("Y-m-d");
-		$adId = $ad->id;
-		if ($advman_engine->getSetting('stats')) {
-			$stats = $advman_engine->getStats();
-			if (empty($stats[$date][$adId])) {
-				$stats[$date][$adId] = 0;
-			}
-			$stats[$date][$adId]++;
-			$advman_engine->setStats($stats);
-		}
-	}
 	function load_plugins($dir, &$obj)
 	{
 		if ($handle = opendir($dir)) {

@@ -102,6 +102,7 @@ class OX_Ad extends OX_Plugin
 			'show-author' => '',
 			'show-category' => '',
 			'show-pagetype' => array('archive','home','page','post','search'),
+			'show-tag' => '',
 			'weight' => '1',
 			'width' => '728',
 		);
@@ -159,6 +160,22 @@ class OX_Ad extends OX_Plugin
 			}
 		}
 		
+		// Filter by tag
+		$tagFilter = $this->get('show-tag', true);
+		if (is_array($tagFilter)) {
+			$tags = get_the_tags();
+			$found = false;
+			foreach ($tags as $tag) {
+				if (in_array($tag->term_id, $tagFilter)) {
+					$found = true;
+					break;
+				}
+			}
+			if (!$found) {
+				return false;
+			}
+		}
+		
 		//Extend this to include all ad-specific checks, so it can used to filter adzone groups in future.
 		$pageTypes = $this->get_property('show-pagetype');
 		if (!empty($pageTypes)) {
@@ -201,13 +218,12 @@ class OX_Ad extends OX_Plugin
 		$code = str_replace($search, $replace, $code);
 		
 		if ($advman_engine->getSetting('enable-php')) {
-			$code = eval('?>' . $code);
+			$code = eval(' ?>' . $code . '<?php ');
 		}
 		
 		return $code;
 //		return $this->get('code');
 	}
-	
 	function import_detect_network($code)
 	{
 		return false;
