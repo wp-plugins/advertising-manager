@@ -1,13 +1,31 @@
 <?php
 class OX_Tools
 {
+	function display_ad($ad)
+	{
+		global $advman_engine;
+		
+		// Display the ad
+		echo $ad->display();
+		// Count the ad
+		$date = date("Y-m-d");
+		$adId = $ad->id;
+		if ($advman_engine->getSetting('stats')) {
+			$stats = $advman_engine->getStats();
+			if (empty($stats[$date][$adId])) {
+				$stats[$date][$adId] = 0;
+			}
+			$stats[$date][$adId]++;
+			$advman_engine->setStats($stats);
+		}
+	}
 	function load_plugins($dir, &$obj)
 	{
 		if ($handle = opendir($dir)) {
 			while (false !== ($file = readdir($handle))) {
 				// Make sure that the first character does not start with a '.' (omit hidden files like '.', '..', '.svn', etc.)
 				// as well as make sure the file is not a directory
-				if ($file[0] != '.') {
+				if ($file[0] != '.' && substr($file, -4) == '.php') {
 					$require_file = is_dir("{$dir}/{$file}") ? "{$dir}/{$file}/{$file}.php" : "{$dir}/{$file}";
 					
 					if (file_exists($require_file)) {
@@ -105,6 +123,15 @@ class OX_Tools
 		return array('sections' => $sct, 'formats' => $fmt);
 	}
 	
+	function sanitize_post_var($field)
+	{
+		if (isset($_POST[$field])) {
+			return OX_Tools::sanitize($_POST[$field], 'key');
+		}
+		
+		return '';
+	}
+	
 	function sanitize($field, $type = null)
 	{
 		if (is_array($field)) {
@@ -132,7 +159,6 @@ class OX_Tools
 				return stripslashes(str_replace("\0", '', $field));
 				break;
 		}
-		
 	}
 	
 	function explode_format($format)

@@ -99,8 +99,9 @@ class OX_Ad extends OX_Plugin
 			'notes' => '',
 			'openx-market' => 'yes',
 			'openx-market-cpm' => '0.20',
-			'show-pagetype' => array('archive','home','page','post','search'),
 			'show-author' => '',
+			'show-category' => '',
+			'show-pagetype' => array('archive','home','page','post','search'),
 			'weight' => '1',
 			'width' => '728',
 		);
@@ -121,35 +122,34 @@ class OX_Ad extends OX_Plugin
 		
 		// Filter by network counter
 		$counter = $this->get_network_property('counter');
-		if (!empty($counter)) {
+		if (!empty($counter['network'])) {
 			if ($advman_engine->counter['network'][get_class($this)] >= $counter) {
 				return false;
 			}
 		}
 		// Filter by ad counter
 		$counter = $this->get_property('counter');
-		if (!empty($counter)) {
+		if (!empty($counter['id'])) {
 			if ($advman_engine->counter['id'][$this->id] >= $counter) {
 				return false;
 			}
 		}
 		
 		// Filter by author
-		$authors = $this->get('show-author', true);
-		if (!empty($authors)) {
-			if (!in_array($post->post_author, $authors)) {
+		$authorFilter = $this->get('show-author', true);
+		if (is_array($authorFilter)) {
+			if (!in_array($post->post_author, $authorFilter)) {
 				return false;
 			}
 		}
-/*		
+		
 		// Filter by category
-		$cat = $this->get('show-category', true);
-		$cat = '1';
-		if (!empty($cat) && ($cat != 'all')) {
+		$categoryFilter = $this->get('show-category', true);
+		if (is_array($categoryFilter)) {
 			$categories = get_the_category();
 			$found = false;
 			foreach ($categories as $category) {
-				if ($category->cat_ID == $cat) {
+				if (in_array($category->cat_ID, $categoryFilter)) {
 					$found = true;
 					break;
 				}
@@ -158,7 +158,7 @@ class OX_Ad extends OX_Plugin
 				return false;
 			}
 		}
-*/		
+		
 		//Extend this to include all ad-specific checks, so it can used to filter adzone groups in future.
 		$pageTypes = $this->get_property('show-pagetype');
 		if (!empty($pageTypes)) {
@@ -184,6 +184,8 @@ class OX_Ad extends OX_Plugin
 	
 	function display($codeonly = false, $search = array(), $replace = array())
 	{
+		global $advman_engine;
+		
 		$search[] = '{{random}}';
 		$replace[] = mt_rand();
 		$search[] = '{{timestamp}}';
@@ -196,8 +198,13 @@ class OX_Ad extends OX_Plugin
 		}
 		
 		$code = $codeonly ? $this->get('code') : ($this->get('html-before') . $this->get('code') . $this->get('html-after'));
+		$code = str_replace($search, $replace, $code);
 		
-		return str_replace($search, $replace, $code);
+		if ($advman_engine->getSetting('enable-php')) {
+			$code = eval('?>' . $code);
+		}
+		
+		return $code;
 //		return $this->get('code');
 	}
 	

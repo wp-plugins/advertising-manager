@@ -4,7 +4,7 @@ Plugin Name: Advertising Manager
 PLugin URI: http://code.openx.org/projects/show/advertising-manager
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer, Martin Fitzpatrick
-Version: 3.4.8
+Version: 3.4.14
 Author URI: http://www.switzer.org
 */
 
@@ -19,16 +19,17 @@ add_action('plugins_loaded', 'advman_run', 1);
 function advman_init()
 {
 	global $wp_version;
+	global $advman_engine;
 
-	@define('ADVMAN_VERSION', '3.4.8');
-	@define('ADVMAN_PATH', dirname(__FILE__));
-	@define('ADVMAN_LIB', ADVMAN_PATH . '/lib/Advman');
-	@define('OX_LIB', ADVMAN_PATH . '/lib/OX');
-	@define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
+	define('ADVMAN_VERSION', '3.4.14');
+	define('ADVMAN_PATH', dirname(__FILE__));
+	define('ADVMAN_LIB', ADVMAN_PATH . '/lib/Advman');
+	define('OX_LIB', ADVMAN_PATH . '/lib/OX');
+	define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
 
 	// Get the template path
 	$version = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP2.6' : 'WP2.7';
-	@define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . "/lib/Advman/Template/{$version}");
+	define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . "/lib/Advman/Template/{$version}");
 
 	// Load the language file
 	load_plugin_textdomain('advman', false, 'advertising-manager/languages');
@@ -43,9 +44,9 @@ function advman_init()
 	    define ('PHP_INT_MAX', OX_Tools::get_int_max());
 	}
 	
-	// First, get an instance of the ad engine
-	global $advman_engine;
+	// Get an instance of the ad engine
 	$advman_engine = new OX_Swifty('Advman_Dal');
+
 	// Next, load admin if needed
 	if (is_admin()) {
 		require_once(ADVMAN_LIB . '/Admin.php');
@@ -70,7 +71,7 @@ function advman_run()
 		$name = OX_Tools::sanitize($_REQUEST['advman-ad-name'], 'key');
 		$ad = $advman_engine->selectAd($name);
 		if (!empty($ad)) {
-			echo $ad->display();
+			OX_Tools::display_ad($ad);
 		}
 		die(0);
 	}
@@ -80,7 +81,7 @@ function advman_run()
 		$id = OX_Tools::sanitize($_REQUEST['advman-ad-id'], 'number');
 		$ad = $advman_engine->getAd($id);
 		if (!empty($ad)) {
-			echo $ad->display();
+			OX_Tools::display_ad($ad);
 		}
 		die(0);
 	}
@@ -119,7 +120,7 @@ function advman_filter_content_callback($matches)
 	
 	$ad = $advman_engine->selectAd($matches[1]);
 	if (!empty($ad)) {
-		return $ad->display();
+		OX_Tools::display_ad($ad);
 	}
 	return '';
 }
@@ -138,7 +139,7 @@ function advman_ad($name = false)
 	
 	$ad = $advman_engine->selectAd($name);
 	if (!empty($ad)) {
-		echo $ad->display();
+		OX_Tools::display_ad($ad);
 	}
 }
 
