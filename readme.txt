@@ -1,5 +1,5 @@
 === Advertising Manager ===
-Contributors: switzer, mutube
+Contributors: switzer
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40switzer%2eorg&item_name=Do%20you%20like%20Advertising%20Manager%20for%20Wordpress%3F%20%20Please%20help%20development%20by%20donating%21&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
 Tags: ad, adbrite, adgridwork, adify, admin, adpinion, adroll, ads, adsense, adserver, advertisement, advertising, affiliate, banner, banners, chitika, cj, commercial, commission, crispads, google, income, junction, link, manager, media, money, openx, plugin, random, referral, revenue, rotator, seo, server, shoppingads, widget, widgetbucks, yahoo, ypn
 Requires at least: 2.5
@@ -10,7 +10,7 @@ Easily place Google Adsense and other ads on your Wordpress blog.  Simple to use
 
 == Description ==
 
-This plugin will manage and rotate your Google Adsense and other ads on your Wordpress blog.  It automatically recognises many ad networks including [Google Adsense](http://www.google.com/adsense), [AdBrite](http://www.adbrite.com/mb/landing_both.php?spid=51549&afb=120x60-1-blue), [Adify](http://www.adify.com), [AdGridWork](http://www.adgridwork.com/?r=18501), [Adpinion](http://www.adpinion.com/), [Adroll](http://re.adroll.com/a/D44UNLTJPNH5ZDXTTXII7V/7L73RCFU5VCG7FRNNIGH7O/d6ca1e265e654df2010a2153d5c42ed4.re), [Chitika](http://chitika.com/publishers.php?refid=switzer), [Commission Junction](http://www.cj.com/), [CrispAds](http://www.crispads.com/), [OpenX](http://www.openx.org/), [ShoppingAds](http://www.shoppingads.com/refer_1ebff04bf5805f6da1b4), [Yahoo!PN](http://ypn.yahoo.com/), and [WidgetBucks](http://www.widgetbucks.com/home.page?referrer=468034).  Unsupported ad networks can be used as well.
+This plugin will manage and rotate your Google Adsense and other ads on your Wordpress blog.  It automatically recognises many ad networks including [Google Adsense](http://www.google.com/adsense), [AdBrite](http://www.adbrite.com/mb/landing_both.php?spid=118090&afb=120x60-1-white), [Adify](http://www.adify.com), [AdGridWork](http://www.adgridwork.com/?r=18501), [Adpinion](http://www.adpinion.com/), [Adroll](http://re.adroll.com/a/D44UNLTJPNH5ZDXTTXII7V/7L73RCFU5VCG7FRNNIGH7O/d6ca1e265e654df2010a2153d5c42ed4.re), [Chitika](http://chitika.com/publishers.php?refid=switzer), [Commission Junction](http://www.cj.com/), [CrispAds](http://www.crispads.com/), [OpenX](http://www.openx.org/), [ShoppingAds](http://www.shoppingads.com/refer_1ebff04bf5805f6da1b4), [Yahoo!PN](http://ypn.yahoo.com/), and [WidgetBucks](http://www.widgetbucks.com/home.page?referrer=468034).  Unsupported ad networks can be used as well.
 
 Features:
 
@@ -114,6 +114,7 @@ By popular demand, below are the changes for versions listed. Use this to determ
 
 As a general rule the version X.Y.Z increments Z with bugfixes, Y with additional features, and X with major overhaul.
 
+* **3.4.14** Removed some notices from the code.  Added PHP ad ability (BETA).  Added collecting statistics on ads (as a start - much more to do).  Added the 'notes' column in the ad list.
 * **3.4.13** Added additional checking before including files in the plugin directory.  Removed '@' for defines - if there is an error, things should stop there.
 * **3.4.12** Added displaying ads to particular categories.
 * **3.4.11** Fixed error when using Advman for Swedish and other languages.

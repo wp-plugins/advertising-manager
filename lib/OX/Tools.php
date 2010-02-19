@@ -1,6 +1,24 @@
 <?php
 class OX_Tools
 {
+	function display_ad($ad)
+	{
+		global $advman_engine;
+		
+		// Display the ad
+		echo $ad->display();
+		// Count the ad
+		$date = date("Y-m-d");
+		$adId = $ad->id;
+		if ($advman_engine->getSetting('stats')) {
+			$stats = $advman_engine->getStats();
+			if (empty($stats[$date][$adId])) {
+				$stats[$date][$adId] = 0;
+			}
+			$stats[$date][$adId]++;
+			$advman_engine->setStats($stats);
+		}
+	}
 	function load_plugins($dir, &$obj)
 	{
 		if ($handle = opendir($dir)) {
@@ -105,6 +123,15 @@ class OX_Tools
 		return array('sections' => $sct, 'formats' => $fmt);
 	}
 	
+	function sanitize_post_var($field)
+	{
+		if (isset($_POST[$field])) {
+			return OX_Tools::sanitize($_POST[$field], 'key');
+		}
+		
+		return '';
+	}
+	
 	function sanitize($field, $type = null)
 	{
 		if (is_array($field)) {
@@ -132,7 +159,6 @@ class OX_Tools
 				return stripslashes(str_replace("\0", '', $field));
 				break;
 		}
-		
 	}
 	
 	function explode_format($format)

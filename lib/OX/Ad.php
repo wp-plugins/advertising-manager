@@ -122,14 +122,14 @@ class OX_Ad extends OX_Plugin
 		
 		// Filter by network counter
 		$counter = $this->get_network_property('counter');
-		if (!empty($counter)) {
+		if (!empty($counter['network'])) {
 			if ($advman_engine->counter['network'][get_class($this)] >= $counter) {
 				return false;
 			}
 		}
 		// Filter by ad counter
 		$counter = $this->get_property('counter');
-		if (!empty($counter)) {
+		if (!empty($counter['id'])) {
 			if ($advman_engine->counter['id'][$this->id] >= $counter) {
 				return false;
 			}
@@ -184,6 +184,8 @@ class OX_Ad extends OX_Plugin
 	
 	function display($codeonly = false, $search = array(), $replace = array())
 	{
+		global $advman_engine;
+		
 		$search[] = '{{random}}';
 		$replace[] = mt_rand();
 		$search[] = '{{timestamp}}';
@@ -196,8 +198,13 @@ class OX_Ad extends OX_Plugin
 		}
 		
 		$code = $codeonly ? $this->get('code') : ($this->get('html-before') . $this->get('code') . $this->get('html-after'));
+		$code = str_replace($search, $replace, $code);
 		
-		return str_replace($search, $replace, $code);
+		if ($advman_engine->getSetting('enable-php')) {
+			$code = eval('?>' . $code);
+		}
+		
+		return $code;
 //		return $this->get('code');
 	}
 	
