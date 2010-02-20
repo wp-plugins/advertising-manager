@@ -22,9 +22,8 @@ class Advman_Widget extends WP_Widget
             $suppress = !empty($instance['suppress']);
             $title = apply_filters('widget_title', $instance['title']);
             
-            echo $suppress ? $title : ($before_widget . $before_title . $title . $after_title);
-            OX_Tools::display_ad($ad);
-            echo $suppress ? '' : $after_widget;
+            $ad_code = $ad->display();
+            echo $suppress ? ($title . $ad_code) : ($before_widget . $before_title . $title . $after_title . $ad_code . $after_widget);
         }
     }
     
