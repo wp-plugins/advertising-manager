@@ -218,7 +218,7 @@ class OX_Ad extends OX_Plugin
 		$code = str_replace($search, $replace, $code);
 		
 		if ($advman_engine->getSetting('enable-php')) {
-			$code = eval(' ?>' . $code . '<?php ');
+			eval('$code = ?>' . $code . '<?php ');
 		}
 		
 		return $code;
