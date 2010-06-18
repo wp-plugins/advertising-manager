@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40
 Tags: ad, adbrite, adgridwork, adify, admin, adpinion, adroll, ads, adsense, adserver, advertisement, advertising, affiliate, banner, banners, chitika, cj, commercial, commission, crispads, google, income, junction, link, manager, media, money, openx, plugin, random, referral, revenue, rotator, seo, server, shoppingads, widget, widgetbucks, yahoo, ypn
 Requires at least: 2.5
 Tested up to: 3.0
-Stable tag: 3.4.18
+Stable tag: 3.4.19
 
 Easily place Google Adsense and other ads on your Wordpress blog.  Simple to use, with powerful management and optimisation features.
 
@@ -105,11 +105,13 @@ More detailed instuctions can be found in the documentation:  [Concepts - Placin
 
 == Upgrade Notice ==
 
-= 3.4.18 =
-* Fixed PHP Compaitible Mode to work with in-post ads
-* Tested with WP 3.0 and made minor changes
+= 3.4.19 =
+* Fixed PHP ads to use proper syntax
 
 == Change Log ==
+
+= 3.4.19 =
+* Fixed PHP ads to use proper syntax
 
 = 3.4.18 =
 * Fixed PHP Compaitible Mode to work with in-post ads

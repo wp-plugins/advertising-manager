@@ -49,7 +49,7 @@ INCREASE VERSION NUMBER
     1.  in the comments at the top of advertising-manager.php
     2.  in the code at the top of advertising-manager.php
     3.  in the readme file
-    4.  in this build file (search for the version number 3.4.18 - there are a number of places in this file where the version exists)
+    4.  in this build file (search for the version number 3.4.19 - there are a number of places in this file where the version exists)
     5.  check the upgrade to make sure any version upgrades are correct
 
 README
@@ -67,8 +67,8 @@ CHECK IN ALL FILES
 DEPLOYMENT
 - Tag the version in wordpress
     cd ~/code/advertising-manager
-    svn cp trunk tags/3.4.18
-    svn ci -m "tagging version 3.4.18"
+    svn cp trunk tags/3.4.19
+    svn ci -m "tagging version 3.4.19"
 
 - Add a zipped file to the repository:
     Follow the build process below:
@@ -78,7 +78,7 @@ DEPLOYMENT
     cd ~/build
     svn export http://svn.wp-plugins.org/advertising-manager/trunk
     mv trunk advertising-manager
-    zip -r advertising-manager-3.4.18.zip advertising-manager/
+    zip -r advertising-manager-3.4.19.zip advertising-manager/
     
     http://code.openx.org/projects/list_files/advertising-manager
 

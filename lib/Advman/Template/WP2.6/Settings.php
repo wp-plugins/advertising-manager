@@ -85,7 +85,7 @@ class Advman_Template_Settings
 	<td>
 		<fieldset>
 			<legend class="hidden"><?php _e('Other Settings', 'advman'); ?></legend>
-			<label for="advman-enable-php"><input name="advman-enable-php" type="checkbox" id="advman-enable-php" value="1"<?php echo $oxEnablePhp ? ' checked="checked"' : ''; ?> /> <?php _e('Allow PHP Code in Ads (BETA)', 'advman'); ?></label>
+			<label for="advman-enable-php"><input name="advman-enable-php" type="checkbox" id="advman-enable-php" value="1"<?php echo $oxEnablePhp ? ' checked="checked"' : ''; ?> /> <?php _e('Allow PHP Code in Ads', 'advman'); ?></label>
 		</fieldset>
 		<span class="setting-description"><?php _e('Allowing PHP code in ads will execute any PHP code when delivering an ad.  Be careful - only enable if you know what you are doing.', 'advman'); ?></span>
 	</td>
