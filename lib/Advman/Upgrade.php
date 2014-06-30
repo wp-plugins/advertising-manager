@@ -12,7 +12,8 @@ class Advman_Upgrade
 		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14', '3.4.15');
 		foreach ($versions as $v) {
 			if (version_compare($version, $v, '<')) {
-				call_user_func(array('Advman_Upgrade', 'advman_' . str_replace('.','_',$v)), &$data);  //wrap var in array to pass by reference
+                $func = 'advman_' . str_replace('.','_',$v);
+                Advman_Upgrade::$func($data);
 			}
 		}
 		
