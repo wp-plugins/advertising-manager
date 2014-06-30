@@ -110,9 +110,10 @@ class OX_Swifty
 	{
 		$ad = $this->dal->select_ad($id);
 		if ($ad) {
-			$ad = version_compare(phpversion(), '5.0') < 0 ? $ad : clone($ad); // Hack to deal with PHP 4/5 incompatiblity with cloning
-			$ad->add_revision();
-			return $this->dal->insert_ad($ad);
+            // Not sure why, but we will manually clone an object here
+            $new = unserialize(serialize($ad));
+            $new->add_revision();
+			return $this->dal->insert_ad($new);
 		}
 		
 		return false;
