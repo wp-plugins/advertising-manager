@@ -4,8 +4,10 @@ Plugin Name: Advertising Manager
 PLugin URI: http://code.openx.org/projects/show/advertising-manager
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer
-Version: 3.4.19
 Author URI: http://www.switzer.org
+Version: 3.4.19
+Text Domain: advman
+Domain Path: /languages
 */
 
 // Show notices (DEBUGGING ONLY)
