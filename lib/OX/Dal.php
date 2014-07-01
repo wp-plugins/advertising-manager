@@ -1,13 +1,13 @@
 <?php
 class OX_Dal
 {
-	function OX_Dal($engine)
+	function OX_Dal()
 	{
 	}
 	function select_ad($id)
 	{
 	}
-	function select_ads($ids)
+	function select_ads()
 	{
 	}
 	function insert_ad($ad)
