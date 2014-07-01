@@ -36,7 +36,6 @@ class Advman_Dal extends OX_Dal
 			$data['settings']['next_ad_id'] = 1;
 			$data['settings']['default-ad'] = '';
 			$data['settings']['version'] = ADVMAN_VERSION;
-			$data['settings']['openx-sync'] = true;
 			$data['settings']['publisher-id'] = md5(uniqid('', true));
 			$data['settings']['enable-php'] = false;
 			$data['settings']['purge-stats-days'] = 30;

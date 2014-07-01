@@ -22,9 +22,6 @@ class OX_Swifty
 		
 		// Load the data access layer
 		$this->dal = is_null($dalClass) ? new OX_Dal() : new $dalClass();
-		
-		// Sync with OpenX
-		$this->sync();
 	}
 	
 	function addAction($key, $value)
@@ -221,37 +218,6 @@ class OX_Swifty
 				$this->counter['network'][strtolower(get_class($ad))] = 1;
 			} else {
 				$this->counter['network'][strtolower(get_class($ad))]++;
-			}
-		}
-	}
-	/**
-	 * This function synchornises with the central server.  This will be used to pass ad deals to publishers if publisher choose to accept
-	 */
-	function sync()
-	{
-		$sync = $this->dal->select_setting('openx-sync');
-		if ($sync) {
-			$timestamp = $this->dal->select_setting('last-sync');
-//			$timestamp = 1235710700; //FOR TESTING
-			$now = mktime(0,0,0);
-			if (empty($timestamp) || ($now - $timestamp > 0) ) {
-				$this->dal->update_setting('last-sync', $now);
-				
-				$params = array(
-					'p' => $this->dal->select_setting('product-name'),
-					'i' => $this->dal->select_setting('publisher-id'),
-					'v' => $this->dal->select_setting('version'),
-					'w' => $this->dal->select_setting('host-version'),
-					'e' => $this->dal->select_setting('admin-email'),
-					's' => $this->dal->select_setting('website-url'),
-					'd' => $this->dal->select_setting('yesterday-views'),
-				);
-				
-				$id = base64_encode(serialize($params));
-	
-				$url = 'http://code.openx.org/sync.php?id=' . $id;
-//				$url = 'http://localhost:8888/wordpress.27/wp-content/plugins/advertising-manager/sync.php?XDEBUG_SESSION_START=' . time() . '&id=' . $id;
-				$data = @file_get_contents($url);
 			}
 		}
 	}

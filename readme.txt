@@ -1,10 +1,10 @@
 === Advertising Manager ===
 Contributors: switzer
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40switzer%2eorg&item_name=Do%20you%20like%20Advertising%20Manager%20for%20Wordpress%3F%20%20Please%20help%20development%20by%20donating%21&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
-Tags: ad, adbrite, adgridwork, adify, admin, adpinion, adroll, ads, adsense, adserver, advertisement, advertising, affiliate, banner, banners, chitika, cj, commercial, commission, crispads, google, income, junction, link, manager, media, money, openx, plugin, random, referral, revenue, rotator, seo, server, shoppingads, widget, widgetbucks, yahoo, ypn
+Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, plugin, rotator
 Requires at least: 2.5
 Tested up to: 3.0
-Stable tag: 3.4.19
+Stable tag: 3.4.20
 
 Easily place Google Adsense and other ads on your Wordpress blog.  Simple to use, with powerful management and optimisation features.
 
@@ -99,16 +99,18 @@ More detailed instuctions can be found in the documentation:  [Concepts - Placin
 
 == To Do ==
 
-* Link into OpenX Sync and OpenX Market for optimisation
 * Auto-inserting of ads into posts based on configurable rules (i.e. All Posts, 2nd Paragraph)
 * Support for Amazon Affiliates and any other networks I hear about.
 
 == Upgrade Notice ==
 
-= 3.4.19 =
-* Fixed PHP ads to use proper syntax
+= 3.4.20 =
+* Updated Advertising Manager (after 4 years!) to work with the latest Wordpress version
 
 == Change Log ==
+
+= 3.4.20 =
+* Updated Advertising Manager (after 4 years!) to work with the latest Wordpress version
 
 = 3.4.19 =
 * Fixed PHP ads to use proper syntax

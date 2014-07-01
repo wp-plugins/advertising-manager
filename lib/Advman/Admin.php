@@ -42,7 +42,7 @@ class Advman_Admin
 			}
 		}
 	}
-	
+
 	function set_auto_optimise($active)
 	{
 		global $advman_engine;
@@ -60,8 +60,8 @@ class Advman_Admin
 			}
 		}
 	}
-	
-	function save_properties(&$ad, $default = false)
+
+    function save_properties(&$ad, $default = false)
 	{
 		global $advman_engine;
 		
@@ -395,7 +395,7 @@ class Advman_Admin
 		$action = OX_Tools::sanitize_post_var('advman-action');
 		if ($action == 'save') {
 			global $advman_engine;
-			$settings = array('openx-market', 'openx-market-cpm', 'openx-sync', 'enable-php', 'stats', 'purge-stats-days');
+			$settings = array('openx-market', 'openx-market-cpm', 'enable-php', 'stats', 'purge-stats-days');
 			foreach ($settings as $setting) {
 				$value = isset($_POST["advman-{$setting}"]) ? OX_Tools::sanitize($_POST["advman-{$setting}"]) : false;
 				$advman_engine->setSetting($setting, $value);

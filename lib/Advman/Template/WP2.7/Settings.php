@@ -12,10 +12,6 @@ class Advman_Template_Settings
 		if (is_null($oxMarket)) {
 			$oxMarket = false;
 		}
-		$oxUpdates = $advman_engine->getSetting('openx-sync');
-		if (is_null($oxUpdates)) {
-			$oxUpdates = false;
-		}
 		$oxCpm = $advman_engine->getSetting('openx-market-cpm');
 		if (is_null($oxCpm)) {
 			$oxCpm = '0.20';
@@ -59,16 +55,6 @@ class Advman_Template_Settings
 		</fieldset>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php _e('Default floor price:', 'advman'); ?> <input type="text" name="advman-openx-market-cpm" value="<?php echo $oxCpm; ?>" class="small-text" /><br />
 		<span class="setting-description"><?php _e('By enabling the OpenX Market, an alternative ad may show if it will make you more money than the existing ad.  The floor price is the eCPM (revenue per 1000 ads) that your ad network pays.', 'advman'); ?></span>
-	</td>
-</tr>
-<tr valign="top">
-	<th scope="row"><?php _e('Updates', 'advman'); ?></th>
-	<td>
-		<fieldset>
-			<legend class="hidden"><?php _e('Updates', 'advman'); ?></legend>
-			<label for="advman-openx-sync"><input name="advman-openx-sync" type="checkbox" id="advman-openx-sync" value="1"<?php echo $oxUpdates ? ' checked="checked"' : ''; ?> /> <?php _e('Check for updates', 'advman'); ?></label>
-		</fieldset>
-		<span class="setting-description"><?php _e('Checking for updates will keep you informed of not only updates, but of any offers from advertisers who want to buy your ad space.', 'advman'); ?></span>
 	</td>
 </tr>
 <tr valign="top">

@@ -9,7 +9,7 @@ class Advman_Upgrade
 	{
 		$version = Advman_Upgrade::_get_version($data);
 		Advman_Upgrade::_backup($data, $version);
-		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14', '3.4.15');
+		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14', '3.4.15', '3.4.20');
 		foreach ($versions as $v) {
 			if (version_compare($version, $v, '<')) {
                 $func = 'advman_' . str_replace('.','_',$v);
@@ -19,7 +19,13 @@ class Advman_Upgrade
 		
 		$data['settings']['version'] = ADVMAN_VERSION;
 	}
-	
+
+    function advman_3_4_20(&$data)
+    {
+        // Remove synchronization settings
+        unset($data['settings']['last-sync']);
+        unset($data['settings']['openx-sync']);
+    }
 	function advman_3_4_15(&$data)
 	{
 		// Set the category to be 'all' (by making it = '')
