@@ -9,7 +9,7 @@ class Advman_Upgrade
 	{
 		$version = Advman_Upgrade::_get_version($data);
 		Advman_Upgrade::_backup($data, $version);
-		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14', '3.4.15', '3.4.20');
+		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14', '3.4.15', '3.4.20', '3.4.21');
 		foreach ($versions as $v) {
 			if (version_compare($version, $v, '<')) {
                 $func = 'advman_' . str_replace('.','_',$v);
@@ -20,6 +20,21 @@ class Advman_Upgrade
 		$data['settings']['version'] = ADVMAN_VERSION;
 	}
 
+    function advman_3_4_21(&$data)
+    {
+        // Add the 'enable php' setting
+        if (!isset($data['settings']['verification'])) {
+            $data['settings']['verification'] = true;
+        }
+
+        // Unset OpenX Market data
+        unset($data['settings']['openx-market']);
+        unset($data['settings']['openx-market-cpm']);
+        foreach ($data['ads'] as $id => $ad) {
+            unset($data['ads'][$id]['openx-market']);
+            unset($data['ads'][$id]['openx-market-cpm']);
+        }
+    }
     function advman_3_4_20(&$data)
     {
         // Remove synchronization settings

@@ -38,7 +38,7 @@ class Advman_Template_Edit_Network extends Advman_Template_Edit
 		
 //		add_meta_box('advman_display_options', __('Default Website Display Options', 'advman'), array('Advman_Template_Metabox', 'display_options_network'), 'advman', 'main');
 		// Main pane - advanced options
-		add_meta_box('advman_optimisation', __('Default Optimization Settings', 'advman'), array('Advman_Template_Metabox', 'display_optimisation_network'), 'advman', 'advanced');
+		add_meta_box('advman_verification', __('Default Verification Settings', 'advman'), array('Advman_Template_Metabox', 'display_verification_network'), 'advman', 'advanced');
 		add_meta_box('advman_code', __('Default Code Settings', 'advman'), array('Advman_Template_Metabox', 'display_code_network'), 'advman', 'advanced');
 		// Main pane - low priority options
 		add_meta_box('advman_history', __('History', 'advman'), array('Advman_Template_Metabox', 'display_history_network'), 'advman', 'advanced');

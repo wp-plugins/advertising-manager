@@ -168,20 +168,19 @@ class Advman_Template_Metabox
 <?php
 	}
 	
-	function display_optimisation_network($ad)
+	function display_verification_network($ad)
 	{
-		return Advman_Template_Metabox::display_optimisation($ad, true);
+		return Advman_Template_Metabox::display_verification($ad, true);
 	}
-	function display_optimisation_ad($ad)
+	function display_verification_ad($ad)
 	{
-		return Advman_Template_Metabox::display_optimisation($ad, false);
+		return Advman_Template_Metabox::display_verification($ad, false);
 	}
-	function display_optimisation($ad, $nw = false)
+	function display_verification($ad, $nw = false)
 	{
 		$weight = ($nw) ? $ad->get_network_property('weight') : $ad->get_property('weight');
-		$openxMarket = ($nw) ? $ad->get_network_property('openx-market') : $ad->get_property('openx-market');
-		$openxMarketCpm = ($nw) ? $ad->get_network_property('openx-market-cpm') : $ad->get_property('openx-market-cpm');
-		
+		$verification = ($nw) ? $ad->get_network_property('verification') : $ad->get_property('verification');
+
 ?><div style="font-size:small;">
 <p>
 	<label for="advman-weight"><?php _e('Weight:'); ?></label>
@@ -192,24 +191,17 @@ class Advman_Template_Metabox
 </p>
 <br />
 <p>
-	<label for="advman-openx-market" class="selectit">
-		<input name="advman-openx-market" type="checkbox" id="advman-openx-market" value="yes"<?php echo ($openxMarket == 'yes' ? ' checked="checked"' : ''); ?> onChange="document.getElementById('advman-openx-market-cpm').disabled = (!this.checked);" />
-		<?php _e('OpenX Market Enabled', 'advman'); ?>
+	<label for="advman-verification" class="selectit">
+		<input name="advman-verification" type="checkbox" id="advman-verification" value="yes"<?php echo ($verification == 'yes' ? ' checked="checked"' : ''); ?> />
+		<?php _e('Verification Enabled', 'advman'); ?>
 	</label>
 <?php if (!$nw): ?>
-	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('openx-market'); ?>">
-<?php endif; ?>
-</p>
-<p>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="advman-openx-market-cpm-label" for="advman-openx-market-cpm"><?php _e('Average eCPM:'); ?></label>
-	<input type="text" name="advman-openx-market-cpm" style="width:50px" id="advman-openx-market-cpm" value="<?php echo $openxMarketCpm; ?>"<?php echo ($openxMarket != 'yes' ? ' disabled="disabled"' : ''); ?> />
-<?php if (!$nw): ?>
-	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('openx-market-cpm'); ?>">
+	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('verification'); ?>">
 <?php endif; ?>
 </p>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying. OpenX Market optimised ads will display an alternative ad if it will make more money than this ad. Set the avarage amount you make from this network per 1000 ads (eCPM), and Advertising Manager will automatically optimise on the OpenX Market.', 'advman'); ?></span>
+<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying. Verification will let advertisers know that their ad is placed on a verified website. Some advertisers require verification before they display their ad.', 'advman'); ?></span>
 <?php
 	}
 	

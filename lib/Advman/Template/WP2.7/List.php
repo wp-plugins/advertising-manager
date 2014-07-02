@@ -57,14 +57,26 @@ function ADS_setAction(action, id, name, network)
 
 <div class="tablenav">
 
-<div class="alignleft actions">
-<select id="advman-bulk-top" name="action">
-<option value="" selected="selected"><?php _e('Bulk Actions', 'advman'); ?></option>
-<option value="copy"><?php _e('Copy', 'advman'); ?></option>
-<option value="delete"><?php _e('Delete', 'advman'); ?></option>
-</select>
-<input type="submit" value="<?php _e('Apply', 'advman'); ?>" name="doaction" id="doaction" class="button-secondary action" onclick="document.getElementById('advman-action').value = document.getElementById('advman-bulk-top').value;" />
 
+
+
+
+
+
+
+
+
+
+
+<div class="alignleft actions bulkactions">
+    <select id="advman-bulk-top" name="action">
+        <option value="" selected="selected"><?php _e('Bulk Actions', 'advman'); ?></option>
+        <option value="copy"><?php _e('Copy', 'advman'); ?></option>
+        <option value="delete"><?php _e('Delete', 'advman'); ?></option>
+    </select>
+    <input type="submit" value="<?php _e('Apply', 'advman'); ?>" name="doaction" id="doaction" class="button action" onclick="document.getElementById('advman-action').value = document.getElementById('advman-bulk-top').value;" />
+</div>
+<div class="alignleft actions">
 <select name='advman-filter-network' class='postform' >
 	<option value='0'> <?php _e('View all ad types', 'advman'); ?> </option>
 <?php foreach ($networks as $network => $networkName): ?>
