@@ -56,18 +56,6 @@ function ADS_setAction(action, id, name, network)
 <input type="hidden" id="advman-target" name="advman-target" />
 
 <div class="tablenav">
-
-
-
-
-
-
-
-
-
-
-
-
 <div class="alignleft actions bulkactions">
     <select id="advman-bulk-top" name="action">
         <option value="" selected="selected"><?php _e('Bulk Actions', 'advman'); ?></option>
@@ -77,20 +65,20 @@ function ADS_setAction(action, id, name, network)
     <input type="submit" value="<?php _e('Apply', 'advman'); ?>" name="doaction" id="doaction" class="button action" onclick="document.getElementById('advman-action').value = document.getElementById('advman-bulk-top').value;" />
 </div>
 <div class="alignleft actions">
-<select name='advman-filter-network' class='postform' >
-	<option value='0'> <?php _e('View all ad types', 'advman'); ?> </option>
+    <select name='advman-filter-network' class='postform' >
+        <option value='0'> <?php _e('View all ad types', 'advman'); ?> </option>
 <?php foreach ($networks as $network => $networkName): ?>
-	<option class="level-0"<?php echo ($filterNetwork == $network) ? ' selected' : '' ?> value="<?php echo $network ?>"> <?php printf(__('View only %s ads', 'advman'), $networkName); ?> </option>
+    	<option class="level-0"<?php echo ($filterNetwork == $network) ? ' selected' : '' ?> value="<?php echo $network ?>"> <?php printf(__('View only %s ads', 'advman'), $networkName); ?> </option>
 <?php endforeach; ?>
-</select>
-<select name='advman-filter-active' class='postform' >
-	<option value='0'> <?php _e('View all ad statuses', 'advman'); ?> </option>
-	<option class="level-0"<?php echo ($filterActive == 'active') ? ' selected' : '' ?> value="active"> <?php _e('View active ads only', 'advman'); ?> </option>
-	<option class="level-0"<?php echo ($filterActive == 'inactive') ? ' selected' : '' ?> value="inactive"> <?php _e('View paused ads only', 'advman'); ?> </option>
-</select>
-<input type="submit" id="post-query-submit" value="<?php _e('Filter', 'advman'); ?>" class="button-secondary" onclick="document.getElementById('advman-action').value = 'filter';" />
+    </select>
+    <select name='advman-filter-active' class='postform' >
+        <option value='0'> <?php _e('View all ad statuses', 'advman'); ?> </option>
+        <option class="level-0"<?php echo ($filterActive == 'active') ? ' selected' : '' ?> value="active"> <?php _e('View active ads only', 'advman'); ?> </option>
+        <option class="level-0"<?php echo ($filterActive == 'inactive') ? ' selected' : '' ?> value="inactive"> <?php _e('View paused ads only', 'advman'); ?> </option>
+    </select>
+    <input type="submit" id="post-query-submit" value="<?php _e('Filter', 'advman'); ?>" class="button" onclick="document.getElementById('advman-action').value = 'filter';" />
 <?php if ( !empty($filterActive) || !empty($filterNetwork)) : ?>
-<input type="submit" value="<?php _e('Clear', 'advman'); ?>" class="button-secondary" onclick="document.getElementById('advman-action').value = 'clear';" />
+    <input type="submit" value="<?php _e('Clear', 'advman'); ?>" class="button" onclick="document.getElementById('advman-action').value = 'clear';" />
 <?php endif ?>
 </div>
 
