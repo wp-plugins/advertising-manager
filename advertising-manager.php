@@ -27,7 +27,7 @@ function advman_init()
 	define('ADVMAN_PATH', dirname(__FILE__));
 	define('ADVMAN_LIB', ADVMAN_PATH . '/lib/Advman');
 	define('OX_LIB', ADVMAN_PATH . '/lib/OX');
-	define('ADVMAN_URL', plugin_dir_url() . 'advertising-manager');
+	define('ADVMAN_URL', plugin_dir_url(__FILE__));
 
 	// Get the template path
 	define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . "/lib/Advman/Template/WP2.7");

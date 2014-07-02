@@ -12,10 +12,6 @@ class Advman_Template_Settings
 		if (is_null($oxVerification)) {
 			$oxVerification = true;
 		}
-		$oxCpm = $advman_engine->getSetting('openx-market-cpm');
-		if (is_null($oxCpm)) {
-			$oxCpm = '0.20';
-		}
 		$oxEnablePhp = $advman_engine->getSetting('enable-php');
 		if (is_null($oxEnablePhp)) {
 			$oxEnablePhp = false;
@@ -46,7 +42,7 @@ class Advman_Template_Settings
 <tbody>
 <tr valign="top">
 	<th scope="row">
-		<label for="advman-openx-market"><?php _e('Verification', 'advman'); ?></label>
+		<label for="advman-verification"><?php _e('Verification', 'advman'); ?></label>
 	</th>
 	<td>
 		<fieldset>

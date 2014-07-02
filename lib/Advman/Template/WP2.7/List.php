@@ -30,6 +30,12 @@ class Advman_Template_List
 <h2><?php _e('Manage Your Advertising', 'advman'); ?></h2>
 <script type='text/javascript'>
 /* <![CDATA[ */
+function advman_filter()
+{
+    document.getElementById('advman-action').value = 'filter';
+    document.getElementById('advman-form').submit();
+}
+
 function ADS_setAction(action, id, name, network)
 {
 	submit = true;
@@ -65,18 +71,18 @@ function ADS_setAction(action, id, name, network)
     <input type="submit" value="<?php _e('Apply', 'advman'); ?>" name="doaction" id="doaction" class="button action" onclick="document.getElementById('advman-action').value = document.getElementById('advman-bulk-top').value;" />
 </div>
 <div class="alignleft actions">
-    <select name='advman-filter-network' class='postform' >
+    <select id='advman-filter-network' name='advman-filter-network' class='postform' >
         <option value='0'> <?php _e('View all ad types', 'advman'); ?> </option>
 <?php foreach ($networks as $network => $networkName): ?>
     	<option class="level-0"<?php echo ($filterNetwork == $network) ? ' selected' : '' ?> value="<?php echo $network ?>"> <?php printf(__('View only %s ads', 'advman'), $networkName); ?> </option>
 <?php endforeach; ?>
     </select>
-    <select name='advman-filter-active' class='postform' >
+    <select id='advman-filter-active' name='advman-filter-active' class='postform' >
         <option value='0'> <?php _e('View all ad statuses', 'advman'); ?> </option>
         <option class="level-0"<?php echo ($filterActive == 'active') ? ' selected' : '' ?> value="active"> <?php _e('View active ads only', 'advman'); ?> </option>
         <option class="level-0"<?php echo ($filterActive == 'inactive') ? ' selected' : '' ?> value="inactive"> <?php _e('View paused ads only', 'advman'); ?> </option>
     </select>
-    <input type="submit" id="post-query-submit" value="<?php _e('Filter', 'advman'); ?>" class="button" onclick="document.getElementById('advman-action').value = 'filter';" />
+    <input type="submit" id="post-query-submit" value="<?php _e('Filter', 'advman'); ?>" class="button" onclick="advman_filter();" />
 <?php if ( !empty($filterActive) || !empty($filterNetwork)) : ?>
     <input type="submit" value="<?php _e('Clear', 'advman'); ?>" class="button" onclick="document.getElementById('advman-action').value = 'clear';" />
 <?php endif ?>
@@ -99,7 +105,6 @@ function ADS_setAction(action, id, name, network)
 	<th scope="col"  class="manage-column column-advman-default" style=""><?php _e('Default', 'advman'); ?></th>
 	<th scope="col"  class="manage-column column-advman-stats" style=""><?php _e('Views Today', 'advman'); ?></th>
 	<th scope="col"  class="manage-column column-date" style=""><?php _e('Last Edit', 'advman'); ?></th>
-	<th scope="col"  class="manage-column column-advman-notes" style=""><?php _e('Notes', 'advman'); ?></th>
 	</tr>
 	</thead>
 
@@ -113,7 +118,6 @@ function ADS_setAction(action, id, name, network)
 	<th scope="col"  class="manage-column column-advman-default" style=""><?php _e('Default', 'advman'); ?></th>
 	<th scope="col"  class="manage-column column-advman-stats" style=""><?php _e('Views Today', 'advman'); ?></th>
 	<th scope="col"  class="manage-column column-date" style=""><?php _e('Last Edit', 'advman'); ?></th>
-	<th scope="col"  class="manage-column column-advman-notes" style=""><?php _e('Notes', 'advman'); ?></th>
 	</tr>
 	</tfoot>
 
@@ -134,13 +138,12 @@ function ADS_setAction(action, id, name, network)
 		</td>
 		<td class="advman-type column-advman-type"><a href="javascript:ADS_setAction('edit','<?php echo strtolower(get_class($ad)); ?>');" title="<?php printf(__('Edit the ad network &quot;%s&quot;', 'advman'), $ad->network_name); ?>"><?php echo $ad->network_name; ?></a></td>
 		<td class="advman-format column-advman-format"> <?php echo $this->displayFormat($ad); ?></td>
-		<td class="advman-active column-advman-active"><a href="javascript:ADS_setAction('<?php echo ($ad->active) ? 'deactivate' : 'activate'; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
+		<td class="advman-active column-advman-active"><a href="javascript:ADS_setAction('<?php echo ($ad->active) ? "deactivate" : "activate"; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
 		<td class="advman-default column-advman-default"><a href="javascript:ADS_setAction('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $defaultAdName) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
 <?php
 		list($last_user, $last_timestamp, $last_timestamp2) = Advman_Tools::get_last_edit($ad->get_property('revisions'));
 ?>		<td class="advman-stats column-advman-stats"><?php echo empty($stats[$date][$ad->id]) ? 0 : $stats[$date][$ad->id]; ?></td>
 		<td class="date column-date"><abbr title="<?php echo $last_timestamp2 ?>"><?php echo $last_timestamp . __(' ago', 'advman'); ?></abbr><br /> <?php echo __('by', 'advman') . ' ' . $last_user; ?></td>
-		<td class="advman-notes column-advman-notes"><abbr title="<?php echo $ad->get_property('notes'); ?>"><?php echo $ad->get_property('notes'); ?></abbr></td>
 	</tr>
 <?php endif; ?>
 <?php endif; ?>

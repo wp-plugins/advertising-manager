@@ -32,9 +32,9 @@ class Advman_Admin
 			$action = OX_Tools::sanitize_post_var('advman-action');
 			$yes = OX_Tools::sanitize_post_var('advman-notice-confirm-yes');
 			switch ($action) {
-				case 'optimise':
-					Advman_Admin::set_auto_optimise(!empty($yes));
-					Advman_Admin::remove_notice('optimise');
+				case 'verification':
+					Advman_Admin::set_verification(!empty($yes));
+					Advman_Admin::remove_notice('verification');
 					break;
 				case 'activate advertising-manager':
 					Advman_Admin::remove_notice('activate advertising-manager');
@@ -43,7 +43,7 @@ class Advman_Admin
 		}
 	}
 
-	function set_auto_optimise($active)
+	function set_verification($active)
 	{
 		global $advman_engine;
 		
@@ -341,7 +341,7 @@ class Advman_Admin
 			case 'list_ads' :
 			default :
 				$template = Advman_Tools::get_template('List');
-				$template->display();
+				$template->display(null, $filter);
 				break;
 			
 		}
@@ -413,11 +413,11 @@ class Advman_Admin
 				wp_enqueue_script('prototype');
 				wp_enqueue_script('postbox');
 //				wp_enqueue_script('jquery');
-				wp_enqueue_script('jquery-multiselect', ADVMAN_URL . '/scripts/jquery.multiSelect.js', array('jquery'));
-				wp_enqueue_script('advman', ADVMAN_URL . '/scripts/advman.js');
+				wp_enqueue_script('jquery-multiselect', ADVMAN_URL . 'scripts/jquery.multiSelect.js', array('jquery'));
+				wp_enqueue_script('advman', ADVMAN_URL . 'scripts/advman.js');
 				echo "
-<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.css' />
-<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/jquery.multiSelect.css' />";
+<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "scripts/advman.css' />
+<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "scripts/jquery.multiSelect.css' />";
 			}
 		}
 	}

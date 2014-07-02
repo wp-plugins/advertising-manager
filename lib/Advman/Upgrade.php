@@ -215,7 +215,7 @@ class Advman_Upgrade
 		$notice = __('<strong>Advertising Manager</strong> has been upgraded from your <strong>Adsense Manager</strong> settings.', 'advman');
 //		$question = __('Enable <a>auto optimisation</a>? (RECOMMENDED)', 'advman');
 //		$question = str_replace('<a>', '<a href="http://code.openx.org/wiki/advertising-manager/Auto_Optimization" target="_new">', $question);
-		Advman_Admin::add_notice('optimise', $notice, 'ok');
+//		Advman_Admin::add_notice('optimise', $notice, 'ok');
 
 		// Set the new version
 		$data['settings']['version'] = '3.3.19';
