@@ -27,11 +27,21 @@ class Advman_Template_List
 		
 ?><div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
-<h2><?php _e('Manage Your Advertising', 'advman'); ?></h2>
+<h2><?php _e('Ads', 'advman'); ?> <a href="admin.php?page=advman-create" class="add-new-h2"><?php _e('Add New', 'advman'); ?></a></h2>
+
+
+<ul class='subsubsub'>
+    <li class='all'><a href='admin.php?page=advman-manage'<?php echo ($filterActive !== 'active') ? ' class="current"' : '' ?>>All <span class="count">(<?php echo $adCount ?>)</span></a> |</li>
+    <li class='publish'><a href='javascript:advman_filter("active");'<?php echo ($filterActive == 'active') ? ' class="current"' : '' ?>>Active <span class="count">(<?php echo $activeAdCount ?>)</span></a></li>
+</ul>
+
 <script type='text/javascript'>
 /* <![CDATA[ */
-function advman_filter()
+function advman_filter(value)
 {
+    if (value) {
+        document.getElementById('advman-filter-active').value = value;
+    }
     document.getElementById('advman-action').value = 'filter';
     document.getElementById('advman-form').submit();
 }
