@@ -100,46 +100,51 @@ function ADS_setAction(action, id, name, network)
 
 <div class="clear"></div>
 
-<table class="widefat post fixed" cellspacing="0">
-	<thead>
-	<tr>
-	<th scope="col"  class="manage-column column-cb check-column" style=""><input type="checkbox" /></th>
-	<th scope="col"  class="manage-column column-title" style=""><?php _e('Name', 'advman'); ?></th>
-	<th scope="col"  class="manage-column column-advman-type" style=""><?php _e('Type', 'advman'); ?></th>
-	<th scope="col"  class="manage-column column-advman-format" style=""><?php _e('Format', 'advman'); ?></th>
-	<th scope="col"  class="manage-column column-advman-active" style=""><?php _e('Active', 'advman'); ?></th>
-	<th scope="col"  class="manage-column column-advman-default" style=""><?php _e('Default', 'advman'); ?></th>
-	<th scope="col"  class="manage-column column-advman-stats" style=""><?php _e('Views Today', 'advman'); ?></th>
-	<th scope="col"  class="manage-column column-date" style=""><?php _e('Last Edit', 'advman'); ?></th>
-	</tr>
-	</thead>
+<table class="wp-list-table widefat fixed posts">
 
-	<tfoot>
-	<tr>
-	<th scope="col"  class="manage-column column-cb check-column" style=""><input type="checkbox" /></th>
-	<th scope="col"  class="manage-column column-title" style=""><?php _e('Name', 'advman'); ?></th>
-	<th scope="col"  class="manage-column column-advman-type" style=""><?php _e('Type', 'advman'); ?></th>
-	<th scope="col"  class="manage-column column-advman-format" style=""><?php _e('Format', 'advman'); ?></th>
-	<th scope="col"  class="manage-column column-advman-active" style=""><?php _e('Active', 'advman'); ?></th>
-	<th scope="col"  class="manage-column column-advman-default" style=""><?php _e('Default', 'advman'); ?></th>
-	<th scope="col"  class="manage-column column-advman-stats" style=""><?php _e('Views Today', 'advman'); ?></th>
-	<th scope="col"  class="manage-column column-date" style=""><?php _e('Last Edit', 'advman'); ?></th>
-	</tr>
-	</tfoot>
+    <thead>
+    <tr>
+        <th scope="col" id='advman-cb' class="manage-column column-advman-cb check-column" style=""><label class="screen-reader-text" for="advman-cb-select-all-1">Select All</label><input id="advman-cp-select-all-1" type="checkbox" /></th>
+        <th scope="col" id='advman-name' class="manage-column column-advman-name" style=""><?php _e('Name', 'advman'); ?></th>
+        <th scope="col" id='advman-type' class="manage-column column-advman-type" style=""><?php _e('Type', 'advman'); ?></th>
+        <th scope="col" id='advman-format' class="manage-column column-advman-format" style=""><?php _e('Format', 'advman'); ?></th>
+        <th scope="col" id='advman-active' class="manage-column column-advman-active" style=""><?php _e('Active', 'advman'); ?></th>
+        <th scope="col" id='advman-default' class="manage-column column-advman-default" style=""><?php _e('Default', 'advman'); ?></th>
+        <th scope="col" id='advman-stats' class="manage-column column-advman-stats" style=""><?php _e('Views Today', 'advman'); ?></th>
+        <th scope="col" id='advman-date' class="manage-column column-advman-date" style=""><?php _e('Last Edit', 'advman'); ?></th>
+    </tr>
+    </thead>
 
-	<tbody>
+    <tfoot>
+    <tr>
+        <th scope="col" class="manage-column column-advman-cb check-column" style=""><label class="screen-reader-text" for="advman-cb-select-all-2">Select All</label><input id="advman-cp-select-all-2" type="checkbox" /></th>
+        <th scope="col" class="manage-column column-advman-name" style=""><?php _e('Name', 'advman'); ?></th>
+        <th scope="col" class="manage-column column-advman-type" style=""><?php _e('Type', 'advman'); ?></th>
+        <th scope="col" class="manage-column column-advman-format" style=""><?php _e('Format', 'advman'); ?></th>
+        <th scope="col" class="manage-column column-advman-active" style=""><?php _e('Active', 'advman'); ?></th>
+        <th scope="col" class="manage-column column-advman-default" style=""><?php _e('Default', 'advman'); ?></th>
+        <th scope="col" class="manage-column column-advman-stats" style=""><?php _e('Views Today', 'advman'); ?></th>
+        <th scope="col" class="manage-column column-advman-date" style=""><?php _e('Last Edit', 'advman'); ?></th>
+    </tr>
+    </tfoot>
+
+
+
+    <tbody id="the-list">
 <?php foreach ($ads as $ad) : ?>
 <?php if ( ($filterActive == 'active' && $ad->active) || ($filterActive == 'inactive' && !$ad->active) || empty($filterActive) ) : ?>
 <?php if ( ($filterNetwork == strtolower(get_class($ad))) || empty($filterNetwork) ) : ?>
-	<tr id='post-3' class='alternate author-self status-publish iedit' valign="top">
-		<th scope="row" class="check-column"><input type="checkbox" name="advman-targets[]" value="<?php echo $ad->id; ?>" /></th>
-		<td class="post-title column-title">
-			<strong><a class="row-title" href="javascript:ADS_setAction('edit','<?php echo $ad->id; ?>');" title="<?php printf(__('Edit the ad &quot;%s&quot;', 'advman'), $ad->name); ?>">[<?php echo $ad->id; ?>] <?php echo $ad->name; ?></a></strong>
+	<tr id='post-<?php echo $ad->id ?>' class='post-<?php echo $ad->id ?> type-post status-publish format-standard hentry category-uncategorized iedit author-self level-0'>
+		<th scope="row" class="check-column">
+            <label class="screen-reader-text" for="advman-cb-select-<?php echo $ad->id ?>">Select <?php echo $ad->name ?></label>
+            <input id="advman-cp-select-<?php echo $ad->id ?>" type="checkbox" name="advman-targets[]" value="<?php echo $ad->id; ?>" />
+        </th>
+		<td class="post-title page-title column-title"><strong><a class="row-title" href="javascript:ADS_setAction('edit','<?php echo $ad->id; ?>');" title="<?php printf(__('Edit &#8220;%s&#8220;', 'advman'), $ad->name); ?>">[<?php echo $ad->id; ?>] <?php echo $ad->name; ?></a></strong>
 			<div class="row-actions">
-				<span class='edit'><a href="javascript:ADS_setAction('edit','<?php echo $ad->id; ?>');" title="<?php printf(__('Edit the ad &quot;%s&quot;', 'advman'), $ad->name); ?>"><?php _e('Edit', 'advman'); ?></a> | </span>
-				<span class='edit'><a class='submitdelete' title="<?php _e('Copy this ad', 'advman'); ?>" href="javascript:ADS_setAction('copy','<?php echo $ad->id; ?>');"><?php _e('Copy', 'advman'); ?></a> | </span>
-				<span class='edit'><a class='submitdelete' title="<?php _e('Delete this ad', 'advman'); ?>" href="javascript:ADS_setAction('delete','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>', '<?php echo $ad->network_name; ?>');" onclick=""><?php _e('Delete', 'advman'); ?></a> | </span>
-				<span class='edit'><a href="<?php echo $ad->get_preview_url(); ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview', 'advman'); ?></a></span>
+				<span class='edit'><a href="javascript:ADS_setAction('edit','<?php echo $ad->id; ?>');" title="<?php printf(__('Edit &#8220;%s&#8220;', 'advman'), $ad->name); ?>"><?php _e('Edit', 'advman'); ?></a> | </span>
+				<span class='copy'><a title="<?php _e('Copy this ad', 'advman'); ?>" href="javascript:ADS_setAction('copy','<?php echo $ad->id; ?>');"><?php _e('Copy', 'advman'); ?></a> | </span>
+				<span class='trash'><a class='submitdelete' title="<?php _e('Delete this ad', 'advman'); ?>" href="javascript:ADS_setAction('delete','<?php echo $ad->id; ?>', '<?php echo $ad->name; ?>', '<?php echo $ad->network_name; ?>');" onclick=""><?php _e('Delete', 'advman'); ?></a> | </span>
+				<span class='view'><a href="<?php echo $ad->get_preview_url(); ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview', 'advman'); ?></a></span>
 			</div>
 		</td>
 		<td class="advman-type column-advman-type"><a href="javascript:ADS_setAction('edit','<?php echo strtolower(get_class($ad)); ?>');" title="<?php printf(__('Edit the ad network &quot;%s&quot;', 'advman'), $ad->network_name); ?>"><?php echo $ad->network_name; ?></a></td>
