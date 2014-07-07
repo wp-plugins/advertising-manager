@@ -8,9 +8,6 @@ class Advman_Admin
 	 */
 	function init()
 	{
-		global $wp_version;
-		
-		
         add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
         add_submenu_page('advman-manage', __('All Ads', 'advman'), __('All Ads', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
         add_submenu_page('advman-manage', __('Add New', 'advman'), __('Add New', 'advman'), 8, 'advman-create', array('Advman_Admin','create'));
@@ -25,31 +22,9 @@ class Advman_Admin
 			$action = OX_Tools::sanitize_post_var('advman-action');
 			$yes = OX_Tools::sanitize_post_var('advman-notice-confirm-yes');
 			switch ($action) {
-				case 'verification':
-					Advman_Admin::set_verification(!empty($yes));
-					Advman_Admin::remove_notice('verification');
-					break;
 				case 'activate advertising-manager':
 					Advman_Admin::remove_notice('activate advertising-manager');
 					break;
-			}
-		}
-	}
-
-	function set_verification($active)
-	{
-		global $advman_engine;
-		
-		$verification = ($active) ? 'yes' : 'no';
-		$ads = $advman_engine->getAds();
-		foreach ($ads as $id => $ad) {
-			$p = $ad->get_network_property('verification');
-			if ($p != $verification) {
-				$ad->set_network_property('verification', $verification);
-			}
-			$p = $ad->get_property('verification');
-			if (!empty($p) && $p != $verification) {
-				$ad->set_property('verification', $verification);
 			}
 		}
 	}
@@ -377,7 +352,7 @@ class Advman_Admin
 		$template = Advman_Tools::get_template('Create');
 		$template->display();
 	}
-	
+
 	/**
 	 * This function is called from the Wordpress Settings menu
 	 */
