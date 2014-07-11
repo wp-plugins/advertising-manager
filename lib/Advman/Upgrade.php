@@ -1,6 +1,7 @@
 <?php
 
 include_once (ADVMAN_LIB . '/Admin.php');
+include_once (ADVMAN_LIB . '/Notice.php');
 
 class Advman_Upgrade
 {
@@ -212,10 +213,8 @@ class Advman_Upgrade
 		Advman_Upgrade::adsensem_upgrade_ad_settings($data);
 		Advman_Upgrade::adsensem_upgrade_network_settings($data);
 		Advman_Upgrade::adsensem_upgrade_settings($data);
-		$notice = __('<strong>Advertising Manager</strong> has been upgraded from your <strong>Adsense Manager</strong> settings.', 'advman');
-//		$question = __('Enable <a>auto optimisation</a>? (RECOMMENDED)', 'advman');
-//		$question = str_replace('<a>', '<a href="http://code.openx.org/wiki/advertising-manager/Auto_Optimization" target="_new">', $question);
-//		Advman_Admin::add_notice('optimise', $notice, 'ok');
+		$notice = __('<strong>Advertising Manager</strong> has been upgraded from your <strong>AdSense Manager</strong> settings.  Please deactivate <strong>AdSense Manager</strong> to avoid confusion.', 'advman');
+		Advman_Notice::add_notice('upgraded-from-adsensem', $notice, 'ok');
 
 		// Set the new version
 		$data['settings']['version'] = '3.3.19';

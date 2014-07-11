@@ -149,8 +149,18 @@ class OX_Tools
 		list($h, $l) = split('[#]', $h);
 		return array($w, $h, $l);
 	}
-	
-	function post_url($url, $data, $optional_headers = null)
+
+    function get_request_var($var)
+    {
+        $page = '';
+        if ($_REQUEST[$var]) {
+            $page = OX_Tools::sanitize($_REQUEST[$var]);
+        }
+
+        return $page;
+    }
+
+    function post_url($url, $data, $optional_headers = null)
 	{
 		$params = array('http' => array(
 			'method' => 'post',

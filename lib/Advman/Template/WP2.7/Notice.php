@@ -8,9 +8,8 @@ class Advman_Template_Notice
 
 ?>				<div id="message" class="updated fade">
 					<p>
-						<form action="admin.php?page=advman-manage" method="post" id="advman-config-manage" enctype="multipart/form-data">
-						<input type="hidden" name="advman-mode" value="notice">		
-						<input type="hidden" name="advman-action" value="<?php echo $action; ?>">												
+						<form method="post">
+						<input type="hidden" name="advman-notice-action" value="<?php echo $action; ?>">
 						<?php echo $notice['text']; ?>
 <?php
 				if ($notice['confirm'] == 'yn') {
