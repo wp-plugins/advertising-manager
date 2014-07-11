@@ -6,15 +6,8 @@ class Advman_Template_Create
 ?><div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
 	<h2><?php _e('Add New Ad', 'advman'); ?></h2>
-	<form action="admin.php?page=advman-manage" method="post" id="advman-form" enctype="multipart/form-data">
-	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
-	<input type="hidden" name="advman-action" id="advman-action">
-	<input type="hidden" name="advman-target" id="advman-target">
-<!--
-	<div id="side-info-column" class="inner-sidebar">
-		<p><h3>Or, select an ad network below:</p></h3>
-	</div>
--->
+	<form method="post">
+
 	<div id="post-body" class="has-sidebar">
 		<div id="post-body-content" class="has-sidebar-content" style="width:520px">
 			

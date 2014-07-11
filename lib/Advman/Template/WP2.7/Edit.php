@@ -3,21 +3,16 @@ class Advman_Template_Edit
 {
 	function display($ad, $nw = false)
 	{
-		$target = $nw ? strtolower(get_class($ad)) : $ad->id;
-		$mode = $nw ? 'edit_network' : 'edit_ad';
 ?>
 <div class="wrap">
-	<div id="icon-edit" class="icon32"><br /></div>
 <?php if ($nw): ?>
-	<h2><?php printf(__('Edit %s Network Settings', 'advman'), "<span class='" . strtolower(get_class($ad)) . "'>" . $ad->network_name . "</span>"); ?></h2>
+	<h2><?php echo __('Edit Network: ', 'advman') . $ad->network_name; ?></h2>
 <?php else: ?>
-	<h2><?php printf(__('Edit Settings for %s Ad:', 'advman'), $ad->network_name); ?> <span class="<?php echo strtolower(get_class($ad)); ?>"><?php echo "[{$ad->id}] " . $ad->name; ?></span></h2>
-<?php endif; ?>		
-	<form action="" method="post" id="advman-form" enctype="multipart/form-data">
-	<input type="hidden" name="advman-mode" id="advman-mode" value="<?php echo $mode; ?>">
-	<input type="hidden" name="advman-action" id="advman-action">
-	<input type="hidden" name="advman-target" id="advman-target" value="<?php echo $target; ?>">
-<?php  
+    <h2><?php _e('Edit Ad', 'advman'); ?> <a href="admin.php?page=advman-ad-new" class="add-new-h2"><?php _e('Add New', 'advman'); ?></a></h2>
+<?php endif; ?>
+	<form method="post">
+	<input type="hidden" id="advman-action" name="action">
+<?php
 		wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );  
 		wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
 ?>
@@ -33,7 +28,7 @@ class Advman_Template_Edit
 		// Title
 		$this->display_title($ad, $nw);
 		// Show normal boxes
-		do_meta_boxes('advman','main',$ad);
+		do_meta_boxes('advman','normal',$ad);
 		// Show advanced screen
 		$this->display_advanced($ad);
 		// Show advanced boxes
@@ -55,7 +50,7 @@ if (!$nw): ?>
 	<input type="text" name="advman-name" size="30" value="<?php echo $ad->name; ?>" id="title" autocomplete="off" />
 </div><!-- titlewrap -->
 <div class="inside">
-	<span style="font-size:x-small;color:gray;"><?php _e('Enter the name for this ad.', 'advman'); ?> <?php _e('Ads with the same name will rotate according to their relative weights.', 'advman'); ?></span>
+	<span style="font-size:small;color:gray;"><?php _e('Enter the name for this ad.', 'advman'); ?> <?php _e('Ads with the same name will rotate according to their relative weights.', 'advman'); ?></span>
 </div><!-- inside -->
 </div><!-- titlediv -->
 <?php endif;

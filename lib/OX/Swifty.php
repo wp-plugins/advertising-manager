@@ -140,7 +140,7 @@ class OX_Swifty
 				}
 			}
 		}
-		
+
 		// Not a pre-defined network - we will make it HTML code...
 		if (!$imported) {
 			$ad = $advman_engine->factory('OX_Ad_Html');

@@ -13,7 +13,7 @@ class Advman_Template_Edit_Network extends Advman_Template_Edit
 		$fields = array('account-id','slot','counter');
 		foreach ($fields as $field) {
 			if (isset($properties[$field])) {
-				add_meta_box('advman_account', __('Account Details', 'advman'), array('Advman_Template_Metabox', 'display_account_network'), 'advman', 'main');
+				add_meta_box('advman_account', __('Account Details', 'advman'), array('Advman_Template_Metabox', 'display_account_network'), 'advman', 'normal');
 				break;
 			}
 		}
@@ -22,7 +22,7 @@ class Advman_Template_Edit_Network extends Advman_Template_Edit
 		$fields = array('adformat','adtype');
 		foreach ($fields as $field) {
 			if (isset($properties[$field])) {
-				add_meta_box('advman_format', __('Ad Format', 'advman'), array('Advman_Template_Metabox', 'display_format_network'), 'advman', 'main');
+				add_meta_box('advman_format', __('Ad Format', 'advman'), array('Advman_Template_Metabox', 'display_format_network'), 'advman', 'normal');
 				break;
 			}
 		}
@@ -31,12 +31,12 @@ class Advman_Template_Edit_Network extends Advman_Template_Edit
 		$fields = array('alt-text','color-bg','color-border','color-link','color-text','color-title','font-text','font-title','status');
 		foreach ($fields as $field) {
 			if (isset($properties[$field])) {
-				add_meta_box('advman_appearance', __('Ad Appearance', 'advman'), array('Advman_Template_Metabox', 'display_appearance_network'), 'advman', 'main');
+				add_meta_box('advman_appearance', __('Ad Appearance', 'advman'), array('Advman_Template_Metabox', 'display_appearance_network'), 'advman', 'normal');
 				break;
 			}
 		}
 
-//		add_meta_box('advman_display_options', __('Default Website Display Options', 'advman'), array('Advman_Template_Metabox', 'display_options_network'), 'advman', 'main');
+//		add_meta_box('advman_display_options', __('Default Website Display Options', 'advman'), array('Advman_Template_Metabox', 'display_options_network'), 'advman', 'normal');
 		// Main pane - advanced options
 		add_meta_box('advman_verification', __('Default Verification Settings', 'advman'), array('Advman_Template_Metabox', 'display_verification_network'), 'advman', 'advanced');
 		add_meta_box('advman_code', __('Default Code Settings', 'advman'), array('Advman_Template_Metabox', 'display_code_network'), 'advman', 'advanced');

@@ -27,7 +27,7 @@ class Advman_Template_List
 		
 ?><div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
-<h2><?php _e('Ads', 'advman'); ?> <a href="admin.php?page=advman-create" class="add-new-h2"><?php _e('Add New', 'advman'); ?></a></h2>
+<h2><?php _e('Ads', 'advman'); ?> <a href="admin.php?page=advman-ad-new" class="add-new-h2"><?php _e('Add New', 'advman'); ?></a></h2>
 
 
 <ul class='subsubsub'>
@@ -152,7 +152,7 @@ function ADS_setAction(action, id, name, network)
 		<td class="advman-active column-advman-active"><a href="javascript:ADS_setAction('<?php echo ($ad->active) ? "deactivate" : "activate"; ?>','<?php echo $ad->id; ?>');"> <?php echo ($ad->active) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
 		<td class="advman-default column-advman-default"><a href="javascript:ADS_setAction('default','<?php echo $ad->id; ?>');"> <?php echo ($ad->name == $defaultAdName) ? __('Yes', 'advman') : __('No', 'advman'); ?></a></td>
 <?php
-		list($last_user, $last_timestamp, $last_timestamp2) = Advman_Tools::get_last_edit($ad->get_property('revisions'));
+		list($last_user, $last_timestamp, $last_timestamp2, $ts) = Advman_Tools::get_last_edit($ad->get_property('revisions'));
 ?>		<td class="advman-stats column-advman-stats"><?php echo empty($stats[$date][$ad->id]) ? 0 : $stats[$date][$ad->id]; ?></td>
 		<td class="date column-date"><abbr title="<?php echo $last_timestamp2 ?>"><?php echo $last_timestamp . __(' ago', 'advman'); ?></abbr><br /> <?php echo __('by', 'advman') . ' ' . $last_user; ?></td>
 	</tr>
