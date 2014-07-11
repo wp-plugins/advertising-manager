@@ -168,19 +168,20 @@ class Advman_Template_Metabox
 <?php
 	}
 	
-	function display_verification_network($ad)
+	function display_optimisation_network($ad)
 	{
-		return Advman_Template_Metabox::display_verification($ad, true);
+		return Advman_Template_Metabox::display_optimisation($ad, true);
 	}
-	function display_verification_ad($ad)
+	function display_optimisation_ad($ad)
 	{
-		return Advman_Template_Metabox::display_verification($ad, false);
+		return Advman_Template_Metabox::display_optimisation($ad, false);
 	}
-	function display_verification($ad, $nw = false)
+	function display_optimisation($ad, $nw = false)
 	{
 		$weight = ($nw) ? $ad->get_network_property('weight') : $ad->get_property('weight');
-		$verification = ($nw) ? $ad->get_network_property('verification') : $ad->get_property('verification');
-
+		$openxMarket = ($nw) ? $ad->get_network_property('openx-market') : $ad->get_property('openx-market');
+		$openxMarketCpm = ($nw) ? $ad->get_network_property('openx-market-cpm') : $ad->get_property('openx-market-cpm');
+		
 ?><div style="font-size:small;">
 <p>
 	<label for="advman-weight"><?php _e('Weight:'); ?></label>
@@ -191,17 +192,24 @@ class Advman_Template_Metabox
 </p>
 <br />
 <p>
-	<label for="advman-verification" class="selectit">
-		<input name="advman-verification" type="checkbox" id="advman-verification" value="yes"<?php echo ($verification == 'yes' ? ' checked="checked"' : ''); ?> />
-		<?php _e('Verification Enabled', 'advman'); ?>
+	<label for="advman-openx-market" class="selectit">
+		<input name="advman-openx-market" type="checkbox" id="advman-openx-market" value="yes"<?php echo ($openxMarket == 'yes' ? ' checked="checked"' : ''); ?> onChange="document.getElementById('advman-openx-market-cpm').disabled = (!this.checked);" />
+		<?php _e('OpenX Market Enabled', 'advman'); ?>
 	</label>
 <?php if (!$nw): ?>
-	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('verification'); ?>">
+	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('openx-market'); ?>">
+<?php endif; ?>
+</p>
+<p>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="advman-openx-market-cpm-label" for="advman-openx-market-cpm"><?php _e('Average eCPM:'); ?></label>
+	<input type="text" name="advman-openx-market-cpm" style="width:50px" id="advman-openx-market-cpm" value="<?php echo $openxMarketCpm; ?>"<?php echo ($openxMarket != 'yes' ? ' disabled="disabled"' : ''); ?> />
+<?php if (!$nw): ?>
+	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('openx-market-cpm'); ?>">
 <?php endif; ?>
 </p>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying. Verification will let advertisers know that their ad is placed on a verified website. Some advertisers require verification before they display their ad.', 'advman'); ?></span>
+<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying. OpenX Market optimised ads will display an alternative ad if it will make more money than this ad. Set the avarage amount you make from this network per 1000 ads (eCPM), and Advertising Manager will automatically optimise on the OpenX Market.', 'advman'); ?></span>
 <?php
 	}
 	
@@ -465,7 +473,7 @@ foreach ($available_props as $key => $text) : ?>
 <p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
 <p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to copy the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to do nothing, OK to copy)', 'advman'); ?>')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Copy this ad', 'advman'); ?></a></p>
 <p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></p>
-<p class="hide-if-no-js"><a href="admin.php?page=advman-network&network=<?php echo get_class($ad); ?>"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
+<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
 <?php
 	}
 	function display_shortcuts_network($ad)
@@ -508,14 +516,14 @@ foreach ($available_props as $key => $text) : ?>
 	function display_save_settings($ad, $nw = false)
 	{
 		$revisions = ($nw) ? $ad->get_network_property('revisions') : $ad->get_property('revisions');
-		list($last_user, $last_timestamp, $last_timestamp2, $ts) = Advman_Tools::get_last_edit($revisions);
+		list($last_user, $last_timestamp, $last_timestamp2) = Advman_Tools::get_last_edit($revisions);
 ?>
 <div id="advman-submitad" class="submitbox">
 	<div id="minor-publishing">
 	<div style="display:none;"><input type="submit" name="save" value="<?php _e('Save', 'advman'); ?>" /></div>
 	<div id="minor-publishing-actions">
 		<div id="save-action">
-			<input id="save-post" class="button button-highlighted" type="submit" tabindex="4" value="<?php _e('Apply', 'advman'); ?>" />
+			<input id="save-post" class="button button-highlighted" type="submit" tabindex="4" value="<?php _e('Apply', 'advman'); ?>" onclick="document.getElementById('advman-action').value='apply';" />
 		</div>
 <?php if (!$nw) : ?>
 		<div id="preview-action">
@@ -529,11 +537,7 @@ foreach ($available_props as $key => $text) : ?>
 <?php if (!$nw) : ?>
 	<div class="misc-pub-section">
 		<label for="post_status"><?php _e('Status:', 'advman'); ?></label>
-<?php
-        $action = $ad->active ? 'deactivate' : 'activate';
-        $url = add_query_arg('action', $action);
-?>
-		<b><a href="<?php echo $url ?>" class="edit-post-status hide-if-no-js"><?php echo ($ad->active) ? __('Active', 'advman') : __('Paused', 'advman'); ?></a></b>
+		<b><a href="javascript:submit();" class="edit-post-status hide-if-no-js" onclick="document.getElementById('advman-action').value='<?php echo $ad->active ? 'deactivate' : 'activate'; ?>'; document.getElementById('advman-form').submit();"><?php echo ($ad->active) ? __('Active', 'advman') : __('Paused', 'advman'); ?></a></b>
 	</div><!-- misc-pub-section -->
 <?php endif; ?>
 	<div class="misc-pub-section curtime misc-pub-section-last">
@@ -544,7 +548,7 @@ foreach ($available_props as $key => $text) : ?>
 	</div><!-- minor-publishing -->
 	<div id="major-publishing-actions">
 	<div id="delete-action">
-		<a class="submitdelete deletion" href="?page=advman-list""><?php _e('Cancel', 'advmgr') ?></a>
+		<a class="submitdelete deletion" href="javascript:submit();" onclick="document.getElementById('advman-action').value='cancel'; document.getElementById('advman-form').submit();"><?php _e('Cancel', 'advmgr') ?></a>
 	</div><!-- delete-action -->
 	<div id="publishing-action">
 		<input type="submit" class="button-primary" id="advman_save" tabindex="5" accesskey="p" value="<?php _e('Save', 'advman'); ?>" onclick="document.getElementById('advman-action').value='save';" />

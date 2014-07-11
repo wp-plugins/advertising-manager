@@ -97,11 +97,12 @@ class OX_Ad extends OX_Plugin
 			'html-after' => '',
 			'html-before' => '',
 			'notes' => '',
+			'openx-market' => 'yes',
+			'openx-market-cpm' => '0.20',
 			'show-author' => '',
 			'show-category' => '',
 			'show-pagetype' => array('archive','home','page','post','search'),
 			'show-tag' => '',
-            'verification' => 'yes',
 			'weight' => '1',
 			'width' => '728',
 		);

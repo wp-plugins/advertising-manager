@@ -1,7 +1,6 @@
 <?php
 
 include_once (ADVMAN_LIB . '/Admin.php');
-include_once (ADVMAN_LIB . '/Notice.php');
 
 class Advman_Upgrade
 {
@@ -10,7 +9,7 @@ class Advman_Upgrade
 	{
 		$version = Advman_Upgrade::_get_version($data);
 		Advman_Upgrade::_backup($data, $version);
-		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14', '3.4.15', '3.4.20', '3.4.21');
+		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14', '3.4.15', '3.4.20');
 		foreach ($versions as $v) {
 			if (version_compare($version, $v, '<')) {
                 $func = 'advman_' . str_replace('.','_',$v);
@@ -21,21 +20,6 @@ class Advman_Upgrade
 		$data['settings']['version'] = ADVMAN_VERSION;
 	}
 
-    function advman_3_4_21(&$data)
-    {
-        // Add the 'enable php' setting
-        if (!isset($data['settings']['verification'])) {
-            $data['settings']['verification'] = true;
-        }
-
-        // Unset OpenX Market data
-        unset($data['settings']['openx-market']);
-        unset($data['settings']['openx-market-cpm']);
-        foreach ($data['ads'] as $id => $ad) {
-            unset($data['ads'][$id]['openx-market']);
-            unset($data['ads'][$id]['openx-market-cpm']);
-        }
-    }
     function advman_3_4_20(&$data)
     {
         // Remove synchronization settings
@@ -213,8 +197,10 @@ class Advman_Upgrade
 		Advman_Upgrade::adsensem_upgrade_ad_settings($data);
 		Advman_Upgrade::adsensem_upgrade_network_settings($data);
 		Advman_Upgrade::adsensem_upgrade_settings($data);
-		$notice = __('<strong>Advertising Manager</strong> has been upgraded from your <strong>AdSense Manager</strong> settings.  Please deactivate <strong>AdSense Manager</strong> to avoid confusion.', 'advman');
-		Advman_Notice::add_notice('upgraded-from-adsensem', $notice, 'ok');
+		$notice = __('<strong>Advertising Manager</strong> has been upgraded from your <strong>Adsense Manager</strong> settings.', 'advman');
+//		$question = __('Enable <a>auto optimisation</a>? (RECOMMENDED)', 'advman');
+//		$question = str_replace('<a>', '<a href="http://code.openx.org/wiki/advertising-manager/Auto_Optimization" target="_new">', $question);
+		Advman_Admin::add_notice('optimise', $notice, 'ok');
 
 		// Set the new version
 		$data['settings']['version'] = '3.3.19';

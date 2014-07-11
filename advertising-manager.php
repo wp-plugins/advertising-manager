@@ -27,10 +27,11 @@ function advman_init()
 	define('ADVMAN_PATH', dirname(__FILE__));
 	define('ADVMAN_LIB', ADVMAN_PATH . '/lib/Advman');
 	define('OX_LIB', ADVMAN_PATH . '/lib/OX');
-	define('ADVMAN_URL', plugin_dir_url(__FILE__));
+	define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
 
 	// Get the template path
-	define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . "/lib/Advman/Template/WP2.7");
+	$version = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP2.6' : 'WP2.7';
+	define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . "/lib/Advman/Template/{$version}");
 
 	// Load the language file
 	load_plugin_textdomain('advman', false, 'advertising-manager/languages');
@@ -54,17 +55,19 @@ function advman_init()
 	}
 	
 	// Add widgets
-    include_once(ADVMAN_LIB . '/Widget.php');
-    add_action('widgets_init', create_function('', 'return register_widget("Advman_Widget");'));
-
-    // Add Ad.js script if needed
-    wp_enqueue_script('adjs', '//cdn.adjs.net/publisher.ad.min.js');
+	if (version_compare($wp_version,"2.8-alpha", "<")) {
+		include_once(ADVMAN_LIB . '/Widget_Old.php');
+		add_action('widgets_init',  array('Advman_Widget', 'init'), 1);
+	} else {
+		include_once(ADVMAN_LIB . '/Widget.php');
+		add_action('widgets_init', create_function('', 'return register_widget("Advman_Widget");'));
+	}
 }
 
 function advman_run()
 {
 	global $advman_engine;
-
+	
 	// An ad is being requested by its name
 	if (!empty($_REQUEST['advman-ad-name'])) {
 		$name = OX_Tools::sanitize($_REQUEST['advman-ad-name'], 'key');
@@ -114,17 +117,14 @@ function advman_filter_content($content)
 	
 	return preg_replace_callback($patterns, 'advman_filter_content_callback', $content);
 }
-
-// Called from a blog post, when you write [ad#name] in the post
+	
 function advman_filter_content_callback($matches)
 {
 	global $advman_engine;
 	
 	$ad = $advman_engine->selectAd($matches[1]);
 	if (!empty($ad)) {
-
-//        $adHtml = '<div data-adjs="true" data-width="728" data-height="90" id="leaderboard"><!-- ' . $ad->display() . ' --></div>';
-        $adHtml = $ad->display();
+		$adHtml = $ad->display();
 		$advman_engine->incrementStats($ad);
 		return $adHtml;
 	}

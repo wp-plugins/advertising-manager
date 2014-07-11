@@ -1,12 +1,12 @@
 === Advertising Manager ===
 Contributors: switzer
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40switzer%2eorg&item_name=Do%20you%20like%20Advertising%20Manager%20for%20Wordpress%3F%20%20Please%20help%20development%20by%20donating%21&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
-Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, plugin, widget
+Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, plugin, rotator
 Requires at least: 2.5
-Tested up to: 3.9.1
+Tested up to: 3.0
 Stable tag: 3.4.20
 
-Easily place ads on inside your blog posts, templates, or sidebar widgets. Simple to use, with powerful management and optimisation features.  Words with all popular ad networks including Google Adsense.
+Easily place Google Adsense and other ads on your Wordpress blog.  Simple to use, with powerful management and optimisation features.
 
 == Description ==
 
@@ -14,20 +14,22 @@ This plugin will manage and rotate your Google Adsense and other ads on your Wor
 
 Features:
 
-* The most popular advertising plugin for Wordpress, with new features coming every single month
+* The most popular ad plugin for Wordpress, with new features coming every single month
+* Simple way to import all of your ads
 * Widget can be used to place ads in the sidebar
 * Put ads in your blog posts with the click of a button
 * Ads can be placed in your templates with a single PHP function
-* Ad targeting by author, category, tag, page type, and much more
+* Ad limitations by author, category, tag, page type, and much more
 * Auto-recognition for 15 of the most popular ad networks, so you can manage these ads in your Wordpress blog rather than going to each website.
-* View high level analytics for your ads
 
 Related Links:
 
 * <a href="http://code.openx.org/projects/show/advertising-manager" title="Advertising Manager plugin for WordPress">Plugin Homepage</a>
-* Follow <a href="http://twitter.com/scottswitzer" title="Track Advertising Manager developments by following author Scott Switzer on Twitter">Scott Switzer</a> on Twitter
-* <a href="https://github.com/switzer/advertising-manager/issues" title="Feature requests and bugs">Feature Requests and Bugs</a>
+* Follow <a href="http://twitter.com/scottswitzer" title="Track Advertising Manager developments by following author Scott Switzer on Twitter">Scott Switzer</a> and <a href="http://twitter.com/openx" title="Track Advertising Manager developments by following sponsor OpenX on Twitter">OpenX</a> on Twitter
+* <a href="http://code.openx.org/projects/activity/advertising-manager" title="Recent changes for the Advertising Manager plugin for WordPress">Recent Changes</a>
+* <a href="http://code.openx.org/projects/advertising-manager/issues" title="Feature requests and bugs">Feature Requests and Bugs</a>
 * <a href="http://wordpress.org/tags/advertising-manager">Support Forum</a>
+* <a href="http://openx.org/ad-server/get-openx-hosted">OpenX Ad Server</a> - Advertising Manager is compatible with OpenX tags, in case you want to use advanced techniques to manage your ads.
 
 == Installation ==
 
