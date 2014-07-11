@@ -465,7 +465,7 @@ foreach ($available_props as $key => $text) : ?>
 <p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
 <p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to copy the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to do nothing, OK to copy)', 'advman'); ?>')){document.getElementById('advman-action').value='copy'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Copy this ad', 'advman'); ?></a></p>
 <p class="hide-if-no-js"><a href="javascript:submit();" onclick="if(confirm('<?php printf(__('You are about to permanently delete the %s ad:', 'advman'), $ad->network_name); ?>\n\n  <?php echo '[' . $ad->id . '] ' . $ad->name; ?>\n\n<?php _e('Are you sure?', 'advman'); ?>\n<?php _e('(Press Cancel to keep, OK to delete)', 'advman'); ?>')){document.getElementById('advman-action').value='delete'; document.getElementById('advman-form').submit(); } else {return false;}"><?php _e('Delete this ad', 'advman'); ?></a></p>
-<p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
+<p class="hide-if-no-js"><a href="admin.php?page=advman-network&network=<?php echo get_class($ad); ?>"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
 <?php
 	}
 	function display_shortcuts_network($ad)
@@ -508,14 +508,14 @@ foreach ($available_props as $key => $text) : ?>
 	function display_save_settings($ad, $nw = false)
 	{
 		$revisions = ($nw) ? $ad->get_network_property('revisions') : $ad->get_property('revisions');
-		list($last_user, $last_timestamp, $last_timestamp2) = Advman_Tools::get_last_edit($revisions);
+		list($last_user, $last_timestamp, $last_timestamp2, $ts) = Advman_Tools::get_last_edit($revisions);
 ?>
 <div id="advman-submitad" class="submitbox">
 	<div id="minor-publishing">
 	<div style="display:none;"><input type="submit" name="save" value="<?php _e('Save', 'advman'); ?>" /></div>
 	<div id="minor-publishing-actions">
 		<div id="save-action">
-			<input id="save-post" class="button button-highlighted" type="submit" tabindex="4" value="<?php _e('Apply', 'advman'); ?>" onclick="document.getElementById('advman-action').value='apply';" />
+			<input id="save-post" class="button button-highlighted" type="submit" tabindex="4" value="<?php _e('Apply', 'advman'); ?>" />
 		</div>
 <?php if (!$nw) : ?>
 		<div id="preview-action">
@@ -529,7 +529,11 @@ foreach ($available_props as $key => $text) : ?>
 <?php if (!$nw) : ?>
 	<div class="misc-pub-section">
 		<label for="post_status"><?php _e('Status:', 'advman'); ?></label>
-		<b><a href="javascript:submit();" class="edit-post-status hide-if-no-js" onclick="document.getElementById('advman-action').value='<?php echo $ad->active ? 'deactivate' : 'activate'; ?>'; document.getElementById('advman-form').submit();"><?php echo ($ad->active) ? __('Active', 'advman') : __('Paused', 'advman'); ?></a></b>
+<?php
+        $action = $ad->active ? 'deactivate' : 'activate';
+        $url = add_query_arg('action', $action);
+?>
+		<b><a href="<?php echo $url ?>" class="edit-post-status hide-if-no-js"><?php echo ($ad->active) ? __('Active', 'advman') : __('Paused', 'advman'); ?></a></b>
 	</div><!-- misc-pub-section -->
 <?php endif; ?>
 	<div class="misc-pub-section curtime misc-pub-section-last">
@@ -540,7 +544,7 @@ foreach ($available_props as $key => $text) : ?>
 	</div><!-- minor-publishing -->
 	<div id="major-publishing-actions">
 	<div id="delete-action">
-		<a class="submitdelete deletion" href="javascript:submit();" onclick="document.getElementById('advman-action').value='cancel'; document.getElementById('advman-form').submit();"><?php _e('Cancel', 'advmgr') ?></a>
+		<a class="submitdelete deletion" href="?page=advman-list""><?php _e('Cancel', 'advmgr') ?></a>
 	</div><!-- delete-action -->
 	<div id="publishing-action">
 		<input type="submit" class="button-primary" id="advman_save" tabindex="5" accesskey="p" value="<?php _e('Save', 'advman'); ?>" onclick="document.getElementById('advman-action').value='save';" />

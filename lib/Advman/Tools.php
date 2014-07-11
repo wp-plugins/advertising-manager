@@ -68,13 +68,14 @@ class Advman_Tools
 		}
 		
 		if ((time() - $last_timestamp) < (30 * 24 * 60 * 60)) { // less than 30 days ago
-			$last_timestamp =  human_time_diff($t);
-			$last_timestamp2 = date('l, F jS, Y @ h:ia', $t);
+			$human =  human_time_diff($t);
+			$formatted = date('l, F jS, Y @ h:ia', $t);
 		} else {
-			$last_timestamp =  __('> 30 days', 'advman');
-			$last_timestamp2 = '';
+			$human =  __('> 30 days', 'advman');
+            $formatted = '';
 		}
-		return array($last_user, $last_timestamp, $last_timestamp2);
+
+		return array($last_user, $human, $formatted, $last_timestamp);
 	}
 	
 	/**
@@ -243,5 +244,145 @@ class Advman_Tools
 		
 		return $aProperties;
 	}
+
+    function save_properties(&$ad, $default = false)
+    {
+        global $advman_engine;
+
+        // Whether we changed any setting in this entity
+        $changed = false;
+
+        // Set the ad properties (if not setting default properties)
+        if (!$default) {
+            if (isset($_POST['advman-name'])) {
+                $value = OX_Tools::sanitize($_POST['advman-name']);
+                if ($value != $ad->name) {
+                    Advman_Admin::check_default($ad, $value);
+                    $ad->name = $value;
+                    $changed = true;
+                }
+            }
+
+            if (isset($_POST['advman-active'])) {
+                $value = $_POST['advman-active'] == 'yes';
+                if ($ad->active != $value) {
+                    $ad->active = $value;
+                    $changed = true;
+                }
+            }
+        }
+
+        $properties = $ad->get_network_property_defaults();
+        if (!empty($properties)) {
+            foreach ($properties as $property => $d) {
+                if (isset($_POST["advman-{$property}"])) {
+                    $value = OX_Tools::sanitize($_POST["advman-{$property}"]);
+                    if ($default) {
+                        // Deal with multi select 'show-author'
+                        if ($property == 'show-author') {
+                            Advman_Tools::format_author_value($value);
+                        }
+                        if ($property == 'show-category') {
+                            Advman_Tools::format_category_value($value);
+                        }
+                        if ($property == 'show-tag') {
+                            Advman_Tools::format_tag_value($value);
+                        }
+                        if ($ad->get_network_property($property) != $value) {
+                            $ad->set_network_property($property, $value);
+                            $changed = true;
+                        }
+                    } else {
+                        // Deal with multi select 'show-author'
+                        if ($property == 'show-author') {
+                            Advman_Tools::format_author_value($value);
+                        }
+                        if ($property == 'show-category') {
+                            Advman_Tools::format_category_value($value);
+                        }
+                        if ($property == 'show-tag') {
+                            Advman_Tools::format_tag_value($value);
+                        }
+                        if ($ad->get_property($property) != $value) {
+                            $ad->set_property($property, $value);
+                            $changed = true;
+                        }
+                    }
+                    // deal with adtype
+                    if ($property == 'adtype') {
+                        if (isset($_POST["advman-adformat-{$value}"])) {
+                            $v = OX_Tools::sanitize($_POST["advman-adformat-{$value}"]);
+                            if ($default) {
+                                if ($ad->get_network_property('adformat') != $v) {
+                                    $ad->set_network_property('adformat', $v);
+                                    $changed = true;
+                                }
+                            } else {
+                                if ($ad->get_property('adformat') != $v) {
+                                    $ad->set_property('adformat', $v);
+                                    $changed = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $changed;
+    }
+
+    function check_default($ad, $value)
+    {
+        global $advman_engine;
+
+        $d = $advman_engine->getSetting('default-ad');
+        if (!empty($d) && $ad->name == $d) {
+            $modify = true;
+            $ads = $advman_engine->getAds();
+            foreach ($ads as $a) {
+                if ($a->id != $ad->id && $a->name == $d) {
+                    $modify = false;
+                    break;
+                }
+            }
+            if ($modify) {
+                $advman_engine->setSetting('default-ad', $value);
+            }
+        }
+    }
+
+    function current_ad()
+    {
+        global $advman_engine;
+
+        $ad = false;
+
+        if ($_REQUEST['ad']) {
+            $id = OX_Tools::sanitize($_GET['ad']);
+
+            if (is_numeric($id)) {
+                $ad = $advman_engine->getAd($id);
+            }
+        }
+
+        return $ad;
+    }
+
+    function current_network()
+    {
+        global $advman_engine;
+
+        $network = false;
+
+        if ($_REQUEST['network']) {
+            $class = OX_Tools::sanitize($_GET['network']);
+            $network = $advman_engine->factory($class);
+        }
+
+        return $network;
+    }
+
+
 }
 ?>

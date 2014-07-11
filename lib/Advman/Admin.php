@@ -1,147 +1,77 @@
 <?php
+
 require_once (ADVMAN_LIB . '/Tools.php');
+require_once (ADVMAN_LIB . '/List.php');
+require_once (ADVMAN_LIB . '/Ad.php');
+require_once (ADVMAN_LIB . '/Network.php');
+require_once (ADVMAN_LIB . '/Editor.php');
+require_once (ADVMAN_LIB . '/Notice.php');
 
 class Advman_Admin
 {
 	/**
-	 * Initialise menu items, notices, etc.
+	 * Add plugin hooks
 	 */
 	function init()
 	{
-        add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
-        add_submenu_page('advman-manage', __('All Ads', 'advman'), __('All Ads', 'advman'), 8, 'advman-manage', array('Advman_Admin','process'));
-        add_submenu_page('advman-manage', __('Add New', 'advman'), __('Add New', 'advman'), 8, 'advman-create', array('Advman_Admin','create'));
-        add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
+        // 'Ads' top level menu
+        add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'));
 
-        add_action('admin_print_scripts', array('Advman_Admin', 'add_scripts'));
-		add_action('admin_notices', array('Advman_Admin','display_notices'), 1 );
-		add_action('admin_footer', array('Advman_Admin','display_editor'));
-		
-		$mode = OX_Tools::sanitize_post_var('advman-mode');
-		if ($mode == 'notice') {
-			$action = OX_Tools::sanitize_post_var('advman-action');
-			$yes = OX_Tools::sanitize_post_var('advman-notice-confirm-yes');
-			switch ($action) {
-				case 'activate advertising-manager':
-					Advman_Admin::remove_notice('activate advertising-manager');
-					break;
-			}
-		}
-	}
+        // 'List' submenu item
+        $listhook = add_submenu_page('advman-list', __('All Ads', 'advman'), __('All Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'));
+        add_action("load-$listhook", array('Advman_List', 'add_options'));
+        add_action("admin_head-$listhook", array('Advman_List', 'add_contextual_help' ));
+        add_action("admin_head-$listhook", array('Advman_List', 'add_css' ));
 
-    function save_properties(&$ad, $default = false)
-	{
-		global $advman_engine;
-		
-		// Whether we changed any setting in this entity
-		$changed = false;
-		
-		// Set the ad properties (if not setting default properties)
-		if (!$default) {
-			if (isset($_POST['advman-name'])) {
-				$value = OX_Tools::sanitize($_POST['advman-name']);
-				if ($value != $ad->name) {
-					Advman_Admin::check_default($ad, $value);
-					$ad->name = $value;
-					$changed = true;
-				}
-			}
-			
-			if (isset($_POST['advman-active'])) {
-				$value = $_POST['advman-active'] == 'yes';
-				if ($ad->active != $value) {
-					$ad->active = $value;
-					$changed = true;
-				}
-			}
-		}
-		
-		$properties = $ad->get_network_property_defaults();
-		if (!empty($properties)) {
-			foreach ($properties as $property => $d) {
-				if (isset($_POST["advman-{$property}"])) {
-					$value = OX_Tools::sanitize($_POST["advman-{$property}"]);
-					if ($default) {
-						// Deal with multi select 'show-author'
-						if ($property == 'show-author') {
-							Advman_Tools::format_author_value($value);
-						}
-						if ($property == 'show-category') {
-							Advman_Tools::format_category_value($value);
-						}
-						if ($property == 'show-tag') {
-							Advman_Tools::format_tag_value($value);
-						}
-						if ($ad->get_network_property($property) != $value) {
-							$ad->set_network_property($property, $value);
-							$changed = true;
-						}
-					} else {
-						// Deal with multi select 'show-author'
-						if ($property == 'show-author') {
-							Advman_Tools::format_author_value($value);
-						}
-						if ($property == 'show-category') {
-							Advman_Tools::format_category_value($value);
-						}
-						if ($property == 'show-tag') {
-							Advman_Tools::format_tag_value($value);
-						}
-						if ($ad->get_property($property) != $value) {
-							$ad->set_property($property, $value);
-							$changed = true;
-						}
-					}
-					// deal with adtype
-					if ($property == 'adtype') {
-						if (isset($_POST["advman-adformat-{$value}"])) {
-							$v = OX_Tools::sanitize($_POST["advman-adformat-{$value}"]);
-							if ($default) {
-								if ($ad->get_network_property('adformat') != $v) {
-									$ad->set_network_property('adformat', $v);
-									$changed = true;
-								}
-							} else {
-								if ($ad->get_property('adformat') != $v) {
-									$ad->set_property('adformat', $v);
-									$changed = true;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		return $changed;
-	}
-	
-	function check_default($ad, $value)
-	{
-		global $advman_engine;
-		
-		$d = $advman_engine->getSetting('default-ad');
-		if (!empty($d) && $ad->name == $d) {
-			$modify = true;
-			$ads = $advman_engine->getAds();
-			foreach ($ads as $a) {
-				if ($a->id != $ad->id && $a->name == $d) {
-					$modify = false;
-					break;
-				}
-			}
-			if ($modify) {
-				$advman_engine->setSetting('default-ad', $value);
-			}
-		}
-	}
-	
+        // 'Create' submenu item
+        add_submenu_page('advman-list', __('Add New', 'advman'), __('Add New', 'advman'), 8, 'advman-ad-new', array('Advman_Ad','process'));
+
+        // 'Edit' item - adding a submenu page with a null parent will make the page available, but will not place on a menu - the intended effect for edit pages
+        add_submenu_page(null, __('Edit Ad', 'advman'), __('Edit Ad', 'advman'), 8, 'advman-ad', array('Advman_Ad','process'));
+        add_submenu_page(null, __('Edit Network', 'advman'), __('Edit Network', 'advman'), 8, 'advman-network', array('Advman_Network','process'));
+
+        // 'Settings' for Advertising Manager
+        add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Settings','process'));
+
+        // Display any advman notices if we have any
+        add_action('admin_notices', array('Advman_Notice','display'), 1 );
+
+        // Add our 'add ad' select box to a few screens
+		add_action('admin_footer-post.php', array('Advman_Editor','process'));
+        add_action('admin_footer-post-new.php', array('Advman_Editor','process'));
+        add_action('admin_footer-page.php', array('Advman_Editor','process'));
+        add_action('admin_footer-page-new.php', array('Advman_Editor','process'));
+        add_action('admin_footer-bookmarklet.php', array('Advman_Editor','process'));
+
+        // Process any actions
+        $page = OX_Tools::get_request_var('page');
+
+        switch ($page) {
+            case 'advman-ad-new'  : Advman_Ad::init(); break;
+            case 'advman-ad'      : Advman_Ad::init(); break;
+            case 'advman-network' : Advman_Network::init(); break;
+            case 'advman-list'    : Advman_List::init(); break;
+        }
+
+        // Check to see if any notice was acted upon as well
+        //Advman_Notice::process();
+
+        //$mode = OX_Tools::sanitize_post_var('advman-mode');
+
+        //if ($mode == 'notice') {
+        //    Advman_Notice::process();
+		//}
+    }
+
 	/**
 	 * Process input from the Admin UI.  Called staticly from the Wordpress form screen.
 	 */
-	function process()
-	{
-		global $advman_engine;
+    function process_old()
+    {
+        global $advman_engine;
+
+        $page = get_query_var('action');
+        wp_die("action:$page");
 		
 		$filter = null;
 		$mode = OX_Tools::sanitize_post_var('advman-mode');
@@ -168,52 +98,17 @@ class Advman_Admin
 		
 		switch ($action) {
 			
-			case 'activate' :
-				if (!$ad->active) {
-					$ad->active = true;
-					$advman_engine->setAd($ad);
-				}
-				break;
-			
 			case 'clear' :
 				break;
 			
-			case 'copy' :
-				if (!empty($ad)) {
-					$ad = $advman_engine->copyAd($ad->id);
-				}
-				if (!empty($ads)) {
-					foreach ($ads as $ad) {
-						$advman_engine->copyAd($ad->id);
-					}
-				}
-				break;
-			
-			case 'deactivate' :
-				if ($ad->active) {
-					$ad->active = false;
-					$advman_engine->setAd($ad);
-				}
-				break;
-			
+
+
 			case 'default' :
 				$default = ($advman_engine->getSetting('default-ad') != $ad->name ? $ad->name : '');
 				$advman_engine->setSetting('default-ad', $default);
 				break;
 			
-			case 'delete' :
-				if (!empty($ad)) {
-					$ad = $advman_engine->deleteAd($ad->id);
-				}
-				if (!empty($ads)) {
-					foreach ($ads as $ad) {
-						$advman_engine->deleteAd($ad->id);
-					}
-				}
-				$ads = $advman_engine->getAds();
-				$mode = !empty($ads) ? 'list_ads' : 'create_ad';
-				break;
-			
+
 			case 'edit' :
 				$mode = !empty($id) ? 'edit_ad' : 'edit_network';
 				break;
@@ -227,12 +122,6 @@ class Advman_Admin
 				if (!empty($filter_network)) {
 					$filter['network'] = $filter_network;
 				}
-				break;
-			
-			case 'import' :
-				$tag = OX_Tools::sanitize($_POST['advman-code']);
-				$ad = $advman_engine->importAdTag($tag);
-				$mode = 'edit_ad';
 				break;
 			
 			case 'list' :
@@ -318,99 +207,6 @@ class Advman_Admin
 			$template = Advman_Tools::get_template('List');
 			$template->display();
 		}
-	}
-	
-	/**
-	 * Display notices in the Admin UI.  Called staticly from the Wordpress 'admin_notices' hook.
-	 */
-	function display_notices()
-	{
-		$notices = Advman_Admin::get_notices();
-		if (!empty($notices)) {
-			$template = Advman_Tools::get_template('Notice');
-			$template->display($notices);
-		}
-		
-	}
-	function display_editor()
-	{
-		global $advman_engine;
-		
-		$url = $_SERVER['REQUEST_URI'];
-		if (strpos($url, 'post.php') || strpos($url, 'post-new.php') || strpos($url, 'page.php') || strpos($url, 'page-new.php') || strpos($url, 'bookmarklet.php')) {
-			$ads = $advman_engine->getAds();
-			$template = Advman_Tools::get_template('Editor');
-			$template->display($ads);
-		}
-	}
-	
-	/**
-	 * This function is called from the Wordpress Ads menu
-	 */
-	function create()
-	{
-		$template = Advman_Tools::get_template('Create');
-		$template->display();
-	}
-
-	/**
-	 * This function is called from the Wordpress Settings menu
-	 */
-	function settings()
-	{
-		
-		// Get our options and see if we're handling a form submission.
-		$action = OX_Tools::sanitize_post_var('advman-action');
-		if ($action == 'save') {
-			global $advman_engine;
-			$settings = array('verification', 'enable-php', 'stats', 'purge-stats-days');
-			foreach ($settings as $setting) {
-				$value = isset($_POST["advman-{$setting}"]) ? OX_Tools::sanitize($_POST["advman-{$setting}"]) : false;
-				$advman_engine->setSetting($setting, $value);
-			}
-		}
-		$template = Advman_Tools::get_template('Settings');
-		$template->display();
-	}
-
-	function add_scripts()
-	{
-		if (is_admin()) {
-			$page = !empty($_GET['page']) ? $_GET['page'] : '';
-			if ($page == 'advman-manage') {
-				wp_enqueue_script('prototype');
-				wp_enqueue_script('postbox');
-//				wp_enqueue_script('jquery');
-				wp_enqueue_script('jquery-multiselect', ADVMAN_URL . 'scripts/jquery.multiSelect.js', array('jquery'));
-				wp_enqueue_script('advman', ADVMAN_URL . 'scripts/advman.js');
-				echo "
-<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "scripts/advman.css' />
-<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "scripts/jquery.multiSelect.css' />";
-			}
-		}
-	}
-	function get_notices()
-	{
-		return get_option('plugin_advman_ui_notices');
-	}
-	function set_notices($notices)
-	{
-		return update_option('plugin_advman_ui_notices', $notices);
-	}
-	function add_notice($action,$text,$confirm=false)
-	{
-		$notices = Advman_Admin::get_notices();
-		$notices[$action]['text'] = $text;
-		$notices[$action]['confirm'] = $confirm;
-		Advman_Admin::set_notices($notices);
-	}
-	function remove_notice($action)
-	{
-		$notices = Advman_Admin::get_notices();
-		if (!empty($notices[$action])) {
-			unset($notices[$action]);
-		}
-		Advman_Admin::set_notices($notices);
 	}
 }
 ?>
