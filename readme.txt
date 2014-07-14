@@ -6,7 +6,7 @@ Requires at least: 2.5
 Tested up to: 3.9.1
 Stable tag: 3.4.21
 
-Easily place ads on inside your blog posts, templates, or sidebar widgets. Simple to use, with powerful management and optimisation features.  Words with all popular ad networks including Google Adsense.
+Easily place ads on inside your blog posts, templates, or sidebar widgets. Simple to use, with powerful management and optimisation features.
 
 == Description ==
 
