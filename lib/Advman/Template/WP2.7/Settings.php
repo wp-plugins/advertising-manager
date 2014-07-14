@@ -8,14 +8,6 @@ class Advman_Template_Settings
 		
 		$action = isset($_POST['advman-action']) ? OX_Tools::sanitize($_POST['advman-action'], 'key') : '';
 		
-		$oxMarket = $advman_engine->getSetting('openx-market');
-		if (is_null($oxMarket)) {
-			$oxMarket = false;
-		}
-		$oxCpm = $advman_engine->getSetting('openx-market-cpm');
-		if (is_null($oxCpm)) {
-			$oxCpm = '0.20';
-		}
 		$oxEnablePhp = $advman_engine->getSetting('enable-php');
 		if (is_null($oxEnablePhp)) {
 			$oxEnablePhp = false;
@@ -44,19 +36,6 @@ class Advman_Template_Settings
 
 <table class="form-table">
 <tbody>
-<tr valign="top">
-	<th scope="row">
-		<label for="advman-openx-market"><?php _e('Optimization', 'advman'); ?></label>
-	</th>
-	<td>
-		<fieldset>
-			<legend class="hidden"><?php _e('Optimization', 'advman'); ?></legend>
-			<label for="advman-openx-market"><input name="advman-openx-market" type="checkbox" id="advman-openx-market" value="1"<?php echo $oxMarket ? ' checked="checked"' : ''; ?> /> <?php _e('Optimize ads on OpenX Market by default', 'advman'); ?></label>
-		</fieldset>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php _e('Default floor price:', 'advman'); ?> <input type="text" name="advman-openx-market-cpm" value="<?php echo $oxCpm; ?>" class="small-text" /><br />
-		<span class="setting-description"><?php _e('By enabling the OpenX Market, an alternative ad may show if it will make you more money than the existing ad.  The floor price is the eCPM (revenue per 1000 ads) that your ad network pays.', 'advman'); ?></span>
-	</td>
-</tr>
 <tr valign="top">
 	<th scope="row">
 		<label for="advman-stats"><?php _e('Statistics', 'advman'); ?></label>

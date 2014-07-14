@@ -24,8 +24,22 @@ class Advman_Template_List
 		$filterNetwork = !empty($filter['network']) ? $filter['network'] : null;
 		
 		$defaultAdName = $advman_engine->getSetting('default-ad');
+
+        $action = isset($_POST['advman-action']) ? OX_Tools::sanitize($_POST['advman-action'], 'key') : '';
+        $msg = false;
+        switch ($action) {
+            case 'copy' : $msg = __("Ad copied.", "advman"); break;
+            case 'delete' : $msg = __("Ad deleted.", "advman"); break;
+        }
 		
-?><div class="wrap">
+        if ($msg) {
+?>
+            <div id="message" class="updated fade"><p><strong><?php echo $msg; ?></strong></p></div>
+<?php
+        }
+?>
+
+<div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
 <h2><?php _e('Manage Your Advertising', 'advman'); ?></h2>
 <script type='text/javascript'>

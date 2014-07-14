@@ -5,7 +5,18 @@ class Advman_Template_Edit
 	{
 		$target = $nw ? strtolower(get_class($ad)) : $ad->id;
 		$mode = $nw ? 'edit_network' : 'edit_ad';
-?>
+        $action = isset($_POST['advman-action']) ? OX_Tools::sanitize($_POST['advman-action'], 'key') : '';
+        $msg = false;
+        switch ($action) {
+            case 'apply' : $msg = __("Ad saved.", "advman"); break;
+        }
+
+        if ($msg) {
+            ?>
+            <div id="message" class="updated fade"><p><strong><?php echo $msg; ?></strong></p></div>
+        <?php
+        }
+        ?>
 <div class="wrap">
 	<div id="icon-edit" class="icon32"><br /></div>
 <?php if ($nw): ?>

@@ -32,31 +32,9 @@ class Advman_Admin
 			$action = OX_Tools::sanitize_post_var('advman-action');
 			$yes = OX_Tools::sanitize_post_var('advman-notice-confirm-yes');
 			switch ($action) {
-				case 'optimise':
-					Advman_Admin::set_auto_optimise(!empty($yes));
-					Advman_Admin::remove_notice('optimise');
-					break;
 				case 'activate advertising-manager':
 					Advman_Admin::remove_notice('activate advertising-manager');
 					break;
-			}
-		}
-	}
-
-	function set_auto_optimise($active)
-	{
-		global $advman_engine;
-		
-		$market = ($active) ? 'yes' : 'no';
-		$ads = $advman_engine->getAds();
-		foreach ($ads as $id => $ad) {
-			$p = $ad->get_network_property('openx-market');
-			if ($p != $market) {
-				$ad->set_network_property('openx-market', $market);
-			}
-			$p = $ad->get_property('openx-market');
-			if (!empty($p) && $p != $market) {
-				$ad->set_property('openx-market', $market);
 			}
 		}
 	}
@@ -395,7 +373,7 @@ class Advman_Admin
 		$action = OX_Tools::sanitize_post_var('advman-action');
 		if ($action == 'save') {
 			global $advman_engine;
-			$settings = array('openx-market', 'openx-market-cpm', 'enable-php', 'stats', 'purge-stats-days');
+			$settings = array('enable-php', 'stats', 'purge-stats-days');
 			foreach ($settings as $setting) {
 				$value = isset($_POST["advman-{$setting}"]) ? OX_Tools::sanitize($_POST["advman-{$setting}"]) : false;
 				$advman_engine->setSetting($setting, $value);
