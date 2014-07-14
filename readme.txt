@@ -1,12 +1,12 @@
 === Advertising Manager ===
 Contributors: switzer
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40switzer%2eorg&item_name=Do%20you%20like%20Advertising%20Manager%20for%20Wordpress%3F%20%20Please%20help%20development%20by%20donating%21&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
-Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, plugin, rotator
+Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, plugin, widget
 Requires at least: 2.5
-Tested up to: 3.0
-Stable tag: 3.4.20
+Tested up to: 3.9.1
+Stable tag: 3.4.21
 
-Easily place Google Adsense and other ads on your Wordpress blog.  Simple to use, with powerful management and optimisation features.
+Easily place ads on inside your blog posts, templates, or sidebar widgets. Simple to use, with powerful management and optimisation features.  Words with all popular ad networks including Google Adsense.
 
 == Description ==
 
@@ -14,22 +14,20 @@ This plugin will manage and rotate your Google Adsense and other ads on your Wor
 
 Features:
 
-* The most popular ad plugin for Wordpress, with new features coming every single month
-* Simple way to import all of your ads
+* The most popular advertising plugin for Wordpress, with new features coming every single month
 * Widget can be used to place ads in the sidebar
 * Put ads in your blog posts with the click of a button
 * Ads can be placed in your templates with a single PHP function
-* Ad limitations by author, category, tag, page type, and much more
+* Ad targeting by author, category, tag, page type, and much more
 * Auto-recognition for 15 of the most popular ad networks, so you can manage these ads in your Wordpress blog rather than going to each website.
+* View high level analytics for your ads
 
 Related Links:
 
-* <a href="http://code.openx.org/projects/show/advertising-manager" title="Advertising Manager plugin for WordPress">Plugin Homepage</a>
-* Follow <a href="http://twitter.com/scottswitzer" title="Track Advertising Manager developments by following author Scott Switzer on Twitter">Scott Switzer</a> and <a href="http://twitter.com/openx" title="Track Advertising Manager developments by following sponsor OpenX on Twitter">OpenX</a> on Twitter
-* <a href="http://code.openx.org/projects/activity/advertising-manager" title="Recent changes for the Advertising Manager plugin for WordPress">Recent Changes</a>
-* <a href="http://code.openx.org/projects/advertising-manager/issues" title="Feature requests and bugs">Feature Requests and Bugs</a>
+* <a href="https://wordpress.org/plugins/advertising-manager" title="Advertising Manager plugin for WordPress">Plugin Homepage</a>
+* Follow <a href="http://twitter.com/scottswitzer" title="Track Advertising Manager developments by following author Scott Switzer on Twitter">Scott Switzer</a> on Twitter
+* <a href="https://github.com/switzer/advertising-manager/issues" title="Feature requests and bugs">Feature Requests and Bugs</a>
 * <a href="http://wordpress.org/tags/advertising-manager">Support Forum</a>
-* <a href="http://openx.org/ad-server/get-openx-hosted">OpenX Ad Server</a> - Advertising Manager is compatible with OpenX tags, in case you want to use advanced techniques to manage your ads.
 
 == Installation ==
 
@@ -39,11 +37,6 @@ Related Links:
 1. Place ads in your template by adding '<?php advman_ad(name) ?>' to your template in the place you want to see an ad (where 'name' is the name of your ad).
 1. Place ads in your blog posts and pages by adding '[ad#name]' to your blog post (where 'name' is the name of your ad), or by using the 'Insert Ad' dropdown from the edit toolbar.
 1. Place ads in your sidebar by dragging the 'Advertisement' widget onto your sidebar, and selecting the ad you want to display
-
-More detailed installation instructions can be found on the [Advertising Manager Wiki](http://code.openx.org/wiki/advertising-manager/Installation_Instructions).
-
-If you are upgrading from Adsense Manager, Adsense Deluxe, or a previous version of Advertising Manager, upgrade instructions can be found [here](http://code.openx.org/wiki/advertising-manager/Upgrading_Instructions).
-
 
 == Screenshots ==
 
@@ -72,7 +65,7 @@ Yes.
 Yes.  Advertising Manager is localised.  If your blog is in another language, and Advertising Manager shows in English, then it is most likely that a translation has not been done.
 Don't worry - if you are a native speaker in English as well as your local language, you can help out!  Information on how to get involved can be found here:
 
-http://code.openx.org/wiki/advertising-manager/Translate_Advertising_Manager_in_your_language
+NOTE:  Translations are in the process of being upgraded to a new technology - updated instructions will happen in the next version
 
 = Do I still need Advertising Manager now I can manage ads through Google's system? =
 
@@ -104,10 +97,15 @@ More detailed instuctions can be found in the documentation:  [Concepts - Placin
 
 == Upgrade Notice ==
 
-= 3.4.20 =
-* Updated Advertising Manager (after 4 years!) to work with the latest Wordpress version
+= 3.4.21 =
+* Added notices when items where being saved, copied, and deleted
+* Removed broken ad exchange integration
 
 == Change Log ==
+
+= 3.4.21 =
+* Added notices when items where being saved, copied, and deleted
+* Removed broken ad exchange integration
 
 = 3.4.20 =
 * Updated Advertising Manager (after 4 years!) to work with the latest Wordpress version
@@ -214,4 +212,4 @@ This plugin is released under the GPL - you can use it free of charge on your pe
 
 == Translations ==
 
-The plugin comes with various translations, please refer to the [WordPress Codex](http://codex.wordpress.org/Installing_WordPress_in_Your_Language "Installing WordPress in Your Language") for more information about activating the translation. If you want to help to translate the plugin to your language, please have a look at the advman.pot file which contains all defintions and may be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poedit](http://www.poedit.net/) (Windows).
+The plugin comes with various translations, please refer to the WordPress Codex for more information about activating the translation. If you want to help to translate the plugin to your language, please have a look at the advman.pot file which contains all defintions and may be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poedit](http://www.poedit.net/) (Windows).
