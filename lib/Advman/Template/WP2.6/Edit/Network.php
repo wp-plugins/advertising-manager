@@ -35,17 +35,13 @@ class Advman_Template_Edit_Network extends Advman_Template_Edit
 				break;
 			}
 		}
-
+		
 //		add_meta_box('advman_display_options', __('Default Website Display Options', 'advman'), array('Advman_Template_Metabox', 'display_options_network'), 'advman', 'main');
 		// Main pane - advanced options
 		add_meta_box('advman_optimisation', __('Default Optimization Settings', 'advman'), array('Advman_Template_Metabox', 'display_optimisation_network'), 'advman', 'advanced');
 		add_meta_box('advman_code', __('Default Code Settings', 'advman'), array('Advman_Template_Metabox', 'display_code_network'), 'advman', 'advanced');
 		// Main pane - low priority options
 		add_meta_box('advman_history', __('History', 'advman'), array('Advman_Template_Metabox', 'display_history_network'), 'advman', 'advanced');
-		// Sidebar - default options
-		add_meta_box('advman_submit', __('Save Settings', 'advman'), array('Advman_Template_Metabox', 'display_save_settings_network'), 'advman', 'side');
-		add_meta_box('advman_shortcuts', __('Shortcuts', 'advman'), array('Advman_Template_Metabox', 'display_shortcuts_network'), 'advman', 'side');
-		add_meta_box('advman_notes', __('Notes', 'advman'), array('Advman_Template_Metabox', 'display_notes_network'), 'advman', 'side');
 		
 		parent::display($ad, true);
 	}

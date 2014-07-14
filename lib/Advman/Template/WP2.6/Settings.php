@@ -5,7 +5,7 @@ class Advman_Template_Settings
 	function display($target = null)
 	{
 		global $advman_engine;
-		
+
 		$action = isset($_POST['advman-action']) ? OX_Tools::sanitize($_POST['advman-action'], 'key') : '';
 		
 		$oxEnablePhp = $advman_engine->getSetting('enable-php');
@@ -21,13 +21,12 @@ class Advman_Template_Settings
 			$oxPurgeStatsDays = 30;
 		}
 		
-?><div class="wrap">
-	<div id="icon-options-general" class="icon32"><br /></div>
-<h2><?php _e('Ad Settings', 'advman'); ?></h2>
-
-<?php if ($action == 'save') : ?>
+?><?php if ($action == 'save') : ?>
 <div id="message" class="updated fade"><p><strong><?php _e('Settings saved.') ?></strong></p></div>
 <?php endif; ?>
+
+<div class="wrap">
+<h2><?php _e('Ad Settings', 'advman'); ?></h2>
 
 <form action="" method="post" id="advman-form" enctype="multipart/form-data">
 <input type="hidden" name="advman-mode" id="advman-mode" value="settings" />
@@ -35,7 +34,6 @@ class Advman_Template_Settings
 <input type="hidden" name="advman-target" id="advman-target" />
 
 <table class="form-table">
-<tbody>
 <tr valign="top">
 	<th scope="row">
 		<label for="advman-stats"><?php _e('Statistics', 'advman'); ?></label>
@@ -45,7 +43,7 @@ class Advman_Template_Settings
 			<legend class="hidden"><?php _e('Statistics', 'advman'); ?></legend>
 			<label for="advman-stats"><input name="advman-stats" type="checkbox" id="advman-stats" value="1"<?php echo $oxStats ? ' checked="checked"' : ''; ?> /> <?php _e('Collect statistics about the number of ads served', 'advman'); ?></label>
 		</fieldset>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php _e('Purge after:', 'advman'); ?> <input type="text" name="advman-purge-stats-days" value="<?php echo $oxPurgeStatsDays; ?>" class="small-text" /> <?php _e('days', 'advman'); ?><br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php _e('Purge after:', 'advman'); ?> <input type="text" name="advman-purge-stats-days" value="<?php echo $oxStatsPurgeDays; ?>" class="small-text" /> <?php _e('days', 'advman'); ?><br />
 		<span class="setting-description"><?php _e('Collecting statistics about your ad serving will give you insight on how many ads have been viewed by your users.  It is a good idea to purge these stats after 30 days so that your database does not get too full.', 'advman'); ?></span>
 	</td>
 </tr>
@@ -59,7 +57,6 @@ class Advman_Template_Settings
 		<span class="setting-description"><?php _e('Allowing PHP code in ads will execute any PHP code when delivering an ad.  Be careful - only enable if you know what you are doing.', 'advman'); ?></span>
 	</td>
 </tr>
-</tbody>
 </table>
 
 

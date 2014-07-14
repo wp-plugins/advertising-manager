@@ -168,18 +168,17 @@ class Advman_Template_Metabox
 <?php
 	}
 	
-	function display_verification_network($ad)
+	function display_optimisation_network($ad)
 	{
-		return Advman_Template_Metabox::display_verification($ad, true);
+		return Advman_Template_Metabox::display_optimisation($ad, true);
 	}
-	function display_verification_ad($ad)
+	function display_optimisation_ad($ad)
 	{
-		return Advman_Template_Metabox::display_verification($ad, false);
+		return Advman_Template_Metabox::display_optimisation($ad, false);
 	}
-	function display_verification($ad, $nw = false)
+	function display_optimisation($ad, $nw = false)
 	{
 		$weight = ($nw) ? $ad->get_network_property('weight') : $ad->get_property('weight');
-		$verification = ($nw) ? $ad->get_network_property('verification') : $ad->get_property('verification');
 
 ?><div style="font-size:small;">
 <p>
@@ -190,18 +189,9 @@ class Advman_Template_Metabox
 <?php endif; ?>
 </p>
 <br />
-<p>
-	<label for="advman-verification" class="selectit">
-		<input name="advman-verification" type="checkbox" id="advman-verification" value="yes"<?php echo ($verification == 'yes' ? ' checked="checked"' : ''); ?> />
-		<?php _e('Verification Enabled', 'advman'); ?>
-	</label>
-<?php if (!$nw): ?>
-	<img class="default_note" title="<?php echo __('[Default]', 'advman') . ' ' . $ad->get_network_property('verification'); ?>">
-<?php endif; ?>
-</p>
 </div>
 <br />
-<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying. Verification will let advertisers know that their ad is placed on a verified website. Some advertisers require verification before they display their ad.', 'advman'); ?></span>
+<span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying.', 'advman'); ?></span>
 <?php
 	}
 	

@@ -101,7 +101,6 @@ class OX_Ad extends OX_Plugin
 			'show-category' => '',
 			'show-pagetype' => array('archive','home','page','post','search'),
 			'show-tag' => '',
-            'verification' => 'yes',
 			'weight' => '1',
 			'width' => '728',
 		);
