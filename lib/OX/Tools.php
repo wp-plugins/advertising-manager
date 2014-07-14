@@ -104,16 +104,20 @@ class OX_Tools
 		
 		return array('sections' => $sct, 'formats' => $fmt);
 	}
-	
-	function sanitize_post_var($field)
-	{
-		if (isset($_POST[$field])) {
-			return OX_Tools::sanitize($_POST[$field], 'key');
-		}
-		
-		return '';
-	}
-	
+
+    function sanitize_request_var($field)
+    {
+        return OX_Tools::sanitize_arr_var($field, $_REQUEST);
+    }
+    function sanitize_post_var($field)
+    {
+        return OX_Tools::sanitize_arr_var($field, $_POST);
+    }
+
+    function sanitize_arr_var($field, $arr)
+    {
+        return (isset($arr[$field])) ?  OX_Tools::sanitize($arr[$field], 'key') : '';
+    }
 	function sanitize($field, $type = null)
 	{
 		if (is_array($field)) {
