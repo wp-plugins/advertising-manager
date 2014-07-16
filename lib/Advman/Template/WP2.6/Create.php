@@ -7,7 +7,7 @@ class Advman_Template_Create
 		global $_advman;
 		global $_advman_networks;
 ?>	<div class="wrap">
-		<form action="admin.php?page=advman-manage" method="post" id="advman-form" enctype="multipart/form-data">
+		<form method="post" id="advman-form">
 			<input type="hidden" name="advman-mode" id="advman-mode" value="create_ad">	
 			<input type="hidden" name="advman-action" id="advman-action">
 			<input type="hidden" name="advman-target" id="advman-target">

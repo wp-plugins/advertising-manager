@@ -34,7 +34,7 @@
 .ox_plugin_shoppingads {padding-left:25px;background:url(../images/shoppingads.png) left no-repeat;}
 .ox_plugin_ypn {padding-left:25px;background:url(http://www.yahoo.com/favicon.ico) left no-repeat;}
 
-.default_note {padding-left:20px;background:url(../images/default.png) left no-repeat;width:16px;height:16px;}
+.default_note {background:url(../images/default.png) left no-repeat;width:16px;height:16px;}
 
 .fixed .column-advman-active,
 .fixed .column-advman-default,
