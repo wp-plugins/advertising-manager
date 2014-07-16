@@ -24,7 +24,7 @@ class Advman_Template_Edit
 <?php else: ?>
 	<h2><?php printf(__('Edit Settings for %s Ad:', 'advman'), $ad->network_name); ?> <span class="<?php echo strtolower(get_class($ad)); ?>"><?php echo "[{$ad->id}] " . $ad->name; ?></span></h2>
 <?php endif; ?>		
-	<form action="" method="post" id="advman-form" enctype="multipart/form-data">
+	<form method="post" id="advman-form">
 	<input type="hidden" name="advman-mode" id="advman-mode" value="<?php echo $mode; ?>">
 	<input type="hidden" name="advman-action" id="advman-action">
 	<input type="hidden" name="advman-target" id="advman-target" value="<?php echo $target; ?>">

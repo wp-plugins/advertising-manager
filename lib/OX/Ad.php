@@ -236,7 +236,7 @@ class OX_Ad extends OX_Plugin
 	
 	function get_preview_url()
 	{
-		return get_bloginfo('wpurl') . '/wp-admin/edit.php?page=advman-manage&advman-ad-id=' . $this->id;
+		return get_bloginfo('wpurl') . '/wp-admin/edit.php?page=advman-list&advman-ad-id=' . $this->id;
 	}
 
 	function get_ad_formats()
