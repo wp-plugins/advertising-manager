@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40
 Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, plugin, widget
 Requires at least: 2.5
 Tested up to: 3.9.1
-Stable tag: 3.4.21
+Stable tag: 3.4.22
 
 Easily place ads on inside your blog posts, templates, or sidebar widgets. Simple to use, with powerful management and optimisation features.
 
@@ -97,11 +97,15 @@ More detailed instuctions can be found in the documentation:  [Concepts - Placin
 
 == Upgrade Notice ==
 
-= 3.4.21 =
-* Added notices when items where being saved, copied, and deleted
-* Removed broken ad exchange integration
+= 3.4.22 =
+* Split up Advertising manager page into multiple pages
+* Fixed issue with setting network defaults.  Thanks @Gwyneth Llewelyn
 
 == Change Log ==
+
+= 3.4.22 =
+* Split up Advertising manager page into multiple pages
+* Fixed issue with setting network defaults.  Thanks @Gwyneth Llewelyn
 
 = 3.4.21 =
 * Added notices when items where being saved, copied, and deleted
