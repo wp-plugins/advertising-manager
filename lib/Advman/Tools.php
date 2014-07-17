@@ -243,5 +243,45 @@ class Advman_Tools
 		
 		return $aProperties;
 	}
+
+    function get_current_ad()
+    {
+        global $advman_engine;
+
+        $target = OX_Tools::sanitize_request_var('advman-target');
+        if (is_numeric($target)) {
+            $id = intval($target);
+            $ad = $advman_engine->getAd($id);
+        }
+
+        return $ad;
+    }
+
+    function get_current_network()
+    {
+        global $advman_engine;
+
+        $target = OX_Tools::sanitize_request_var('advman-target');
+        $network = $advman_engine->factory($target);
+
+        return $network;
+    }
+
+
+
+    function get_current_ads()
+    {
+        global $advman_engine;
+
+        $targets = OX_Tools::sanitize_request_var('advman-targets');
+        if (is_array($targets)) {
+            $ads = array();
+            foreach ($targets as $target) {
+                $ads[$target] = $advman_engine->getAd($target);
+            }
+        }
+
+        return $ads;
+    }
 }
 ?>
