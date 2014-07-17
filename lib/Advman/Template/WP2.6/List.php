@@ -9,7 +9,6 @@ class Advman_Template_List
 		
 ?>		<div class="wrap">
 			<form action="" method="post" id="advman-form" enctype="multipart/form-data">
-				<input type="hidden" id="advman-mode" name="advman-mode" value="list_ads" />
 				<input type="hidden" id="advman-action" name="advman-action" />
 				<input type="hidden" id="advman-target" name="advman-target" />
 			<h2><?php _e('Manage Your Advertising', 'advman'); ?></h2>

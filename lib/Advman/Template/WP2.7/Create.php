@@ -7,7 +7,6 @@ class Advman_Template_Create
 	<div id="icon-edit" class="icon32"><br /></div>
 	<h2><?php _e('Create Ad', 'advman'); ?></h2>
 	<form method="post" id="advman-form">
-	<input type="hidden" name="advman-mode" id="advman-mode" value="edit_ad">
 	<input type="hidden" name="advman-action" id="advman-action">
 	<input type="hidden" name="advman-target" id="advman-target">
 <!--

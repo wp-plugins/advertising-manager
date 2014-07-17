@@ -4,13 +4,11 @@ class Advman_Template_Edit
 	function display($ad, $nw = false)
 	{
 		$target = $nw ? strtolower(get_class($ad)) : $ad->id;
-		$mode = $nw ? 'edit_network' : 'edit_ad';
 		$revisions = ($nw) ? $ad->get_network_property('revisions') : $ad->get_property('revisions');
 		list($last_user, $last_timestamp, $last_timestamp2) = Advman_Tools::get_last_edit($revisions);
 ?>
 
 <form action="" method="post" id="advman-form" enctype="multipart/form-data">
-<input type="hidden" name="advman-mode" id="advman-mode" value="<?php echo $mode; ?>">
 <input type="hidden" name="advman-action" id="advman-action">
 <input type="hidden" name="advman-target" id="advman-target" value="<?php echo $target; ?>">
 <?php  

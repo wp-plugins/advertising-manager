@@ -7,8 +7,7 @@ class Advman_Template_Notice
 			foreach ($notices as $action => $notice) {
 ?>				<div id='update-nag'>
 				<form action="admin.php?page=advman-list" method="post" id="advman-config-manage" enctype="multipart/form-data">
-				<input type="hidden" name="advman-mode" value="notice">		
-				<input type="hidden" name="advman-action" value="<?php echo $action; ?>">												
+				<input type="hidden" name="advman-action" value="<?php echo $action; ?>">
 <?php
 				echo $notice['text'];
 				if ($notice['confirm'] == 'yn') {

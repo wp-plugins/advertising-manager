@@ -50,9 +50,13 @@ class Advman_Admin
 
 
         // Process any actions
-        $mode = OX_Tools::sanitize_request_var('advman-mode');
         $action = OX_Tools::sanitize_post_var('advman-action');
         $page = OX_Tools::sanitize_request_var('page');
+
+        // Check to see if the activate action is being fired
+        if ($action == 'activate advertising-manager') {
+            Advman_Admin::remove_notice('activate advertising-manager');
+        }
 
         switch ($page) {
             case 'advman-ad-new'   : Advman_Admin::import_action($action); break;
@@ -60,16 +64,6 @@ class Advman_Admin
             case 'advman-list'     : Advman_Admin::ad_list_action($action); break;
             case 'advman-network'  : Advman_Admin::network_action($action); break;
         }
-
-        if ($mode == 'notice') {
-            $yes = OX_Tools::sanitize_post_var('advman-notice-confirm-yes');
-            switch ($action) {
-                case 'activate advertising-manager':
-                    Advman_Admin::remove_notice('activate advertising-manager');
-                    break;
-            }
-        }
-
     }
 
     function network_action($action, $network = null)
@@ -102,8 +96,8 @@ class Advman_Admin
                     case 'save':
                         if (Advman_Admin::save_properties($network, true)) {
                             $advman_engine->setAdNetwork($network);
+                            Advman_Admin::add_notice('advman-notice-once', __("Network updated"), false);
                         }
-                        Advman_Admin::add_notice('advman-notice-once', __("Network updated"), false);
                         wp_redirect(admin_url('admin.php?page=advman-list'));
                         exit;
                 }
@@ -253,8 +247,8 @@ class Advman_Admin
                 case 'save' :
                     if (Advman_Admin::save_properties($ad)) {
                         $advman_engine->setAd($ad);
+                        Advman_Admin::add_notice('advman-notice-once', __("Ad updated. <a href='admin.php?page=advman-ad&advman-target={$ad->id}'>View ad</a>"), false);
                     }
-                    Advman_Admin::add_notice('advman-notice-once', __("Ad updated. <a href='admin.php?page=advman-ad&advman-target={$ad->id}'>View ad</a>"), false);
                     wp_redirect(admin_url('admin.php?page=advman-list'));
                     exit;
             }
@@ -376,33 +370,34 @@ class Advman_Admin
 		global $advman_engine;
 		
 		$filter = null;
-		$mode = OX_Tools::sanitize_request_var('advman-mode');
-		$action = OX_Tools::sanitize_post_var('advman-action');
+		$template = false;
+        $page = OX_Tools::sanitize_request_var('page');
 
-		$template = null;
-		switch ($mode) {
-			case 'create_ad' :
+		switch ($page) {
+
+            case 'advman-ad' :
+                $ad = Advman_Tools::get_current_ad();
+                if ($ad) {
+                    $template = Advman_Tools::get_template('Edit_Ad', $ad);
+                    $template->display($ad);
+                }
+                break;
+
+            case 'advman-ad-new' :
 				$template = Advman_Tools::get_template('Create');
 				$template->display();
 				break;
 			
-			case 'edit_network' :
-				$network = Advman_Tools::get_current_network();
-				if ($network) {
-					$template = Advman_Tools::get_template('Edit_Network', $network);
-					$template->display($network);
-				}
-				break;
-			
-			case 'list_ads' :
-			default :
-				$template = Advman_Tools::get_template('List');
-				$template->display();
-				break;
-			
+            case 'advman-network' :
+                $network = Advman_Tools::get_current_network();
+                if ($network) {
+                    $template = Advman_Tools::get_template('Edit_Network', $network);
+                    $template->display($network);
+                }
+                break;
 		}
 		
-		if (is_null($template)) {
+		if (!$template) {
 			$template = Advman_Tools::get_template('List');
 			$template->display();
 		}
