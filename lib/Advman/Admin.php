@@ -12,7 +12,7 @@ class Advman_Admin
 		
 		
 		if (version_compare($wp_version,"2.7-alpha", '>')) {
-			add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-list', array('Advman_Admin','process'));
+			add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-list', array('Advman_Admin','process'), ADVMAN_URL . '/images/advman-menu-icon.svg');
 			add_submenu_page('advman-list', __('Edit Ads', 'advman'), __('Edit', 'advman'), 8, 'advman-list', array('Advman_Admin','process'));
 			add_submenu_page('advman-list', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-ad-new', array('Advman_Admin','create'));
             add_submenu_page(null, __('Edit Ad', 'advman'), __('Edit', 'advman'), 8, 'advman-ad', array('Advman_Admin','edit_ad'));
@@ -514,16 +514,15 @@ class Advman_Admin
             function advman_build_tinymce_menu(editor)
             {
                 return [
-                    <?php
-                            if ($ads) {
-                                foreach ($ads as $ad) {
-                                    echo "{text: 'Ad {$ad->id}: {$ad->name}', value: '[ad#{$ad->name}]', onclick: function() { editor.insertContent(this.value()); } },";
-                                }
-                            } else {
-                                    echo "{text: '(No ads defined)', value: ''},";
-
-                            }
-                    ?>
+<?php
+        if ($ads) {
+            foreach ($ads as $ad) {
+                echo "{text: 'Ad {$ad->id}: {$ad->name}', value: '[ad#{$ad->name}]', onclick: function() { editor.insertContent(this.value()); } },";
+            }
+        } else {
+                echo "{text: '(No ads defined)', value: ''},";
+        }
+?>
                 ];
             }
         </script>
