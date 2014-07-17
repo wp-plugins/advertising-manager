@@ -131,6 +131,14 @@ class Advman_Admin
 
     function ad_list_action($action)
     {
+        global $advman_engine;
+
+        // First, if there are no ads, redirect to the create screen
+        $ads = $advman_engine->getAds();
+        if (!$ads) {
+            wp_redirect(admin_url('admin.php?page=advman-ad-new'));
+        }
+
         if ($action) {
             $ads = Advman_Tools::get_current_ads();
             if ($ads) {
@@ -361,11 +369,6 @@ class Advman_Admin
 					$template = Advman_Tools::get_template('Edit_Network', $network);
 					$template->display($network);
 				}
-				break;
-			
-			case 'settings' :
-				$template = Advman_Tools::get_template('Settings');
-				$template->display();
 				break;
 			
 			case 'list_ads' :
