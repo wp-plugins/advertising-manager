@@ -1,7 +1,7 @@
 === Advertising Manager ===
 Contributors: switzer
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40switzer%2eorg&item_name=Do%20you%20like%20Advertising%20Manager%20for%20Wordpress%3F%20%20Please%20help%20development%20by%20donating%21&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
-Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, plugin, widget
+Tags: ad, admin, adsense, adserver, advertisement, advertising, banner, google, manager, plugin, rotate, widget
 Requires at least: 2.5
 Tested up to: 3.9.1
 Stable tag: 3.4.20

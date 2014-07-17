@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Advertising Manager
-Plugin URI: http://github.com/switzer/advertising-manager/wiki
+Plugin URI: http://wordpress.org/plugins/advertising-manager/
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer
 Author URI: http://github.com/switzer
