@@ -27,7 +27,7 @@ class Advman_Admin
             add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 		}
 
-		add_action('admin_print_scripts', array('Advman_Admin', 'add_scripts'));
+		add_action('admin_enqueue_scripts', array('Advman_Admin', 'admin_enqueue_scripts'));
 
         // Display any notices that exist
 		add_action('admin_notices', array('Advman_Admin','display_notices'), 1 );
@@ -85,6 +85,7 @@ class Advman_Admin
                     case 'apply' :
                         if (Advman_Admin::save_properties($network, true)) {
                             $advman_engine->setAdNetwork($network);
+                            Advman_Admin::add_notice('advman-notice-once', __("Network updated"), false);
                         }
                         break;
 
@@ -95,12 +96,14 @@ class Advman_Admin
                     case 'reset':
                         $network->reset_network_properties();
                         $advman_engine->setAdNetwork($network);
+                        Advman_Admin::add_notice('advman-notice-once', __("Network settings reset to defaults"), false);
                         break;
 
                     case 'save':
                         if (Advman_Admin::save_properties($network, true)) {
                             $advman_engine->setAdNetwork($network);
                         }
+                        Advman_Admin::add_notice('advman-notice-once', __("Network updated"), false);
                         wp_redirect(admin_url('admin.php?page=advman-list'));
                         exit;
                 }
@@ -126,8 +129,6 @@ class Advman_Admin
     {
         global $advman_engine;
 
-        //wp_die("action:$action");
-
         // First, if there are no ads, redirect to the create screen
         $ads = $advman_engine->getAds();
         if (!$ads) {
@@ -152,7 +153,7 @@ class Advman_Admin
                                     $advman_engine->copyAd($ad->id);
                                 }
                             }
-                            Advman_Admin::add_notice('advman-ad-action', __("Ads copied"), false);
+                            Advman_Admin::add_notice('advman-notice-once', __("Ads copied"), false);
                             break;
 
                         case 'delete' :
@@ -161,7 +162,7 @@ class Advman_Admin
                                     $advman_engine->deleteAd($ad->id);
                                 }
                             }
-                            Advman_Admin::add_notice('advman-ad-action', __("Ads deleted"), false);
+                            Advman_Admin::add_notice('advman-notice-once', __("Ads deleted"), false);
                             break;
 
                     }
@@ -190,7 +191,7 @@ class Advman_Admin
                 case 'apply' :
                     if (Advman_Admin::save_properties($ad)) {
                         $advman_engine->setAd($ad);
-                        Advman_Admin::add_notice('advman-ad-action', __("Ad updated"), false);
+                        Advman_Admin::add_notice('advman-notice-once', __("Ad updated"), false);
                     }
                     break;
 
@@ -198,7 +199,7 @@ class Advman_Admin
                     if (!$ad->active) {
                         $ad->active = true;
                         $advman_engine->setAd($ad);
-                        Advman_Admin::add_notice('advman-ad-action', __("Ad activated"), false);
+                        Advman_Admin::add_notice('advman-notice-once', __("Ad activated"), false);
                     }
                     break;
 
@@ -208,7 +209,7 @@ class Advman_Admin
 
                 case 'copy' :
                     $ad_new = $advman_engine->copyAd($ad->id);
-                    Advman_Admin::add_notice('advman-ad-action', __("Ad copied. <a href='admin.php?page=advman-ad&advman-target={$ad->id}'>View original</a>"), false);
+                    Advman_Admin::add_notice('advman-notice-once', __("Ad copied. <a href='admin.php?page=advman-ad&advman-target={$ad->id}'>View original</a>"), false);
                     wp_redirect(admin_url('admin.php?page=advman-ad&advman-target='.$ad_new->id));
                     break;
 
@@ -216,7 +217,7 @@ class Advman_Admin
                     if ($ad->active) {
                         $ad->active = false;
                         $advman_engine->setAd($ad);
-                        Advman_Admin::add_notice('advman-ad-action', __("Ad deactivated"), false);
+                        Advman_Admin::add_notice('advman-notice-once', __("Ad deactivated"), false);
                     }
                     break;
 
@@ -227,7 +228,7 @@ class Advman_Admin
 
                 case 'delete' :
                     $advman_engine->deleteAd($ad->id);
-                    Advman_Admin::add_notice('advman-ad-action', __("Ad deleted"), false);
+                    Advman_Admin::add_notice('advman-notice-once', __("Ad deleted"), false);
                     wp_redirect(admin_url('admin.php?page=advman-list'));
                     break;
 
@@ -253,7 +254,7 @@ class Advman_Admin
                     if (Advman_Admin::save_properties($ad)) {
                         $advman_engine->setAd($ad);
                     }
-                    Advman_Admin::add_notice('advman-ad-action', __("Ad updated. <a href='admin.php?page=advman-ad&advman-target={$ad->id}'>View ad</a>"), false);
+                    Advman_Admin::add_notice('advman-notice-once', __("Ad updated. <a href='admin.php?page=advman-ad&advman-target={$ad->id}'>View ad</a>"), false);
                     wp_redirect(admin_url('admin.php?page=advman-list'));
                     exit;
             }
@@ -417,7 +418,7 @@ class Advman_Admin
 			$template = Advman_Tools::get_template('Notice');
 			$template->display($notices);
             // Remove any 'one time' notices
-            Advman_Admin::remove_notice('advman-ad-action');
+            Advman_Admin::remove_notice('advman-notice-once');
 		}
 		
 	}
@@ -468,22 +469,6 @@ class Advman_Admin
 		$template->display();
 	}
 
-    function add_scripts()
-	{
-		if (is_admin()) {
-			$page = !empty($_GET['page']) ? $_GET['page'] : '';
-			if ($page == 'advman-list' || $page == 'advman-ad' || $page == 'advman-network') {
-				wp_enqueue_script('prototype');
-				wp_enqueue_script('postbox');
-//				wp_enqueue_script('jquery');
-				wp_enqueue_script('jquery-multiselect', ADVMAN_URL . '/scripts/jquery.multiSelect.js', array('jquery'));
-				wp_enqueue_script('advman', ADVMAN_URL . '/scripts/advman.js');
-				echo "
-<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/advman.css' />
-<link type='text/css' rel='stylesheet' href='" . ADVMAN_URL . "/scripts/jquery.multiSelect.css' />";
-			}
-		}
-	}
 	function get_notices()
 	{
 		return get_option('plugin_advman_ui_notices');
@@ -559,6 +544,24 @@ class Advman_Admin
     function register_tinymce_javascript($plugin_array) {
         $plugin_array['advman'] = ADVMAN_URL . '/scripts/advman-editor.js';
         return $plugin_array;
+    }
+
+    /*
+     * Hook to add some styling to advman lists and forms
+     */
+    function admin_enqueue_scripts($hook)
+    {
+        if (stristr($hook, 'page_advman-') !== false) {
+            // scripts
+            wp_enqueue_script('prototype');
+            wp_enqueue_script('postbox');
+            wp_enqueue_script('jquery-multiselect', ADVMAN_URL . '/scripts/jquery.multiSelect.js', array('jquery'));
+            wp_enqueue_script('advman', ADVMAN_URL . '/scripts/advman.js');
+
+            // styles
+            wp_enqueue_style('advman', ADVMAN_URL . '/scripts/advman.css');
+            wp_enqueue_style('advman-multiselect', ADVMAN_URL . '/scripts/jquery.multiSelect.css');
+        }
     }
 }
 ?>
