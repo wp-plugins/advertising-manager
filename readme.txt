@@ -4,13 +4,13 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40
 Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, plugin, widget
 Requires at least: 2.5
 Tested up to: 3.9.1
-Stable tag: 3.4.22
+Stable tag: 3.4.23
 
-Easily place ads on inside your blog posts, templates, or sidebar widgets. Simple to use, with powerful management and optimisation features.
+Easily place and rotate ads on inside your blog posts, templates, or sidebar widgets. Simple to use, powerful features.  Used by thousands of blogs.
 
 == Description ==
 
-This plugin will manage and rotate your Google Adsense and other ads on your Wordpress blog.  It automatically recognises many ad networks including [Google Adsense](http://www.google.com/adsense), [AdBrite](http://www.adbrite.com/), [Adify](http://www.adify.com), [AdGridWork](http://www.adgridwork.com/), [Adpinion](http://www.adpinion.com/), [Adroll](http://www.adroll.com), [Chitika](http://chitika.com/publishers.php), [Commission Junction](http://www.cj.com/), [CrispAds](http://www.crispads.com/), [OpenX](http://www.openx.org/), [ShoppingAds](http://www.shoppingads.com/), [Yahoo!PN](http://ypn.yahoo.com/), and [WidgetBucks](http://www.widgetbucks.com/home.page).  Other ad networks can be used as well.
+This plugin will manage and rotate your Google Adsense and other ads on your Wordpress blog.  It automatically recognises many ad networks including [Google Adsense](http://www.google.com/adsense) and other popular networks.  Target your ads to different authors, categories, tags, and pages.  View statistics on your ad performance.
 
 Features:
 
@@ -19,7 +19,7 @@ Features:
 * Put ads in your blog posts with the click of a button
 * Ads can be placed in your templates with a single PHP function
 * Ad targeting by author, category, tag, page type, and much more
-* Auto-recognition for 15 of the most popular ad networks, so you can manage these ads in your Wordpress blog rather than going to each website.
+* Auto-recognition for the most popular ad networks, so you can manage these ads in your Wordpress blog rather than going to each website.
 * View high level analytics for your ads
 
 Related Links:
@@ -94,14 +94,36 @@ More detailed instuctions can be found in the documentation:  [Concepts - Placin
 
 * Auto-inserting of ads into posts based on configurable rules (i.e. All Posts, 2nd Paragraph)
 * Support for Amazon Affiliates and any other networks I hear about.
+* Add an 'about us' page
+* Add an example ad upon installation so that it is easy to see what Advertising Manager does
+* Add usage information at the bottom of the list screen
+* By default, show a placeholder ad (not the real ad) for admin users so that ad quality is higher
+* Add ability to show in an email
+* Send daily and weekly statistics information
+* Add version information to the footer in admin screens of advman
+
 
 == Upgrade Notice ==
 
-= 3.4.22 =
-* Split up Advertising manager page into multiple pages
-* Fixed issue with setting network defaults.  Thanks @Gwyneth Llewelyn
+= 3.4.23 =
+* Added custom icon to menu and tinymce editor
+* Code cleanup
+* Added better notices after performing actions
+* Fixed bulk actions - copy and delete now work from the list screen
+* When there are no ads, you are now redirected to the create screen from the list screen
+* Added better Wordpress editor integration with TinyMCE
+* Updated developer instructions for people who want to get up and running quickly with Docker
 
 == Change Log ==
+
+= 3.4.23 =
+* Added custom icon to menu and tinymce editor
+* Code cleanup
+* Added better notices after performing actions
+* Fixed bulk actions - copy and delete now work from the list screen
+* When there are no ads, you are now redirected to the create screen from the list screen
+* Added better Wordpress editor integration with TinyMCE
+* Updated developer instructions for people who want to get up and running quickly with Docker
 
 = 3.4.22 =
 * Split up Advertising manager page into multiple pages
