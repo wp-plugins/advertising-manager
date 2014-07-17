@@ -26,11 +26,27 @@ class Advman_Admin
             add_submenu_page(null, __('Edit Network', 'advman'), __('Edit', 'advman'), 8, 'advman-network', array('Advman_Admin','edit_network'));
             add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 		}
-		
+
 		add_action('admin_print_scripts', array('Advman_Admin', 'add_scripts'));
 		add_action('admin_notices', array('Advman_Admin','display_notices'), 1 );
-		add_action('admin_footer', array('Advman_Admin','display_editor'));
-		
+
+        // Add editor plugin to automatically insert an ad into a blog post
+        add_action('admin_enqueue_scripts', array('Advman_Admin', 'add_editor_css'));
+        add_action('before_wp_tiny_mce', array('Advman_Admin', 'tinymce_menu_script' ));
+        add_filter('mce_buttons', array('Advman_Admin','editor_button'));
+        add_filter('mce_external_plugins', array('Advman_Admin', 'register_tinymce_javascript'));
+
+
+
+
+        // Add our 'add ad' select box to a few screens
+//        add_action('admin_footer-post.php', array('Advman_Admin','display_editor'));
+//        add_action('admin_footer-post-new.php', array('Advman_Admin','display_editor'));
+//        add_action('admin_footer-page.php', array('Advman_Admin','display_editor'));
+//        add_action('admin_footer-page-new.php', array('Advman_Admin','display_editor'));
+//        add_action('admin_footer-bookmarklet.php', array('Advman_Admin','display_editor'));
+
+
         // Process any actions
         $mode = OX_Tools::sanitize_request_var('advman-mode');
         $action = OX_Tools::sanitize_post_var('advman-action');
@@ -378,18 +394,7 @@ class Advman_Admin
 		}
 		
 	}
-	function display_editor()
-	{
-		global $advman_engine;
-		
-		$url = $_SERVER['REQUEST_URI'];
-		if (strpos($url, 'post.php') || strpos($url, 'post-new.php') || strpos($url, 'page.php') || strpos($url, 'page-new.php') || strpos($url, 'bookmarklet.php')) {
-			$ads = $advman_engine->getAds();
-			$template = Advman_Tools::get_template('Editor');
-			$template->display($ads);
-		}
-	}
-	
+
 	/**
 	 * This function is called from the Wordpress Ads menu
 	 */
@@ -436,7 +441,7 @@ class Advman_Admin
 		$template->display();
 	}
 
-	function add_scripts()
+    function add_scripts()
 	{
 		if (is_admin()) {
 			$page = !empty($_GET['page']) ? $_GET['page'] : '';
@@ -475,5 +480,58 @@ class Advman_Admin
 		}
 		Advman_Admin::set_notices($notices);
 	}
+
+    /*
+     * Add a custom CSS which contains the image that is used in the menu button of the editor
+     */
+    function add_editor_css()
+    {
+        wp_enqueue_style('advman-editor', ADVMAN_URL . '/scripts/advman-editor.css');
+    }
+
+    /*
+     * Generate a function that generates an array of ads for the editor menu button
+     */
+    function tinymce_menu_script()
+    {
+        global $advman_engine;
+
+        $ads = $advman_engine->getAds();
+        ?>
+        <script type="text/javascript">
+            function advman_build_tinymce_menu(editor)
+            {
+                return [
+                    <?php
+                            if ($ads) {
+                                foreach ($ads as $ad) {
+                                    echo "{text: 'Ad {$ad->id}: {$ad->name}', value: '[ad#{$ad->name}]', onclick: function() { editor.insertContent(this.value()); } },";
+                                }
+                            } else {
+                                    echo "{text: '(No ads defined)', value: ''},";
+
+                            }
+                    ?>
+                ];
+            }
+        </script>
+    <?php
+    }
+
+    /*
+     * Hook to add a custom button on the wordpress tinymce editor
+     */
+    function editor_button($buttons) {
+        array_push($buttons, 'separator', 'advman_ad_key');
+        return $buttons;
+    }
+
+    /*
+     * Hook to register the javascript for the custom button on the wordpress tinymce editor
+     */
+    function register_tinymce_javascript($plugin_array) {
+        $plugin_array['advman'] = ADVMAN_URL . '/scripts/advman-editor.js';
+        return $plugin_array;
+    }
 }
 ?>
