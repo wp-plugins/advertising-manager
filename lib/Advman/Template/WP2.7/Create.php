@@ -8,7 +8,6 @@ class Advman_Template_Create
 	<h2><?php _e('Create Ad', 'advman'); ?></h2>
 	<form method="post" id="advman-form">
 	<input type="hidden" name="advman-action" id="advman-action">
-	<input type="hidden" name="advman-target" id="advman-target">
 <!--
 	<div id="side-info-column" class="inner-sidebar">
 		<p><h3>Or, select an ad network below:</p></h3>

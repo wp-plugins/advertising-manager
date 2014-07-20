@@ -30,7 +30,6 @@ class Advman_Template_Settings
 
 <form action="" method="post" id="advman-form" enctype="multipart/form-data">
 <input type="hidden" name="advman-action" id="advman-action" value="save" />
-<input type="hidden" name="advman-target" id="advman-target" />
 
 <table class="form-table">
 <tr valign="top">
