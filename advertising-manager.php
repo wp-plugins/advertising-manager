@@ -52,7 +52,7 @@ function advman_init()
 	// Next, load admin if needed
 	if (is_admin()) {
 		require_once(ADVMAN_LIB . '/Admin.php');
-	}
+    }
 	
 	// Add widgets
 	if (version_compare($wp_version,"2.8-alpha", "<")) {

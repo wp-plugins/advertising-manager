@@ -15,10 +15,10 @@ class Advman_Admin
 		if (version_compare($wp_version,"2.7-alpha", '>')) {
 			add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'), ADVMAN_URL . '/images/advman-menu-icon.svg');
 			$listhook = add_submenu_page('advman-list', __('All Ads', 'advman'), __('All Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'));
-			add_submenu_page('advman-list', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-ad-new', array('Advman_Admin','create'));
-            add_submenu_page(null, __('Edit Ad', 'advman'), __('Edit', 'advman'), 8, 'advman-ad', array('Advman_Admin','edit_ad'));
-            add_submenu_page(null, __('Edit Network', 'advman'), __('Edit', 'advman'), 8, 'advman-network', array('Advman_Admin','edit_network'));
-            add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
+			$createhook = add_submenu_page('advman-list', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-ad-new', array('Advman_Admin','create'));
+            $adhook = add_submenu_page(null, __('Edit Ad', 'advman'), __('Edit', 'advman'), 8, 'advman-ad', array('Advman_Admin','edit_ad'));
+            $networkhook = add_submenu_page(null, __('Edit Network', 'advman'), __('Edit', 'advman'), 8, 'advman-network', array('Advman_Admin','edit_network'));
+            $settingshook = add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 		} else {
 			add_menu_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'), ADVMAN_URL . '/images/advman-menu-icon.svg');
 			add_submenu_page('advman-list', __('All Ads', 'advman'), __('All Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'));
@@ -44,16 +44,11 @@ class Advman_Admin
         add_filter('mce_buttons', array('Advman_Admin','editor_button'));
         add_filter('mce_external_plugins', array('Advman_Admin', 'register_tinymce_javascript'));
 
+        // Add 'settings' to the plugin activate page
+        add_filter( 'plugin_action_links_advertising-manager/advertising-manager.php', array('Advman_Admin', 'plugin_action_links' ));
 
-
-
-        // Add our 'add ad' select box to a few screens
-//        add_action('admin_footer-post.php', array('Advman_Admin','display_editor'));
-//        add_action('admin_footer-post-new.php', array('Advman_Admin','display_editor'));
-//        add_action('admin_footer-page.php', array('Advman_Admin','display_editor'));
-//        add_action('admin_footer-page-new.php', array('Advman_Admin','display_editor'));
-//        add_action('admin_footer-bookmarklet.php', array('Advman_Admin','display_editor'));
-
+        // Chage footer text on Advertising Manager pages
+        add_filter("admin_footer_text-$listhook", array('Advman_Admin', 'admin_footer_text'));
 
         // Process any actions
         $action = OX_Tools::sanitize_post_var('advman-action');
@@ -512,5 +507,16 @@ class Advman_Admin
             wp_enqueue_style('advman-multiselect', ADVMAN_URL . '/scripts/jquery.multiSelect.css');
         }
     }
+
+    function admin_footer_text( $hook, $default_text )
+    {
+        return $hook . $default_text . " | <span id='footer-thankyou'>" . __("Ads by <a href='http://wordpress.org/plugins/advertising-manager/'>Advertising Manager</a>", "advman") . "</span>";
+    }
+
+    function plugin_action_links( $links ) {
+        $settings = '<a href="'. get_admin_url(null, 'options-general.php?page=advman-settings') .'">' . __('Settings', 'advman') . '</a>';
+        return array(0 => $settings) + $links;
+    }
+
 }
 ?>
