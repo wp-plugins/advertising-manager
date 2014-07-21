@@ -52,7 +52,6 @@ function advman_setAction(action, id, name, network)
 </script>
 
 <form action="" method="post" id="advman-form" enctype="multipart/form-data">
-<input type="hidden" id="advman-mode" name="advman-mode" value="list_ads" />
 <input type="hidden" id="advman-action" name="advman-action" />
 <input type="hidden" id="advman-target" name="advman-target" />
 

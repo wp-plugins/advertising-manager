@@ -43,6 +43,7 @@ class Advman_Widget extends WP_Widget
         
         $ads = $advman_engine->getAds();
         $names = array();
+        // Loop through ads, and get only unique ad names
         foreach ($ads as $ad) {
             $names[$ad->name] = $ad->name;
         }

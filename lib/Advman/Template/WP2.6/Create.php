@@ -8,9 +8,7 @@ class Advman_Template_Create
 		global $_advman_networks;
 ?>	<div class="wrap">
 		<form method="post" id="advman-form">
-			<input type="hidden" name="advman-mode" id="advman-mode" value="create_ad">	
 			<input type="hidden" name="advman-action" id="advman-action">
-			<input type="hidden" name="advman-target" id="advman-target">
 			<h2><?php _e('Create Ad', 'advman'); ?></h2>
 			
 			<table>

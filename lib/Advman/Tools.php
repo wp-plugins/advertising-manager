@@ -54,30 +54,43 @@ class Advman_Tools
 	/**
 	 * Get the last edit of this ad
 	 */
-	function get_last_edit($revisions)
-	{
-		$last_user = __('Unknown', 'advman');
-		$last_timestamp = 0;
-		
-		if (!empty($revisions)) {
-			foreach($revisions as $t => $u) {
-				$last_user = $u;
-				$last_timestamp = $t;
-				break; // just get first one - the array is sorted by reverse date
-			}
-		}
-		
-		if ((time() - $last_timestamp) < (30 * 24 * 60 * 60)) { // less than 30 days ago
-			$last_timestamp =  human_time_diff($t);
-			$last_timestamp2 = date('l, F jS, Y @ h:ia', $t);
-		} else {
-			$last_timestamp =  __('> 30 days', 'advman');
-			$last_timestamp2 = '';
-		}
-		return array($last_user, $last_timestamp, $last_timestamp2);
-	}
-	
-	/**
+    function get_last_edit($revisions)
+    {
+        $last_user = __('Unknown', 'advman');
+        $last_timestamp = 0;
+
+        if (!empty($revisions)) {
+            foreach($revisions as $t => $u) {
+                $last_user = $u;
+                $last_timestamp = $t;
+                break; // just get first one - the array is sorted by reverse date
+            }
+        }
+
+        if ((time() - $last_timestamp) < (30 * 24 * 60 * 60)) { // less than 30 days ago
+            $human =  human_time_diff($t);
+            $formatted = date('l, F jS, Y @ h:ia', $t);
+        } else {
+            $human =  __('> 30 days', 'advman');
+            $formatted = '';
+        }
+
+        return array($last_user, $human, $formatted, $last_timestamp);
+    }
+
+    function get_search_query()
+    {
+        $q = false;
+
+        if ( isset($_GET['s']) ) {
+            $q = OX_Tools::sanitize($_GET['s']);
+        }
+        return $q;
+    }
+
+
+
+    /**
 	 * Get a template based on the class of an object
 	 */
 	function get_template($name)
@@ -248,7 +261,7 @@ class Advman_Tools
     {
         global $advman_engine;
 
-        $target = OX_Tools::sanitize_request_var('advman-target');
+        $target = OX_Tools::sanitize_request_var('ad');
         if (is_numeric($target)) {
             $id = intval($target);
             $ad = $advman_engine->getAd($id);
@@ -261,7 +274,7 @@ class Advman_Tools
     {
         global $advman_engine;
 
-        $target = OX_Tools::sanitize_request_var('advman-target');
+        $target = OX_Tools::sanitize_request_var('network');
         $network = $advman_engine->factory($target);
 
         return $network;
@@ -273,7 +286,8 @@ class Advman_Tools
     {
         global $advman_engine;
 
-        $targets = OX_Tools::sanitize_request_var('advman-targets');
+        $ads = false;
+        $targets = OX_Tools::sanitize_request_var('ad');
         if (is_array($targets)) {
             $ads = array();
             foreach ($targets as $target) {
