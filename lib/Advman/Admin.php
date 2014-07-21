@@ -47,8 +47,8 @@ class Advman_Admin
         // Add 'settings' to the plugin activate page
         add_filter( 'plugin_action_links_advertising-manager/advertising-manager.php', array('Advman_Admin', 'plugin_action_links' ));
 
-        // Chage footer text on Advertising Manager pages
-        add_filter("admin_footer_text-$listhook", array('Advman_Admin', 'admin_footer_text'));
+        // Change footer text on Advertising Manager pages
+        add_filter("admin_footer_text", array('Advman_Admin', 'admin_footer_text'));
 
         // Process any actions
         $action = OX_Tools::sanitize_post_var('advman-action');
@@ -508,9 +508,16 @@ class Advman_Admin
         }
     }
 
-    function admin_footer_text( $hook, $default_text )
+    function admin_footer_text($default_text)
     {
-        return $hook . $default_text . " | <span id='footer-thankyou'>" . __("Ads by <a href='http://wordpress.org/plugins/advertising-manager/'>Advertising Manager</a>", "advman") . "</span>";
+        $addition = '';
+        $page = OX_Tools::sanitize_request_var('page');
+
+        if (stristr($page, 'advman-') !== false) {
+            $addition = " | <span id='footer-thankyou'>" . __("Ads by <a href='http://wordpress.org/plugins/advertising-manager/'>Advertising Manager</a>", "advman") . " </span><span style='font-size:x-small;color:silver'>v" . ADVMAN_VERSION . "</span>";
+        }
+
+        return $default_text . $addition;
     }
 
     function plugin_action_links( $links ) {
