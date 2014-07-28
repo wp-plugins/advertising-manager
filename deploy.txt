@@ -1,4 +1,4 @@
-// HERE IS HOW TO DEPLOY A VERSION
+// HERE IS HOW TO DEPLOY A VERSION OF ADVERTISING MANAGER
 
 TRANSLATIONS
 (NOTE - translations are in the process of being moved to
