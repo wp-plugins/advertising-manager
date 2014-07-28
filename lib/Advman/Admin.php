@@ -11,14 +11,15 @@ class Advman_Admin
 	{
 		global $wp_version;
 		
-		
+//        print_r($_POST);
+//        exit;
 		if (version_compare($wp_version,"2.7-alpha", '>')) {
 			add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'), ADVMAN_URL . '/images/advman-menu-icon.svg');
 			$listhook = add_submenu_page('advman-list', __('All Ads', 'advman'), __('All Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'));
-			$createhook = add_submenu_page('advman-list', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-ad-new', array('Advman_Admin','create'));
-            $adhook = add_submenu_page(null, __('Edit Ad', 'advman'), __('Edit', 'advman'), 8, 'advman-ad', array('Advman_Admin','edit_ad'));
-            $networkhook = add_submenu_page(null, __('Edit Network', 'advman'), __('Edit', 'advman'), 8, 'advman-network', array('Advman_Admin','edit_network'));
-            $settingshook = add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
+			add_submenu_page('advman-list', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-ad-new', array('Advman_Admin','create'));
+            add_submenu_page(null, __('Edit Ad', 'advman'), __('Edit', 'advman'), 8, 'advman-ad', array('Advman_Admin','edit_ad'));
+            add_submenu_page(null, __('Edit Network', 'advman'), __('Edit', 'advman'), 8, 'advman-network', array('Advman_Admin','edit_network'));
+            add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 		} else {
 			add_menu_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'), ADVMAN_URL . '/images/advman-menu-icon.svg');
 			add_submenu_page('advman-list', __('All Ads', 'advman'), __('All Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'));
@@ -55,10 +56,7 @@ class Advman_Admin
         $page = OX_Tools::sanitize_request_var('page');
 
         // Check to see if the activate action is being fired
-        if ($action == 'activate advertising-manager') {
-            Advman_Admin::remove_notice('activate advertising-manager');
-        }
-
+        Advman_Admin::notice_action($action);
         switch ($page) {
             case 'advman-ad-new'   : Advman_Admin::import_action($action); break;
             case 'advman-ad'       : Advman_Admin::ad_action($action); break;
@@ -67,6 +65,21 @@ class Advman_Admin
         }
     }
 
+    function notice_action($action)
+    {
+        if ($action == 'activate advertising-manager') {
+            Advman_Admin::remove_notice('activate advertising-manager');
+        }
+
+        if ($action == 'adjs-beta') {
+            if (OX_Tools::sanitize_post_var('advman-notice-confirm-yes')) {
+                wp_redirect(admin_url('options-general.php?page=advman-settings'));
+            }
+            Advman_Admin::remove_notice('adjs-beta');
+        }
+
+
+    }
     function network_action($action, $network = null)
     {
         global $advman_engine;
@@ -358,8 +371,11 @@ class Advman_Admin
 	 */
 	function display_notices()
 	{
+//        $advman_page = Advman_Tools::is_advman_page();
+
 		$notices = Advman_Admin::get_notices();
-		if (!empty($notices)) {
+//		if (!empty($notices) && $advman_page) {
+		if (!empty($notices)) {  // remove advman_page for now - showing across admin screens until users say something.
 			$template = Advman_Tools::get_template('Notice');
 			$template->display($notices);
             // Remove any 'one time' notices
@@ -399,16 +415,60 @@ class Advman_Admin
 	 */
 	function settings()
 	{
-		
-		// Get our options and see if we're handling a form submission.
+        global $advman_engine;
+
+        // Get our options and see if we're handling a form submission.
 		$action = OX_Tools::sanitize_post_var('advman-action');
 		if ($action == 'save') {
 			global $advman_engine;
-			$settings = array('enable-php', 'stats', 'purge-stats-days');
+            // We need to know if we are changing the adjs settings
+            $adjs_pre = $advman_engine->getSetting('enable-adjs');
+			$settings = array('enable-php', 'stats', 'purge-stats-days', 'enable-adjs');
 			foreach ($settings as $setting) {
 				$value = isset($_POST["advman-{$setting}"]) ? OX_Tools::sanitize($_POST["advman-{$setting}"]) : false;
 				$advman_engine->setSetting($setting, $value);
 			}
+            $adjs_post = $advman_engine->getSetting('enable-adjs');
+
+            // If a user is turning on adjs
+            // This generates a client ID given the admin email address and the domain.  Note:  user has given consent in settings if we have made it this far.
+            if (!$adjs_pre && $adjs_post) {
+                $url = 'http://adjs.io/beta_signups';
+                $params = array(
+                    'headers' => array("Accept"=>'application/json'),
+                    'body' =>  array('beta_signup' => array("email"=>get_option('admin_email'),"url"=> get_option('siteurl')))
+                );
+
+//                print_r($params);
+//                exit;
+                $response = wp_remote_post($url, $params);
+                if (is_array($response) && $response['body']) {
+                    $clientId = json_decode($response['body'])->client_id;
+                    $advman_engine->setSetting('adjs-clientid', $clientId);
+                } else {
+                    // Fail silently!
+//                    print_r($response);
+//                    exit;
+                }
+            }
+            // If a user is turning off adjs
+            // This generates a client ID given the admin email address and the domain.  Note:  user has given consent in settings if we have made it this far.
+            if ($adjs_pre && !$adjs_post) {
+
+                $clientId = $advman_engine->getSetting('adjs-clientid');
+                if ($clientId) {
+                    $url = "http://adjs.io/beta_signups/$clientId";
+                    $params = array(
+                        'method' => 'DELETE',
+                        'headers' => array("Accept"=>'application/json')
+                    );
+                    $response = wp_remote_request($url, $params);
+
+                    if ($response['response'] && $response['response']['code'] == 204) {
+                        $advman_engine->setSetting('adjs-clientid','');
+                    }
+                }
+            }
 		}
 		$template = Advman_Tools::get_template('Settings');
 		$template->display();
@@ -495,7 +555,7 @@ class Advman_Admin
      */
     function admin_enqueue_scripts($hook)
     {
-        if (stristr($hook, 'page_advman-') !== false) {
+        if (Advman_Tools::is_advman_page($hook)) {
             // scripts
             wp_enqueue_script('prototype');
             wp_enqueue_script('postbox');
@@ -525,5 +585,14 @@ class Advman_Admin
         return array(0 => $settings) + $links;
     }
 
+    function activate()
+    {
+        // Add quality notice
+        $notice = __('Would you like to enable experimental ad quality controls in <strong>Advertising Manager</strong>?', 'advman');
+//		$question = __('Enable <a>auto optimisation</a>? (RECOMMENDED)', 'advman');
+//		$question = str_replace('<a>', '<a href="http://code.openx.org/wiki/advertising-manager/Auto_Optimization" target="_new">', $question);
+        Advman_Admin::add_notice('adjs-beta', $notice, 'learn');
+
+    }
 }
 ?>

@@ -5,7 +5,7 @@ Plugin URI: http://github.com/switzer/advertising-manager/wiki
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer
 Author URI: http://github.com/switzer
-Version: 3.4.24
+Version: 3.4.25
 Text Domain: advman
 Domain Path: /languages
 */
@@ -23,7 +23,12 @@ function advman_init()
 	global $wp_version;
 	global $advman_engine;
 
-	define('ADVMAN_VERSION', '3.4.24');
+    // number used to uniquely identify ad slots
+    global $advman_slot;
+    $advman_slot = 1;
+
+
+	define('ADVMAN_VERSION', '3.4.25');
 	define('ADVMAN_PATH', dirname(__FILE__));
 	define('ADVMAN_LIB', ADVMAN_PATH . '/lib/Advman');
 	define('OX_LIB', ADVMAN_PATH . '/lib/OX');
@@ -52,6 +57,7 @@ function advman_init()
 	// Next, load admin if needed
 	if (is_admin()) {
 		require_once(ADVMAN_LIB . '/Admin.php');
+        register_activation_hook( __FILE__, array( 'Advman_Admin', 'activate') );
     }
 	
 	// Add widgets
@@ -62,6 +68,12 @@ function advman_init()
 		include_once(ADVMAN_LIB . '/Widget.php');
 		add_action('widgets_init', create_function('', 'return register_widget("Advman_Widget");'));
 	}
+
+    // Add ad quality script if enabled
+    if ($advman_engine->getSetting('enable-adjs')) {
+//        wp_enqueue_script('adjs', '//cdn.adjs.net/publisher.ad.js');
+        wp_enqueue_script('adjs','//s3.amazonaws.com/js.adjsdemo.com/publisher.ad.js');
+    }
 }
 
 function advman_run()
@@ -149,7 +161,6 @@ function advman_ad($name = false)
 		$advman_engine->incrementStats($ad);
 	}
 }
-
 
 /**
  * Called when the Wordpress footer displays, and adds a comment in the HTML for debugging purposes

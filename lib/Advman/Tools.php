@@ -3,6 +3,15 @@ require_once(OX_LIB . '/Tools.php');
 
 class Advman_Tools
 {
+    function is_advman_page($page = null)
+    {
+        if (!$page) {
+            $page = OX_Tools::sanitize_request_var('page');
+        }
+
+        return ($page && stristr($page, 'advman-') !== false);
+    }
+
 	function format_author_value(&$value)
 	{
 		if (is_array($value)) {

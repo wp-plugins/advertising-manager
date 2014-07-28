@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40
 Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, rotate, widget
 Requires at least: 2.5
 Tested up to: 3.9.1
-Stable tag: 3.4.24
+Stable tag: 3.4.25
 
 Easily place and rotate ads on inside your blog posts, templates, or sidebar widgets. Simple to use, powerful features.  Used by thousands of blogs.
 
@@ -105,17 +105,15 @@ More detailed instuctions can be found in the documentation:  [Concepts - Placin
 
 == Upgrade Notice ==
 
-= 3.4.24 =
-* Added search functionality on ad list
-* Added sort functionality on ad list
-* Added Advertising Manager version to admin page footer for advertising pages
-* Added screen level documentation
-* Added paging when more than 10 ads
-* Added better filtering
-* Added link to settings on plugin screen
-* Lots of behind the scenes cleanup!
+= 3.4.25 =
+* Added experimental ad quality feature - url verification
+* Clean up the way notices work
 
 == Change Log ==
+
+= 3.4.25 =
+* Added experimental ad quality feature - url verification
+* Clean up the way notices work
 
 = 3.4.24 =
 * Added search functionality on ad list

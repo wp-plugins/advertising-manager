@@ -220,7 +220,24 @@ class OX_Ad extends OX_Plugin
 			eval(' ?>' . $code . '<?php ');
 			$code = ob_get_clean();
 		}
-		
+
+        if (!$codeonly && $advman_engine->getSetting('enable-adjs')) {
+
+            global $advman_slot;
+
+            $tag = '<div data-adjs="true"';
+            if ($this->get('width')) {
+                $tag .= ' data-width="' . $this->get('width') . '"';
+            }
+            if ($this->get('height')) {
+                $tag .= ' data-height="' . $this->get('height') . '"';
+            }
+            $tag .= ' data-escaped=true id="advman-ad-' . $advman_slot++ . $this->get('id') . "\"><!--\n";
+            $code = $tag . htmlspecialchars($code) . "\n--></div>";
+
+        }
+
+        // If adjs - wrap in div, and dislay encoded params
 		return $code;
 //		return $this->get('code');
 	}
