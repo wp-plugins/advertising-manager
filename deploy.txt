@@ -1,50 +1,37 @@
 // HERE IS HOW TO DEPLOY A VERSION OF ADVERTISING MANAGER
 
 TRANSLATIONS
-(NOTE - translations are in the process of being moved to
     1.  Generate a translation pot template here:
     http://wordpress.org/extend/plugins/advertising-manager/admin/
+
+    2. Sign into Transifex and add the pot file by going to:
+    https://www.transifex.com/projects/p/advertising-manager-1/resources/
+    and clicking on ‘add new resource.’
+
+    3. Click the translation template and select the translation language
+
+    4. If an mo file exists for that language, convert to po file, then upload po file:
+    msgunfmt advman-lang.mo > advman-lang.po
+
+    5. Click ‘Translate Now’ to translate
     
-    2.  Copy the translation template to the pootle server:
-    cd ~/Downloads/
-    mv advertising-manager.pot advman.pot
-    scp advman.pot pootle@openx.org:/home/pootle/Pootle/po/advman/templates/
-    rm advman.pot
+    6. After translating and reviewing, go to Advertising Manager Overview page by clicking
+    ‘Advertising Manager’ on the top left-hand corner. 
+
+    7. Click on the translation language, then on the pot template
     
-    3.  Update the templates:
-    http://translate.openx.org/projects/advman/admin.html?doupdatelanguage=1&updatelanguage=en
-    
-    4.  Translate (at least English!):
-    http://translate.openx.org/en/advman/index.html?editing=1
-    
-    5.  Generate the .mo file for all languages:
-    cd ~/code/advertising-manager/trunk/languages/
-    rm *.mo
-    curl http://translate.openx.org/ar/advman/advman.mo -o advman-ar.mo
-    curl http://translate.openx.org/cs/advman/advman.mo -o advman-cs_CZ.mo
-    curl http://translate.openx.org/de/advman/advman.mo -o advman-de_DE.mo
-    curl http://translate.openx.org/el/advman/advman.mo -o advman-el.mo
-    curl http://translate.openx.org/en/advman/advman.mo -o advman-en_US.mo
-    curl http://translate.openx.org/es/advman/advman.mo -o advman-es_ES.mo
-    curl http://translate.openx.org/he/advman/advman.mo -o advman-he_IL.mo
-    curl http://translate.openx.org/hu/advman/advman.mo -o advman-hu_HU.mo
-    curl http://translate.openx.org/id/advman/advman.mo -o advman-id_ID.mo
-    curl http://translate.openx.org/ja/advman/advman.mo -o advman-ja.mo
-    curl http://translate.openx.org/ko/advman/advman.mo -o advman-ko_KR.mo
-    curl http://translate.openx.org/pt_BR/advman/advman.mo -o advman-pt_BR.mo
-    curl http://translate.openx.org/pt_PT/advman/advman.mo -o advman-pt_PT.mo
-    curl http://translate.openx.org/ru/advman/advman.mo -o advman-ru_RU.mo
-    curl http://translate.openx.org/sv/advman/advman.mo -o advman-sv_SE.mo
-    curl http://translate.openx.org/tr/advman/advman.mo -o advman-tr.mo
-    svn add *.mo
-    svn ci -m "Updated languages from translation server"
-    
-    New language names follow the ISO format used in Wordpress:
-    http://codex.wordpress.org/WordPress_Localization
-    
-    New language:
-    Add the 'nobody' account permission:  Compile PO Files
-    ex:  http://translate.openx.org/ru/advman/admin.html
+    8. Download for translation
+    NOTE: ‘Download for translation’ generates a po file consisting of everything in the pot file.
+    ‘Download only reviewed translations’ generates a po file consisting of only the translations that were
+    saved and reviewed.
+
+    9. Copy po file to /languages, then add and commit file:
+    svn add advman-lang.po
+    svn commit -m “adding new translation files”
+
+    10. Convert po file to mo file:
+    msgfmt -o advman-lang.po advman-lang.mo
+
 
 INCREASE VERSION NUMBER
     1.  in the comments at the top of advertising-manager.php
