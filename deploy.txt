@@ -15,15 +15,16 @@ TRANSLATIONS
 
     5. Click ‘Translate Now’ to translate
     
-    6. After translating and reviewing, go to Advertising Manager Overview page by clicking
-    ‘Advertising Manager’ on the top left-hand corner. 
+    6. After translating and reviewing, go to Advertising Manager Overview page by
+    clicking ‘Advertising Manager’ on the top left-hand corner. 
 
     7. Click on the translation language, then on the pot template
     
     8. Download for translation
-    NOTE: ‘Download for translation’ generates a po file consisting of everything in the pot file.
-    ‘Download only reviewed translations’ generates a po file consisting of only the translations that were
-    saved and reviewed.
+    NOTE: ‘Download for translation’ generates a po file consisting of everything in the
+    pot file. 
+    ‘Download only reviewed translations’ generates a po file consisting of only the
+    translations that were saved and reviewed.
 
     9. Copy po file to /languages, then add and commit file:
     svn add advman-lang.po
