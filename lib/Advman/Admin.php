@@ -181,6 +181,8 @@ class Advman_Admin
                 case 'default' :
                     $default = ($advman_engine->getSetting('default-ad') != $ad->name ? $ad->name : '');
                     $advman_engine->setSetting('default-ad', $default);
+                    $msg = $default ? __('Ad is now default') : __('Ad is no longer default');
+                    Advman_Admin::add_notice('advman-notice-once', $msg, false);
                     break;
 
                 case 'delete' :

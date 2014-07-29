@@ -139,7 +139,8 @@ class Advman_Template_Table extends WP_List_Table
 
     function column_def($item)
     {
-        return $item['def'] ? __('Yes', 'advman') : __('No', 'advman');
+        $default = $item['def'] ? __('Yes', 'advman') : __('No', 'advman');
+        return "<a href='?page=advman-list&action=default&ad={$item['id']}'>" . $default . "</a>";
     }
 
     function column_date($item)

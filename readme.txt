@@ -105,11 +105,15 @@ More detailed instuctions can be found in the documentation:  [Concepts - Placin
 
 == Upgrade Notice ==
 
-= 3.4.25 =
-* Added experimental ad quality feature - url verification
-* Clean up the way notices work
+= 3.4.26 =
+* Allowed default ad to be toggled from ad list again
+* Changed Ad.js URL to be from CDN
 
 == Change Log ==
+
+= 3.4.26 =
+* Allowed default ad to be toggled from ad list again
+* Changed Ad.js URL to be from CDN
 
 = 3.4.25 =
 * Added experimental ad quality feature - url verification
