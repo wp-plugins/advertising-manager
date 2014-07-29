@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40
 Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, rotate, widget
 Requires at least: 2.5
 Tested up to: 3.9.1
-Stable tag: 3.4.25
+Stable tag: 3.4.26
 
 Easily place and rotate ads on inside your blog posts, templates, or sidebar widgets. Simple to use, powerful features.  Used by thousands of blogs.
 
