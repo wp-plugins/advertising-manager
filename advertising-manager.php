@@ -71,8 +71,8 @@ function advman_init()
 
     // Add ad quality script if enabled
     if ($advman_engine->getSetting('enable-adjs')) {
-//        wp_enqueue_script('adjs', '//cdn.adjs.net/publisher.ad.js');
-        wp_enqueue_script('adjs','//s3.amazonaws.com/js.adjsdemo.com/publisher.ad.js');
+        wp_enqueue_script('adjs', '//cdn.adjs.net/publisher.ad.min.js');
+//        wp_enqueue_script('adjs','//s3.amazonaws.com/js.adjsdemo.com/publisher.ad.js');
     }
 }
 
