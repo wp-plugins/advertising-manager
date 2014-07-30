@@ -14,3 +14,6 @@
 4. Click ‘Advertising Manager -> advertising-manager.pot’ 
 
 5. Click ‘Translate Now’ to begin translating.
+
+6. Don’t forget to save.
+

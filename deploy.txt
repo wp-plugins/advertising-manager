@@ -1,6 +1,8 @@
 // HERE IS HOW TO DEPLOY A VERSION OF ADVERTISING MANAGER
 
 TRANSLATIONS
+
+  NEW:
     1.  Generate a translation pot template here:
     http://wordpress.org/extend/plugins/advertising-manager/admin/
 
@@ -13,25 +15,25 @@ TRANSLATIONS
     4. If an mo file exists for that language, convert to po file, then upload po file:
     msgunfmt advman-lang.mo > advman-lang.po
 
-    5. Click ‘Translate Now’ to translate
+  COMPLETED:
+    1. On Advertising Manager Overview page, click on the translation language, then on
+    the pot template
     
-    6. After translating and reviewing, go to Advertising Manager Overview page by
-    clicking ‘Advertising Manager’ on the top left-hand corner. 
-
-    7. Click on the translation language, then on the pot template
-    
-    8. Download for translation
+    2. Download for translation
     NOTE: ‘Download for translation’ generates a po file consisting of everything in the
     pot file. 
     ‘Download only reviewed translations’ generates a po file consisting of only the
     translations that were saved and reviewed.
 
-    9. Copy po file to /languages, then add and commit file:
+    3. Copy po file to /languages, then add and commit file:
     svn add advman-lang.po
     svn commit -m “adding new translation files”
 
-    10. Convert po file to mo file:
+    4. Convert po file to mo file:
     msgfmt -o advman-lang.po advman-lang.mo
+
+    5. Commit mo files:
+    svn commit -m “adding new mo files”
 
 
 INCREASE VERSION NUMBER
