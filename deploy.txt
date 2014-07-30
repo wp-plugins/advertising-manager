@@ -10,11 +10,6 @@ TRANSLATIONS
     https://www.transifex.com/projects/p/advertising-manager-1/resources/
     and clicking on ‘add new resource.’
 
-    3. Click the translation template and select the translation language
-
-    4. If an mo file exists for that language, convert to po file, then upload po file:
-    msgunfmt advman-lang.mo > advman-lang.po
-
   COMPLETED:
     1. On Advertising Manager Overview page, click on the translation language, then on
     the pot template
