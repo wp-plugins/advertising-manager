@@ -1,13 +1,19 @@
 // HERE IS HOW TO DEPLOY A VERSION OF ADVERTISING MANAGER
 
 TRANSLATIONS
+- Generate a new POT file
+
+cd ~/code/wordpress/advertising-manager/trunk
+php ../../tools/i18n/makepot.php wp-plugin .
+mv ./advertising-manager.pot ./languages
+svn ci languages/advertising-manager.pot -m "Updated i18n source file"
 
   NEW:
     1.  Generate a translation pot template here:
-    http://wordpress.org/extend/plugins/advertising-manager/admin/
+    http://wordpress.org/plugins/advertising-manager/admin/?action=pot
 
     2. Sign into Transifex and add the pot file by going to:
-    https://www.transifex.com/projects/p/advertising-manager-1/resources/
+    https://www.transifex.com/projects/p/advertising-manager/resources/
     and clicking on ‘add new resource.’
 
   COMPLETED:

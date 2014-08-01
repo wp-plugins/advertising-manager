@@ -31,3 +31,6 @@ apt-get update
 apt-get install mysql-server
 service mysql restart
 exit
+
+# Translations
+pip install
