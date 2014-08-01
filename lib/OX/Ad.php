@@ -145,14 +145,16 @@ class OX_Ad extends OX_Plugin
 		// Filter by category
 		$categoryFilter = $this->get('show-category', true);
 		if (is_array($categoryFilter)) {
+            $found = false;
 			$categories = get_the_category();
-			$found = false;
-			foreach ($categories as $category) {
-				if (in_array($category->cat_ID, $categoryFilter)) {
-					$found = true;
-					break;
-				}
-			}
+            if ($categories) {
+                foreach ($categories as $category) {
+                    if (in_array($category->cat_ID, $categoryFilter)) {
+                        $found = true;
+                        break;
+                    }
+                }
+            }
 			if (!$found) {
 				return false;
 			}
@@ -161,14 +163,16 @@ class OX_Ad extends OX_Plugin
 		// Filter by tag
 		$tagFilter = $this->get('show-tag', true);
 		if (is_array($tagFilter)) {
+            $found = false;
 			$tags = get_the_tags();
-			$found = false;
-			foreach ($tags as $tag) {
-				if (in_array($tag->term_id, $tagFilter)) {
-					$found = true;
-					break;
-				}
-			}
+            if ($tags) {
+                foreach ($tags as $tag) {
+                    if (in_array($tag->term_id, $tagFilter)) {
+                        $found = true;
+                        break;
+                    }
+                }
+            }
 			if (!$found) {
 				return false;
 			}
