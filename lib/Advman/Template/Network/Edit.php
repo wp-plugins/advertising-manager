@@ -2,7 +2,7 @@
 require_once(ADVMAN_PATH . "/lib/Advman/Template/Edit.php");
 require_once(ADVMAN_LIB . '/Template/Metabox.php');
 
-class Advman_Template_Edit_Network extends Advman_Template_Edit
+class Advman_Template_Network_Edit extends Advman_Template_Edit
 {
 	function display($ad)
 	{

@@ -1,6 +1,6 @@
 <?php
 require_once (ADVMAN_LIB . '/Tools.php');
-require_once (ADVMAN_LIB . '/List.php');
+require_once (ADVMAN_LIB . '/AdList.php');
 
 class Advman_Admin
 {
@@ -11,17 +11,17 @@ class Advman_Admin
 	{
 		global $wp_version;
 
-        add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'), ADVMAN_URL . '/images/advman-menu-icon.svg');
-        $listhook = add_submenu_page('advman-list', __('All Ads', 'advman'), __('All Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'));
+        add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-list', array('Advman_Ad_List','process'), ADVMAN_URL . '/images/advman-menu-icon.svg');
+        $ad_list_hook = add_submenu_page('advman-list', __('All Ads', 'advman'), __('All Ads', 'advman'), 8, 'advman-list', array('Advman_Ad_List','process'));
         add_submenu_page('advman-list', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-ad-new', array('Advman_Admin','create'));
         add_submenu_page(null, __('Edit Ad', 'advman'), __('Edit', 'advman'), 8, 'advman-ad', array('Advman_Admin','edit_ad'));
         add_submenu_page(null, __('Edit Network', 'advman'), __('Edit', 'advman'), 8, 'advman-network', array('Advman_Admin','edit_network'));
         add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 
         // List items
-        add_action("load-$listhook", array('Advman_List', 'add_options'));
-        add_action("admin_head-$listhook", array('Advman_List', 'add_contextual_help' ));
-        add_action("admin_head-$listhook", array('Advman_List', 'add_css' ));
+        add_action("load-$ad_list_hook", array('Advman_Ad_List', 'add_options'));
+        add_action("admin_head-$ad_list_hook", array('Advman_Ad_List', 'add_contextual_help' ));
+        add_action("admin_head-$ad_list_hook", array('Advman_Ad_List', 'add_css' ));
 
 		add_action('admin_enqueue_scripts', array('Advman_Admin', 'admin_enqueue_scripts'));
 
@@ -49,7 +49,7 @@ class Advman_Admin
         switch ($page) {
             case 'advman-ad-new'   : Advman_Admin::import_action($action); break;
             case 'advman-ad'       : Advman_Admin::ad_action($action); break;
-            case 'advman-list'     : Advman_List::init(); break;
+            case 'advman-list'     : Advman_Ad_List::init(); break;
             case 'advman-network'  : Advman_Admin::network_action($action); break;
         }
     }
@@ -332,27 +332,27 @@ class Advman_Admin
             case 'advman-ad' :
                 $ad = Advman_Tools::get_current_ad();
                 if ($ad) {
-                    $template = Advman_Tools::get_template('Edit_Ad', $ad);
+                    $template = Advman_Tools::get_template('Ad_Edit', $ad);
                     $template->display($ad);
                 }
                 break;
 
             case 'advman-ad-new' :
-				$template = Advman_Tools::get_template('Create');
+				$template = Advman_Tools::get_template('Ad_Create');
 				$template->display();
 				break;
 			
             case 'advman-network' :
                 $network = Advman_Tools::get_current_network();
                 if ($network) {
-                    $template = Advman_Tools::get_template('Edit_Network', $network);
+                    $template = Advman_Tools::get_template('Network_Edit', $network);
                     $template->display($network);
                 }
                 break;
 		}
 		
 		if (!$template) {
-			$template = Advman_Tools::get_template('List');
+			$template = Advman_Tools::get_template('Ad_List');
 			$template->display();
 		}
 	}
@@ -380,7 +380,7 @@ class Advman_Admin
 	 */
 	function create()
 	{
-		$template = Advman_Tools::get_template('Create');
+		$template = Advman_Tools::get_template('Ad_Create');
 		$template->display();
 	}
 
@@ -390,14 +390,14 @@ class Advman_Admin
     function edit_ad()
     {
         $ad = Advman_Tools::get_current_ad();
-        $template = Advman_Tools::get_template('Edit_Ad', $ad);
+        $template = Advman_Tools::get_template('Ad_Edit', $ad);
         $template->display($ad);
     }
 
     function edit_network()
     {
         $network = Advman_Tools::get_current_network();
-        $template = Advman_Tools::get_template('Edit_Network', $network);
+        $template = Advman_Tools::get_template('Network_Edit', $network);
         $template->display($network);
     }
 

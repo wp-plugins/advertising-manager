@@ -1,5 +1,5 @@
 <?php
-class Advman_Template_Create
+class Advman_Template_Ad_Create
 {
 	function display($target = null)
 	{

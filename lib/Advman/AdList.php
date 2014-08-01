@@ -3,7 +3,7 @@ require_once (ADVMAN_LIB . '/Tools.php');
 require_once (ADVMAN_LIB . '/Template/Table.php');
 //require_once (ADVMAN_LIB . '/Notice.php');
 
-class Advman_List
+class Advman_Ad_List
 {
     // Perform any work here before anything gets written to the screen
     function init()
