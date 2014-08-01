@@ -8,7 +8,7 @@ if( ! class_exists( 'WP_List_Table' ) ) {
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
 
-class Advman_Template_Table extends WP_List_Table
+class Advman_Template_Slot_Table extends WP_List_Table
 {
 
     function __construct(){
@@ -83,7 +83,6 @@ class Advman_Template_Table extends WP_List_Table
                             'format' => $this->displayFormat($ad),
                             'active' => ($ad->active),
                             'def' => ($ad->name == $defaultAdName),
-                            'stats' => empty($stats[$date][$ad->id]) ? 0 : $stats[$date][$ad->id],
                             'date' => $ts,
                             'date1' => $human,
                             'date2' => $formatted,
@@ -156,7 +155,6 @@ class Advman_Template_Table extends WP_List_Table
             case 'format':
             case 'active':
             case 'def':
-            case 'stats':
             case 'date':
                 return $item[ $column_name ];
             default:
@@ -173,7 +171,6 @@ class Advman_Template_Table extends WP_List_Table
             'format'  => __( 'Format', 'advman' ),
             'active'  => __( 'Active', 'advman' ),
             'def'     => __( 'Default', 'advman' ),
-            'stats'   => __( 'Views Today', 'advman' ),
             'date'    => __( 'Last Edit', 'advman' )
         );
         return $columns;
@@ -187,7 +184,6 @@ class Advman_Template_Table extends WP_List_Table
             'format' => array('format',false),
             'active' => array('active',false),
             'def' => array('def',false),
-            'stats' => array('stats',false),
             'date' => array('date',false),
         );
 

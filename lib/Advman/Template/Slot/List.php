@@ -1,10 +1,10 @@
 <?php
-class Advman_Template_Ad_List
+class Advman_Template_Slot_List
 {
 	function display($target = null, $filter = null)
 	{
 		global $advman_engine;
-		$ads = $advman_engine->getAds();
+		$slots = $advman_engine->getSlots();
 		$date = date('Y-m-d');
 		
 		$adCount = 0;
