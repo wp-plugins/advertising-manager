@@ -4,7 +4,8 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40
 Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, rotate, widget
 Requires at least: 2.5
 Tested up to: 3.9.1
-Stable tag: 3.4.26
+Stable tag: 3.4.27
+License: GPLv2 or later
 
 Easily place and rotate ads on inside your blog posts, templates, or sidebar widgets. Simple to use, powerful features.  Used by thousands of blogs.
 
@@ -31,9 +32,15 @@ Related Links:
 
 == Installation ==
 
-1. Unzip the package and upload the advertising-manager directory into your wp-content/plugins directory
-1. Activate the plugin at the plugin administration page
-1. Add your ad networks by clicking 'Create new' under the 'Ads' menu.  Manage your ad networks by clicking 'Edit' under the 'Ads' menu.
+1. Under the 'Plugins' menu in your Wordpress Admin console, click 'Add New'.
+1. Search for 'advertising-manager'.
+1. The first item should be 'Advertising Manager' by Scott Switzer.  Click the 'Install Now' button.
+1. Click 'Ok' if an alert box appears.
+1. After the plugin installs, click 'Activate Plugin'.
+
+== Usage ==
+
+1. Add your ads by clicking 'Create New' under the 'Ads' menu.
 1. Place ads in your template by adding '<?php advman_ad(name) ?>' to your template in the place you want to see an ad (where 'name' is the name of your ad).
 1. Place ads in your blog posts and pages by adding '[ad#name]' to your blog post (where 'name' is the name of your ad), or by using the 'Insert Ad' dropdown from the edit toolbar.
 1. Place ads in your sidebar by dragging the 'Advertisement' widget onto your sidebar, and selecting the ad you want to display
@@ -63,21 +70,13 @@ Yes.
 
 = Can Advertising Manager work in my language? =
 Yes.  Advertising Manager is localised.  If your blog is in another language, and Advertising Manager shows in English, then it is most likely that a translation has not been done.
-Don't worry - if you are a native speaker in English as well as your local language, you can help out!  Information on how to get involved can be found here:
+Don't worry - if you are a native speaker in English as well as your local language, you can help out!  Advertising Manager translations can be updated here:
 
-NOTE:  Translations are in the process of being upgraded to a new technology - updated instructions will happen in the next version
+https://www.transifex.com/projects/p/advertising-manager/
 
 = Do I still need Advertising Manager now I can manage ads through Google's system? =
 
-Yes.  Advertising manager allows you to rotate ads, easily turn on/off ads, place them in your blog, and many features other than configuration of the ad colors and format.  It a critical tool to use if you want to make more from your advertising.
-
-= Why does changing Ad Format/Dimensions sometimes not change the size of the ad? =
-
-For some ad networks (e.g. newer Adsense tags, WidgetBucks, Adroll, etc.) the dimensions of ads are managed through the online interface. There is no way to change these settings from within the WordPress system that would work reliably. You do not have to update these dimension settings if you update your Ad online, however, it can be useful in correctly identifying 'Alternate Ads' for AdSense blocks.
-
-= How do I place Ad code at the top, bottom, left, right, etc. of the page? =
-
-There is a (nice tutorial here)[http://www.tamba2.org.uk/wordpress/adsense/] which explains positioning using code in template files. You can use this together with Advertising Manager: just place the ad code tags <?php advman_ad('name'); ?> where it says "place code here". 
+Yes.  Advertising manager allows you to rotate ads, easily turn on/off ads, place them in your blog, and many other features.  It a critical tool to use if you want to make more from your advertising.
 
 = How can I share revenue with my authors? =
 
@@ -86,8 +85,6 @@ There is a (nice tutorial here)[http://www.tamba2.org.uk/wordpress/adsense/] whi
 1.  Name both ads the same - this will allow them to rotate.
 1.  In your author's ad, be sure to select the authors username in Display Options
 1.  Set the weights of the ads according to your revenue share.  The easiest way to do this is to set YOUR ad weight to 36, and then set the weight of your author's ad according to the revenue share deal.  For 10% revenue share, set the author ad weight to 4; 20% = 9; 33% = 18; 40% = 24; 50% = 36; 60% = 54; 66.7% = 72; 70% = 84; 80% = 144; 90% = 324.  For the nerdy wonks out there, the formula is (AUTHOR AD WEIGHT) = (MY AD WEIGHT * REVENUE SHARE) / (1 - REVENUE SHARE)
-
-More detailed instuctions can be found in the documentation:  [Concepts - Placing ads on your blog](http://code.openx.org/wiki/advertising-manager/Placing_ads_on_your_blog)
 
 
 == To Do ==
@@ -100,16 +97,19 @@ More detailed instuctions can be found in the documentation:  [Concepts - Placin
 * By default, show a placeholder ad (not the real ad) for admin users so that ad quality is higher
 * Add ability to show in an email
 * Send daily and weekly statistics information
-* Add version information to the footer in admin screens of advman
 
 
 == Upgrade Notice ==
 
-= 3.4.26 =
-* Allowed default ad to be toggled from ad list again
-* Changed Ad.js URL to be from CDN
+= 3.4.27 =
+* Updated translations to use Transifex (https://www.transifex.com/projects/p/advertising-manager/)
+* Updated deployment instructions with new translation methodology
 
 == Change Log ==
+
+= 3.4.27 =
+* Updated translations to use Transifex (https://www.transifex.com/projects/p/advertising-manager/)
+* Updated deployment instructions with new translation methodology
 
 = 3.4.26 =
 * Allowed default ad to be toggled from ad list again
@@ -249,6 +249,7 @@ More detailed instuctions can be found in the documentation:  [Concepts - Placin
 
 This plugin is released under the GPL - you can use it free of charge on your personal or commercial blog. Make sure to submit back to the project any changes that you make!
 
+
 == Translations ==
 
-The plugin comes with various translations, please refer to the WordPress Codex for more information about activating the translation. If you want to help to translate the plugin to your language, please have a look at the advman.pot file which contains all defintions and may be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poedit](http://www.poedit.net/) (Windows).
+Advertising Manager is translated into several different languages.  If a translation is missing or incomplete, and you want to help, please head over to the [Advertising Manager Transifex](https://www.transifex.com/projects/p/advertising-manager/) project to help with your translation.
