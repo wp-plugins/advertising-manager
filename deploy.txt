@@ -6,43 +6,31 @@ TRANSLATIONS
 cd ~/code/wordpress/advertising-manager/trunk
 php ../../tools/i18n/makepot.php wp-plugin .
 mv ./advertising-manager.pot ./languages
-svn ci languages/advertising-manager.pot -m "Updated i18n source file"
-
-  NEW:
-    1.  Generate a translation pot template here:
-    http://wordpress.org/plugins/advertising-manager/admin/?action=pot
-
-    2. Sign into Transifex and add the pot file by going to:
-    https://www.transifex.com/projects/p/advertising-manager/resources/
-    and clicking on ‘add new resource.’
-
-  COMPLETED:
-    1. On Advertising Manager Overview page, click on the translation language, then on
-    the pot template
-    
-    2. Download for translation
-    NOTE: ‘Download for translation’ generates a po file consisting of everything in the
-    pot file. 
-    ‘Download only reviewed translations’ generates a po file consisting of only the
-    translations that were saved and reviewed.
-
-    3. Copy po file to /languages, then add and commit file:
-    svn add advman-lang.po
-    svn commit -m “adding new translation files”
-
-    4. Convert po file to mo file:
-    msgfmt -o advman-lang.po advman-lang.mo
-
-    5. Commit mo files:
-    svn commit -m “adding new mo files”
+tx pull -a
+cd ~/code/wordpress/advertising-manager/trunk/languages
+msgfmt -o advman-ar.mo advman-ar.po
+msgfmt -o advman-de_DE.mo advman-de_DE.po
+msgfmt -o advman-el.mo advman-el.po
+msgfmt -o advman-en_US.mo advman-en_US.po
+msgfmt -o advman-es_ES.mo advman-es_ES.po
+msgfmt -o advman-hu_HU.mo advman-hu_HU.po
+msgfmt -o advman-id_ID.mo advman-id_ID.po
+msgfmt -o advman-ja.mo advman-ja.po
+msgfmt -o advman-ko_KR.mo advman-ko_KR.po
+msgfmt -o advman-pt_BR.mo advman-pt_BR.po
+msgfmt -o advman-ru_RU.mo advman-ru_RU.po
+msgfmt -o advman-th.mo advman-th.po
+msgfmt -o advman-tr.mo advman-tr.po
+svn ci . -m "Updated i18n languages and source files"
 
 
 INCREASE VERSION NUMBER
     1.  in the comments at the top of advertising-manager.php
     2.  in the code at the top of advertising-manager.php
-    3.  in the readme file
-    4.  in this build file (search for the version number 3.4.26 - there are a number of places in this file where the version exists)
-    5.  check the upgrade to make sure any version upgrades are correct
+    3.  in the readme file (stable tag at the top)
+    4.  In the readme file (Changelog)
+    5.  in this build file (search for the version number 3.4.27 - there are a number of places in this file where the version exists)
+    6.  check the upgrade to make sure any version upgrades are correct
 
 README
     1.  Add to the changelog
@@ -59,8 +47,8 @@ CHECK IN ALL FILES
 DEPLOYMENT
 - Tag the version in wordpress
     cd ~/code/wordpress/advertising-manager
-    svn cp trunk tags/3.4.26
-    svn ci -m "tagging version 3.4.26"
+    svn cp trunk tags/3.4.27
+    svn ci -m "tagging version 3.4.27"
 
 - Add a zipped file to the repository:
     Follow the build process below:
@@ -70,7 +58,7 @@ DEPLOYMENT
     cd ~/build
     svn export http://svn.wp-plugins.org/advertising-manager/trunk
     mv trunk advertising-manager
-    zip -r advertising-manager-3.4.26.zip advertising-manager/
+    zip -r advertising-manager-3.4.27.zip advertising-manager/
     
     http://code.openx.org/projects/list_files/advertising-manager
 

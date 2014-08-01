@@ -7,9 +7,9 @@ msgstr ""
 "Project-Id-Version: Advertising Manager\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/advertising-manager\n"
 "POT-Creation-Date: 2014-07-29 16:17:52+00:00\n"
-"PO-Revision-Date: 2014-07-29 18:33+0000\n"
+"PO-Revision-Date: 2014-07-30 18:40+0000\n"
 "Last-Translator: Carina Bunnag <systems@adjs.io>\n"
-"Language-Team: Thai (http://www.transifex.com/projects/p/advertising-manager-1/language/th/)\n"
+"Language-Team: Thai (http://www.transifex.com/projects/p/advertising-manager/language/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -287,7 +287,7 @@ msgstr ""
 
 #: lib/Advman/Template/Metabox.php:111
 msgid "Search"
-msgstr ""
+msgstr "ค้นหา"
 
 #: lib/Advman/Template/Metabox.php:122
 msgid "By Page Type:"
