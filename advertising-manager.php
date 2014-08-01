@@ -34,10 +34,6 @@ function advman_init()
 	define('OX_LIB', ADVMAN_PATH . '/lib/OX');
 	define('ADVMAN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/advertising-manager');
 
-	// Get the template path
-	$version = (version_compare($wp_version,"2.7-alpha", "<")) ? 'WP2.6' : 'WP2.7';
-	define('ADVMAN_TEMPLATE_PATH', ADVMAN_PATH . "/lib/Advman/Template/{$version}");
-
 	// Load the language file
 	load_plugin_textdomain('advman', false, 'advertising-manager/languages');
 	
@@ -61,13 +57,8 @@ function advman_init()
     }
 	
 	// Add widgets
-	if (version_compare($wp_version,"2.8-alpha", "<")) {
-		include_once(ADVMAN_LIB . '/Widget_Old.php');
-		add_action('widgets_init',  array('Advman_Widget', 'init'), 1);
-	} else {
-		include_once(ADVMAN_LIB . '/Widget.php');
-		add_action('widgets_init', create_function('', 'return register_widget("Advman_Widget");'));
-	}
+    include_once(ADVMAN_LIB . '/Widget.php');
+    add_action('widgets_init', create_function('', 'return register_widget("Advman_Widget");'));
 
     // Add ad quality script if enabled
     if ($advman_engine->getSetting('enable-adjs')) {

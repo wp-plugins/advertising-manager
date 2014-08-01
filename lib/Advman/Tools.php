@@ -104,8 +104,8 @@ class Advman_Tools
 	 */
 	function get_template($name)
 	{
-		$namePath = str_replace('_', '/', $name);
-		include_once(ADVMAN_TEMPLATE_PATH . "/{$namePath}.php");
+        $namePath = str_replace('_', '/', $name);
+		include_once(ADVMAN_PATH . "/lib/Advman/Template/{$namePath}.php");
 		$className = "Advman_Template_{$name}";
 		return new $className;
 	}
