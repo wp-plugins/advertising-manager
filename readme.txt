@@ -101,11 +101,17 @@ Yes.  Advertising manager allows you to rotate ads, easily turn on/off ads, plac
 
 == Upgrade Notice ==
 
-= 3.4.27 =
-* Updated translations to use Transifex (https://www.transifex.com/projects/p/advertising-manager/)
-* Updated deployment instructions with new translation methodology
+= 3.4.28 =
+* Fixed bug when using filtering by tag or category
+* Removed templates for wordpress versions 2.4 and earlier
+* Reformatted code in preparation for ad slots
 
 == Change Log ==
+
+= 3.4.28 =
+* Fixed bug when using filtering by tag or category
+* Removed templates for wordpress versions 2.4 and earlier
+* Reformatted code in preparation for ad slots
 
 = 3.4.27 =
 * Updated translations to use Transifex (https://www.transifex.com/projects/p/advertising-manager/)
