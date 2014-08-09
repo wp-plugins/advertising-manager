@@ -3,7 +3,7 @@ Contributors: switzer
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40switzer%2eorg&item_name=Do%20you%20like%20Advertising%20Manager%20for%20Wordpress%3F%20%20Please%20help%20development%20by%20donating%21&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
 Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, rotate, widget
 Requires at least: 2.5
-Tested up to: 3.9.1
+Tested up to: 3.9.2
 Stable tag: 3.4.27
 License: GPLv2 or later
 
@@ -101,11 +101,17 @@ Yes.  Advertising manager allows you to rotate ads, easily turn on/off ads, plac
 
 == Upgrade Notice ==
 
-= 3.4.27 =
-* Updated translations to use Transifex (https://www.transifex.com/projects/p/advertising-manager/)
-* Updated deployment instructions with new translation methodology
+= 3.4.28 =
+* Fixed bug when using filtering by tag or category
+* Removed templates for wordpress versions 2.4 and earlier
+* Reformatted code in preparation for ad slots
 
 == Change Log ==
+
+= 3.4.28 =
+* Fixed bug when using filtering by tag or category
+* Removed templates for wordpress versions 2.4 and earlier
+* Reformatted code in preparation for ad slots
 
 = 3.4.27 =
 * Updated translations to use Transifex (https://www.transifex.com/projects/p/advertising-manager/)
