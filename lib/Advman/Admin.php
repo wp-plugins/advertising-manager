@@ -15,6 +15,7 @@ class Advman_Admin
         $ad_list_hook = add_submenu_page('advman-list', __('All Ads', 'advman'), __('All Ads', 'advman'), 8, 'advman-list', array('Advman_Ad_List','process'));
         add_submenu_page('advman-list', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-ad-new', array('Advman_Admin','create'));
         add_submenu_page(null, __('Edit Ad', 'advman'), __('Edit', 'advman'), 8, 'advman-ad', array('Advman_Admin','edit_ad'));
+        add_submenu_page(null, __('Preview Ad', 'advman'), __('Preview', 'advman'), 8, 'advman-ad-preview', array('Advman_Admin','preview_ad'));
         add_submenu_page(null, __('Edit Network', 'advman'), __('Edit', 'advman'), 8, 'advman-network', array('Advman_Admin','edit_network'));
         add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 
@@ -47,10 +48,10 @@ class Advman_Admin
         // Check to see if the activate action is being fired
         Advman_Admin::notice_action($action);
         switch ($page) {
-            case 'advman-ad-new'   : Advman_Admin::import_action($action); break;
-            case 'advman-ad'       : Advman_Admin::ad_action($action); break;
-            case 'advman-list'     : Advman_Ad_List::init(); break;
-            case 'advman-network'  : Advman_Admin::network_action($action); break;
+            case 'advman-ad-new'     : Advman_Admin::import_action($action); break;
+            case 'advman-ad'         : Advman_Admin::ad_action($action); break;
+            case 'advman-list'       : Advman_Ad_List::init(); break;
+            case 'advman-network'    : Advman_Admin::network_action($action); break;
         }
     }
 
@@ -341,7 +342,15 @@ class Advman_Admin
 				$template = Advman_Tools::get_template('Ad_Create');
 				$template->display();
 				break;
-			
+
+            case 'advman-ad-preview' :
+                $ad = Advman_Tools::get_current_ad();
+                if ($ad) {
+                    $template = Advman_Tools::get_template('Ad_Preview', $ad);
+                    $template->display($ad);
+                }
+                break;
+
             case 'advman-network' :
                 $network = Advman_Tools::get_current_network();
                 if ($network) {
@@ -391,6 +400,13 @@ class Advman_Admin
     {
         $ad = Advman_Tools::get_current_ad();
         $template = Advman_Tools::get_template('Ad_Edit', $ad);
+        $template->display($ad);
+    }
+
+    function preview_ad()
+    {
+        $ad = Advman_Tools::get_current_ad();
+        $template = Advman_Tools::get_template('Ad_Preview', $ad);
         $template->display($ad);
     }
 

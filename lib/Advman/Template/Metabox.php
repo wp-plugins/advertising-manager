@@ -509,7 +509,7 @@ foreach ($available_props as $key => $text) : ?>
 		</div>
 <?php if (!$nw) : ?>
 		<div id="preview-action">
-			<a class="preview button" href="<?php echo $ad->get_preview_url(); ?>" target="wp-preview" id="post-preview" tabindex="4"><?php _e('Preview Ad', 'advman'); ?></a>
+			<a class="preview button" href="<?php echo $ad->get_preview_url(); ?>" id="post-preview" tabindex="4"><?php _e('Preview Ad', 'advman'); ?></a>
 			<input type="hidden" name="wp-preview" id="wp-preview" value="" />
 		</div><!-- preview-action -->
 <?php endif; ?>
