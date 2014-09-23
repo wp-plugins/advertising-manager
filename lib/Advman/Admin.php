@@ -579,7 +579,7 @@ class Advman_Admin
     function activate()
     {
         // Add quality notice
-        $notice = __('Would you like to enable experimental ad quality controls in <strong>Advertising Manager</strong>?', 'advman');
+        $notice = __('Would you like to enable ad quality measurement in <strong>Advertising Manager</strong>?', 'advman');
 //		$question = __('Enable <a>auto optimisation</a>? (RECOMMENDED)', 'advman');
 //		$question = str_replace('<a>', '<a href="http://code.openx.org/wiki/advertising-manager/Auto_Optimization" target="_new">', $question);
         Advman_Admin::add_notice('adjs-beta', $notice, 'learn');
