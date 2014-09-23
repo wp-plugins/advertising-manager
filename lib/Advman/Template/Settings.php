@@ -59,7 +59,7 @@ class Advman_Template_Settings
 			<label for="advman-stats"><input name="advman-stats" type="checkbox" id="advman-stats" value="1"<?php echo $oxStats ? ' checked="checked"' : ''; ?> /> <?php _e('Collect statistics about the number of ads served', 'advman'); ?></label>
 		</fieldset>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php _e('Purge after:', 'advman'); ?> <input type="text" name="advman-purge-stats-days" value="<?php echo $oxPurgeStatsDays; ?>" class="small-text" /> <?php _e('days', 'advman'); ?><br />
-		<span class="setting-description"><?php _e('Collecting statistics about your ad serving will give you insight on how many ads have been viewed by your users.  It is a good idea to purge these stats after 30 days so that your database does not get too full.', 'advman'); ?></span>
+		<span class="setting-description"><?php _e('Collecting statistics about your ad serving will give you insight on how many ads have been viewed by your users.  It is a good idea to purge these stats after maximum 100 days so that your database does not get too full.', 'advman'); ?></span>
 	</td>
 </tr>
 <tr valign="top">
