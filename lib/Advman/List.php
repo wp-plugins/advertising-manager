@@ -1,15 +1,15 @@
 <?php
 require_once (ADVMAN_LIB . '/Tools.php');
-require_once (ADVMAN_LIB . '/Template/Ad/Table.php');
+require_once (ADVMAN_LIB . '/Template/Table/List.php');
 //require_once (ADVMAN_LIB . '/Notice.php');
 
-class Advman_Ad_List
+class Advman_List
 {
     // Perform any work here before anything gets written to the screen
     function init()
     {
-        global $advman_engine, $advman_ad_list;
-        $advman_ad_list = new Advman_Template_Ad_Table();
+        global $advman_engine, $advman_list;
+        $advman_list = new Advman_Template_Table_List();
 
         //Detect when a bulk action is being triggered...
         $action = OX_Tools::sanitize_request_var('action');
@@ -57,7 +57,7 @@ class Advman_Ad_List
         }
     }
 
-    function ad_list_action($action)
+    function list_action($action)
     {
         global $advman_engine;
 
@@ -73,7 +73,7 @@ class Advman_Ad_List
 
     function process()
     {
-        global $advman_ad_list;
+        global $advman_list;
         $q = Advman_Tools::get_search_query();
 
         echo '<div class="wrap"><h2>' . __('Ads', 'advman');
@@ -81,19 +81,19 @@ class Advman_Ad_List
             printf( ' <span class="subtitle">' . __('Search results for &#8220;%s&#8221;', 'advman') . '</span>', $q );
 
         echo '</h2>';
-        $advman_ad_list->views();
-        $advman_ad_list->prepare_items();
+        $advman_list->views();
+        $advman_list->prepare_items();
         ?>
         <form method="get">
             <input type="hidden" name="page" value="advman-list">
             <?php
-            $advman_ad_list->search_box( 'search', 'ad' );
+            $advman_list->search_box( 'search', 'ad' );
             ?>
         </form>
         <form method="post">
             <?php
             wp_nonce_field('advman-bulk-actions');
-            $advman_ad_list->display();
+            $advman_list->display();
             ?>
         </form>
         </div>

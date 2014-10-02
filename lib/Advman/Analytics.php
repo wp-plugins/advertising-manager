@@ -1,15 +1,15 @@
 <?php
 require_once (ADVMAN_LIB . '/Tools.php');
-require_once (ADVMAN_LIB . '/Template/Slot/Table.php');
+require_once (ADVMAN_LIB . '/Template/Table/Analytics.php');
 //require_once (ADVMAN_LIB . '/Notice.php');
 
-class Advman_Ad_Slot
+class Advman_Analytics
 {
     // Perform any work here before anything gets written to the screen
     function init()
     {
-        global $advman_engine, $advman_slot_list;
-        $advman_slot_list = new Advman_Template_Slot_Table();
+        global $advman_engine, $advman_analytics;
+        $advman_analytics = new Advman_Template_Table_Analytics();
 
         //Detect when a bulk action is being triggered...
         $action = OX_Tools::sanitize_request_var('action');
@@ -57,7 +57,7 @@ class Advman_Ad_Slot
         }
     }
 
-    function ad_list_action($action)
+    function ad_analytics_action($action)
     {
         global $advman_engine;
 
@@ -73,27 +73,27 @@ class Advman_Ad_Slot
 
     function process()
     {
-        global $advman_slot_list;
+        global $advman_analytics;
         $q = Advman_Tools::get_search_query();
 
-        echo '<div class="wrap"><h2>' . __('Ads', 'advman');
+        echo '<div class="wrap"><h2>' . __('Analytics', 'advman');
         if (!empty($q))
             printf( ' <span class="subtitle">' . __('Search results for &#8220;%s&#8221;', 'advman') . '</span>', $q );
 
         echo '</h2>';
-        $advman_slot_list->views();
-        $advman_slot_list->prepare_items();
+        $advman_analytics->views();
+        $advman_analytics->prepare_items();
         ?>
         <form method="get">
-            <input type="hidden" name="page" value="advman-list">
+            <input type="hidden" name="page" value="advman-analytics">
             <?php
-            $advman_slot_list->search_box( 'search', 'ad' );
+            $advman_analytics->search_box( 'search', 'ad' );
             ?>
         </form>
         <form method="post">
             <?php
             wp_nonce_field('advman-bulk-actions');
-            $advman_slot_list->display();
+            $advman_analytics->display();
             ?>
         </form>
         </div>
@@ -122,7 +122,7 @@ class Advman_Ad_Slot
             'id'		=> 'overview',
             'title'		=> __('Overview'),
             'content'	=>
-                '<p>' . __('This screen provides access to all of your ads. Each ad is listed in the table below.  You can customize the display of this screen to suit your workflow.') . '</p>'
+                '<p>' . __('This screen shows performance of ads running on your site.  Select the timeframe that you want to view, and all ads that were shown during that timeframe will appear below.') . '</p>'
         ) );
         get_current_screen()->add_help_tab( array(
             'id'		=> 'screen-content',
@@ -134,27 +134,6 @@ class Advman_Ad_Slot
                 '<li>' . __('You can sort the list to order by name, type, format, etc.  Click the title of the column to sort ascending.  Click the title again to sort decending.') . '</li>' .
                 '<li>' . __('You can filter the list of ads by ad status using the text links in the upper left to show All, Active, or Inactive ads. The default view is to show all ads.') . '</li>' .
                 '<li>' . __('You can refine the list to show only ads of a specific type. Click the Filter button after making your selection.') . '</li>' .
-                '</ul>'
-        ) );
-        get_current_screen()->add_help_tab( array(
-            'id'		=> 'action-links',
-            'title'		=> __('Available Actions'),
-            'content'	=>
-                '<p>' . __('Hovering over a row in the posts list will display action links that allow you to manage your post. You can perform the following actions:') . '</p>' .
-                '<ul>' .
-                '<li>' . __('<strong>Edit</strong> takes you to the editing screen for that ad. You can also reach that screen by clicking on the ad name.') . '</li>' .
-                '<li>' . __('<strong>Delete</strong> removes your ad from this list and permanently deletes it.') . '</li>' .
-                '<li>' . __('<strong>Preview</strong> will show you what your rendered ad will look like if you display it on your site.') . '</li>' .
-                '</ul>'
-        ) );
-        get_current_screen()->add_help_tab( array(
-            'id'		=> 'bulk-actions',
-            'title'		=> __('Bulk Actions'),
-            'content'	=>
-                '<p>' . __('You can also perform actions on multiple ads at once. Select the ads you want to act on using the checkboxes, then select the action you want to take from the Bulk Actions menu and click Apply.  Use the checkbox in the header to select or deselect all items.') . '</p>' .
-                '<ul>' .
-                '<li>' . __('<strong>Copy</strong> makes a copy of the selected ads and adds them to the list') . '</li>' .
-                '<li>' . __('<strong>Delete</strong> removes the selected ads from this list and permanently deletes them.') . '</li>' .
                 '</ul>'
         ) );
 

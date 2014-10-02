@@ -1,6 +1,7 @@
 <?php
 require_once (ADVMAN_LIB . '/Tools.php');
-require_once (ADVMAN_LIB . '/AdList.php');
+require_once (ADVMAN_LIB . '/List.php');
+require_once (ADVMAN_LIB . '/Analytics.php');
 
 class Advman_Admin
 {
@@ -11,17 +12,23 @@ class Advman_Admin
 	{
 		global $wp_version;
 
-        add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-list', array('Advman_Ad_List','process'), ADVMAN_URL . '/images/advman-menu-icon.svg');
-        $ad_list_hook = add_submenu_page('advman-list', __('All Ads', 'advman'), __('All Ads', 'advman'), 8, 'advman-list', array('Advman_Ad_List','process'));
+        add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'), ADVMAN_URL . '/images/advman-menu-icon.svg');
+        $list_hook = add_submenu_page('advman-list', __('All Ads', 'advman'), __('All Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'));
+//        $analytics_hook = add_submenu_page('advman-list', __('Analytics', 'advman'), __('Analytics', 'advman'), 8, 'advman-analytics', array('Advman_Analytics','process'));
         add_submenu_page('advman-list', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-ad-new', array('Advman_Admin','create'));
         add_submenu_page(null, __('Edit Ad', 'advman'), __('Edit', 'advman'), 8, 'advman-ad', array('Advman_Admin','edit_ad'));
+        add_submenu_page(null, __('Preview Ad', 'advman'), __('Preview', 'advman'), 8, 'advman-ad-preview', array('Advman_Admin','preview_ad'));
         add_submenu_page(null, __('Edit Network', 'advman'), __('Edit', 'advman'), 8, 'advman-network', array('Advman_Admin','edit_network'));
         add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 
         // List items
-        add_action("load-$ad_list_hook", array('Advman_Ad_List', 'add_options'));
-        add_action("admin_head-$ad_list_hook", array('Advman_Ad_List', 'add_contextual_help' ));
-        add_action("admin_head-$ad_list_hook", array('Advman_Ad_List', 'add_css' ));
+        add_action("load-$list_hook", array('Advman_List', 'add_options'));
+        add_action("admin_head-$list_hook", array('Advman_List', 'add_contextual_help' ));
+        add_action("admin_head-$list_hook", array('Advman_List', 'add_css' ));
+        // Analytics items
+//        add_action("load-$analytics_hook", array('Advman_Analytics', 'add_options'));
+//        add_action("admin_head-$analytics_hook", array('Advman_Analytics', 'add_contextual_help' ));
+//        add_action("admin_head-$analytics_hook", array('Advman_Analytics', 'add_css' ));
 
 		add_action('admin_enqueue_scripts', array('Advman_Admin', 'admin_enqueue_scripts'));
 
@@ -47,10 +54,11 @@ class Advman_Admin
         // Check to see if the activate action is being fired
         Advman_Admin::notice_action($action);
         switch ($page) {
-            case 'advman-ad-new'   : Advman_Admin::import_action($action); break;
-            case 'advman-ad'       : Advman_Admin::ad_action($action); break;
-            case 'advman-list'     : Advman_Ad_List::init(); break;
-            case 'advman-network'  : Advman_Admin::network_action($action); break;
+            case 'advman-ad-new'     : Advman_Admin::import_action($action); break;
+            case 'advman-ad'         : Advman_Admin::ad_action($action); break;
+            case 'advman-analytics'  : Advman_Analytics::init(); break;
+            case 'advman-list'       : Advman_List::init(); break;
+            case 'advman-network'    : Advman_Admin::network_action($action); break;
         }
     }
 
@@ -341,7 +349,15 @@ class Advman_Admin
 				$template = Advman_Tools::get_template('Ad_Create');
 				$template->display();
 				break;
-			
+
+            case 'advman-ad-preview' :
+                $ad = Advman_Tools::get_current_ad();
+                if ($ad) {
+                    $template = Advman_Tools::get_template('Ad_Preview', $ad);
+                    $template->display($ad);
+                }
+                break;
+
             case 'advman-network' :
                 $network = Advman_Tools::get_current_network();
                 if ($network) {
@@ -349,10 +365,15 @@ class Advman_Admin
                     $template->display($network);
                 }
                 break;
+
+            case 'advman-analytics' :
+                $template = Advman_Tools::get_template('Table_Analytics');
+                $template->display();
+                break;
 		}
 		
 		if (!$template) {
-			$template = Advman_Tools::get_template('Ad_List');
+			$template = Advman_Tools::get_template('Table_List');
 			$template->display();
 		}
 	}
@@ -391,6 +412,13 @@ class Advman_Admin
     {
         $ad = Advman_Tools::get_current_ad();
         $template = Advman_Tools::get_template('Ad_Edit', $ad);
+        $template->display($ad);
+    }
+
+    function preview_ad()
+    {
+        $ad = Advman_Tools::get_current_ad();
+        $template = Advman_Tools::get_template('Ad_Preview', $ad);
         $template->display($ad);
     }
 
@@ -579,7 +607,7 @@ class Advman_Admin
     function activate()
     {
         // Add quality notice
-        $notice = __('Would you like to enable experimental ad quality controls in <strong>Advertising Manager</strong>?', 'advman');
+        $notice = __('Would you like to enable ad quality measurement in <strong>Advertising Manager</strong>?', 'advman');
 //		$question = __('Enable <a>auto optimisation</a>? (RECOMMENDED)', 'advman');
 //		$question = str_replace('<a>', '<a href="http://code.openx.org/wiki/advertising-manager/Auto_Optimization" target="_new">', $question);
         Advman_Admin::add_notice('adjs-beta', $notice, 'learn');

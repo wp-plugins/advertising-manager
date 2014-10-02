@@ -2,13 +2,13 @@
 /*
 Plugin Name: Test List Table Example
 */
-require_once (ADVMAN_LIB . '/Tools.php');
+require_once(ADVMAN_LIB . '/Tools.php');
 
 if( ! class_exists( 'WP_List_Table' ) ) {
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
 
-class Advman_Template_Slot_Table extends WP_List_Table
+class Advman_Template_Table_List extends WP_List_Table
 {
 
     function __construct(){

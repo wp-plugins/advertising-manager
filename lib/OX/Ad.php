@@ -229,16 +229,9 @@ class OX_Ad extends OX_Plugin
 
             global $advman_slot;
 
-            $tag = '<div data-adjs="true"';
-            if ($this->get('width')) {
-                $tag .= ' data-width="' . $this->get('width') . '"';
-            }
-            if ($this->get('height')) {
-                $tag .= ' data-height="' . $this->get('height') . '"';
-            }
-            $tag .= ' data-escaped=true id="advman-ad-' . $advman_slot++ . $this->get('id') . "\"><!--\n";
-            $code = $tag . htmlspecialchars($code) . "\n--></div>";
-
+            $tag = '<div id="advman-ad-' . $advman_slot++ . "\">\n";
+            $code = $tag . $code . "\n";
+            $code .= "<script src=\"//cdn.adjs.net/publisher.append.ad.min.js\"></script></div>";
         }
 
         // If adjs - wrap in div, and dislay encoded params
@@ -257,10 +250,16 @@ class OX_Ad extends OX_Plugin
 	
 	function get_preview_url()
 	{
-		return get_bloginfo('wpurl') . '/wp-admin/edit.php?page=advman-list&advman-ad-id=' . $this->id;
+        return admin_url('admin.php?page=advman-ad-preview&ad='.$this->id);
+//		return get_bloginfo('wpurl') . '/wp-admin/edit.php?page=advman-list&advman-ad-id=' . $this->id;
 	}
 
-	function get_ad_formats()
+    function get_edit_url()
+    {
+        return admin_url('admin.php?page=advman-ad&ad='.$this->id);
+    }
+
+    function get_ad_formats()
 	{
 		return array('all' => array('custom', '728x90', '468x60', '120x600', '160x600', '300x250', '125x125'));
 	}

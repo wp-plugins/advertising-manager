@@ -9,7 +9,7 @@ class Advman_Upgrade
 	{
 		$version = Advman_Upgrade::_get_version($data);
 		Advman_Upgrade::_backup($data, $version);
-		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14', '3.4.15', '3.4.20', '3.4.25');
+		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14', '3.4.15', '3.4.20', '3.4.25', '3.4.29');
 		foreach ($versions as $v) {
 			if (version_compare($version, $v, '<')) {
                 $func = 'advman_' . str_replace('.','_',$v);
@@ -21,6 +21,43 @@ class Advman_Upgrade
 	}
 
 
+    function advman_3_4_29(&$data)
+    {
+        // Convert stats to a new format
+        $stats = $data['stats'];
+        $new_stats = array();
+
+        foreach ($stats as $dt => $stat) {
+            foreach ($stat as $adId => $impressions) {
+                $new_stats['d'][$dt]['ad'][$adId]['i'] = $impressions;
+            }
+        }
+        $data['stats'] = $new_stats;
+
+        // Remove publisher-id  (not used)
+        if (isset($data['settings']['publisher-id'])) {
+            unset($data['settings']['publisher-id']);
+        }
+        // Change the purge stats days to 100 if still at the default of 30
+        if (isset($data['settings']['purge-stats-days']) && $data['settings']['purge-stats-days'] == 30) {
+            $data['settings']['purge-stats-days'] = 100;
+        }
+        // Re-send adjs client ID
+        if ($data['settings']['enable-adjs']) {
+
+            $clientId = $data['settings']['adjs-clientid'];
+            if ($clientId) {
+                $url = "http://adjs.io/beta_signups/$clientId";
+                $params = array(
+                    'method'  => 'PUT',
+                    'headers' => array("Accept"=>'application/json'),
+                    'body'    => array('beta_signup' => array("email"=>get_option('admin_email'),"url"=> get_option('siteurl')))
+                );
+
+                wp_remote_request($url, $params);
+            }
+        }
+    }
     function advman_3_4_25(&$data)
     {
         // Remove OpenX Market - does not work

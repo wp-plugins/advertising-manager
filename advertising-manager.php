@@ -1,11 +1,12 @@
 <?php
+
 /*
 Plugin Name: Advertising Manager
 Plugin URI: http://github.com/switzer/advertising-manager/wiki
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer
 Author URI: http://github.com/switzer
-Version: 3.4.28
+Version: 3.4.29
 Text Domain: advman
 Domain Path: /languages
 */
@@ -28,7 +29,7 @@ function advman_init()
     $advman_slot = 1;
 
 
-	define('ADVMAN_VERSION', '3.4.28');
+	define('ADVMAN_VERSION', '3.4.29');
 	define('ADVMAN_PATH', dirname(__FILE__));
 	define('ADVMAN_LIB', ADVMAN_PATH . '/lib/Advman');
 	define('OX_LIB', ADVMAN_PATH . '/lib/OX');
@@ -63,7 +64,6 @@ function advman_init()
     // Add ad quality script if enabled
     if ($advman_engine->getSetting('enable-adjs')) {
         wp_enqueue_script('adjs', '//cdn.adjs.net/publisher.ad.min.js');
-//        wp_enqueue_script('adjs','//s3.amazonaws.com/js.adjsdemo.com/publisher.ad.js');
     }
 }
 

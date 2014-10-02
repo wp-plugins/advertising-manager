@@ -43,6 +43,9 @@
 .fixed .column-advman-type {
 	width: 10%;
 }
+.fixed .column-impressions {
+    text-align: right;
+}
 .fixed .column-advman-notes {
 	width: 15%;
 }
