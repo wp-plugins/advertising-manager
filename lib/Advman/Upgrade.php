@@ -23,6 +23,17 @@ class Advman_Upgrade
 
     function advman_3_4_29(&$data)
     {
+        // Convert stats to a new format
+        $stats = $data['stats'];
+        $new_stats = array();
+
+        foreach ($stats as $dt => $stat) {
+            foreach ($stat as $adId => $impressions) {
+                $new_stats['d'][$dt]['ad'][$adId]['i'] = $impressions;
+            }
+        }
+        $data['stats'] = $new_stats;
+
         // Remove publisher-id  (not used)
         if (isset($data['settings']['publisher-id'])) {
             unset($data['settings']['publisher-id']);

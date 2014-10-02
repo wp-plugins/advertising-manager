@@ -3,8 +3,8 @@ Contributors: switzer
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40switzer%2eorg&item_name=Do%20you%20like%20Advertising%20Manager%20for%20Wordpress%3F%20%20Please%20help%20development%20by%20donating%21&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
 Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, rotate, widget
 Requires at least: 2.5
-Tested up to: 3.9.2
-Stable tag: 3.4.28
+Tested up to: 4.0
+Stable tag: 3.4.29
 License: GPLv2 or later
 
 Easily place and rotate ads on inside your blog posts, templates, or sidebar widgets. Simple to use, powerful features.  Used by thousands of blogs.
@@ -96,17 +96,26 @@ Yes.  Advertising manager allows you to rotate ads, easily turn on/off ads, plac
 * Add usage information at the bottom of the list screen
 * By default, show a placeholder ad (not the real ad) for admin users so that ad quality is higher
 * Add ability to show in an email
-* Send daily and weekly statistics information
+* Move stats into its own table http://codex.wordpress.org/Creating_Tables_with_Plugins
 
+== Bugs ==
+
+* Setting number of ads to display in ad-list does not work.
+* Unable to configure what columns to display in ad-list.
 
 == Upgrade Notice ==
 
-= 3.4.28 =
-* Fixed bug when using filtering by tag or category
-* Removed templates for wordpress versions 2.4 and earlier
-* Reformatted code in preparation for ad slots
+= 3.4.29 =
+* Tested for Wordpress 4.0
+* Reformatted code to prepare for Analytics - coming soon!
+* Fixed bug with previewing ad
 
 == Change Log ==
+
+= 3.4.29 =
+* Tested for Wordpress 4.0
+* Reformatted code to prepare for Analytics - coming soon!
+* Fixed bug with previewing ad
 
 = 3.4.28 =
 * Fixed bug when using filtering by tag or category

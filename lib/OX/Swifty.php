@@ -56,22 +56,108 @@ class OX_Swifty
 	{
 		return $this->dal->update_stats($stats);
 	}
-	
-	function getStats()
-	{
-		return $this->dal->select_stats();
-	}
-	
-	function incrementStats($ad)
+
+    /*
+     * The goal of this method is to give back stats for a date range:
+     * - by entity
+     * - # imps
+     * - # clicks
+     * - # views
+     * - # vs. prev. imps
+     * - # vs. prev. clicks
+     * - # vs. prev. views
+     * returns an array of this structure:
+     * [ad_id][i] = number of impressions
+     * [ad_id][i-] = number of impressions from the immediately previous segment
+     */
+	function getStats($date_range = null, $entity_breakdown = 'ad', $date_breakdown = 'hour', $previous = false)
+    {
+        // If no date range specified, then get it for today
+        if (!$date_range) {
+            $today = date('Y-m-d');
+            $date_range = array(
+                'begin' => $today,
+                'end' => $today
+            );
+        }
+
+        // For now, entity breakdown is always 'ads'
+        $entity_breakdown = 'ads';
+
+        // For now, date breakdown is always by day
+        // $date_breakdown = 'd';
+
+        // If previous timeperiod, find the range of days immediately preceding the date range
+        if ($previous) {
+
+        }
+        // Get the begin and end dates.  These dates are passed in as 'Y-m-d'.
+        $begin = strtotime($date_range['begin']);
+        $end = strtotime($date_range['end']) + 86400;  // begin/end are inclusive, so add a day to the end
+
+        // If you want the previous time period, then some math is needed to get the start and end dates of the previous timeperiod
+        if ($previous) {
+            $diff = ($end - $begin);
+            $begin -= $diff;
+            $end -= $diff;
+        }
+
+        // Get the raw statistics
+        $stats = $this->dal->select_stats();
+
+        // Sum up stats for this date range
+        $sum_stats = array();
+        foreach ($stats['d'] as $dtstr => $stat) {
+            $dt = strtotime($dtstr);
+            if ($dt >= $begin && $dt < $end) {
+                // Get the entity breakdown
+                $s = $stat[$entity_breakdown];
+                // Loop through each of the entities and sum up
+                foreach ($s as $id => $data) {
+                    if (!isset($sum_stats[$id])) {
+                        $sum_stats[$id] = $data;
+                    } else {
+                        foreach($data as $v => $n) {
+                            // Either create a new node or increment the node
+                            $sum_stats[$id][$v] = (!isset($sum_stats[$id][$v])) ? $n : $sum_stats[$id][$v] + $n;
+                        }
+                        $sum_stats[$id]['i'] += $data['i'];
+                    }
+                    if ($entity_breakdown == 'ads') {
+                        $ad = $this->getAd($id);
+                        if ($ad) {
+                            $sum_stats[$id]['name'] = $ad->name;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $sum_stats;
+    }
+
+	function incrementStats($ad, $type = 'i')
 	{
 		$date = date("Y-m-d");
+        $hour = date('H');
 		$adId = $ad->id;
+
 		if ($this->getSetting('stats')) {
-			$stats = $this->getStats();
-			if (empty($stats[$date][$adId])) {
-				$stats[$date][$adId] = 0;
+
+            $stats = $this->dal->select_stats();
+
+            // Increment date stats
+			if (empty($stats['d'][$date]['ads'][$adId][$type])) {
+                $stats['d'][$date]['ads'][$adId][$type] = 0;
 			}
-			$stats[$date][$adId]++;
+            $stats['d'][$date]['ads'][$adId][$type]++;
+
+            // Increment hour stats
+            if (empty($stats['h'][$date][$hour]['ads'][$adId][$type])) {
+                $stats['h'][$date][$hour]['ads'][$adId][$type] = 0;
+            }
+            $stats['h'][$date][$hour]['ads'][$adId][$type]++;
+
 			$this->setStats($stats);
 		}
 	}

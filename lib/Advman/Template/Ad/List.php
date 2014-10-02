@@ -1,5 +1,5 @@
 <?php
-class Advman_Template_Ad_List
+class Advman_Template_List
 {
 	function display($target = null, $filter = null)
 	{
