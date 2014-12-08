@@ -149,7 +149,11 @@ class Advman_Dal extends OX_Dal
 				$stats = $this->data['stats'];
 				return ( empty($stats[$yesterday]) ? 0 : array_sum($stats[$yesterday]) );
 		}
-		return $this->data['settings'][$key];
+        if (array_key_exists($key, $this->data['settings'])) {
+            return $this->data['settings'][$key];
+        }
+
+        return false;
 	}
 	
 	function update_setting($key, $value)
