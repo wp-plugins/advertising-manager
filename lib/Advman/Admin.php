@@ -14,7 +14,7 @@ class Advman_Admin
 
         add_object_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'), ADVMAN_URL . '/images/advman-menu-icon.svg');
         $list_hook = add_submenu_page('advman-list', __('All Ads', 'advman'), __('All Ads', 'advman'), 8, 'advman-list', array('Advman_List','process'));
-//        $analytics_hook = add_submenu_page('advman-list', __('Analytics', 'advman'), __('Analytics', 'advman'), 8, 'advman-analytics', array('Advman_Analytics','process'));
+        $analytics_hook = add_submenu_page('advman-list', __('Analytics', 'advman'), __('Analytics', 'advman'), 8, 'advman-analytics', array('Advman_Analytics','process'));
         add_submenu_page('advman-list', __('Create New Ad', 'advman'), __('Create New', 'advman'), 8, 'advman-ad-new', array('Advman_Admin','create'));
         add_submenu_page(null, __('Edit Ad', 'advman'), __('Edit', 'advman'), 8, 'advman-ad', array('Advman_Admin','edit_ad'));
         add_submenu_page(null, __('Preview Ad', 'advman'), __('Preview', 'advman'), 8, 'advman-ad-preview', array('Advman_Admin','preview_ad'));
@@ -26,9 +26,9 @@ class Advman_Admin
         add_action("admin_head-$list_hook", array('Advman_List', 'add_contextual_help' ));
         add_action("admin_head-$list_hook", array('Advman_List', 'add_css' ));
         // Analytics items
-//        add_action("load-$analytics_hook", array('Advman_Analytics', 'add_options'));
-//        add_action("admin_head-$analytics_hook", array('Advman_Analytics', 'add_contextual_help' ));
-//        add_action("admin_head-$analytics_hook", array('Advman_Analytics', 'add_css' ));
+        add_action("load-$analytics_hook", array('Advman_Analytics', 'add_options'));
+        add_action("admin_head-$analytics_hook", array('Advman_Analytics', 'add_contextual_help' ));
+        add_action("admin_head-$analytics_hook", array('Advman_Analytics', 'add_css' ));
 
 		add_action('admin_enqueue_scripts', array('Advman_Admin', 'admin_enqueue_scripts'));
 

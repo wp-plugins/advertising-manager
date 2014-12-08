@@ -82,7 +82,7 @@ class Advman_Template_Table_Analytics extends WP_List_Table
     function column_name($item)
     {
         //Return the title contents
-        return $item['name'] . " <span style='color:silver'> (id:" . $item['id'] . ")</span>";
+        return $item['name'] . " <span style='color:silver'> (id:" . $item['i'] . ")</span>";
     }
 
     function column_default( $item, $column_name )
