@@ -12,7 +12,7 @@ class OX_Tools
 					
 					if (file_exists($require_file)) {
 						require_once $require_file;
-						$fileName = split('[.]', $file);
+						$fileName = preg_split('/[.]/', $file);
 						$class = 'OX_Plugin_' . $fileName[0];
 						$plugin = new $class();
 						$plugin->register_plugin($obj);
