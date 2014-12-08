@@ -4,7 +4,7 @@
 
 # From your OSX command prompt
 git clone git@github.com:adjs/coreos-vagrant.git
-cd coreos-vagrant.git
+cd coreos-vagrant
 vagrant up
 vagrant ssh
 
