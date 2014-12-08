@@ -149,9 +149,8 @@ class OX_Tools
 	
 	function explode_format($format)
 	{
-		list($w, $h) = split('[x]', $format);
-		list($h, $l) = split('[#]', $h);
-		return array($w, $h, $l);
+		$vars = preg_split("/[x#]+/", $format);
+		return $vars;
 	}
 	
 	function post_url($url, $data, $optional_headers = null)
