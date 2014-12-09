@@ -3,17 +3,17 @@ require_once(ADVMAN_LIB . '/Tools.php');
 
 class Advman_Template_Metabox
 {
-	function display_format_network($ad)
+	static function display_format_network($ad)
 	{
 		return Advman_Template_Metabox::display_format($ad, true);
 	}
-	
-	function display_format_ad($ad)
+
+    static function display_format_ad($ad)
 	{
 		return Advman_Template_Metabox::display_format($ad, false);
 	}
-	
-	function display_format($ad, $nw = false)
+
+    static function display_format($ad, $nw = false)
 	{
 		$properties = $ad->get_network_property_defaults();
 		if (isset($properties['adtype'])) {
@@ -85,16 +85,16 @@ class Advman_Template_Metabox
 <span style="font-size:x-small;color:gray;"><?php _e('Select one of the supported ad format sizes.', 'advman'); ?> <?php if (!empty($formats['sections']['custom'])) _e('If your ad size is not one of the standard sizes, select Custom and fill in your size.', 'advman'); ?></span>
 <?php
 	}
-	
-	function display_options_network($ad)
+
+    static function display_options_network($ad)
 	{
 		return Advman_Template_Metabox::display_options($ad, true);
 	}
-	function display_options_ad($ad)
+    static function display_options_ad($ad)
 	{
 		return Advman_Template_Metabox::display_options($ad, false);
 	}
-	function display_options($ad, $nw = false)
+    static function display_options($ad, $nw = false)
 	{
 		// Authors
 		$users = get_users_of_blog();
@@ -167,16 +167,16 @@ class Advman_Template_Metabox
 <span style="font-size:x-small;color:gray;"><?php _e('Website display options determine where on your website your ads will appear.', 'advman'); ?></span>
 <?php
 	}
-	
-	function display_optimisation_network($ad)
+
+    static function display_optimisation_network($ad)
 	{
 		return Advman_Template_Metabox::display_optimisation($ad, true);
 	}
-	function display_optimisation_ad($ad)
+    static function display_optimisation_ad($ad)
 	{
 		return Advman_Template_Metabox::display_optimisation($ad, false);
 	}
-	function display_optimisation($ad, $nw = false)
+    static function display_optimisation($ad, $nw = false)
 	{
 		$weight = ($nw) ? $ad->get_network_property('weight') : $ad->get_property('weight');
 
@@ -194,16 +194,16 @@ class Advman_Template_Metabox
 <span style="font-size:x-small; color:gray;"><?php _e('Weight determines how often this ad is displayed relative to the other ads with the same name.  A weight of \'0\' will stop this ad from displaying.', 'advman'); ?></span>
 <?php
 	}
-	
-	function display_code_network($ad)
+
+    static function display_code_network($ad)
 	{
 		return Advman_Template_Metabox::display_code($ad, true);
 	}
-	function display_code_ad($ad)
+    static function display_code_ad($ad)
 	{
 		return Advman_Template_Metabox::display_code($ad, false);
 	}
-	function display_code($ad, $nw = false)
+    static function display_code($ad, $nw = false)
 	{
 		$edit = strtolower(get_class($ad)) == 'ox_ad_html';
 		$htmlBefore = ($nw) ? $ad->get_network_property('html-before') : $ad->get_property('html-before');
@@ -243,16 +243,16 @@ class Advman_Template_Metabox
 <span style="font-size:x-small;color:gray;"><?php _e('Place any HTML code you want to display before or after your tag in the appropriate section.'); ?> <?php _e('If you want to change your ad network tag, you need to import the new tag again.', 'advman'); ?></span>
 <?php
 	}
-	
-	function display_account_ad($ad)
+
+    static function display_account_ad($ad)
 	{
 		return Advman_Template_Metabox::display_account($ad, false);
 	}
-	function display_account_network($ad)
+    static function display_account_network($ad)
 	{
 		return Advman_Template_Metabox::display_account($ad, true);
 	}
-	function display_account($ad, $nw = false)
+    static function display_account($ad, $nw = false)
 	{
 		$properties = $ad->get_network_property_defaults();
 		$available_props = array(
@@ -299,15 +299,15 @@ class Advman_Template_Metabox
 <span style="font-size:x-small; color:gray;"><?php printf($msg, $ad->network_name, $ad->network_name); ?></span>
 <?php
 	}
-	function display_history_network($ad)
+    static function display_history_network($ad)
 	{
 		return Advman_Template_Metabox::display_history($ad, true);
 	}
-	function display_history_ad($ad)
+    static function display_history_ad($ad)
 	{
 		return Advman_Template_Metabox::display_history($ad, false);
 	}
-	function display_history($ad, $nw = false)
+    static function display_history($ad, $nw = false)
 	{
 		$revisions = ($nw) ? $ad->get_network_property('revisions') : $ad->get_property('revisions');
 		
@@ -317,7 +317,7 @@ class Advman_Template_Metabox
 ?>		<li><?php printf(__('More than %d days ago', 'advman'), 30) ?><span style="color:gray"> <?php _e('by Unknown', 'advman'); ?></span></li>
 <?php
 		} else {
-			$now = mktime();
+			$now = time();
 			foreach ($revisions as $ts => $name) {
 				$days = (strtotime($now) - strtotime($ts)) / 86400 + 1;
 				if ($days <= 30) {
@@ -331,16 +331,16 @@ class Advman_Template_Metabox
 <span style="font-size:x-small; color:gray;"><?php _e('The last 30 days of revisions are stored for each ad.', 'advman'); ?></span>
 <?php
 	}
-	
-	function display_appearance_network($ad)
+
+    static function display_appearance_network($ad)
 	{
 		return Advman_Template_Metabox::display_appearance($ad, true);
 	}
-	function display_appearance_ad($ad)
+    static function display_appearance_ad($ad)
 	{
 		return Advman_Template_Metabox::display_appearance($ad, false);
 	}
-	function display_appearance($ad, $nw = false)
+    static function display_appearance($ad, $nw = false)
 	{
 		$settings = Advman_Tools::organize_appearance($ad);
 ?><table id="advman-settings-colors" width="100%">
@@ -449,7 +449,7 @@ foreach ($available_props as $key => $text) : ?>
 <span style="font-size:x-small;color:gray;"><?php echo $msg; ?></span>
 <?php
 	}
-	function display_shortcuts_ad($ad)
+    static function display_shortcuts_ad($ad)
 	{
 ?>
 <p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
@@ -458,7 +458,7 @@ foreach ($available_props as $key => $text) : ?>
 <p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='edit-network'; document.getElementById('advman-form').submit();"><?php printf(__('Edit %s Defaults', 'advman'), $ad->network_name); ?></a></p>
 <?php
 	}
-	function display_shortcuts_network($ad)
+    static function display_shortcuts_network($ad)
 	{
 ?>
 <p id="jaxtag"><label class="hidden" for="newtag"><?php _e('Shortcuts', 'advman'); ?></label></p>
@@ -468,18 +468,18 @@ foreach ($available_props as $key => $text) : ?>
 <p class="hide-if-no-js"><a href="javascript:submit();" onclick="document.getElementById('advman-action').value='reset'; document.getElementById('advman-target').value='<?php echo strtolower(get_class($ad)); ?>'; document.getElementById('advman-form').submit();"><?php printf(__('Reset %s settings to defaults', 'advman'), $ad->network_name); ?></a></p>
 <?php
 	}
-	
-	function display_notes_network($ad)
+
+    static function display_notes_network($ad)
 	{
 		return Advman_Template_Metabox::display_notes($ad, true);
 	}
-	
-	function display_notes_ad($ad)
+
+    static function display_notes_ad($ad)
 	{
 		return Advman_Template_Metabox::display_notes($ad, false);
 	}
-	
-	function display_notes($ad, $nw = false)
+
+    static function display_notes($ad, $nw = false)
 	{
 		$notes = $nw ? $ad->get_network_property('notes') : $ad->get_property('notes');
 		
@@ -487,15 +487,15 @@ foreach ($available_props as $key => $text) : ?>
 <textarea id="advman_notes" rows="8" cols="28" name="advman-notes"><?php echo $ad->get('notes'); ?></textarea><br />
 <?php
 	}
-	function display_save_settings_network($ad)
+    static function display_save_settings_network($ad)
 	{
 		Advman_Template_Metabox::display_save_settings($ad, true);
 	}
-	function display_save_settings_ad($ad)
+    static function display_save_settings_ad($ad)
 	{
 		Advman_Template_Metabox::display_save_settings($ad, false);
 	}
-	function display_save_settings($ad, $nw = false)
+    static function display_save_settings($ad, $nw = false)
 	{
 		$revisions = ($nw) ? $ad->get_network_property('revisions') : $ad->get_property('revisions');
 		list($last_user, $last_timestamp, $last_timestamp2) = Advman_Tools::get_last_edit($revisions);

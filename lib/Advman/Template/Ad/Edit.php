@@ -4,7 +4,7 @@ require_once(ADVMAN_LIB . '/Template/Metabox.php');
 
 class Advman_Template_Ad_Edit extends Advman_Template_Edit
 {
-	function display($ad)
+	function display($ad, $nw = false)
 	{
 		// Main pane - default options
 		$properties = $ad->get_network_property_defaults();

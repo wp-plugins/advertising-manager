@@ -12,7 +12,7 @@ Domain Path: /languages
 */
 
 // Show notices (DEBUGGING ONLY)
-//error_reporting(E_ALL);
+error_reporting(E_ALL);
 
 // Load all of the definitions that are needed for Advertising Manager
 advman_init();

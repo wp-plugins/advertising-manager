@@ -8,7 +8,7 @@ class Advman_Admin
 	/**
 	 * Initialise menu items, notices, etc.
 	 */
-	function init()
+	static function init()
 	{
 		global $wp_version;
 
@@ -62,7 +62,7 @@ class Advman_Admin
         }
     }
 
-    function notice_action($action)
+    static function notice_action($action)
     {
         if ($action == 'activate advertising-manager') {
             Advman_Admin::remove_notice('activate advertising-manager');
@@ -77,7 +77,7 @@ class Advman_Admin
 
 
     }
-    function network_action($action, $network = null)
+    static function network_action($action, $network = null)
     {
         global $advman_engine;
 
@@ -119,7 +119,7 @@ class Advman_Admin
 
     }
 
-    function import_action($action)
+    static function import_action($action)
     {
         global $advman_engine;
 
@@ -130,7 +130,7 @@ class Advman_Admin
         }
     }
 
-    function ad_action($action, $ad = null)
+    static function ad_action($action, $ad = null)
     {
         global $advman_engine;
 
@@ -217,7 +217,7 @@ class Advman_Admin
         }
     }
 
-    function save_properties(&$ad, $default = false)
+    static function save_properties(&$ad, $default = false)
 	{
 		global $advman_engine;
 		
@@ -304,7 +304,7 @@ class Advman_Admin
 		return $changed;
 	}
 	
-	function check_default($ad, $value)
+	static function check_default($ad, $value)
 	{
 		global $advman_engine;
 		
@@ -327,7 +327,7 @@ class Advman_Admin
 	/**
 	 * Process input from the Admin UI.  Called staticly from the Wordpress form screen.
 	 */
-	function process()
+	static function process()
 	{
 		global $advman_engine;
 		
@@ -381,7 +381,7 @@ class Advman_Admin
 	/**
 	 * Display notices in the Admin UI.  Called staticly from the Wordpress 'admin_notices' hook.
 	 */
-	function display_notices()
+	static function display_notices()
 	{
 //        $advman_page = Advman_Tools::is_advman_page();
 
@@ -399,7 +399,7 @@ class Advman_Admin
 	/**
 	 * This function is called from the Wordpress Ads menu
 	 */
-	function create()
+	static function create()
 	{
 		$template = Advman_Tools::get_template('Ad_Create');
 		$template->display();
@@ -408,21 +408,21 @@ class Advman_Admin
     /**
      * This function is called from the Wordpress Ads menu
      */
-    function edit_ad()
+    static function edit_ad()
     {
         $ad = Advman_Tools::get_current_ad();
         $template = Advman_Tools::get_template('Ad_Edit', $ad);
         $template->display($ad);
     }
 
-    function preview_ad()
+    static function preview_ad()
     {
         $ad = Advman_Tools::get_current_ad();
         $template = Advman_Tools::get_template('Ad_Preview', $ad);
         $template->display($ad);
     }
 
-    function edit_network()
+    static function edit_network()
     {
         $network = Advman_Tools::get_current_network();
         $template = Advman_Tools::get_template('Network_Edit', $network);
@@ -432,7 +432,7 @@ class Advman_Admin
     /**
 	 * This function is called from the Wordpress Settings menu
 	 */
-	function settings()
+	static function settings()
 	{
         global $advman_engine;
 
@@ -493,22 +493,22 @@ class Advman_Admin
 		$template->display();
 	}
 
-	function get_notices()
+	static function get_notices()
 	{
 		return get_option('plugin_advman_ui_notices');
 	}
-	function set_notices($notices)
+    static function set_notices($notices)
 	{
 		return update_option('plugin_advman_ui_notices', $notices);
 	}
-	function add_notice($action,$text,$confirm=false)
+    static function add_notice($action,$text,$confirm=false)
 	{
 		$notices = Advman_Admin::get_notices();
 		$notices[$action]['text'] = $text;
 		$notices[$action]['confirm'] = $confirm;
 		Advman_Admin::set_notices($notices);
 	}
-	function remove_notice($action)
+    static function remove_notice($action)
 	{
 		$notices = Advman_Admin::get_notices();
 		if (!empty($notices[$action])) {
@@ -520,7 +520,7 @@ class Advman_Admin
     /*
      * Add a custom CSS which contains the image that is used in the menu button of the editor
      */
-    function add_editor_css()
+    static function add_editor_css()
     {
         wp_enqueue_style('advman-editor', ADVMAN_URL . '/scripts/advman-editor.css');
     }
@@ -528,7 +528,7 @@ class Advman_Admin
     /*
      * Generate a function that generates an array of ads for the editor menu button
      */
-    function tinymce_menu_script()
+    static function tinymce_menu_script()
     {
         global $advman_engine;
 
@@ -556,7 +556,7 @@ class Advman_Admin
     /*
      * Hook to add a custom button on the wordpress tinymce editor
      */
-    function editor_button($buttons) {
+    static function editor_button($buttons) {
         array_push($buttons, 'advman_ad_key');
         return $buttons;
     }
@@ -564,7 +564,7 @@ class Advman_Admin
     /*
      * Hook to register the javascript for the custom button on the wordpress tinymce editor
      */
-    function register_tinymce_javascript($plugin_array) {
+    static function register_tinymce_javascript($plugin_array) {
         $plugin_array['advman'] = ADVMAN_URL . '/scripts/advman-editor.js';
         return $plugin_array;
     }
@@ -572,7 +572,7 @@ class Advman_Admin
     /*
      * Hook to add some styling to advman lists and forms
      */
-    function admin_enqueue_scripts($hook)
+    static function admin_enqueue_scripts($hook)
     {
         if (Advman_Tools::is_advman_page($hook)) {
             // scripts
@@ -587,7 +587,7 @@ class Advman_Admin
         }
     }
 
-    function admin_footer_text($default_text)
+    static function admin_footer_text($default_text)
     {
         $addition = '';
         $page = OX_Tools::sanitize_request_var('page');
@@ -599,12 +599,12 @@ class Advman_Admin
         return $default_text . $addition;
     }
 
-    function plugin_action_links( $links ) {
+    static function plugin_action_links( $links ) {
         $settings = '<a href="'. get_admin_url(null, 'options-general.php?page=advman-settings') .'">' . __('Settings', 'advman') . '</a>';
         return array(0 => $settings) + $links;
     }
 
-    function activate()
+    static function activate()
     {
         // Add quality notice
         $notice = __('Would you like to enable ad quality measurement in <strong>Advertising Manager</strong>?', 'advman');

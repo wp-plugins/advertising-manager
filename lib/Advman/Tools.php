@@ -3,7 +3,7 @@ require_once(OX_LIB . '/Tools.php');
 
 class Advman_Tools
 {
-    function is_advman_page($page = null)
+    static function is_advman_page($page = null)
     {
         if (!$page) {
             $page = OX_Tools::sanitize_request_var('page');
@@ -12,7 +12,7 @@ class Advman_Tools
         return ($page && stristr($page, 'advman-') !== false);
     }
 
-	function format_author_value(&$value)
+    static function format_author_value(&$value)
 	{
 		if (is_array($value)) {
 			$users = get_users_of_blog();
@@ -28,7 +28,7 @@ class Advman_Tools
 			}
 		}
 	}
-	function format_category_value(&$value)
+    static function format_category_value(&$value)
 	{
 		if (is_array($value)) {
 			$categories = get_categories("hierarchical=0&hide_empty=0");
@@ -44,7 +44,7 @@ class Advman_Tools
 			}
 		}
 	}
-	function format_tag_value(&$value)
+    static function format_tag_value(&$value)
 	{
 		if (is_array($value)) {
 			$tags = get_tags("hierarchical=0&hide_empty=0");
@@ -63,7 +63,7 @@ class Advman_Tools
 	/**
 	 * Get the last edit of this ad
 	 */
-    function get_last_edit($revisions)
+    static function get_last_edit($revisions)
     {
         $last_user = __('Unknown', 'advman');
         $last_timestamp = 0;
@@ -87,7 +87,7 @@ class Advman_Tools
         return array($last_user, $human, $formatted, $last_timestamp);
     }
 
-    function get_search_query()
+    static function get_search_query()
     {
         $q = false;
 
@@ -102,15 +102,15 @@ class Advman_Tools
     /**
 	 * Get a template based on the class of an object
 	 */
-	function get_template($name)
+    static function get_template($name)
 	{
         $namePath = str_replace('_', '/', $name);
 		include_once(ADVMAN_PATH . "/lib/Advman/Template/{$namePath}.php");
 		$className = "Advman_Template_{$name}";
 		return new $className;
 	}
-	
-	function organize_appearance($ad)
+
+    static function organize_appearance($ad)
 	{
 		$defaults = $ad->get_network_property_defaults();
 		
@@ -136,8 +136,8 @@ class Advman_Tools
 		
 		return $app;
 	}
-	
-	function organize_formats($tfs)
+
+    static function organize_formats($tfs)
 	{
 		$types = array(
 			'text' => __('Text ads', 'advman'),
@@ -253,7 +253,7 @@ class Advman_Tools
 		return array('data' => $data, 'types' => $types, 'sections' => $sections, 'formats' => $formats);
 	}
 	
-	function get_properties_from_array($aAd)
+	static function get_properties_from_array($aAd)
 	{
 		$aProperties = array();
 		$aOmit = array('name', 'id', 'active', 'class');
@@ -266,7 +266,7 @@ class Advman_Tools
 		return $aProperties;
 	}
 
-    function get_current_ad()
+    static function get_current_ad()
     {
         global $advman_engine;
 
@@ -279,7 +279,7 @@ class Advman_Tools
         return $ad;
     }
 
-    function get_current_network()
+    static function get_current_network()
     {
         global $advman_engine;
 
@@ -291,7 +291,7 @@ class Advman_Tools
 
 
 
-    function get_current_ads()
+    static function get_current_ads()
     {
         global $advman_engine;
 

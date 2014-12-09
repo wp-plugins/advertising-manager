@@ -209,15 +209,17 @@ class OX_Ad extends OX_Plugin
 		$replace[] = mt_rand();
 		$search[] = '{{timestamp}}';
 		$replace[] = time();
-		
+
 		$properties = $this->get_network_property_defaults();
 		foreach ($properties as $property => $value) {
-			$search[] = '{{' . $property . '}}';
-			$replace[] = $this->get($property);
+            if (substr($property, 0, 5) !== 'show-') {
+                $search[] = '{{' . $property . '}}';
+                $replace[] = $this->get($property);
+            }
 		}
 		
 		$code = $codeonly ? $this->get('code') : ($this->get('html-before') . $this->get('code') . $this->get('html-after'));
-		$code = str_replace($search, $replace, $code);
+        $code = str_replace($search, $replace, $code);
 		
 		if ($advman_engine->getSetting('enable-php')) {
 			ob_start();

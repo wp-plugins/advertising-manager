@@ -1,7 +1,7 @@
 <?php
 class OX_Tools
 {
-	function load_plugins($dir, &$obj)
+	static function load_plugins($dir, &$obj)
 	{
 		if ($handle = opendir($dir)) {
 			while (false !== ($file = readdir($handle))) {
@@ -22,8 +22,8 @@ class OX_Tools
 			closedir($handle);
 		}
 	}
-	
-	function get_int_max()
+
+    static function get_int_max()
 	{
 		$max=0x7fff;
 		$probe = 0x7fffffff;
@@ -34,7 +34,7 @@ class OX_Tools
 		return $max;
 	}
 
-	function sort($ads)
+    static function sort($ads)
 	{
 		uasort($ads, array('OX_Tools', '_sort_ads'));
 		return $ads;
@@ -43,7 +43,7 @@ class OX_Tools
 	/**
 	 * Sort ads by network, then by ID
 	 */
-	function _sort_ads($ad1,$ad2)
+    static function _sort_ads($ad1,$ad2)
 	{
 		$cmp = strcmp(get_class($ad1), get_class($ad2));
 		if ($cmp == 0) {
@@ -51,8 +51,8 @@ class OX_Tools
 		}
 		return $cmp;
 	}
-	
-	function organize_colors($colors)
+
+    static function organize_colors($colors)
 	{
 		$clr = array();
 		$clr['border'] = __('Border:', 'advman');
@@ -68,8 +68,8 @@ class OX_Tools
 		
 		return $clr;
 	}
-	
-	function organize_formats($formats)
+
+    static function organize_formats($formats)
 	{
 		$fmt = array();
 		$fmt['horizontal']['728x90'] = __('728 x 90 Leaderboard', 'advman');
@@ -105,20 +105,20 @@ class OX_Tools
 		return array('sections' => $sct, 'formats' => $fmt);
 	}
 
-    function sanitize_request_var($field)
+    static function sanitize_request_var($field)
     {
         return OX_Tools::sanitize_arr_var($field, $_REQUEST);
     }
-    function sanitize_post_var($field)
+    static function sanitize_post_var($field)
     {
         return OX_Tools::sanitize_arr_var($field, $_POST);
     }
 
-    function sanitize_arr_var($field, $arr)
+    static function sanitize_arr_var($field, $arr)
     {
         return (isset($arr[$field])) ?  OX_Tools::sanitize($arr[$field], 'key') : '';
     }
-	function sanitize($field, $type = null)
+    static function sanitize($field, $type = null)
 	{
 		if (is_array($field)) {
 			$a = array();
@@ -146,14 +146,14 @@ class OX_Tools
 				break;
 		}
 	}
-	
-	function explode_format($format)
+
+    static function explode_format($format)
 	{
 		$vars = preg_split("/[x#]+/", $format);
 		return $vars;
 	}
-	
-	function post_url($url, $data, $optional_headers = null)
+
+    static function post_url($url, $data, $optional_headers = null)
 	{
 		$params = array('http' => array(
 			'method' => 'post',
@@ -175,7 +175,7 @@ class OX_Tools
 		}
 		return $response;
 	}
-	function generate_name($base = null)
+    static function generate_name($base = null)
 	{
 		global $advman_engine;
 		$ads = $advman_engine->getAds();
