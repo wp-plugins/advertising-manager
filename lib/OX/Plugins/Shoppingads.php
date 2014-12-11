@@ -48,8 +48,8 @@ class OX_Plugin_Shoppingads extends OX_Ad
 	{
 		return array('border', 'title', 'bg', 'text');
 	}
-	
-	function import_detect_network($code)
+
+	static function import_detect_network($code)
 	{
 		return ( strpos($code,'shoppingads_ad_client')!==false );
 	}

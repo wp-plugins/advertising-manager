@@ -45,8 +45,8 @@ class OX_Plugin_Adsense extends OX_Ad
 		
 		return array('all' => $text + $image + $video, 'text' => $text, 'image' => $image, 'video' => $video, 'link' => $link);
 	}
-	
-	function import_detect_network($code)
+
+	static function import_detect_network($code)
 	{
 		return (strpos($code,'google_ad_client') !== false);
 	}

@@ -39,8 +39,8 @@ class OX_Plugin_Adify extends OX_Ad
 	{
 		return array('all' => array('custom','728x90', '468x60', '120x600', '160x600', '300x250', '160x160'));
 	}
-	
-	function import_detect_network($code)
+
+	static function import_detect_network($code)
 	{
 		return (strpos($code,'sr_adspace_id') !== false);
 	}

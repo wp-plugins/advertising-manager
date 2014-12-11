@@ -37,8 +37,8 @@ class OX_Plugin_Crispads extends OX_Ad
 	{
 		return array('border', 'title', 'bg', 'text');
 	}
-	
-	function import_detect_network($code)
+
+	static function import_detect_network($code)
 	{
 		return (	preg_match('/http:\/\/www.crispads.com\/spinner\//', $code, $matches) !==0);
 	}

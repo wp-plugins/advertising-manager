@@ -6,7 +6,7 @@ require_once (ADVMAN_LIB . '/Template/Table/Analytics.php');
 class Advman_Analytics
 {
     // Perform any work here before anything gets written to the screen
-    function init()
+    static function init()
     {
         global $advman_engine, $advman_analytics;
         $advman_analytics = new Advman_Template_Table_Analytics();
@@ -57,7 +57,7 @@ class Advman_Analytics
         }
     }
 
-    function ad_analytics_action($action)
+    static function ad_analytics_action($action)
     {
         global $advman_engine;
 
@@ -69,9 +69,7 @@ class Advman_Analytics
 
     }
 
-
-
-    function process()
+    static function process()
     {
         global $advman_analytics;
         $q = Advman_Tools::get_search_query();
@@ -102,7 +100,7 @@ class Advman_Analytics
     /**
      * Initialise menu items, notices, etc.
      */
-    function add_css() {
+    static function add_css() {
         echo '<style type="text/css">';
         echo '.wp-list-table .column-id { width: 5%; }';
         echo '.wp-list-table .column-name { width: 30%; }';
@@ -117,7 +115,7 @@ class Advman_Analytics
     /**
      * Add contextual help for ad list screen
      */
-    function add_contextual_help() {
+    static function add_contextual_help() {
         get_current_screen()->add_help_tab( array(
             'id'		=> 'overview',
             'title'		=> __('Overview'),
@@ -144,7 +142,7 @@ class Advman_Analytics
         );
     }
 
-    function add_options() {
+    static function add_options() {
         $option = 'per_page';
         $args = array(
             'label' => 'Ads',

@@ -44,7 +44,7 @@ class OX_Plugin_Adbrite extends OX_Ad
 		return array(all => array('728x90', '468x60', '120x600', '160x600', '300x250'));
 	}
 	
-	function import_detect_network($code)
+	static function import_detect_network($code)
 	{
 		
 		return ( (strpos($code,'<!-- Begin: AdBrite -->')!==false) ||

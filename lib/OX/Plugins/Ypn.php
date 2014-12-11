@@ -41,8 +41,8 @@ class OX_Plugin_Ypn extends OX_Ad
 	{
 		return array('border', 'title', 'bg', 'text');
 	}
-	
-	function import_detect_network($code)
+
+	static function import_detect_network($code)
 	{
 		return ( (strpos($code,'ypn-js.overture.com')!==false) );
 	}

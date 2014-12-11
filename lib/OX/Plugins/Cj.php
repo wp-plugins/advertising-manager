@@ -21,7 +21,7 @@ class OX_Plugin_Cj extends OX_Ad
 	
 	function display($codeonly = false, $search = array(), $replace = array())
 	{
-		$xdomains = OX_Plugin_Cj::get_domains();
+		$xdomains = OX_Plugin_Cj::_get_domains();
 		$search[] = '{{xdomain}}';
 		$replace[] = $xdomains[array_rand($xdomains)];
 		
@@ -31,7 +31,7 @@ class OX_Plugin_Cj extends OX_Ad
 	/**
 	 * The domains that CJ randomly chooses to serve ads.  Add to this list as they become available.
 	 */
-	function get_domains()
+	static function _get_domains()
 	{
 		return array(
 			'www.commission-junction.com',
@@ -70,11 +70,11 @@ class OX_Plugin_Cj extends OX_Ad
 	{
 		return array('border', 'title', 'bg', 'text');
 	}
-	
-	function import_detect_network($code)
+
+	static function import_detect_network($code)
 	{
 		$match = false;
-		$xdomains = OX_Plugin_Cj::get_domains();
+		$xdomains = OX_Plugin_Cj::_get_domains();
 		foreach ($xdomains as $d) {
 			if (strpos($code, ('"http://' . $d)) !== false) {
 				$match = true;

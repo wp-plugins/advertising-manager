@@ -38,8 +38,8 @@ class OX_Plugin_Adgridwork extends OX_Ad
 	{
 		return array('all' => array('800x90', '728x90', '600x90', '468x60', '400x90', '234x60', '200x90', '120x600', '160x600', '200x360', '200x270', '336x280', '300x250', '250x250', '200x180', '180x150'));
 	}
-	
-	function import_detect_network($code)
+
+	static function import_detect_network($code)
 	{
 		
 		return (

@@ -31,8 +31,8 @@ class OX_Plugin_Widgetbucks extends OX_Ad
 	{
 		return array('border', 'title', 'bg', 'text');
 	}
-	
-	function import_detect_network($code)
+
+	static function import_detect_network($code)
 	{
 		return (preg_match('/(\w*)\.widgetbucks.com\/script\/(\w*).js\?uid=(\w*)/', $code, $matches));
 	}
