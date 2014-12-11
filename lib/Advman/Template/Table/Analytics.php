@@ -12,14 +12,15 @@ class Advman_Template_Table_Analytics extends WP_List_Table
 {
 
     function __construct(){
-        global $status, $page;
+        global $status, $page, $hook_suffix;
 
         parent::__construct( array(
             'singular'  => __( 'ad', 'advman-analytics' ),     //singular name of the listed records
             'plural'    => __( 'ads', 'advman-analytics' ),   //plural name of the listed records
-            'ajax'      => false        //does this table support ajax?
-
+            'ajax'      => false,        //does this table support ajax?
+			'screen' => null
         ) );
+        echo("__construct");
     }
 
     function get_views()

@@ -12,7 +12,7 @@ class Advman_Template_Table_List extends WP_List_Table
 {
 
     function __construct(){
-        global $status, $page;
+        global $status, $page, $hook_suffix;
 
         parent::__construct( array(
             'singular'  => __( 'ad', 'advman-list' ),     //singular name of the listed records
