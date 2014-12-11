@@ -240,7 +240,7 @@ class OX_Ad extends OX_Plugin
 		return $code;
 //		return $this->get('code');
 	}
-	function import_detect_network($code)
+	static function import_detect_network($code)
 	{
 		return false;
 	}
@@ -284,7 +284,7 @@ class OX_Ad extends OX_Plugin
 		
 		// Deal with revisions
 		$r = array();
-		$now = mktime();
+		$now = time();
 		$r[$now] = $user_login;
 		
 		// Get rid of revisions more than 30 days old
