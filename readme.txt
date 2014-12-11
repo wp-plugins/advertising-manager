@@ -41,7 +41,7 @@ Related Links:
 == Usage ==
 
 1. Add your ads by clicking 'Create New' under the 'Ads' menu.
-1. Place ads in your template by adding '<?php advman_ad(name) ?>' to your template in the place you want to see an ad (where 'name' is the name of your ad).
+1. Place ads in your template by adding '&lt;?php advman_ad(name); ?&gt;' to your template in the place you want to see an ad (where 'name' is the name of your ad).
 1. Place ads in your blog posts and pages by adding '[ad#name]' to your blog post (where 'name' is the name of your ad), or by using the 'Insert Ad' dropdown from the edit toolbar.
 1. Place ads in your sidebar by dragging the 'Advertisement' widget onto your sidebar, and selecting the ad you want to display
 
