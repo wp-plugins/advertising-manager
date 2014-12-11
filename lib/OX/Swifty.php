@@ -263,6 +263,7 @@ class OX_Swifty
 		if (!empty($name)) {
 			// Find the ads which match the name
 			$ads = $advman_engine->getAds();
+
 			$totalWeight = 0;
 			$validAds = array();
 			foreach ($ads as $id => $ad) {
@@ -274,6 +275,7 @@ class OX_Swifty
 					}
 				}
 			}
+
 			// Pick the ad
 			// Generate a number between 0 and 1
 			$rnd = (mt_rand(0, PHP_INT_MAX) / PHP_INT_MAX);
