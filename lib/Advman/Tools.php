@@ -270,6 +270,8 @@ class Advman_Tools
     {
         global $advman_engine;
 
+		$ad = false;
+
         $target = OX_Tools::sanitize_request_var('ad');
         if (is_numeric($target)) {
             $id = intval($target);

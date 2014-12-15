@@ -61,6 +61,9 @@ class Advman_List
     {
         global $advman_engine;
 
+        echo("ACTION:$action");
+        exit;
+
         // First, if there are no ads, redirect to the create screen
         $ads = $advman_engine->getAds();
         if (!$ads) {
