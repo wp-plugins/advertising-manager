@@ -20,7 +20,6 @@ class Advman_Template_Table_Analytics extends WP_List_Table
             'ajax'      => false,        //does this table support ajax?
 			'screen' => null
         ) );
-        echo("__construct");
     }
 
     function get_views()
@@ -90,10 +89,10 @@ class Advman_Template_Table_Analytics extends WP_List_Table
     {
         switch( $column_name ) {
             case 'name': return $item['name'];
-            case 'impressions': return $item['i'];
-            case 'views': return $item['v'];
-            case 'clicks': return $item['c'];
-            case 'quality': return $item['q'];
+            case 'impressions': return empty($item['i']) ? '-' : $item['i'];
+            case 'views': return empty($item['v']) ? '-' : $item['v'];
+            case 'clicks': return empty($item['c']) ? '-' : $item['c'];
+            case 'quality': return empty($item['q']) ? '-' : $item['q'];
             default:
                 return print_r( $item, true ) ; //Show the whole array for troubleshooting purposes
         }
@@ -116,9 +115,9 @@ class Advman_Template_Table_Analytics extends WP_List_Table
         $sortable_columns = array(
             'name'        => array('name',false),
             'impressions' => array('i',false),
-//            'views'       => array('v',false),
+            'views'       => array('v',false),
             'clicks'      => array('c',false),
-//            'quality'     => array('q',false),
+            'quality'     => array('q',false),
         );
 
         return $sortable_columns;
@@ -136,7 +135,7 @@ class Advman_Template_Table_Analytics extends WP_List_Table
     function usort_reorder( $a, $b )
     {
         // If no sort, default to date descending
-        $orderby = ( ! empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : 'date';
+        $orderby = ( ! empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : 'name';
         // If no order, default to asc
         $order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : 'desc';
         // Determine sort order

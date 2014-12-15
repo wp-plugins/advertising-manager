@@ -6,13 +6,13 @@ Plugin URI: http://github.com/switzer/advertising-manager/wiki
 Description: Control and arrange your Advertising and Referral blocks on your Wordpress blog. With Widget and inline post support, integration with all major ad networks.
 Author: Scott Switzer
 Author URI: http://github.com/switzer
-Version: 3.4.29
+Version: 3.5
 Text Domain: advman
 Domain Path: /languages
 */
 
 // Show notices (DEBUGGING ONLY)
-error_reporting(E_ALL);
+// error_reporting(E_ALL);
 
 // Load all of the definitions that are needed for Advertising Manager
 advman_init();
@@ -29,7 +29,7 @@ function advman_init()
     $advman_slot = 1;
 
 
-	define('ADVMAN_VERSION', '3.4.29');
+	define('ADVMAN_VERSION', '3.5');
 	define('ADVMAN_PATH', dirname(__FILE__));
 	define('ADVMAN_LIB', ADVMAN_PATH . '/lib/Advman');
 	define('OX_LIB', ADVMAN_PATH . '/lib/OX');
@@ -70,7 +70,7 @@ function advman_init()
 function advman_run()
 {
 	global $advman_engine;
-	
+
 	// An ad is being requested by its name
 	if (!empty($_REQUEST['advman-ad-name'])) {
 		$name = OX_Tools::sanitize($_REQUEST['advman-ad-name'], 'key');
@@ -94,7 +94,10 @@ function advman_run()
 	}
 
 	// Add a filter for displaying an ad in the content
+	// DEPRECATED - will be using shortcodes going forward
 	add_filter('the_content', 'advman_filter_content');
+
+	add_shortcode('ad', 'advman_shortcode');
 	// Add an action when the wordpress footer displays
 	add_action('wp_footer', 'advman_footer');
 	// If admin, initialise the Admin functionality	
@@ -114,24 +117,32 @@ function advman_filter_content($content)
 		'/<!--adsense#(.*?)-->/',
 		'/<!--am-->/',
 		'/<!--am#(.*?)-->/',
-		'/\[ad\]/',
 		'/\[ad#(.*?)\]/',
 	);
-	
-	return preg_replace_callback($patterns, 'advman_filter_content_callback', $content);
+
+	return preg_replace_callback($patterns, 'advman_filter_content_callback', html_entity_decode($content));
 }
-	
-function advman_filter_content_callback($matches)
+
+// Ad Shortcode
+function advman_shortcode( $atts )
 {
 	global $advman_engine;
-	
-	$ad = $advman_engine->selectAd($matches[1]);
+
+	$name = !empty($atts['name']) ? $atts['name'] : null;
+
+	$ad = $advman_engine->selectAd($name);
+
 	if (!empty($ad)) {
 		$adHtml = $ad->display();
 		$advman_engine->incrementStats($ad);
 		return $adHtml;
 	}
+
 	return '';
+}
+
+function advman_filter_content_callback($matches)
+{
 }
 	
 // Backwards compatibility with adsense-manager
