@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40
 Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, rotate, widget
 Requires at least: 2.5
 Tested up to: 4.0.1
-Stable tag: 3.5
+Stable tag: 3.5.1
 License: GPLv2 or later
 
 Easily place and rotate ads on inside your blog posts, templates, or sidebar widgets. Simple to use, powerful features.  Used by thousands of blogs.
@@ -105,12 +105,13 @@ Yes.  Advertising manager allows you to rotate ads, easily turn on/off ads, plac
 
 == Upgrade Notice ==
 
-= 3.5 =
-* Fixed shortcodes issue introduces with WP 4.0.1
-* Fixed messages that printed in debugging mode
-* Initial analytics screen
+= 3.5.1 =
+* Only update 10 posts at a time when upgrading shortcodes
 
 == Change Log ==
+
+= 3.5.1 =
+* Only update 10 posts at a time when upgrading shortcodes
 
 = 3.5 =
 * Fixed shortcodes issue introduces with WP 4.0.1

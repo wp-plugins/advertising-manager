@@ -9,7 +9,7 @@ class Advman_Upgrade
 	{
 		$version = Advman_Upgrade::_get_version($data);
 		Advman_Upgrade::_backup($data, $version);
-		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14', '3.4.15', '3.4.20', '3.4.25', '3.4.29', '3.5');
+		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14', '3.4.15', '3.4.20', '3.4.25', '3.4.29', '3.5.1');
 		foreach ($versions as $v) {
 			if (version_compare($version, $v, '<')) {
 				$func = 'advman_' . str_replace('.','_',$v);
@@ -33,7 +33,7 @@ class Advman_Upgrade
 		}
 	}
 
-	static function advman_3_5(&$data)
+	static function advman_3_5_1(&$data)
 	{
 		// Check to see if we need to migrate any old ad tags to new ad tags
 		global $advman_engine;
@@ -49,45 +49,55 @@ class Advman_Upgrade
 			'/\[ad#(.*?)\]/',
 		);
 
-		$args = array('numberposts' => -1, 'post_type' => array('post','page'), 'suppress_filters' => false);
-		$posts = get_posts($args);
 		$found_posts = 0;
 		$found_ads = 0;
-		foreach ($posts as $post) {
-			$ad_found_in_post = false;
-			if (!empty($post->post_content)) {
-				foreach ($patterns as $pattern) {
-					if (preg_match_all($pattern, $post->post_content, $matches)) {
-						if (!empty($matches[1])) {
-							for ($i=0; $i<sizeof($matches[1]); $i++) {
-								$name = $matches[1][$i];
-								$ad = Advman_Upgrade::_selectAd($data, $name);
-								if (!$ad) {
-									$name = html_entity_decode($name);
+
+		$offset = 0;
+		$numberposts = 10;
+
+		$args = array('numberposts' => $numberposts, 'offset' => $offset, 'post_type' => array('post','page'), 'suppress_filters' => false);
+		$posts = get_posts($args);
+
+		while ($posts) {
+			foreach ($posts as $post) {
+				$ad_found_in_post = false;
+				if (!empty($post->post_content)) {
+					foreach ($patterns as $pattern) {
+						if (preg_match_all($pattern, $post->post_content, $matches)) {
+							if (!empty($matches[1])) {
+								for ($i=0; $i<sizeof($matches[1]); $i++) {
+									$name = $matches[1][$i];
 									$ad = Advman_Upgrade::_selectAd($data, $name);
-								}
-								if (!$ad) {
-									$name = str_replace(";","\\;",$name);
-									$ad = Advman_Upgrade::_selectAd($data, $name);
-								}
-								if ($ad) {
-									$found_ads++;
-									if (!$ad_found_in_post) {
-										$ad_found_in_post = true;
-										$found_posts++;
+									if (!$ad) {
+										$name = html_entity_decode($name);
+										$ad = Advman_Upgrade::_selectAd($data, $name);
+									}
+									if (!$ad) {
+										$name = str_replace(";","\\;",$name);
+										$ad = Advman_Upgrade::_selectAd($data, $name);
+									}
+									if ($ad) {
+										$found_ads++;
+										if (!$ad_found_in_post) {
+											$ad_found_in_post = true;
+											$found_posts++;
+										}
 									}
 								}
-							}
-						} else {
-							$found_ads++;
-							if (!$ad_found_in_post) {
-								$ad_found_in_post = true;
-								$found_posts++;
+							} else {
+								$found_ads++;
+								if (!$ad_found_in_post) {
+									$ad_found_in_post = true;
+									$found_posts++;
+								}
 							}
 						}
 					}
 				}
 			}
+			$offset += $numberposts;
+			$args = array('numberposts' => $numberposts, 'offset' => $offset, 'post_type' => array('post','page'), 'suppress_filters' => false);
+			$posts = get_posts($args);
 		}
 		if ($found_ads) {
 			$question = __('You have [num_ads] Advertising Manager ads in [num_posts] posts that need to be upgraded to a new ad shortcode format.  <b>Do you want to automatically upgrade these shortcodes?</b>', 'advman');
@@ -115,42 +125,53 @@ class Advman_Upgrade
 			'/\[ad#(.*?)\]/',
 		);
 
-		$args = array('numberposts' => -1, 'post_type' => array('post','page'), 'suppress_filters' => false);
+		$offset = 0;
+		$numberposts = 10;
+
+		$args = array('numberposts' => $numberposts, 'offset' => $offset, 'post_type' => array('post','page'), 'suppress_filters' => false);
 		$posts = get_posts($args);
-		foreach ($posts as $post) {
-			if (!empty($post->post_content)) {
-				$post_content = $post->post_content;
-				foreach ($patterns as $pattern) {
-					if (preg_match_all($pattern, $post->post_content, $matches)) {
-						if (!empty($matches[1])) {
-							for ($i=0; $i<sizeof($matches[1]); $i++) {
-								$name = $matches[1][$i];
-								$ad = Advman_Upgrade::_selectAd($data, $name);
-								if (!$ad) {
-									$name = html_entity_decode($name);
+
+		while ($posts) {
+			foreach ($posts as $post) {
+				if (!empty($post->post_content)) {
+					$post_content = $post->post_content;
+					foreach ($patterns as $pattern) {
+						if (preg_match_all($pattern, $post->post_content, $matches)) {
+							if (!empty($matches[1])) {
+								for ($i = 0; $i < sizeof($matches[1]); $i++) {
+									$name = $matches[1][$i];
 									$ad = Advman_Upgrade::_selectAd($data, $name);
+									if (!$ad) {
+										$name = html_entity_decode($name);
+										$ad = Advman_Upgrade::_selectAd($data, $name);
+									}
+									if (!$ad) {
+										$name = str_replace(";", "\\;", $name);
+										$ad = Advman_Upgrade::_selectAd($data, $name);
+									}
+									if ($ad) {
+										$search = $matches[0][$i];
+										$replace = "[ad name=\"$name\"]";
+										$post_content = str_replace($search, $replace, $post_content);
+									}
 								}
-								if (!$ad) {
-									$name = str_replace(";","\\;",$name);
-									$ad = Advman_Upgrade::_selectAd($data, $name);
-								}
-								if ($ad) {
-									$search = $matches[0][$i];
-									$replace = "[ad name=\"$name\"]";
-									$post_content = str_replace($search, $replace, $post_content);
-								}
+							} else {
+								$search = str_replace("/", "", $pattern);
+								$replace = "[ad]";
+								$post_content = str_replace($search, $replace, $post_content);
 							}
-						} else {
-							$search = str_replace("/","",$pattern);
-							$replace = "[ad]";
-							$post_content = str_replace($search, $replace, $post_content);
 						}
-					}                }
-				if ($post->post_content != $post_content) {
-					$post->post_content = $post_content;
-					wp_update_post($post);
+					}
+					if ($post->post_content != $post_content) {
+						$post->post_content = $post_content;
+						wp_update_post($post);
+					}
 				}
 			}
+
+			$offset += $numberposts;
+			$args = array('numberposts' => $numberposts, 'offset' => $offset, 'post_type' => array('post','page'), 'suppress_filters' => false);
+			$posts = get_posts($args);
 		}
 	}
 
