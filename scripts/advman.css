@@ -36,16 +36,30 @@
 
 .default_note {background:url(../images/default.png) left no-repeat;width:16px;height:16px;}
 
-.fixed .column-advman-active,
-.fixed .column-advman-default,
-.fixed .column-advman-format,
-.fixed .column-advman-stats,
-.fixed .column-advman-type {
-	width: 10%;
+
+.manage-column.column-impressions,
+.manage-column.column-views,
+.manage-column.column-clicks,
+.manage-column.column-quality {
+
+	text-align: right;
 }
-.fixed .column-impressions {
-    text-align: right;
+
+.manage-column.column-impressions span:first-child,
+.manage-column.column-views span:first-child,
+.manage-column.column-clicks span:first-child,
+.manage-column.column-quality span:first-child {
+	width:90%;
 }
+
+.impressions.column-impressions,
+.views.column-views,
+.clicks.column-clicks,
+.quality.column-quality {
+	text-align: right;
+	padding-right: 25px;
+}
+
 .fixed .column-advman-notes {
 	width: 15%;
 }

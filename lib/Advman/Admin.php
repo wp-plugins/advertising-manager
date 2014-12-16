@@ -22,13 +22,17 @@ class Advman_Admin
         add_options_page(__('Ads', 'advman'), __('Ads', 'advman'), 8, 'advman-settings', array('Advman_Admin','settings'));
 
         // List items
-        add_action("load-$list_hook", array('Advman_List', 'add_options'));
-        add_action("admin_head-$list_hook", array('Advman_List', 'add_contextual_help' ));
-        add_action("admin_head-$list_hook", array('Advman_List', 'add_css' ));
+        if ($list_hook) {
+            add_action("load-$list_hook", array('Advman_List', 'add_options'));
+            add_action("admin_head-$list_hook", array('Advman_List', 'add_contextual_help' ));
+            add_action("admin_head-$list_hook", array('Advman_List', 'add_css' ));
+        }
         // Analytics items
-        add_action("load-$analytics_hook", array('Advman_Analytics', 'add_options'));
-        add_action("admin_head-$analytics_hook", array('Advman_Analytics', 'add_contextual_help' ));
-        add_action("admin_head-$analytics_hook", array('Advman_Analytics', 'add_css' ));
+        if ($analytics_hook) {
+            add_action("load-$analytics_hook", array('Advman_Analytics', 'add_options'));
+            add_action("admin_head-$analytics_hook", array('Advman_Analytics', 'add_contextual_help' ));
+            add_action("admin_head-$analytics_hook", array('Advman_Analytics', 'add_css' ));
+        }
 
 		add_action('admin_enqueue_scripts', array('Advman_Admin', 'admin_enqueue_scripts'));
 
@@ -64,10 +68,12 @@ class Advman_Admin
 
     static function notice_action($action)
     {
+        // Activate advertising manager
         if ($action == 'activate advertising-manager') {
             Advman_Admin::remove_notice('activate advertising-manager');
         }
 
+        // Learn more about Adjs beta
         if ($action == 'adjs-beta') {
             if (OX_Tools::sanitize_post_var('advman-notice-confirm-yes')) {
                 wp_redirect(admin_url('options-general.php?page=advman-settings'));
@@ -75,8 +81,17 @@ class Advman_Admin
             Advman_Admin::remove_notice('adjs-beta');
         }
 
-
+        // Update shortcodes
+        if ($action == 'update_shortcodes') {
+            if (OX_Tools::sanitize_post_var('advman-notice-confirm-yes')) {
+                include_once(ADVMAN_LIB . '/Upgrade.php');
+                Advman_Upgrade::update_shortcodes();
+                Advman_Admin::add_notice('advman-notice-once', __("Ad shortcodes updated"), false);
+            }
+            Advman_Admin::remove_notice('update_shortcodes');
+        }
     }
+
     static function network_action($action, $network = null)
     {
         global $advman_engine;
@@ -489,7 +504,8 @@ class Advman_Admin
                 }
             }
 		}
-		$template = Advman_Tools::get_template('Settings');
+
+        $template = Advman_Tools::get_template('Settings');
 		$template->display();
 	}
 
@@ -541,7 +557,7 @@ class Advman_Admin
 <?php
         if ($ads) {
             foreach ($ads as $ad) {
-                echo "{text: 'Ad {$ad->id}: {$ad->name}', value: '[ad#{$ad->name}]', onclick: function() { editor.insertContent(this.value()); } },";
+                echo "{text: 'Ad {$ad->id}: {$ad->name}', value: '[ad name=\"{$ad->name}\"]', onclick: function() { editor.insertContent(this.value()); } },";
             }
         } else {
                 echo "{text: '(No ads defined)', value: ''},";
@@ -608,8 +624,6 @@ class Advman_Admin
     {
         // Add quality notice
         $notice = __('Would you like to enable ad quality measurement in <strong>Advertising Manager</strong>?', 'advman');
-//		$question = __('Enable <a>auto optimisation</a>? (RECOMMENDED)', 'advman');
-//		$question = str_replace('<a>', '<a href="http://code.openx.org/wiki/advertising-manager/Auto_Optimization" target="_new">', $question);
         Advman_Admin::add_notice('adjs-beta', $notice, 'learn');
 
     }

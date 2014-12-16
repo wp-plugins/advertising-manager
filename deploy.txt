@@ -29,8 +29,9 @@ INCREASE VERSION NUMBER
     2.  in the code at the top of advertising-manager.php
     3.  in the readme file (stable tag at the top)
     4.  In the readme file (Changelog)
-    5.  in this build file (search for the version number 3.4.29 - there are a number of places in this file where the version exists)
-    6.  check the upgrade to make sure any version upgrades are correct
+    5.  Upgrade Wordpress tested version in readme file (at the top)
+    6.  in this build file (search for the version number 3.5.1 - there are a number of places in this file where the version exists)
+    7.  check the upgrade to make sure any version upgrades are correct
 
 README
     1.  Add to the changelog
@@ -47,5 +48,5 @@ CHECK IN ALL FILES
 DEPLOYMENT
 - Tag the version in wordpress
     cd ~/code/wordpress/advertising-manager
-    svn cp trunk tags/3.4.29
-    svn ci -m "tagging version 3.4.29"
+    svn cp trunk tags/3.5.1
+    svn ci -m "tagging version 3.5.1"
