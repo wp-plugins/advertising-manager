@@ -3,8 +3,8 @@ Contributors: switzer
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=scott%40switzer%2eorg&item_name=Do%20you%20like%20Advertising%20Manager%20for%20Wordpress%3F%20%20Please%20help%20development%20by%20donating%21&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
 Tags: ad, admin, adsense, adserver, advertisement, advertising, affiliate, banner, google, manager, rotate, widget
 Requires at least: 2.5
-Tested up to: 4.0.1
-Stable tag: 3.5.1
+Tested up to: 4.2.1
+Stable tag: 3.5.2
 License: GPLv2 or later
 
 Easily place and rotate ads on inside your blog posts, templates, or sidebar widgets. Simple to use, powerful features.  Used by thousands of blogs.
@@ -105,10 +105,13 @@ Yes.  Advertising manager allows you to rotate ads, easily turn on/off ads, plac
 
 == Upgrade Notice ==
 
-= 3.5.1 =
-* Only update 10 posts at a time when upgrading shortcodes
+= 3.5.2 =
+* Begin to separate out data so that we take up less memory resources
 
 == Change Log ==
+
+= 3.5.2 =
+* Begin to separate out data so that we take up less memory resources
 
 = 3.5.1 =
 * Only update 10 posts at a time when upgrading shortcodes

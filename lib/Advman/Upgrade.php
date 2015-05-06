@@ -9,7 +9,7 @@ class Advman_Upgrade
 	{
 		$version = Advman_Upgrade::_get_version($data);
 		Advman_Upgrade::_backup($data, $version);
-		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14', '3.4.15', '3.4.20', '3.4.25', '3.4.29', '3.5.1');
+		$versions = array('3.4', '3.4.2', '3.4.3', '3.4.7', '3.4.9', '3.4.12', '3.4.14', '3.4.15', '3.4.20', '3.4.25', '3.4.29', '3.5.1', '3.5.2');
 		foreach ($versions as $v) {
 			if (version_compare($version, $v, '<')) {
 				$func = 'advman_' . str_replace('.','_',$v);
@@ -32,6 +32,24 @@ class Advman_Upgrade
 			}
 		}
 	}
+
+    static function advman_3_5_2(&$data)
+    {
+        // Split out data into different data keys, and remove the 'general' key
+        update_option('plugin_advman_settings', $data['settings']);
+        update_option('plugin_advman_ads', $data['ads']);
+        update_option('plugin_advman_networks', $data['networks']);
+        update_option('plugin_advman_stats', $data['stats']);
+        // Delete the 'general' data key
+        delete_option('plugin_advman');
+        // Set backup to position 1 (position 0 is the current backup)
+        $backup = get_option('plugin_advman_backup');
+        if (!empty($backup)) {
+            update_option('plugin_advman_backup_1', $backup);
+        }
+        delete_option('plugin_advman_backup');
+        delete_option('plugin_adsensem_backup');
+    }
 
 	static function advman_3_5_1(&$data)
 	{
@@ -436,14 +454,27 @@ class Advman_Upgrade
 
 	static function _backup($data, $version)
 	{
-		$backup = get_option('plugin_advman_backup');
-		if (empty($backup)) {
-			$backup = get_option('plugin_adsensem_backup');
-			delete_option('plugin_adsensem_backup');
-		}
+        // Backup the last 4 versions of plugin_advman.
 
-		$backup[$version] = $data;
-		update_option('plugin_advman_backup', $backup);
+        // remove the oldest version
+        delete_option('plugin_advamn_backup_3');
+        // move pos 2 to pos 3
+		$backup = get_option('plugin_advman_backup_2');
+		if (!empty($backup)) {
+			update_option('plugin_advman_backup_3', $backup);
+		}
+        // move pos 1 to pos 2
+        $backup = get_option('plugin_advman_backup_1');
+        if (!empty($backup)) {
+            update_option('plugin_advman_backup_2', $backup);
+        }
+        // move latest to pos 1
+        $backup = get_option('plugin_advman_backup_0');
+        if (!empty($backup)) {
+            update_option('plugin_advman_backup_1', $backup);
+        }
+        // insert current into latest
+        update_option('plugin_advman_backup_0', $data);
 	}
 
 	static function adsensem_get_classmap()
