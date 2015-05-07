@@ -19,39 +19,49 @@ class Advman_Dal extends OX_Dal
         $data = get_option('plugin_advman'); // old way of saving data
         if (empty($data)) {
             $data = array();
-            $data['settings'] = get_option('plugin_advman_settings');
-            $data['ads'] = get_option('plugin_advman_ads');
-            $data['networks'] = get_option('plugin_advman_networks');
-            $data['stats'] = get_option('plugin_advman_stats');
+            // Get settings data
+            $d = get_option('plugin_advman_settings');
+            if (empty($d)) {
+                $d = array(
+                    'next_ad_id' => 1,
+                    'default-ad' => '',
+                    'version' => ADVMAN_VERSION,
+                    'enable-php' => false,
+                    'purge-stats-days' => 30,
+                    'stats' => true
+                );
+                $save = true;
+            }
+            $data['settings'] = $d;
+            // Get ads data
+            $d = get_option('plugin_advman_ads');
+            if (empty($d)) {
+                $d = array();
+                $save = true;
+            }
+            $data['ads'] = $d;
+            // Get networks data
+            $d = get_option('plugin_advman_networks');
+            if (empty($d)) {
+                $d = array();
+                $save = true;
+            }
+            $data['networks'] = $d;
+            // Get stats data
+            $d = get_option('plugin_advman_stats');
+            if (empty($d)) {
+                $d = array();
+                $save = true;
+            }
+            $data['stats'] = $d;
         }
 
-		if (!empty($data)) {
-			if (version_compare($data['settings']['version'], ADVMAN_VERSION, '<')) {
-				include_once(ADVMAN_LIB . '/Upgrade.php');
-				Advman_Upgrade::upgrade_advman($data);
-				$save = true;
-			}
-		} else {
-			$data = get_option('plugin_adsensem');
-			if (!empty($data)) {
-				include_once(ADVMAN_LIB . '/Upgrade.php');
-				Advman_Upgrade::upgrade_adsensem($data);
-				$save = true;
-			}
-		}
-		if (empty($data)) {
-			$data['ads'] = array();
-			$data['networks'] = array();
-			$data['settings'] = array();
-			$data['settings']['next_ad_id'] = 1;
-			$data['settings']['default-ad'] = '';
-			$data['settings']['version'] = ADVMAN_VERSION;
-			$data['settings']['enable-php'] = false;
-			$data['settings']['purge-stats-days'] = 30;
-			$data['settings']['stats'] = true;
-			$data['stats'] = array();
-			$save = true;
-		}
+        if (version_compare($data['settings']['version'], ADVMAN_VERSION, '<')) {
+            include_once(ADVMAN_LIB . '/Upgrade.php');
+            Advman_Upgrade::upgrade_advman($data);
+            $save = true;
+        }
+
 		if (!empty($data['stats'])) {
 			$oldest = time() - ($data['settings']['purge-stats-days'] * 24 * 60 * 60);
 			foreach ($data['stats'] as $day => $stat) {
@@ -69,7 +79,7 @@ class Advman_Dal extends OX_Dal
             update_option('plugin_advman_networks', $data['networks']);
             update_option('plugin_advman_stats', $data['stats']);
 		}
-		
+
 		$this->_map_objects($data);
 		
 		return $data;
