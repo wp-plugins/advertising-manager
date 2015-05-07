@@ -14,34 +14,54 @@ class Advman_Dal extends OX_Dal
 	function _load_data()
 	{
 		$save = false;
-		$data = get_option('plugin_advman');
-		if (!empty($data)) {
-			if (version_compare($data['settings']['version'], ADVMAN_VERSION, '<')) {
-				include_once(ADVMAN_LIB . '/Upgrade.php');
-				Advman_Upgrade::upgrade_advman($data);
-				$save = true;
-			}
-		} else {
-			$data = get_option('plugin_adsensem');
-			if (!empty($data)) {
-				include_once(ADVMAN_LIB . '/Upgrade.php');
-				Advman_Upgrade::upgrade_adsensem($data);
-				$save = true;
-			}
-		}
-		if (empty($data)) {
-			$data['ads'] = array();
-			$data['networks'] = array();
-			$data['settings'] = array();
-			$data['settings']['next_ad_id'] = 1;
-			$data['settings']['default-ad'] = '';
-			$data['settings']['version'] = ADVMAN_VERSION;
-			$data['settings']['enable-php'] = false;
-			$data['settings']['purge-stats-days'] = 30;
-			$data['settings']['stats'] = true;
-			$data['stats'] = array();
-			$save = true;
-		}
+
+        // Load the data into an array
+        $data = get_option('plugin_advman'); // old way of saving data
+        if (empty($data)) {
+            $data = array();
+            // Get settings data
+            $d = get_option('plugin_advman_settings');
+            if (empty($d)) {
+                $d = array(
+                    'next_ad_id' => 1,
+                    'default-ad' => '',
+                    'version' => ADVMAN_VERSION,
+                    'enable-php' => false,
+                    'purge-stats-days' => 30,
+                    'stats' => true
+                );
+                $save = true;
+            }
+            $data['settings'] = $d;
+            // Get ads data
+            $d = get_option('plugin_advman_ads');
+            if (empty($d)) {
+                $d = array();
+                $save = true;
+            }
+            $data['ads'] = $d;
+            // Get networks data
+            $d = get_option('plugin_advman_networks');
+            if (empty($d)) {
+                $d = array();
+                $save = true;
+            }
+            $data['networks'] = $d;
+            // Get stats data
+            $d = get_option('plugin_advman_stats');
+            if (empty($d)) {
+                $d = array();
+                $save = true;
+            }
+            $data['stats'] = $d;
+        }
+
+        if (version_compare($data['settings']['version'], ADVMAN_VERSION, '<')) {
+            include_once(ADVMAN_LIB . '/Upgrade.php');
+            Advman_Upgrade::upgrade_advman($data);
+            $save = true;
+        }
+
 		if (!empty($data['stats'])) {
 			$oldest = time() - ($data['settings']['purge-stats-days'] * 24 * 60 * 60);
 			foreach ($data['stats'] as $day => $stat) {
@@ -54,9 +74,12 @@ class Advman_Dal extends OX_Dal
 		}
 		
 		if ($save) {
-			update_option('plugin_advman', $data);
+            update_option('plugin_advman_settings', $data['settings']);
+            update_option('plugin_advman_ads', $data['ads']);
+            update_option('plugin_advman_networks', $data['networks']);
+            update_option('plugin_advman_stats', $data['stats']);
 		}
-		
+
 		$this->_map_objects($data);
 		
 		return $data;
@@ -82,7 +105,7 @@ class Advman_Dal extends OX_Dal
 		}
 		$data['ads'] = $oAds;
 	}
-	function _update_data($data = null, $key = 'plugin_advman')
+	function _update_data($key, $data = null)
 	{
 		if (is_null($data)) {
 			$data = $this->data;
@@ -90,7 +113,7 @@ class Advman_Dal extends OX_Dal
 		
 		$this->_map_arrays($data);
 	
-		update_option($key, $data);
+		update_option("plugin_advman_$key", $data[$key]);
 	}
 	
 	function factory($class, $aAd = null, $data = null)
@@ -167,7 +190,7 @@ class Advman_Dal extends OX_Dal
 				return false; // all of these settings are read only
 		}
 		$this->data['settings'][$key] = $value;
-		$this->_update_data();
+		$this->_update_data('settings');
 		return true;
 	}
 	
@@ -179,7 +202,7 @@ class Advman_Dal extends OX_Dal
 	function update_stats($stats)
 	{
 		$this->data['stats'] = $stats;
-		$this->_update_data();
+		$this->_update_data('stats');
 		return true;
 	}
 	
@@ -190,14 +213,15 @@ class Advman_Dal extends OX_Dal
 		$ad->id = $id;
 		$this->data['ads'][$id] = $ad;
 		OX_Tools::sort($this->data['ads']);
-		$this->_update_data();
+		$this->_update_data('settings');
+        $this->_update_data('ads');
 		return $ad;
 	}
 	
 	function delete_ad($id)
 	{
 		unset($this->data['ads'][$id]);
-		$this->_update_data();
+		$this->_update_data('ads');
 	}
 	
 	function select_ad($id)
@@ -214,14 +238,14 @@ class Advman_Dal extends OX_Dal
 	{
 		$id = $ad->id;
 		$this->data['ads'][$id] = $ad;
-		$this->_update_data();
+		$this->_update_data('ads');
 		return $id;
 	}
 	
 	function update_ad_network($ad)
 	{
 		$this->data['networks'][strtolower(get_class($ad))] = $ad->np;
-		$this->_update_data();
+		$this->_update_data('networks');
 	}
 }
 ?>

@@ -13,7 +13,7 @@ docker build --no-cache -t switzer/wordpress /home/core/share/switzer/wordpress/
 
 # From coreos command prompt
 docker run --name mysql -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 -d mysql
-docker run --name wordpress --link mysql:mysql -p 8080:80 -v /home/core/share:/usr/src/code -d switzer/wordpress
+docker run --name wordpress --link mysql:mysql -p 8081:80 -v /home/core/share:/usr/src/code -d switzer/wordpress
 PID=$(docker inspect --format='{{ .State.Pid }}' wordpress)
 sudo nsenter --pid --uts --mount --ipc --net --target $PID
 
