@@ -107,31 +107,33 @@ class OX_Swifty
 
         // Sum up stats for this date range
         $sum_stats = array();
-        foreach ($stats['d'] as $dtstr => $stat) {
-            $dt = strtotime($dtstr);
-            if ($dt >= $begin && $dt < $end) {
-                // Get the entity breakdown
-                $s = $stat[$entity_breakdown];
-                // Loop through each of the entities and sum up
-                foreach ($s as $id => $data) {
-                    if (!isset($sum_stats[$id])) {
-                        $sum_stats[$id] = $data;
-                    } else {
-                        foreach($data as $v => $n) {
-                            // Either create a new node or increment the node
-                            $sum_stats[$id][$v] = (!isset($sum_stats[$id][$v])) ? $n : $sum_stats[$id][$v] + $n;
-                        }
-                        $sum_stats[$id]['i'] += $data['i'];
-                    }
-                    if ($entity_breakdown == 'ads') {
-                        $ad = $this->getAd($id);
-                        if ($ad) {
-                            $sum_stats[$id]['name'] = $ad->name;
-                        }
-                    }
-                }
-            }
-        }
+		if (!empty($stats['d'])) {
+			foreach ($stats['d'] as $dtstr => $stat) {
+				$dt = strtotime($dtstr);
+				if ($dt >= $begin && $dt < $end) {
+					// Get the entity breakdown
+					$s = $stat[$entity_breakdown];
+					// Loop through each of the entities and sum up
+					foreach ($s as $id => $data) {
+						if (!isset($sum_stats[$id])) {
+							$sum_stats[$id] = $data;
+						} else {
+							foreach($data as $v => $n) {
+								// Either create a new node or increment the node
+								$sum_stats[$id][$v] = (!isset($sum_stats[$id][$v])) ? $n : $sum_stats[$id][$v] + $n;
+							}
+							$sum_stats[$id]['i'] += $data['i'];
+						}
+						if ($entity_breakdown == 'ads') {
+							$ad = $this->getAd($id);
+							if ($ad) {
+								$sum_stats[$id]['name'] = $ad->name;
+							}
+						}
+					}
+				}
+			}
+		}
 
         return $sum_stats;
     }
